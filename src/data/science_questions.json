@@ -1,0 +1,1192 @@
+{
+  "science": [
+    {
+      "question": "What is the chemical symbol for water?",
+      "options": [
+        "H2O",
+        "O2",
+        "CO2",
+        "NaCl"
+      ],
+      "answer": "H2O",
+      "explanation": "H2O is the chemical formula for water, consisting of two hydrogen atoms and one oxygen atom.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "Which planet is known for its rings?",
+      "options": [
+        "Saturn",
+        "Mars",
+        "Jupiter",
+        "Venus"
+      ],
+      "answer": "Saturn",
+      "explanation": "Saturn is known for its prominent ring system.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "How many legs does an insect have?",
+      "options": [
+        "6",
+        "4",
+        "8",
+        "10"
+      ],
+      "answer": "6",
+      "explanation": "Insects have six legs, which distinguishes them from spiders and other arthropods.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "What gas do plants absorb from the atmosphere for photosynthesis?",
+      "options": [
+        "Carbon Dioxide",
+        "Oxygen",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "answer": "Carbon Dioxide",
+      "explanation": "Plants use carbon dioxide (CO2) along with sunlight and water to produce food.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "What part of the cell contains the genetic material?",
+      "options": [
+        "Nucleus",
+        "Mitochondria",
+        "Cytoplasm",
+        "Ribosome"
+      ],
+      "answer": "Nucleus",
+      "explanation": "The nucleus contains DNA and is the control center of the cell.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "What is the SI unit of force?",
+      "options": [
+        "Newton",
+        "Joule",
+        "Watt",
+        "Pascal"
+      ],
+      "answer": "Newton",
+      "explanation": "The SI unit of force is Newton, named after Sir Isaac Newton.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "Which particle has no electric charge?",
+      "options": [
+        "Neutron",
+        "Proton",
+        "Electron",
+        "Positron"
+      ],
+      "answer": "Neutron",
+      "explanation": "Neutrons are neutral subatomic particles found in the nucleus.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": [
+        "Mitochondria",
+        "Nucleus",
+        "Chloroplast",
+        "Golgi Apparatus"
+      ],
+      "answer": "Mitochondria",
+      "explanation": "Mitochondria generate energy through cellular respiration.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth?",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 10)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 11)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 12)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 13)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 14)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 15)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 16)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 17)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 18)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 19)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 20)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 21)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 22)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 23)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 24)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 25)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 26)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 27)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 28)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 29)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 30)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 31)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 32)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 33)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 34)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 35)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 36)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 37)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 38)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 39)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 40)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 41)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 42)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 43)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 44)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 45)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 46)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 47)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 48)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 49)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 50)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 51)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 52)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 53)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 54)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 55)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 56)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 57)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 58)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 59)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 60)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 61)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 62)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 63)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 64)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 65)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 66)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 67)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 68)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 69)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 70)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 71)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 72)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 73)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 74)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 75)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 76)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 77)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 78)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 79)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 80)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 81)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 82)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 83)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 84)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 85)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 86)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 87)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 88)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 89)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 90)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 91)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 92)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 93)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 94)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 95)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 96)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 97)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 98)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the approximate age of the Earth? (Extra 99)",
+      "options": [
+        "4.5 billion years",
+        "3 billion years",
+        "2.5 billion years",
+        "6 billion years"
+      ],
+      "answer": "4.5 billion years",
+      "explanation": "Earth is estimated to be about 4.5 billion years old.",
+      "difficulty": "hard"
+    }
+  ]
+}

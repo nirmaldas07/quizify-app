@@ -1,0 +1,1192 @@
+{
+  "general-knowledge": [
+    {
+      "question": "What is the capital of France?",
+      "options": [
+        "Paris",
+        "London",
+        "Rome",
+        "Madrid"
+      ],
+      "answer": "Paris",
+      "explanation": "Paris is the capital city of France.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "options": [
+        "Mars",
+        "Jupiter",
+        "Venus",
+        "Saturn"
+      ],
+      "answer": "Mars",
+      "explanation": "Mars is known as the Red Planet due to its reddish appearance.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "Who wrote the national anthem of India?",
+      "options": [
+        "Rabindranath Tagore",
+        "Mahatma Gandhi",
+        "Jawaharlal Nehru",
+        "Subhas Chandra Bose"
+      ],
+      "answer": "Rabindranath Tagore",
+      "explanation": "Rabindranath Tagore wrote the Indian national anthem 'Jana Gana Mana'.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "In which year did India become a republic?",
+      "options": [
+        "1947",
+        "1950",
+        "1952",
+        "1949"
+      ],
+      "answer": "1950",
+      "explanation": "India became a republic on January 26, 1950.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "What is the smallest bone in the human body?",
+      "options": [
+        "Stapes",
+        "Femur",
+        "Tibia",
+        "Ulna"
+      ],
+      "answer": "Stapes",
+      "explanation": "The stapes bone in the ear is the smallest bone in the human body.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "Who is known as the 'Missile Man of India'?",
+      "options": [
+        "A.P.J. Abdul Kalam",
+        "Vikram Sarabhai",
+        "Homi Bhabha",
+        "Satish Dhawan"
+      ],
+      "answer": "A.P.J. Abdul Kalam",
+      "explanation": "Dr. A.P.J. Abdul Kalam earned the title for his work in missile technology.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "Which element has the atomic number 92?",
+      "options": [
+        "Uranium",
+        "Plutonium",
+        "Thorium",
+        "Radon"
+      ],
+      "answer": "Uranium",
+      "explanation": "Uranium has the atomic number 92 in the periodic table.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which is the longest river in Asia?",
+      "options": [
+        "Yangtze",
+        "Ganges",
+        "Mekong",
+        "Yellow River"
+      ],
+      "answer": "Yangtze",
+      "explanation": "The Yangtze River is the longest river in Asia.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron?",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 10)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 11)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 12)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 13)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 14)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 15)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 16)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 17)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 18)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 19)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 20)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 21)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 22)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 23)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 24)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 25)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 26)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 27)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 28)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 29)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 30)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 31)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 32)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 33)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 34)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 35)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 36)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 37)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 38)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 39)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 40)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 41)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 42)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 43)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 44)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 45)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 46)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 47)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 48)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 49)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 50)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 51)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 52)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 53)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 54)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 55)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 56)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 57)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 58)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 59)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 60)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 61)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 62)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 63)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 64)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 65)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 66)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 67)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 68)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 69)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 70)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 71)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 72)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 73)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 74)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 75)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 76)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 77)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 78)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 79)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 80)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 81)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 82)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 83)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 84)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 85)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 86)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 87)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 88)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 89)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 90)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 91)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 92)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 93)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 94)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 95)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 96)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 97)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 98)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Which Nobel laureate discovered the neutron? (Var 99)",
+      "options": [
+        "James Chadwick",
+        "Marie Curie",
+        "Albert Einstein",
+        "Ernest Rutherford"
+      ],
+      "answer": "James Chadwick",
+      "explanation": "James Chadwick discovered the neutron in 1932.",
+      "difficulty": "hard"
+    }
+  ]
+}
