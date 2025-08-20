@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
+/* Animated Wheel icon (same style as Home.jsx) */
 function WheelIcon({ size = 22 }) {
   return (
     <div style={{ width: size, height: size }} className="grid place-items-center">
@@ -25,25 +26,26 @@ export default function Layout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // store scroll positions per route
+  // --- Scroll restore logic ---
   const scrollPositions = useRef({});
   const lastTapRef = useRef(0);
 
-  // Restore scroll when entering a route
+  // Save scroll when leaving route
+  useEffect(() => {
+    return () => {
+      scrollPositions.current[pathname] = window.scrollY;
+    };
+  }, [pathname]);
+
+  // Restore scroll when entering route
   useEffect(() => {
     const pos = scrollPositions.current[pathname];
     if (pos !== undefined) {
       window.scrollTo(0, pos);
-    } else {
-      window.scrollTo(0, 0); // default to top on first visit
     }
   }, [pathname]);
 
-  // Helper: save current scroll before navigating away
-  const saveScroll = () => {
-    scrollPositions.current[pathname] = window.scrollY;
-  };
-
+  // Hide nav only on the "live play" route: `/quiz/{category}`
   const hideNav = /^\/quiz\/[^/]+$/.test(pathname);
 
   const isActive = (path) =>
@@ -54,13 +56,13 @@ export default function Layout() {
 
     const handleClick = () => {
       if (active && path === "/") {
+        // Double tap to scroll top
         const now = Date.now();
         if (now - lastTapRef.current < 500) {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
         lastTapRef.current = now;
       } else {
-        saveScroll();   // ✅ save scroll before leaving
         navigate(path);
       }
     };
@@ -82,6 +84,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
+      {/* Content area with safe areas */}
       <main
         className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+0.25rem)]
           ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
@@ -89,13 +92,16 @@ export default function Layout() {
         <Outlet />
       </main>
 
+      {/* Opaque bottom-area plate + rounded nav on top */}
       {!hideNav && (
         <nav role="navigation" aria-label="Bottom navigation" className="fixed inset-x-0 bottom-0 z-50">
+          {/* Full-width opaque background so content never shows behind icons */}
           <div
             className="absolute inset-x-0 bottom-0 bg-[#0B0F1A]"
             style={{ height: "calc(5.25rem + env(safe-area-inset-bottom))" }}
             aria-hidden
           />
+          {/* Nav content */}
           <div className="relative mx-auto max-w-md px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2">
             <div className="flex h-16 items-center justify-around rounded-2xl border border-base-border bg-base-card shadow-xl">
               <NavItem path="/"            icon={<span className="text-xl">🏠</span>} label="Home" />

@@ -1,7 +1,8 @@
 // src/components/Layout.jsx
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
+/* Animated Wheel icon (same style as Home.jsx) */
 function WheelIcon({ size = 22 }) {
   return (
     <div style={{ width: size, height: size }} className="grid place-items-center">
@@ -25,25 +26,32 @@ export default function Layout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // store scroll positions per route
+  // store scroll position per route
   const scrollPositions = useRef({});
-  const lastTapRef = useRef(0);
 
-  // Restore scroll when entering a route
+  // save scroll position when navigating away
+  useEffect(() => {
+    const saveScroll = () => {
+      scrollPositions.current[pathname] = window.scrollY;
+    };
+    window.addEventListener("beforeunload", saveScroll);
+    return () => {
+      saveScroll();
+      window.removeEventListener("beforeunload", saveScroll);
+    };
+  }, [pathname]);
+
+  // restore scroll position when coming back
   useEffect(() => {
     const pos = scrollPositions.current[pathname];
     if (pos !== undefined) {
       window.scrollTo(0, pos);
     } else {
-      window.scrollTo(0, 0); // default to top on first visit
+      window.scrollTo(0, 0);
     }
   }, [pathname]);
 
-  // Helper: save current scroll before navigating away
-  const saveScroll = () => {
-    scrollPositions.current[pathname] = window.scrollY;
-  };
-
+  // Hide nav only on the "live play" route: `/quiz/{category}`
   const hideNav = /^\/quiz\/[^/]+$/.test(pathname);
 
   const isActive = (path) =>
@@ -54,13 +62,9 @@ export default function Layout() {
 
     const handleClick = () => {
       if (active && path === "/") {
-        const now = Date.now();
-        if (now - lastTapRef.current < 500) {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-        lastTapRef.current = now;
+        // already on Home → scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        saveScroll();   // ✅ save scroll before leaving
         navigate(path);
       }
     };
@@ -82,6 +86,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
+      {/* Content area with safe areas */}
       <main
         className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+0.25rem)]
           ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
@@ -89,6 +94,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
+      {/* Opaque bottom-area plate + rounded nav on top */}
       {!hideNav && (
         <nav role="navigation" aria-label="Bottom navigation" className="fixed inset-x-0 bottom-0 z-50">
           <div
