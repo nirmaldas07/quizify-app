@@ -51,16 +51,8 @@ export default function Layout() {
   // ✅ Pull-to-refresh only for bottom nav pages
   const inBottomNavPage = ["/", "/play", "/leaderboard"].includes(pathname);
 
-  // ✅ Track modal-open state reactively
-  const [modalOpen, setModalOpen] = useState(false);
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setModalOpen(document.body.classList.contains("modal-open"));
-    });
-    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
-
+  // ✅ Auto-hide nav if modal is open
+  const modalOpen = typeof document !== "undefined" && document.body.classList.contains("modal-open");
   const hideNav = modalOpen; // nav hidden when modal is open
 
   const isActive = (path) =>

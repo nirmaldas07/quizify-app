@@ -1046,25 +1046,25 @@ function ScreenWrap({ children }) {
 }
 // popup screen
 function Modal({ children, onClose }) {
-  useEffect(() => {
-    // 🚫 hide bottom nav
-    document.body.classList.add("modal-open");
-    return () => {
-      // ✅ restore bottom nav
-      document.body.classList.remove("modal-open");
-    };
-  }, []);
-
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-end justify-center z-[60]" // 👈 align modal to bottom
+      className="fixed inset-0 z-[60] bg-black/60 flex items-end justify-center"
       onClick={onClose}
     >
       <div
-        className="bg-base-card border border-base-border rounded-t-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+        className="bg-base-card border border-base-border rounded-t-2xl w-full max-w-md 
+                   h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {children}
+        {/* Drag handle */}
+        <div className="flex justify-center py-2">
+          <div className="w-10 h-1.5 rounded-full bg-gray-600" />
+        </div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto px-5 pb-[calc(10rem+env(safe-area-inset-bottom))]">
+          {children}
+        </div>
       </div>
     </div>
   );

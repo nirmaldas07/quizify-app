@@ -48,20 +48,8 @@ export default function Layout() {
     scrollPositions.current[pathname] = window.scrollY;
   };
 
-  // ✅ Pull-to-refresh only for bottom nav pages
-  const inBottomNavPage = ["/", "/play", "/leaderboard"].includes(pathname);
-
-  // ✅ Track modal-open state reactively
-  const [modalOpen, setModalOpen] = useState(false);
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setModalOpen(document.body.classList.contains("modal-open"));
-    });
-    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
-
-  const hideNav = modalOpen; // nav hidden when modal is open
+  // ✅ Hide nav on quiz screens
+  const hideNav = /^\/quiz\/[^/]+$/.test(pathname);
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -72,23 +60,23 @@ export default function Layout() {
   const [pullDist, setPullDist] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
-  const handleTouchStart = (e) => {
-    if (!inBottomNavPage) return; // 🚫 only on Home, Play, Leaderboard
-    if (window.scrollY === 0) {
-      touchStartY.current = e.touches[0].clientY;
-    }
-  };
+const handleTouchStart = (e) => {
+  if (hideNav) return; // 🚫 disable pull-to-refresh on quiz question screens
+  if (window.scrollY === 0) {
+    touchStartY.current = e.touches[0].clientY;
+  }
+};
 
-  const handleTouchMove = (e) => {
-    if (!inBottomNavPage) return; // 🚫 only on Home, Play, Leaderboard
-    if (window.scrollY === 0) {
-      const dist = e.touches[0].clientY - touchStartY.current;
-      if (dist > 0) {
-        setPulling(true);
-        setPullDist(Math.min(dist, 80));
-      }
+const handleTouchMove = (e) => {
+  if (hideNav) return; // 🚫 disable pull-to-refresh on quiz question screens
+  if (window.scrollY === 0) {
+    const dist = e.touches[0].clientY - touchStartY.current;
+    if (dist > 0) {
+      setPulling(true);
+      setPullDist(Math.min(dist, 80));
     }
-  };
+  }
+};
 
   const handleTouchEnd = () => {
     if (pulling && pullDist > 40) {
@@ -174,7 +162,7 @@ export default function Layout() {
 
       <main
         className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
-          ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"} min-h-screen`}
+          ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"} min-h-screen`} // ✅ ensures quiz is never blank
         style={{
           transform: pulling ? `translateY(${pullDist}px)` : "translateY(0)",
           transition: refreshing ? "transform 0.3s ease" : "none",

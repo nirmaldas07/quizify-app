@@ -927,7 +927,7 @@ const onSelect = (optIdx, evt) => {
       )}
 
       {view === "review" && (
-        <div className="mt-2 card rounded-3xl p-5 w-full max-w-none mx-auto pb-24">
+        <div className="mt-5 md:mt-8 card rounded-3xl p-5 w-full max-w-none mx-auto">
           <div className="flex items-center justify-between mb-4">
             <button
                 className="px-3 py-1.5 rounded-xl border border-base-border bg-white/5"
@@ -1044,33 +1044,19 @@ function ScreenWrap({ children }) {
     </div>
   );
 }
-// popup screen
-function Modal({ children, onClose }) {
-  useEffect(() => {
-    // 🚫 hide bottom nav
-    document.body.classList.add("modal-open");
-    return () => {
-      // ✅ restore bottom nav
-      document.body.classList.remove("modal-open");
-    };
-  }, []);
 
+function Modal({ children, onClose }) {
   return (
+    <div className="fixed inset-0 bg-black/60 grid place-items-center z-50" onClick={onClose}>
     <div
-      className="fixed inset-0 bg-black/60 flex items-end justify-center z-[60]" // 👈 align modal to bottom
-      onClick={onClose}
+      className="bg-base-card border border-base-border rounded-2xl p-5 w-full max-w-xs"
+      onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className="bg-base-card border border-base-border rounded-t-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
-      </div>
+      {children}
     </div>
+  </div>
   );
 }
-
-
 
 function Metric({ label, value }) {
   return (

@@ -1057,11 +1057,11 @@ function Modal({ children, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-end justify-center z-[60]" // 👈 align modal to bottom
+      className="fixed inset-0 bg-black/60 grid place-items-center z-[60]"
       onClick={onClose}
     >
       <div
-        className="bg-base-card border border-base-border rounded-t-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+        className="bg-base-card border border-base-border rounded-t-2xl w-full max-w-md max-h-[85vh] overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))]"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
@@ -1069,7 +1069,6 @@ function Modal({ children, onClose }) {
     </div>
   );
 }
-
 
 
 function Metric({ label, value }) {
