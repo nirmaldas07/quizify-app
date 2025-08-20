@@ -25,14 +25,9 @@ export default function Layout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  /* ---------------- Scroll Restore ---------------- */
   const scrollPositions = useRef({});
   const lastTapRef = useRef(0);
-
-  // Preload sound
-  const soundRef = useRef(null);
-  useEffect(() => {
-    soundRef.current = new Audio("/sounds/refresh.mp3");
-  }, []);
 
   useEffect(() => {
     const pos = scrollPositions.current[pathname];
@@ -48,14 +43,14 @@ export default function Layout() {
   };
 
   const hideNav = /^\/quiz\/[^/]+$/.test(pathname);
+
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
-  /* ---------------- Pull-to-refresh ---------------- */
+  /* ---------------- Pull to Refresh ---------------- */
   const touchStartY = useRef(0);
   const [pulling, setPulling] = useState(false);
   const [pullDist, setPullDist] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
 
   const handleTouchStart = (e) => {
     if (window.scrollY === 0) {
@@ -75,37 +70,27 @@ export default function Layout() {
 
   const handleTouchEnd = () => {
     if (pulling && pullDist > 40) {
-      setRefreshing(true);
-
-      // ✅ Play sound
-      if (soundRef.current) {
-        soundRef.current.currentTime = 0;
-        soundRef.current.play().catch(() => {});
+      try {
+        const audio = new Audio("/sounds/coin.mp3"); // place your file in /public/sounds/
+        audio.play();
+      } catch (e) {
+        console.warn("Sound not played", e);
       }
-
-      // ✅ Vibrate
-      if (navigator.vibrate) {
-        navigator.vibrate(60);
-      }
-
-      // ✅ Scroll top
       window.scrollTo({ top: 0, behavior: "smooth" });
-
-      // Stop indicator after 1s
-      setTimeout(() => setRefreshing(false), 1000);
     }
     setPulling(false);
     setPullDist(0);
   };
 
+  /* ---------------- Bottom Nav ---------------- */
   const NavItem = ({ path, icon, label }) => {
     const active = isActive(path);
+
     const handleClick = () => {
-      if (active) {
+      if (active && path === "/") {
         const now = Date.now();
         if (now - lastTapRef.current < 500) {
           window.scrollTo({ top: 0, behavior: "smooth" });
-          if (navigator.vibrate) navigator.vibrate(30);
         }
         lastTapRef.current = now;
       } else {
@@ -113,6 +98,7 @@ export default function Layout() {
         navigate(path);
       }
     };
+
     return (
       <button
         type="button"
@@ -135,29 +121,19 @@ export default function Layout() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-        {/* Pull-to-refresh indicator */}
-        {(pulling || refreshing) && (
+      {/* Pull to refresh indicator */}
+      {pulling && (
         <div
-            className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm"
-            style={{
-            top: "1rem",
-            transform: "translateX(-50%)",
-            width: "160px", // ✅ fixed width ensures both texts are centered
-            textAlign: "center",
-            }}
+          className="fixed top-2 left-1/2 -translate-x-1/2 z-50 text-white text-sm flex items-center gap-2"
+          style={{ transform: `translateY(${pullDist / 2}px)` }}
         >
-            <span className={`${!refreshing ? "motion-safe:animate-spin" : "opacity-0"} mb-1`}>
-            ⭮
-            </span>
-            <span className={refreshing ? "animate-bounce" : ""}>
-            {refreshing ? "Updated!😍" : "Release to refresh"}
-            </span>
+          <span className="motion-safe:animate-spin">⭮</span>
+          <span>Refreshing...</span>
         </div>
-        )}
-
+      )}
 
       <main
-        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
+        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+0.25rem)]
           ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
       >
         <Outlet />

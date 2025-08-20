@@ -135,29 +135,23 @@ export default function Layout() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-        {/* Pull-to-refresh indicator */}
-        {(pulling || refreshing) && (
+      {/* Pull-to-refresh indicator */}
+      {(pulling || refreshing) && (
         <div
-            className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm"
-            style={{
-            top: "1rem",
+          className={`fixed left-1/2 z-50 flex items-center gap-2 text-white text-sm
+            ${refreshing ? "animate-bounce" : ""}`}
+          style={{
+            top: "4rem", // ✅ a little lower
             transform: "translateX(-50%)",
-            width: "160px", // ✅ fixed width ensures both texts are centered
-            textAlign: "center",
-            }}
+          }}
         >
-            <span className={`${!refreshing ? "motion-safe:animate-spin" : "opacity-0"} mb-1`}>
-            ⭮
-            </span>
-            <span className={refreshing ? "animate-bounce" : ""}>
-            {refreshing ? "Updated!😍" : "Release to refresh"}
-            </span>
+          <span className="motion-safe:animate-spin">⭮</span>
+          <span>{refreshing ? "Refreshed..." : "Release to refresh"}</span>
         </div>
-        )}
-
+      )}
 
       <main
-        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
+        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+0.25rem)]
           ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
       >
         <Outlet />

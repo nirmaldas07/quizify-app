@@ -138,24 +138,22 @@ export default function Layout() {
         {/* Pull-to-refresh indicator */}
         {(pulling || refreshing) && (
         <div
-            className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm"
+            className={`fixed left-1/2 z-50 flex items-center justify-center text-white text-sm
+            ${refreshing ? "animate-bounce" : ""}`}
             style={{
-            top: "1rem",
+            top: "4rem", // ✅ a little lower
             transform: "translateX(-50%)",
-            width: "160px", // ✅ fixed width ensures both texts are centered
-            textAlign: "center",
             }}
         >
-            <span className={`${!refreshing ? "motion-safe:animate-spin" : "opacity-0"} mb-1`}>
-            ⭮
-            </span>
-            <span className={refreshing ? "animate-bounce" : ""}>
-            {refreshing ? "Updated!😍" : "Release to refresh"}
-            </span>
+            {!refreshing && (
+            <>
+                <span className="motion-safe:animate-spin mr-2">⭮</span>
+                <span>Release to update</span>
+            </>
+            )}
+            {refreshing && <span>Updated!😍</span>}
         </div>
         )}
-
-
       <main
         className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
           ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}

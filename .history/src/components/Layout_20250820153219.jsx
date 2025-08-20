@@ -140,7 +140,7 @@ export default function Layout() {
         <div
             className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm"
             style={{
-            top: "1rem",
+            top: "2rem",
             transform: "translateX(-50%)",
             width: "160px", // ✅ fixed width ensures both texts are centered
             textAlign: "center",

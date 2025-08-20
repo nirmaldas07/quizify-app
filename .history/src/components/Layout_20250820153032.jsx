@@ -135,26 +135,30 @@ export default function Layout() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-        {/* Pull-to-refresh indicator */}
-        {(pulling || refreshing) && (
-        <div
-            className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm"
-            style={{
-            top: "1rem",
-            transform: "translateX(-50%)",
-            width: "160px", // ✅ fixed width ensures both texts are centered
-            textAlign: "center",
-            }}
+   {/* Pull-to-refresh indicator */}
+    {(pulling || refreshing) && (
+    <div
+        className={`fixed left-1/2 z-50 flex items-center justify-center text-white text-sm
+        ${refreshing ? "animate-bounce" : ""}`}
+        style={{
+        top: "4rem",
+        transform: "translateX(-50%)",
+        }}
+    >
+        {/* Icon slot stays fixed width */}
+        <span className="w-4 flex justify-center">
+        <span
+            className={`motion-safe:animate-spin transition-opacity ${
+            refreshing ? "opacity-0" : "opacity-100"
+            }`}
         >
-            <span className={`${!refreshing ? "motion-safe:animate-spin" : "opacity-0"} mb-1`}>
             ⭮
-            </span>
-            <span className={refreshing ? "animate-bounce" : ""}>
-            {refreshing ? "Updated!😍" : "Release to refresh"}
-            </span>
-        </div>
-        )}
+        </span>
+        </span>
 
+        <span className="ml-2">{refreshing ? "Updated!😍" : "Release to update"}</span>
+    </div>
+    )}
 
       <main
         className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
