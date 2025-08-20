@@ -345,64 +345,55 @@ export default function Quiz() {
   };
 
   /* -------- Handlers -------- */
-const onSelect = (optIdx, evt) => {
-  if (!current) return;
-  if (isPractice && lockedMap[index]) return; // read-only check
+  const onSelect = (optIdx, evt) => {
+    if (!current) return;
+    // Read-only in practice when revisiting previous questions
+    if (isPractice && lockedMap[index]) return;
 
-  try { navigator.vibrate?.(24); } catch {}
+    // Light haptic on any tap
+    try { navigator.vibrate?.(24); } catch {}
 
-  const nextAnswers = answers.slice();
-  if (answers[index] === optIdx) {
-    nextAnswers[index] = null;
-  } else {
-    nextAnswers[index] = optIdx;
-  }
-  setAnswers(nextAnswers);
-
-  // reset skipped
-  if (nextAnswers[index] !== null && skipped[index]) {
-    const nextSkipped = skipped.slice();
-    nextSkipped[index] = false;
-    setSkipped(nextSkipped);
-  }
-
-  // ✅ Immediately lock this question in practice mode
-  if (isPractice && nextAnswers[index] !== null) {
-    setLockedMap(prev => {
-      if (prev[index]) return prev;
-      const copy = prev.slice();
-      copy[index] = true;
-      return copy;
-    });
-  }
-
-  // Feedback (sound + confetti)
-  if (isPractice) {
-    const isCorrect = nextAnswers[index] === current.answerIndex;
-    if (practiceSoundsOn) {
-      if (isCorrect) playCorrect();
-      else if (nextAnswers[index] !== null) playWrong();
+    // Toggle: tap the same option again = unselect
+    const nextAnswers = answers.slice();
+    if (answers[index] === optIdx) {
+      nextAnswers[index] = null;
+    } else {
+      nextAnswers[index] = optIdx;
     }
-    if (isCorrect && evt?.currentTarget) {
-      const rect = evt.currentTarget.getBoundingClientRect();
-      confettiFromRect(rect, 16);
-    }
-  }
+    setAnswers(nextAnswers);
 
-  // QUIZ auto-next after 2s
-  if (!isPractice && nextAnswers[index] !== null) {
-    if (autoNextRef.current) clearTimeout(autoNextRef.current);
-    autoNextRef.current = setTimeout(() => {
-      if (index < total - 1) {
-        goNext();
-      } else {
-        setShowSubmit(true);
-        setPaused(true);
+    // reset "skipped" if we now have a selection
+    if (nextAnswers[index] !== null && skipped[index]) {
+      const nextSkipped = skipped.slice();
+      nextSkipped[index] = false;
+      setSkipped(nextSkipped);
+    }
+
+    // Practice feedback: sound + confetti on correct
+    if (isPractice) {
+      const isCorrect = nextAnswers[index] === current.answerIndex;
+      if (practiceSoundsOn) {
+        if (isCorrect) playCorrect(); else if (nextAnswers[index] !== null) playWrong();
       }
-    }, 2000);
-  }
-};
+      if (isCorrect && evt?.currentTarget) {
+        const rect = evt.currentTarget.getBoundingClientRect();
+        confettiFromRect(rect, 16);
+      }
+    }
 
+    // Auto-next after 2s in QUIZ mode only (only when there is a selection)
+    if (!isPractice && nextAnswers[index] !== null) {
+      if (autoNextRef.current) clearTimeout(autoNextRef.current);
+      autoNextRef.current = setTimeout(() => {
+        if (index < total - 1) {
+          goNext();
+        } else {
+          setShowSubmit(true);
+          setPaused(true);
+        }
+      }, 2000);
+    }
+  };
 
   const lockCurrentIfPractice = () => {
   if (!isPractice) return;

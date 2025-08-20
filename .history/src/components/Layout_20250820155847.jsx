@@ -49,7 +49,7 @@ export default function Layout() {
   };
 
   // ✅ Hide nav on quiz screens
-  const hideNav = /^\/quiz\/[^/]+$/.test(pathname);
+  const hideNav = pathname.startsWith("/quiz/");
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);

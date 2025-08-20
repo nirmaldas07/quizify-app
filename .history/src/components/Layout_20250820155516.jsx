@@ -28,28 +28,24 @@ export default function Layout() {
   const scrollPositions = useRef({});
   const lastTapRef = useRef(0);
 
-  // Preload sound
+  // Preload refresh sound
   const soundRef = useRef(null);
   useEffect(() => {
     soundRef.current = new Audio("/sounds/refresh.mp3");
   }, []);
 
-  // Restore scroll when navigating
+  // Restore scroll on navigation
   useEffect(() => {
     const pos = scrollPositions.current[pathname];
-    if (pos !== undefined) {
-      window.scrollTo(0, pos);
-    } else {
-      window.scrollTo(0, 0);
-    }
+    window.scrollTo(0, pos ?? 0);
   }, [pathname]);
 
   const saveScroll = () => {
     scrollPositions.current[pathname] = window.scrollY;
   };
 
-  // ✅ Hide nav on quiz screens
-  const hideNav = /^\/quiz\/[^/]+$/.test(pathname);
+  // FIXED regex: matches `/quiz/...` AND deeper paths
+  const hideNav = /^\/quiz\/[^/]+/.test(pathname);
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -71,7 +67,7 @@ export default function Layout() {
       const dist = e.touches[0].clientY - touchStartY.current;
       if (dist > 0) {
         setPulling(true);
-        setPullDist(Math.min(dist, 80));
+        setPullDist(Math.min(dist, 100)); // allow smooth pull
       }
     }
   };
@@ -80,27 +76,25 @@ export default function Layout() {
     if (pulling && pullDist > 40) {
       setRefreshing(true);
 
-      // ✅ Play sound
+      // Play sound
       if (soundRef.current) {
         soundRef.current.currentTime = 0;
         soundRef.current.play().catch(() => {});
       }
 
-      // ✅ Vibrate
-      if (navigator.vibrate) {
-        navigator.vibrate(60);
-      }
+      // Vibrate
+      if (navigator.vibrate) navigator.vibrate(60);
 
-      // ✅ Scroll top
+      // Scroll top
       window.scrollTo({ top: 0, behavior: "smooth" });
 
-      // Stop indicator after 1s
       setTimeout(() => setRefreshing(false), 1000);
     }
     setPulling(false);
     setPullDist(0);
   };
 
+  /* ---------------- Nav Item ---------------- */
   const NavItem = ({ path, icon, label }) => {
     const active = isActive(path);
     const handleClick = () => {
@@ -132,18 +126,13 @@ export default function Layout() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-base-bg text-base-text"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className="min-h-screen bg-base-bg text-base-text">
       {/* Pull-to-refresh indicator */}
       {(pulling || refreshing) && (
         <div
           className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm transition-all duration-200"
           style={{
-            top: refreshing ? "4rem" : `${Math.min(pullDist, 100)}px`,
+            top: refreshing ? "4rem" : `${Math.min(pullDist, 80)}px`,
             transform: "translateX(-50%)",
             width: "160px",
             textAlign: "center",
@@ -159,12 +148,15 @@ export default function Layout() {
       )}
 
       <main
-        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
-          ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"} min-h-screen`} // ✅ ensures quiz is never blank
+        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))] 
+          ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
         style={{
           transform: pulling ? `translateY(${pullDist}px)` : "translateY(0)",
           transition: refreshing ? "transform 0.3s ease" : "none",
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <Outlet />
       </main>
