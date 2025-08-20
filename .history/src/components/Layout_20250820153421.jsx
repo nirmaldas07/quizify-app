@@ -135,37 +135,33 @@ export default function Layout() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-    {/* Pull-to-refresh indicator */}
-    {(pulling || refreshing) && (
-    <div
-        className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm transition-all duration-200"
-        style={{
-        top: refreshing ? "4rem" : `${Math.min(pullDist, 100)}px`, // 👈 follows finger, snaps back
-        transform: "translateX(-50%)",
-        width: "160px",
-        textAlign: "center",
-        }}
-    >
-        <span className={`${!refreshing ? "motion-safe:animate-spin" : "opacity-0"} mb-1`}>
-        ⭮
-        </span>
-        <span className={refreshing ? "animate-bounce" : ""}>
-        {refreshing ? "Updated!😍" : "Release to refresh"}
-        </span>
-    </div>
-    )}
+        {/* Pull-to-refresh indicator */}
+        {(pulling || refreshing) && (
+        <div
+            className="fixed left-1/2 z-50 flex flex-col items-center text-white text-sm"
+            style={{
+            top: "4rem",
+            transform: "translateX(-50%)",
+            width: "160px", // ✅ fixed width ensures both texts are centered
+            textAlign: "center",
+            }}
+        >
+            <span className={`${!refreshing ? "motion-safe:animate-spin" : "opacity-0"} mb-1`}>
+            ⭮
+            </span>
+            <span className={refreshing ? "animate-bounce" : ""}>
+            {refreshing ? "Updated!😍" : "Release to refresh"}
+            </span>
+        </div>
+        )}
 
-    <main
-    className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+0.25rem)]
-        ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
-    style={{
-        transform: pulling ? `translateY(${pullDist}px)` : "translateY(0)",
-        transition: refreshing ? "transform 0.3s ease" : "none",
-    }}
-    >
-    <Outlet />
-    </main>
 
+      <main
+        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
+          ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
+      >
+        <Outlet />
+      </main>
 
       {!hideNav && (
         <nav role="navigation" aria-label="Bottom navigation" className="fixed inset-x-0 bottom-0 z-50">

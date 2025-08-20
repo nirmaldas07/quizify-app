@@ -155,17 +155,12 @@ export default function Layout() {
     </div>
     )}
 
-    <main
-    className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+0.25rem)]
-        ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
-    style={{
-        transform: pulling ? `translateY(${pullDist}px)` : "translateY(0)",
-        transition: refreshing ? "transform 0.3s ease" : "none",
-    }}
-    >
-    <Outlet />
-    </main>
-
+      <main
+        className={`mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top))]
+          ${hideNav ? "pb-6" : "pb-[calc(5.25rem+env(safe-area-inset-bottom))]"}`}
+      >
+        <Outlet />
+      </main>
 
       {!hideNav && (
         <nav role="navigation" aria-label="Bottom navigation" className="fixed inset-x-0 bottom-0 z-50">
