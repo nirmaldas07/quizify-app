@@ -1,80 +1,302 @@
-subject,difficulty,question,option1,option2,option3,option4,answer,explanation
-general-knowledge,easy,What is the capital of Japan?,Tokyo,Beijing,Seoul,Bangkok,Tokyo,Tokyo is the capital of Japan.
-general-knowledge,easy,What is the largest mammal?,Blue Whale,Elephant,Giraffe,Human,Blue Whale,The Blue Whale is the largest mammal on Earth.
-general-knowledge,easy,How many continents are there?,7,6,5,8,7,"There are seven continents: Asia, Africa, North America, South America, Antarctica, Europe, and Australia."
-general-knowledge,medium,Who painted the Mona Lisa?,Leonardo da Vinci,Vincent van Gogh,Pablo Picasso,Michelangelo,Leonardo da Vinci,Leonardo da Vinci painted the Mona Lisa.
-general-knowledge,medium,What is the chemical symbol for gold?,Au,Ag,Fe,O,Au,"The chemical symbol for gold is Au, from the Latin word 'aurum'."
-general-knowledge,medium,In which year did the Titanic sink?,1912,1920,1905,1931,1912,"The Titanic sank on April 15, 1912"
-general-knowledge,hard,What is the longest river in the world?,Nile River,Amazon River,Yangtze River,Mississippi River,Nile River,"While the Amazon is often cited, the Nile is traditionally considered the longest."
-general-knowledge,hard,What is the largest country by area?,Russia,Canada,China,USA,Russia,Russia is the largest country in the world by land area.
-general-knowledge,easy,Who wrote 'Romeo and Juliet'?,William Shakespeare,Charles Dickens,Jane Austen,Mark Twain,William Shakespeare,William Shakespeare is the author of 'Romeo and Juliet'.
-general-knowledge,easy,What is the capital of Australia?,Canberra,Sydney,Melbourne,Perth,Canberra,"Canberra is the capital of Australia, not Sydney."
-general-knowledge,medium,Which planet is known as the 'Red Planet'?,Mars,Venus,Jupiter,Saturn,Mars,Mars has a reddish appearance due to iron oxide on its surface.
-general-knowledge,medium,Who invented the light bulb?,Thomas Edison,Nikola Tesla,Alexander Graham Bell,Albert Einstein,Thomas Edison,Thomas Edison is credited with inventing the commercially viable light bulb.
-general-knowledge,medium,What is the largest ocean on Earth?,Pacific Ocean,Atlantic Ocean,Indian Ocean,Arctic Ocean,Pacific Ocean,The Pacific Ocean is the largest and deepest of Earth's oceanic divisions.
-general-knowledge,hard,What is the square root of 144?,12,11,13,10,12,12*12 = 144.
-general-knowledge,hard,What is the currency of Japan?,Yen,Dollar,Euro,Pound,Yen,The Japanese currency is the Yen.
-general-knowledge,hard,What is the chemical symbol for iron?,Fe,Ir,In,I,Fe,"The chemical symbol for iron is Fe, from the Latin word 'ferrum'."
-general-knowledge,easy,Which country is famous for the pyramids?,Egypt,Italy,Greece,China,Egypt,The Great Pyramids are located in Egypt.
-general-knowledge,easy,What is the longest bone in the human body?,Femur,Humerus,Tibia,Fibula,Femur,"The femur, or thigh bone, is the longest bone."
-general-knowledge,medium,What is the largest organ in the human body?,Skin,Heart,Brain,Lungs,Skin,The skin is the largest external and internal organ by area and weight.
-current-affairs,easy,Who is the current President of the United States?,Joe Biden,Donald Trump,Barack Obama,George W. Bush,Joe Biden,Joe Biden is the 46th US President.
-current-affairs,easy,Which country hosted the 2022 FIFA World Cup?,Qatar,Brazil,Germany,Russia,Qatar,Qatar hosted the 2022 FIFA World Cup.
-current-affairs,medium,Who is the current Secretary-General of the United Nations?,António Guterres,Ban Ki-moon,Kofi Annan,Boutros Boutros-Ghali,António Guterres,António Guterres has been the Secretary-General since 2017.
-current-affairs,medium,Which country recently launched the Artemis program to return to the moon?,USA,China,Russia,India,USA,NASA's Artemis program aims to return humans to the moon.
-current-affairs,hard,Which company acquired Twitter in 2022?,X Corp,Meta,Google,Microsoft,X Corp,Elon Musk's X Corp acquired Twitter in 2022.
-current-affairs,hard,Who won the Nobel Peace Prize in 2022?,Ales Bialiatski,Maria Ressa,World Food Programme,Denis Mukwege,Ales Bialiatski,Ales Bialiatski won for his human rights work in Belarus.
-current-affairs,easy,Which city hosted the Summer Olympics in 2020 (held in 2021)?,Tokyo,Paris,London,Rio de Janeiro,Tokyo,The Tokyo 2020 Olympics were delayed due to the pandemic.
-current-affairs,medium,Who is the current Prime Minister of the United Kingdom?,Rishi Sunak,Boris Johnson,Theresa May,David Cameron,Rishi Sunak,Rishi Sunak took office in 2022.
-current-affairs,hard,What is the name of the new social media platform launched by Meta in 2023?,Threads,Bluesky,Mastodon,Spill,Threads,Meta launched Threads as a competitor to Twitter.
-current-affairs,easy,Which country is the largest producer of crude oil?,USA,Saudi Arabia,Russia,China,USA,The USA is the world's leading crude oil producer.
-current-affairs,easy,Who is the current Prime Minister of Canada?,Justin Trudeau,Stephen Harper,Paul Martin,Jean Chrétien,Justin Trudeau,Justin Trudeau is the 23rd Prime Minister of Canada.
-current-affairs,medium,What major event occurred in the UK in September 2022?,Death of Queen Elizabeth II,A new Prime Minister was elected,The UK left the EU,A major heatwave,Death of Queen Elizabeth II,"Queen Elizabeth II passed away on September 8, 2022"
-current-affairs,hard,Which country's currency has faced significant inflation in recent years,leading to a new 'revaluation'?,Venezuela,Argentina,Turkey,Lebanon,Venezuela. Venezuela has revalued its currency multiple times due to hyperinflation.
-current-affairs,hard,Which country successfully landed a rover on Mars in 2021?,China,USA,Russia,UAE,China,China's Zhurong rover landed on Mars as part of the Tianwen-1 mission.
-current-affairs,medium,Which European country is currently at war with Russia?,Ukraine,Poland,Germany,Finland,Ukraine,The Russian invasion of Ukraine began in February 2022.
-current-affairs,easy,Who is the current Pope of the Catholic Church?,Pope Francis,Pope Benedict XVI,Pope John Paul II,Pope Paul VI,Pope Francis,Pope Francis was elected in 2013.
-current-affairs,hard,What major global summit was held in Glasgow in 2021?,COP26,G7,G20,Davos Forum,COP26,COP26 was a major UN climate change conference.
-current-affairs,easy,Which country won the most medals at the 2020 Summer Olympics?,USA,China,Japan,Great Britain,USA,The USA topped the medal table at the Tokyo 2020 Olympics.
-current-affairs,medium,Who is the current Director-General of the World Health Organization (WHO)?,Tedros Adhanom Ghebreyesus,Margaret Chan,Gro Harlem Brundtland,Lee Jong-wook,Tedros Adhanom Ghebreyesus,Dr. Tedros is the current head of the WHO.
-current-affairs,hard,Which country became the first in the world to fully legalize the recreational use of cannabis?,Uruguay,Canada,Netherlands,USA,Uruguay,Uruguay legalized cannabis in 2013.
-fun-facts,easy,What is the only fruit that has its seeds on the outside?,Strawberry,Apple,Orange,Watermelon,Strawberry,A strawberry has its seeds on the outside.
-fun-facts,easy,What is the largest ocean on Earth?,Pacific Ocean,Atlantic Ocean,Indian Ocean,Arctic Ocean,Pacific Ocean,The Pacific Ocean is the largest and deepest ocean.
-fun-facts,medium,How long can a snail sleep for?,3 years,1 day,1 month,1 week,3 years,Snails can sleep for up to three years in hibernation.
-fun-facts,medium,What is the fear of long words called?,Hippopotomonstrosesquippedaliophobia,Acrophobia,Arachnophobia,Claustrophobia,Hippopotomonstrosesquippedaliophobia,It's a long word for a fear of long words.
-fun-facts,hard,What is a group of crows called?,Murder,Flock,Herd,Pack,Murder,A group of crows is called a murder.
-fun-facts,hard,What is the name of the longest-running television show?,The Simpsons,Gunsmoke,Law & Order,Doctor Who,The Simpsons,The Simpsons first aired in 1989 and is still running.
-fun-facts,easy,What color is a polar bear's skin?,Black,White,Pink,Blue,Black,Polar bear skin is black to absorb heat.
-fun-facts,medium,What is the smallest bone in the human body?,Stapes,Femur,Humerus,Ulna,Stapes,The stapes bone is in the ear and is also known as the stirrup.
-fun-facts,hard,What is the only letter not in the periodic table?,J,X,Z,Q,J,The letter 'J' is not used in any element's symbol.
-fun-facts,easy,What is the fear of clowns called?,Coulrophobia,Nyctophobia,Trypanophobia,Aerophobia,Coulrophobia,Coulrophobia is a specific type of phobia.
-fun-facts,easy,What animal has the largest eyes in the world?,Giant squid,Ostrich,Elephant,Giraffe,Giant squid,"The giant squid has the largest eyes, about the size of a dinner plate."
-fun-facts,medium,How many hearts does an octopus have?,3,1,2,4,3,"An octopus has three hearts: two pump blood to the gills, and one pumps it to the rest of the body."
-fun-facts,hard,Which country has more pyramids than Egypt?,Sudan,Mexico,China,Peru,Sudan,"Sudan has over 200 pyramids, more than Egypt."
-fun-facts,hard,What is the fear of balloons called?,Globophobia,Aerophobia,Claustrophobia,Nyctophobia,Globophobia,Globophobia is an irrational fear of balloons.
-fun-facts,easy,What food never spoils?,Honey,Milk,Bread,Cheese,Honey,Honey is known to last indefinitely due to its low moisture and high acidity.
-fun-facts,medium,What is the only state in the USA to grow coffee beans?,Hawaii,California,Florida,Texas,Hawaii,Hawaii is the only US state that commercially grows coffee.
-fun-facts,medium,What is the scientific name for the 'funny bone'?,Ulnar nerve,Femur,Radius,Carpals,Ulnar nerve,The tingling sensation is caused by the ulnar nerve.
-fun-facts,hard,What is the most common phobia in the world?,Arachnophobia (fear of spiders),Acrophobia (fear of heights),Claustrophobia (fear of small spaces),Nyctophobia (fear of the dark),Arachnophobia (fear of spiders),Fear of spiders is considered the most common phobia.
-fun-facts,easy,What is the most active volcano in the world?,Kīlauea,Mount Etna,Mount Vesuvius,Mount Fuji,Kīlauea,Kīlauea in Hawaii has been erupting almost continuously since 1983.
-fun-facts,medium,What is the only food that doesn't rot or go bad?,Honey,Bread,Milk,Cheese,Honey,Honey can last for thousands of years without spoiling.
-other,easy,What is 2+2?,4,3,5,6,4,2+2=4.
-other,easy,What is the name of the main character in the Harry Potter series?,Harry Potter,Ron Weasley,Hermione Granger,Albus Dumbledore,Harry Potter,Harry Potter is the protagonist of the series.
-other,medium,What is the largest planet in our solar system?,Jupiter,Saturn,Earth,Mars,Jupiter,Jupiter is the largest planet.
-other,medium,How many sides does a hexagon have?,6,5,7,8,6,A hexagon is a six-sided polygon.
-other,hard,What is the square root of 144?,12,11,13,10,12,12*12 = 144.
-other,hard,What is the chemical formula for water?,H2O,CO2,NaCl,O2,H2O,Water is a molecule of two hydrogen atoms and one oxygen atom.
-other,easy,What is the primary language spoken in Brazil?,Portuguese,Spanish,English,French,Portuguese,Brazil was a Portuguese colony.
-other,medium,What is the name of the process by which plants make their food?,Photosynthesis,Respiration,Transpiration,Fermentation,Photosynthesis,Plants use sunlight to convert carbon dioxide and water into glucose.
-other,hard,Which element has the atomic number 1?,Hydrogen,Helium,Oxygen,Carbon,Hydrogen,Hydrogen is the first element on the periodic table.
-other,medium,Which planet is known as the 'Red Planet'?,Mars,Venus,Jupiter,Saturn,Mars,Mars has a reddish appearance due to iron oxide on its surface.
-other,easy,What is the name of the main character in the Disney movie 'Frozen'?,Elsa,Anna,Olaf,Kristoff,Elsa,Elsa is the main character and is known for her ice powers.
-other,medium,What is the capital of France?,Paris,London,Berlin,Rome,Paris,Paris is the capital of France.
-other,hard,What is the name of the wizard in 'The Lord of the Rings'?,Gandalf,Aragorn,Frodo,Sauron,Gandalf,Gandalf is a powerful wizard in the series.
-other,easy,What is the name of the bear in 'The Jungle Book'?,Baloo,Mowgli,Bagheera,Shere Khan,Baloo,Baloo is the friendly bear who befriends Mowgli.
-other,medium,What is the name of the toy cowboy in the movie 'Toy Story'?,Woody,Buzz Lightyear,Slinky Dog,Mr. Potato Head,Woody,Woody is the beloved pull-string cowboy doll.
-other,hard,Who wrote 'The Odyssey'?,Homer,Virgil,Sophocles,Plato,Homer,Homer is the ancient Greek poet credited with writing 'The Odyssey' and 'The Iliad'.
-other,easy,What is the name of the largest ocean on Earth?,Pacific Ocean,Atlantic Ocean,Indian Ocean,Arctic Ocean,Pacific Ocean,The Pacific Ocean is the largest and deepest ocean.
-other,medium,How many players are on a standard soccer team?,11,9,10,12,11,A standard soccer team has 11 players on the field.
-other,hard,What is the name of the fictional town where 'The Simpsons' live?,Springfield,Quahog,South Park,Shelbyville,Springfield,The Simpsons live in the fictional town of Springfield.
-other,medium,Who is the author of the 'Harry Potter' series?,J.K. Rowling,Stephenie Meyer,Suzanne Collins,George R.R. Martin,J.K. Rowling,J.K. Rowling is the author of the 'Harry Potter' series.
+category,difficulty,question,option1,option2,option3,option4,answer,explanation
+General Knowledge,Easy,What is the capital of France?,London,Berlin,Paris,Madrid,C,Paris is the capital and largest city of France
+General Knowledge,Easy,How many days are there in a leap year?,365,366,367,364,B,Leap years have 366 days including February 29th
+General Knowledge,Easy,What is the largest mammal in the world?,Elephant,Blue whale,Giraffe,Hippopotamus,B,Blue whales can reach up to 100 feet in length
+General Knowledge,Easy,Which planet is known as the Red Planet?,Venus,Mars,Jupiter,Saturn,B,Mars appears red due to iron oxide on its surface
+General Knowledge,Easy,What is the chemical symbol for water?,H2O,CO2,NaCl,O2,A,Water molecule consists of two hydrogen and one oxygen atom
+General Knowledge,Easy,How many continents are there?,5,6,7,8,C,Seven continents: Asia Africa North America South America Antarctica Europe Australia
+General Knowledge,Easy,What is the largest ocean on Earth?,Atlantic,Pacific,Indian,Arctic,B,Pacific Ocean covers about 63 million square miles
+General Knowledge,Easy,Which gas do plants absorb from the atmosphere?,Oxygen,Nitrogen,Carbon dioxide,Hydrogen,C,Plants use CO2 for photosynthesis to produce oxygen
+General Knowledge,Easy,What is the hardest natural substance?,Gold,Diamond,Iron,Quartz,B,Diamond rates 10 on the Mohs hardness scale
+General Knowledge,Easy,How many legs does a spider have?,6,8,10,12,B,All spiders are arachnids with eight legs
+General Knowledge,Medium,What is the smallest country in the world?,Monaco,Vatican City,San Marino,Liechtenstein,B,Vatican City is 0.17 square miles in area
+General Knowledge,Medium,Which vitamin is produced when skin is exposed to sunlight?,Vitamin A,Vitamin B,Vitamin C,Vitamin D,D,UV rays help skin synthesize vitamin D from cholesterol
+General Knowledge,Medium,What is the currency of Japan?,Yen,Won,Yuan,Rupiah,A,Japanese yen is the official currency of Japan
+General Knowledge,Medium,Which organ in the human body produces insulin?,Liver,Kidney,Pancreas,Heart,C,Beta cells in pancreas produce insulin to regulate blood sugar
+General Knowledge,Medium,What is the speed of light in vacuum?,300000 km/s,150000 km/s,450000 km/s,600000 km/s,A,Speed of light is approximately 299792458 meters per second
+General Knowledge,Medium,Which element has the atomic number 1?,Helium,Hydrogen,Lithium,Carbon,B,Hydrogen is the first element with one proton
+General Knowledge,Medium,What is the largest desert in the world?,Sahara,Gobi,Antarctica,Arabian,C,Antarctica is technically the largest desert by area
+General Knowledge,Medium,Which blood type is known as the universal donor?,A,B,AB,O,D,Type O blood can be donated to any blood type
+General Knowledge,Medium,What is the boiling point of water at sea level?,90°C,95°C,100°C,105°C,C,Water boils at 100 degrees Celsius at standard pressure
+General Knowledge,Medium,Which planet has the most moons?,Jupiter,Saturn,Uranus,Neptune,B,Saturn has 146 confirmed moons as of recent discoveries
+General Knowledge,Hard,What is the Planck constant approximately?,6.626 × 10^-34 J⋅s,6.626 × 10^-27 J⋅s,6.626 × 10^-31 J⋅s,6.626 × 10^-38 J⋅s,A,Fundamental constant in quantum mechanics
+General Knowledge,Hard,Which isotope of carbon is used for radiocarbon dating?,Carbon-12,Carbon-13,Carbon-14,Carbon-15,C,C-14 has a half-life of 5730 years useful for dating
+General Knowledge,Hard,What is the pH of pure water at 25°C?,6,7,8,9,B,Pure water has a neutral pH of 7 at room temperature
+General Knowledge,Hard,Which particle was theorized to give mass to other particles?,Photon,Higgs boson,Neutrino,Muon,B,Higgs boson explains mass through the Higgs field mechanism
+General Knowledge,Hard,What is the escape velocity from Earth?,7.9 km/s,11.2 km/s,15.8 km/s,21.1 km/s,B,11.2 km/s needed to escape Earth's gravitational pull
+General Knowledge,Hard,Which law states that pressure and volume are inversely proportional?,Charles' Law,Boyle's Law,Gay-Lussac's Law,Avogadro's Law,B,Boyle's Law applies at constant temperature
+General Knowledge,Hard,What is the half-life of Uranium-238?,4.5 million years,4.5 billion years,45 million years,450 million years,B,U-238 has a half-life of 4.468 billion years
+General Knowledge,Hard,Which enzyme unwinds DNA during replication?,Ligase,Polymerase,Helicase,Primase,C,DNA helicase breaks hydrogen bonds between base pairs
+General Knowledge,Hard,What is the critical angle for total internal reflection in water?,42°,48°,35°,56°,B,Critical angle for water-air interface is about 48.6°
+General Knowledge,Hard,Which quantum number determines the shape of an orbital?,Principal,Azimuthal,Magnetic,Spin,B,Azimuthal quantum number (l) determines orbital shape
+Fun facts,Easy,Which animal never sleeps?,Giraffe,Elephant,Dolphin,Shark,D,Some shark species must keep moving to breathe
+Fun facts,Easy,What color is a polar bear's skin?,White,Black,Pink,Brown,B,Polar bears have black skin under their white fur
+Fun facts,Easy,How many hearts does an octopus have?,1,2,3,4,C,Octopuses have three hearts to pump blood efficiently
+Fun facts,Easy,What is a group of flamingos called?,Flock,Colony,Flamboyance,Pack,C,A group of flamingos is called a flamboyance
+Fun facts,Easy,Which fruit was once considered poisonous in Europe?,Apple,Tomato,Orange,Banana,B,Tomatoes were thought poisonous due to lead poisoning from plates
+Fun facts,Easy,What percentage of the human body is water?,50%,60%,70%,80%,B,Adult human body is approximately 60% water
+Fun facts,Easy,Which insect can lift 50 times its own weight?,Bee,Butterfly,Ant,Beetle,C,Ants are incredibly strong relative to their size
+Fun facts,Easy,How long is a giraffe's tongue?,12 inches,18 inches,24 inches,30 inches,B,Giraffe tongues are 18-20 inches long and dark colored
+Fun facts,Easy,What is the only mammal capable of true flight?,Flying squirrel,Sugar glider,Bat,Flying lemur,C,Bats are the only mammals with powered flight
+Fun facts,Easy,Which bird can fly backwards?,Hummingbird,Eagle,Sparrow,Robin,A,Hummingbirds can hover and fly in any direction
+Fun facts,Medium,What is the loudest animal on Earth?,Lion,Elephant,Blue whale,Howler monkey,C,Blue whales can produce sounds up to 188 decibels
+Fun facts,Medium,Which animal has the longest pregnancy?,Elephant,Whale,Giraffe,Rhinoceros,A,Elephant pregnancy lasts about 22 months
+Fun facts,Medium,What is the only food that never spoils?,Rice,Honey,Salt,Vinegar,B,Honey's low moisture and acidity prevent bacterial growth
+Fun facts,Medium,Which planet rains diamonds?,Jupiter,Saturn,Neptune,Uranus,C,Neptune's extreme pressure creates diamond rain
+Fun facts,Medium,How many times does a hummingbird's heart beat per minute?,500,800,1200,2000,C,Hummingbird hearts beat up to 1260 times per minute
+Fun facts,Medium,What is the strongest muscle in the human body?,Bicep,Heart,Jaw,Tongue,C,Masseter jaw muscle can exert 200 pounds of force
+Fun facts,Medium,Which animal has fingerprints most similar to humans?,Chimpanzee,Gorilla,Koala,Orangutan,C,Koala fingerprints are nearly identical to human ones
+Fun facts,Medium,What percentage of Antarctica is covered by ice?,85%,90%,95%,98%,D,98% of Antarctica is covered by ice sheets
+Fun facts,Medium,Which vegetable was originally purple?,Carrot,Potato,Eggplant,Cabbage,A,Original carrots were purple; orange varieties came later
+Fun facts,Medium,How many bones are babies born with?,206,270,300,350,B,Babies are born with about 270 bones that fuse as they grow
+Fun facts,Hard,What is the world's oldest known living tree species?,Redwood,Oak,Ginkgo,Baobab,C,Ginkgo trees have existed for 270 million years
+Fun facts,Hard,Which animal has the highest blood pressure?,Elephant,Blue whale,Giraffe,Rhinoceros,C,Giraffes need high pressure to pump blood to their brain
+Fun facts,Hard,What is the rarest blood type in the world?,AB-,Rh-null,Duffy negative,Diego positive,B,Rh-null blood lacks all Rh antigens
+Fun facts,Hard,Which material is harder than diamond?,Graphene,Lonsdaleite,Wurtzite boron nitride,Aggregated diamond nanorods,D,ADNRs are 11% harder than diamond
+Fun facts,Hard,What is the shortest war in history?,Anglo-Zanzibar War,Six-Day War,Falklands War,Gulf War,A,Anglo-Zanzibar War lasted 38-45 minutes in 1896
+Fun facts,Hard,Which country has more time zones than any other?,Russia,United States,China,Canada,A,Russia spans 11 time zones across its territory
+Fun facts,Hard,What is the most abundant gas in Earth's atmosphere?,Oxygen,Nitrogen,Carbon dioxide,Argon,B,Nitrogen makes up about 78% of Earth's atmosphere
+Fun facts,Hard,Which ocean is expanding?,Atlantic,Pacific,Indian,Arctic,A,Atlantic Ocean grows 2-5 cm per year due to seafloor spreading
+Fun facts,Hard,What is the world's most venomous creature?,Box jellyfish,Blue-ringed octopus,Cone snail,Sea wasp,A,Box jellyfish venom can kill a human in minutes
+Fun facts,Hard,Which element was named after a planet?,Uranium,Neptune,Plutonium,Mercury,C,Plutonium was named after the dwarf planet Pluto
+Science,Easy,What gas do plants release during photosynthesis?,Carbon dioxide,Nitrogen,Oxygen,Hydrogen,C,Plants convert CO2 and water into glucose and oxygen
+Science,Easy,What is the center of an atom called?,Electron,Proton,Neutron,Nucleus,D,The nucleus contains protons and neutrons
+Science,Easy,Which force keeps planets in orbit around the sun?,Magnetic force,Gravitational force,Electric force,Nuclear force,B,Gravity provides the centripetal force for orbital motion
+Science,Easy,What is the chemical formula for salt?,NaCl,KCl,CaCl2,MgCl2,A,Table salt is sodium chloride (NaCl)
+Science,Easy,Which blood vessels carry blood away from the heart?,Veins,Arteries,Capillaries,Lymph vessels,B,Arteries carry oxygenated blood from heart to tissues
+Science,Easy,What is the unit of electric current?,Volt,Ampere,Ohm,Watt,B,Electric current is measured in amperes (A)
+Science,Easy,Which organ filters blood in the human body?,Liver,Lung,Kidney,Heart,C,Kidneys filter waste products from blood
+Science,Easy,What is the hardest part of the human body?,Bone,Tooth enamel,Nail,Cartilage,B,Tooth enamel is the hardest substance in the body
+Science,Easy,Which gas makes up most of the air we breathe?,Oxygen,Carbon dioxide,Nitrogen,Hydrogen,C,Air is about 78% nitrogen and 21% oxygen
+Science,Easy,What type of animal is a whale?,Fish,Mammal,Reptile,Amphibian,B,Whales are marine mammals that breathe air
+Science,Medium,What is the powerhouse of the cell?,Nucleus,Mitochondria,Ribosome,Endoplasmic reticulum,B,Mitochondria produce ATP energy for cellular processes
+Science,Medium,Which scientist proposed the theory of evolution?,Isaac Newton,Charles Darwin,Albert Einstein,Gregor Mendel,B,Darwin proposed natural selection as evolution mechanism
+Science,Medium,What is the study of earthquakes called?,Geology,Seismology,Meteorology,Oceanography,B,Seismology studies earthquakes and seismic waves
+Science,Medium,Which element has the symbol Fe?,Iron,Fluorine,Francium,Fermium,A,Fe comes from Latin ferrum meaning iron
+Science,Medium,What is the normal human body temperature in Celsius?,35°C,36°C,37°C,38°C,C,Normal body temperature is 37°C or 98.6°F
+Science,Medium,Which part of the brain controls balance?,Cerebrum,Cerebellum,Brain stem,Hippocampus,B,Cerebellum coordinates movement and maintains balance
+Science,Medium,What is the process of cell division called?,Meiosis,Mitosis,Osmosis,Diffusion,B,Mitosis produces two identical diploid cells
+Science,Medium,Which type of radiation has the longest wavelength?,Gamma rays,X-rays,Visible light,Radio waves,D,Radio waves have wavelengths from meters to kilometers
+Science,Medium,What is the chemical symbol for gold?,Au,Ag,Go,Gd,A,Au comes from Latin aurum meaning gold
+Science,Medium,Which scientist developed the periodic table?,Marie Curie,Dmitri Mendeleev,Antoine Lavoisier,John Dalton,B,Mendeleev organized elements by atomic weight in 1869
+Science,Hard,What is the name of the theoretical particle that mediates gravity?,Graviton,Gluon,Photon,Boson,A,Gravitons are hypothetical particles carrying gravitational force
+Science,Hard,Which amino acid is encoded by only one codon?,Methionine,Alanine,Leucine,Serine,A,Methionine (AUG) is the only amino acid with one codon
+Science,Hard,What is the quantum mechanical property of electron spin?,±1/4,±1/2,±1,±2,B,Electrons have spin quantum number of +1/2 or -1/2
+Science,Hard,Which equation describes the relationship between energy and mass?,F=ma,E=hf,E=mc²,PV=nRT,C,Einstein's mass-energy equivalence equation
+Science,Hard,What is the critical temperature for superconductivity in mercury?,4.2K,7.2K,9.2K,12.2K,A,Mercury becomes superconducting at 4.15 Kelvin
+Science,Hard,Which enzyme catalyzes the first step of glycolysis?,Hexokinase,Phosphofructokinase,Aldolase,Pyruvate kinase,A,Hexokinase phosphorylates glucose to glucose-6-phosphate
+Science,Hard,What is the wavelength of the hydrogen alpha line?,486 nm,656 nm,486 nm,434 nm,B,H-alpha line in Balmer series has wavelength 656.3 nm
+Science,Hard,Which principle states that no two fermions can occupy the same quantum state?,Heisenberg principle,Pauli exclusion principle,Uncertainty principle,Complementarity principle,B,Pauli exclusion explains electron shell structure
+Science,Hard,What is the binding energy of the deuteron?,1.1 MeV,2.2 MeV,3.3 MeV,4.4 MeV,B,Deuteron binding energy is 2.224 MeV
+Science,Hard,Which protein unfolds other proteins during heat shock?,Chaperone,Protease,Kinase,Phosphatase,A,Heat shock proteins refold denatured proteins
+History,Easy,Who was the first President of the United States?,Thomas Jefferson,George Washington,John Adams,Benjamin Franklin,B,Washington served as first US president from 1789-1797
+History,Easy,In which year did World War II end?,1944,1945,1946,1947,B,WWII ended in 1945 with Japan's surrender in September
+History,Easy,Which ancient wonder was located in Alexandria?,Hanging Gardens,Lighthouse,Colossus,Pyramids,B,The Lighthouse of Alexandria was one of Seven Wonders
+History,Easy,Who painted the Mona Lisa?,Vincent van Gogh,Pablo Picasso,Leonardo da Vinci,Michelangelo,C,Da Vinci painted the Mona Lisa between 1503-1519
+History,Easy,Which empire was ruled by Julius Caesar?,Greek Empire,Roman Empire,Persian Empire,Byzantine Empire,B,Caesar was a Roman general and dictator
+History,Easy,What year did the Berlin Wall fall?,1987,1989,1991,1993,B,Berlin Wall fell on November 9 1989
+History,Easy,Who wrote Romeo and Juliet?,Charles Dickens,William Shakespeare,Mark Twain,Oscar Wilde,B,Shakespeare wrote this tragedy around 1595
+History,Easy,Which country gave the Statue of Liberty to the US?,Britain,Spain,France,Italy,C,France gifted the statue in 1886 for America's centennial
+History,Easy,Who was known as the Iron Lady?,Margaret Thatcher,Queen Elizabeth,Golda Meir,Indira Gandhi,A,Thatcher was British PM known for strong leadership
+History,Easy,Which war was fought between North and South in America?,Revolutionary War,Civil War,War of 1812,Spanish-American War,B,American Civil War lasted from 1861-1865
+History,Medium,Who was the first person to circumnavigate the globe?,Christopher Columbus,Vasco da Gama,Ferdinand Magellan,Francis Drake,C,Magellan's expedition completed first circumnavigation in 1522
+History,Medium,Which treaty ended World War I?,Treaty of Paris,Treaty of Versailles,Treaty of Trianon,Treaty of Sevres,B,Treaty of Versailles was signed in 1919
+History,Medium,Who was the last Tsar of Russia?,Nicholas I,Alexander III,Nicholas II,Alexander II,C,Nicholas II abdicated in 1917 during Russian Revolution
+History,Medium,Which civilization built Machu Picchu?,Maya,Aztec,Inca,Olmec,C,Incas built Machu Picchu in 15th century Peru
+History,Medium,In which year did the French Revolution begin?,1787,1789,1791,1793,B,French Revolution started in 1789 with storming of Bastille
+History,Medium,Who led the Mongol Empire at its peak?,Genghis Khan,Kublai Khan,Ogedei Khan,Batu Khan,A,Genghis Khan founded and expanded the Mongol Empire
+History,Medium,Which event triggered World War I?,Assassination of Archduke Franz Ferdinand,Sinking of Lusitania,German invasion of Belgium,Russian mobilization,A,Ferdinand's assassination in Sarajevo started WWI
+History,Medium,Who was the first woman to win a Nobel Prize?,Marie Curie,Dorothy Hodgkin,Rosalind Franklin,Barbara McClintock,A,Marie Curie won Physics Nobel in 1903
+History,Medium,Which Chinese dynasty built the Great Wall?,Han,Ming,Qing,Tang,B,Ming Dynasty built most of current Great Wall
+History,Medium,Who discovered America before Columbus?,Leif Erikson,Amerigo Vespucci,John Cabot,Henry Hudson,A,Viking Leif Erikson reached North America around 1000 AD
+History,Hard,Who was the Byzantine Emperor during the Fourth Crusade?,Alexios IV Angelos,Isaac II Angelos,Alexios V Doukas,John Kantakouzenos,A,Alexios IV was emperor when Crusaders took Constantinople
+History,Hard,Which battle ended Napoleon's Hundred Days?,Waterloo,Leipzig,Austerlitz,Borodino,A,Battle of Waterloo in 1815 ended Napoleon's return
+History,Hard,Who wrote the Ninety-Five Theses?,John Calvin,Martin Luther,Huldrych Zwingli,John Wycliffe,B,Luther posted his theses in 1517 starting Reformation
+History,Hard,Which treaty established the Holy Roman Empire?,Treaty of Verdun,Treaty of Mersen,Diploma Ottonianum,Golden Bull,A,Treaty of Verdun in 843 divided Charlemagne's empire
+History,Hard,Who was the Carthaginian general in the Second Punic War?,Hamilcar Barca,Hasdrubal,Hannibal,Mago,C,Hannibal led Carthage against Rome crossing Alps
+History,Hard,Which Pharaoh built the first pyramid?,Djoser,Khufu,Khafre,Menkaure,A,Step Pyramid of Djoser was first pyramid built
+History,Hard,Who was the first Mughal emperor of India?,Babur,Humayun,Akbar,Shah Jahan,A,Babur founded Mughal Empire after Battle of Panipat 1526
+History,Hard,Which Pope called for the First Crusade?,Urban II,Gregory VII,Innocent III,Alexander II,A,Pope Urban II called First Crusade at Council of Clermont 1095
+History,Hard,Who was the last Western Roman Emperor?,Romulus Augustulus,Julius Nepos,Glycerius,Olybrius,A,Romulus Augustulus was deposed in 476 AD
+History,Hard,Which ancient Greek city-state was known for its navy?,Athens,Sparta,Thebes,Corinth,A,Athens had powerful naval fleet during Classical period
+Geography,Easy,Which is the longest river in the world?,Amazon,Nile,Mississippi,Yangtze,B,Nile River is about 4135 miles long
+Geography,Easy,What is the smallest country in the world?,Monaco,Vatican City,San Marino,Liechtenstein,B,Vatican City is 0.17 square miles
+Geography,Easy,Which mountain range contains Mount Everest?,Alps,Andes,Himalayas,Rocky Mountains,C,Everest is in Himalayas between Nepal and Tibet
+Geography,Easy,What is the capital of Australia?,Sydney,Melbourne,Canberra,Brisbane,C,Canberra is Australia's capital since 1913
+Geography,Easy,Which desert is the largest in the world?,Sahara,Gobi,Kalahari,Arabian,A,Sahara covers about 3.5 million square miles
+Geography,Easy,What is the deepest ocean trench?,Puerto Rico Trench,Japan Trench,Mariana Trench,Peru-Chile Trench,C,Mariana Trench reaches depth of 36200 feet
+Geography,Easy,Which country has the most natural lakes?,Canada,Finland,Russia,Sweden,A,Canada has over 2 million lakes
+Geography,Easy,What is the highest waterfall in the world?,Niagara Falls,Victoria Falls,Angel Falls,Iguazu Falls,C,Angel Falls in Venezuela drops 3212 feet
+Geography,Easy,Which strait separates Europe and Asia?,Bering Strait,Strait of Gibraltar,Bosphorus Strait,Strait of Hormuz,C,Bosphorus connects Europe and Asia in Turkey
+Geography,Easy,What is the largest island in the world?,Madagascar,Greenland,New Guinea,Borneo,B,Greenland covers about 836000 square miles
+Geography,Medium,Which African country is completely surrounded by South Africa?,Botswana,Lesotho,Swaziland,Zimbabwe,B,Lesotho is an enclave within South Africa
+Geography,Medium,What is the deepest lake in the world?,Lake Superior,Lake Baikal,Caspian Sea,Lake Tanganyika,B,Lake Baikal reaches maximum depth of 5387 feet
+Geography,Medium,Which city straddles two continents?,Istanbul,Cairo,Casablanca,Tehran,A,Istanbul spans Europe and Asia across Bosphorus
+Geography,Medium,What is the driest place on Earth?,Death Valley,Sahara Desert,Atacama Desert,Antarctica,C,Atacama Desert receives less than 0.04 inches annually
+Geography,Medium,Which country has the longest coastline?,Canada,Russia,Australia,Norway,A,Canada has over 125000 miles of coastline
+Geography,Medium,What is the largest salt flat in the world?,Bonneville,Salar de Uyuni,Makgadikgadi,Chott el Djerid,B,Salar de Uyuni in Bolivia covers 4086 square miles
+Geography,Medium,Which river flows through the most countries?,Danube,Rhine,Congo,Amazon,A,Danube flows through 10 countries in Europe
+Geography,Medium,What is the southernmost capital city in the world?,Wellington,Canberra,Cape Town,Buenos Aires,A,Wellington New Zealand is southernmost national capital
+Geography,Medium,Which sea has no coastline?,Sargasso Sea,Caribbean Sea,Mediterranean Sea,North Sea,A,Sargasso Sea is bounded only by ocean currents
+Geography,Medium,What is the largest country entirely in Europe?,Ukraine,France,Spain,Germany,A,Ukraine is largest country wholly within Europe
+Geography,Hard,Which projection preserves area but distorts shape?,Mercator,Peters,Robinson,Mollweide,B,Peters projection maintains accurate relative areas
+Geography,Hard,What is the antipodal point of London?,New Zealand,Chile,Australia,Argentina,A,London's antipode is in Pacific Ocean near New Zealand
+Geography,Hard,Which country has the most UNESCO World Heritage Sites?,Italy,China,Spain,France,A,Italy has 59 UNESCO World Heritage Sites
+Geography,Hard,What is the name of the boundary between two tectonic plates?,Transform boundary,Convergent boundary,Divergent boundary,All of the above,D,All three are types of plate boundaries
+Geography,Hard,Which ocean current affects Europe's climate?,Gulf Stream,Kuroshio Current,Benguela Current,California Current,A,Gulf Stream brings warm water to Western Europe
+Geography,Hard,What is the study of place names called?,Toponymy,Cartography,Demography,Hydrology,A,Toponymy studies origin and meaning of place names
+Geography,Hard,Which line of latitude is at 66.5° North?,Arctic Circle,Tropic of Cancer,Tropic of Capricorn,Antarctic Circle,A,Arctic Circle marks edge of midnight sun phenomenon
+Geography,Hard,What is the lowest point on Earth's land surface?,Death Valley,Dead Sea,Afar Depression,Caspian Sea,B,Dead Sea shore is 1412 feet below sea level
+Geography,Hard,Which country has territory on both sides of the equator?,Ecuador,Colombia,Brazil,Gabon,D,Gabon spans the equator in Central Africa
+Geography,Hard,What is the most remote inhabited island?,Tristan da Cunha,Easter Island,St. Helena,Pitcairn Island,A,Tristan da Cunha is 1750 miles from nearest land
+Computer,Easy,What does CPU stand for?,Central Processing Unit,Computer Processing Unit,Central Program Unit,Computer Program Unit,A,CPU is the main processor that executes instructions
+Computer,Easy,What is the binary equivalent of decimal 10?,1001,1010,1100,1101,B,10 in decimal equals 1010 in binary
+Computer,Easy,Which company created Windows?,Apple,Microsoft,Google,IBM,B,Microsoft developed Windows operating system
+Computer,Easy,What does RAM stand for?,Read Access Memory,Random Access Memory,Rapid Access Memory,Remote Access Memory,B,RAM provides temporary storage for running programs
+Computer,Easy,Which key combination copies text in Windows?,Ctrl+C,Ctrl+V,Ctrl+X,Ctrl+Z,A,Ctrl+C copies selected text to clipboard
+Computer,Easy,What is a byte?,8 bits,16 bits,32 bits,64 bits,A,One byte consists of 8 binary digits (bits)
+Computer,Easy,Which programming language is named after a snake?,Java,Python,C++,Ruby,B,Python is named after Monty Python's Flying Circus
+Computer,Easy,What does WWW stand for?,World Wide Web,World Web Window,Wide World Web,Web Wide World,A,WWW refers to the system of interlinked documents
+Computer,Easy,Which device is used to point and click?,Keyboard,Mouse,Monitor,Printer,B,Mouse is primary pointing device for computers
+Computer,Easy,What is the main circuit board in a computer called?,Motherboard,Fatherboard,Mainboard,Baseboard,A,Motherboard connects all computer components together
+Computer,Medium,What is the time complexity of binary search?,O(1),O(log n),O(n),O(n²),B,Binary search eliminates half the elements each step
+Computer,Medium,Which protocol is used for secure web browsing?,HTTP,HTTPS,FTP,SMTP,B,HTTPS encrypts data transmission between browser and server
+Computer,Medium,What does SQL stand for?,Structured Query Language,Simple Query Language,Standard Query Language,System Query Language,A,SQL is used to manage relational databases
+Computer,Medium,Which data structure uses LIFO principle?,Queue,Stack,Array,Tree,B,Stack follows Last In First Out principle
+Computer,Medium,What is the maximum value of an 8-bit unsigned integer?,127,255,256,511,B,8 bits can represent 0-255 (2^8 - 1)
+Computer,Medium,Which sorting algorithm has best average time complexity?,Bubble Sort,Insertion Sort,Merge Sort,Selection Sort,C,Merge Sort has O(n log n) average time complexity
+Computer,Medium,What does API stand for?,Application Programming Interface,Advanced Programming Interface,Automated Programming Interface,Applied Programming Interface,A,APIs define how software components communicate
+Computer,Medium,Which database model uses tables?,Hierarchical,Network,Relational,Object-oriented,C,Relational databases organize data in tables
+Computer,Medium,What is the default port for HTTP?,21,22,80,443,C,HTTP uses port 80 for web server communication
+Computer,Medium,Which language is primarily used for web styling?,HTML,CSS,JavaScript,PHP,B,CSS (Cascading Style Sheets) styles web page appearance
+Computer,Hard,What is the space complexity of merge sort?,O(1),O(log n),O(n),O(n log n),C,Merge sort requires O(n) additional space for merging
+Computer,Hard,Which consistency model allows reading uncommitted data?,Strict,Sequential,Causal,Eventual,D,Eventual consistency may return stale uncommitted data
+Computer,Hard,What is the maximum number of comparisons in quicksort worst case?,O(log n),O(n),O(n log n),O(n²),D,Quicksort worst case occurs with already sorted input
+Computer,Hard,Which cache replacement policy approximates optimal?,LRU,FIFO,Random,Clock,A,LRU (Least Recently Used) approximates optimal replacement
+Computer,Hard,What is the Byzantine Generals Problem about?,Network routing,Distributed consensus,Load balancing,Data encryption,B,Problem of achieving consensus with unreliable communication
+Computer,Hard,Which data structure supports range queries efficiently?,Array,Linked List,Segment Tree,Hash Table,C,Segment trees enable O(log n) range queries
+Computer,Hard,What is the CAP theorem?,Consistency Availability Partition tolerance,Concurrency Atomicity Persistence,Cache Algorithm Protocol,Central Access Point,A,CAP theorem: can't have all three simultaneously
+Computer,Hard,Which algorithm finds shortest paths from single source?,Dijkstra's,Floyd-Warshall,Bellman-Ford,Kruskal's,A,Dijkstra's algorithm finds shortest paths from one vertex
+Computer,Hard,What is the halting problem?,Undecidable problem,NP-complete problem,P problem,Co-NP problem,A,Cannot determine if arbitrary program will halt
+Computer,Hard,Which protocol ensures reliable data delivery?,UDP,TCP,ICMP,ARP,B,TCP provides reliable connection-oriented communication
+Artificial Intelligence,Easy,What does AI stand for?,Automated Intelligence,Artificial Intelligence,Advanced Intelligence,Applied Intelligence,B,AI refers to machine intelligence mimicking human cognition
+Artificial Intelligence,Easy,Which test measures machine intelligence?,Turing Test,IQ Test,Stanford Test,MIT Test,A,Turing Test evaluates if machine can exhibit intelligent behavior
+Artificial Intelligence,Easy,What is machine learning?,Programming explicit rules,Learning from data,Copying human behavior,Following algorithms,B,ML enables computers to learn patterns from data
+Artificial Intelligence,Easy,Which company created ChatGPT?,Google,Microsoft,OpenAI,Meta,C,OpenAI developed ChatGPT as conversational AI system
+Artificial Intelligence,Easy,What does NLP stand for?,Natural Language Processing,Neural Language Programming,Network Language Protocol,New Language Platform,A,NLP enables computers to understand human language
+Artificial Intelligence,Easy,Which is an example of supervised learning?,Clustering,Classification,Reinforcement learning,Unsupervised learning,B,Classification uses labeled data to predict categories
+Artificial Intelligence,Easy,What is a neural network inspired by?,Computer circuits,Brain neurons,Mathematical equations,Logic gates,B,Neural networks mimic biological neuron connections
+Artificial Intelligence,Easy,Which AI can beat humans at chess?,Deep Blue,AlphaGo,Watson,Siri,A,IBM's Deep Blue defeated world champion Garry Kasparov
+Artificial Intelligence,Easy,What is computer vision?,Understanding text,Recognizing images,Processing speech,Playing games,B,Computer vision enables machines to interpret visual information
+Artificial Intelligence,Easy,Which learning requires no labeled data?,Supervised,Unsupervised,Semi-supervised,Reinforcement,B,Unsupervised learning finds patterns in unlabeled data
+Artificial Intelligence,Easy,What is an AI chatbot?,Gaming AI,Conversational AI,Image recognition AI,Self-driving AI,B,Chatbots simulate human conversation through text or voice
+Artificial Intelligence,Medium,What is deep learning based on?,Decision trees,Neural networks,Rule-based systems,Expert systems,B,Deep learning uses multi-layered neural networks
+Artificial Intelligence,Medium,Which algorithm is used for reinforcement learning?,Q-learning,K-means,Linear regression,Decision trees,A,Q-learning learns optimal actions through trial and error
+Artificial Intelligence,Medium,What is overfitting in machine learning?,Model performs well on training data only,Model performs poorly,Model is too simple,Model has no bias,A,Overfitting memorizes training data but fails on new data
+Artificial Intelligence,Medium,Which technique reduces overfitting?,Regularization,Feature scaling,Data augmentation,Cross-validation,A,Regularization adds penalty terms to prevent overfitting
+Artificial Intelligence,Medium,What is the vanishing gradient problem?,Gradients become too large,Gradients become too small,No gradients computed,Gradients oscillate,B,Deep networks suffer from diminishing gradient signals
+Artificial Intelligence,Medium,Which AI defeated Go world champion?,Deep Blue,AlphaGo,Watson,Stockfish,B,Google's AlphaGo beat Lee Sedol in 2016
+Artificial Intelligence,Medium,What is transfer learning?,Learning multiple tasks,Transferring knowledge between tasks,Learning without data,Transferring models,B,Transfer learning applies knowledge from one domain to another
+Artificial Intelligence,Medium,Which activation function helps with vanishing gradients?,Sigmoid,Tanh,ReLU,Softmax,C,ReLU activation function mitigates vanishing gradient problem
+Artificial Intelligence,Medium,What is ensemble learning?,Using single model,Combining multiple models,Learning ensembles,Model averaging,B,Ensemble methods combine predictions from multiple models
+Artificial Intelligence,Medium,Which metric measures classification accuracy?,Mean squared error,Precision and recall,R-squared,Mean absolute error,B,Precision and recall evaluate classification performance
+Artificial Intelligence,Hard,What is the attention mechanism in transformers?,Focusing on important parts,Paying attention to inputs,Weighting input importance,All of the above,D,Attention weighs importance of different input parts
+Artificial Intelligence,Hard,Which optimization algorithm adapts learning rates?,SGD,Adam,Momentum,RMSprop,B,Adam combines momentum and adaptive learning rates
+Artificial Intelligence,Hard,What is the transformer architecture based on?,CNNs,RNNs,Attention mechanism,Autoencoders,C,Transformers rely entirely on attention mechanisms
+Artificial Intelligence,Hard,Which technique generates adversarial examples?,Data augmentation,Feature engineering,Gradient ascent on loss,Random noise,C,Adversarial examples crafted by maximizing loss function
+Artificial Intelligence,Hard,What is catastrophic forgetting?,Forgetting old tasks when learning new ones,Complete memory loss,Forgetting during training,Model corruption,A,Neural networks forget previous tasks when learning new ones
+Artificial Intelligence,Hard,Which method explains AI model decisions?,LIME,SHAP,Grad-CAM,All of the above,D,Multiple methods exist for explainable AI
+Artificial Intelligence,Hard,What is the reparameterization trick used for?,Gradient computation,Sampling from distributions,Model compression,Regularization,B,Enables gradient flow through stochastic nodes
+Artificial Intelligence,Hard,Which architecture introduced residual connections?,VGG,ResNet,AlexNet,LeNet,B,ResNet introduced skip connections to enable deeper networks
+Artificial Intelligence,Hard,What is the difference between GPT and BERT?,Autoregressive vs bidirectional,CNN vs RNN,Supervised vs unsupervised,Small vs large,A,GPT generates sequentially BERT processes bidirectionally
+Artificial Intelligence,Hard,Which sampling method reduces variance in RL?,Importance sampling,Monte Carlo,Temporal difference,Policy gradient,A,Importance sampling corrects for distribution mismatch
+Sports,Easy,How many players are on a basketball team on the court?,4,5,6,7,B,Basketball teams have 5 players on court at once
+Sports,Easy,Which sport is played at Wimbledon?,Golf,Cricket,Tennis,Rugby,C,Wimbledon is famous tennis championship in England
+Sports,Easy,How many holes are played in a standard golf round?,16,18,20,22,B,Standard golf course has 18 holes
+Sports,Easy,Which country hosted the 2016 Summer Olympics?,China,Brazil,Russia,Japan,B,Rio de Janeiro Brazil hosted 2016 Olympics
+Sports,Easy,What is the maximum score in ten-pin bowling?,200,250,300,350,C,Perfect game in bowling scores 300 points
+Sports,Easy,How long is a marathon race?,26.2 miles,24.2 miles,28.2 miles,30.2 miles,A,Marathon distance is 26.2 miles or 42.195 kilometers
+Sports,Easy,Which sport uses a puck?,Hockey,Soccer,Basketball,Baseball,A,Ice hockey and field hockey use pucks
+Sports,Easy,How many Grand Slam tournaments are in tennis?,3,4,5,6,B,Four Grand Slams: Wimbledon US Open French Open Australian Open
+Sports,Easy,What color card means ejection in soccer?,Yellow,Red,Blue,Green,B,Red card results in player ejection from game
+Sports,Easy,Which sport is known as America's pastime?,Football,Baseball,Basketball,Hockey,B,Baseball traditionally called America's national pastime
+Sports,Medium,Who holds the record for most home runs in MLB?,Babe Ruth,Hank Aaron,Barry Bonds,Willie Mays,C,Barry Bonds hit 762 career home runs
+Sports,Medium,Which country has won the most FIFA World Cups?,Germany,Argentina,Italy,Brazil,D,Brazil has won 5 FIFA World Cup titles
+Sports,Medium,What is the term for three strikes in bowling?,Turkey,Spare,Split,Strike,A,Turkey refers to three consecutive strikes
+Sports,Medium,Which swimmer has the most Olympic gold medals?,Mark Spitz,Michael Phelps,Ryan Lochte,Caeleb Dressel,B,Michael Phelps won 23 Olympic gold medals
+Sports,Medium,What is the highest possible break in snooker?,147,155,167,180,A,Maximum break is 147 points in snooker
+Sports,Medium,Which team sport has the largest playing field?,Soccer,American football,Rugby,Cricket,A,Soccer fields are largest among major team sports
+Sports,Medium,How many majors has Tiger Woods won?,14,15,16,17,B,Tiger Woods has won 15 major championships
+Sports,Medium,Which sport features the terms birdie and eagle?,Golf,Tennis,Badminton,Archery,A,Golf scoring terms for under par shots
+Sports,Medium,What is the NHL trophy for best player?,Hart Trophy,Vezina Trophy,Norris Trophy,Calder Trophy,A,Hart Trophy awarded to league's most valuable player
+Sports,Medium,Which racing series features the Indianapolis 500?,NASCAR,Formula 1,IndyCar,Formula E,C,Indianapolis 500 is premier IndyCar Series race
+Sports,Hard,Who was the first athlete to run sub-4-minute mile?,Roger Bannister,Jim Ryun,Sebastian Coe,Steve Ovett,A,Bannister broke 4-minute barrier in 1954
+Sports,Hard,Which boxer was known as The Greatest?,Joe Frazier,George Foreman,Muhammad Ali,Mike Tyson,C,Muhammad Ali called himself The Greatest
+Sports,Hard,What is the Fosbury Flop?,Swimming technique,High jump technique,Pole vault technique,Long jump technique,B,Revolutionary backwards high jump technique
+Sports,Hard,Which team has won the most Stanley Cups?,Boston Bruins,Detroit Red Wings,Montreal Canadiens,Toronto Maple Leafs,C,Montreal Canadiens have 24 Stanley Cup wins
+Sports,Hard,Who holds the NBA record for most points in a game?,Kobe Bryant,Michael Jordan,Wilt Chamberlain,LeBron James,C,Wilt Chamberlain scored 100 points in 1962
+Sports,Hard,What is a perfect game in baseball?,No hits allowed,No runs allowed,No walks allowed,No baserunners allowed,D,Perfect game means no opposing player reaches base
+Sports,Hard,Which gymnast scored the first perfect 10?,Olga Korbut,Nadia Comaneci,Mary Lou Retton,Shannon Miller,B,Nadia Comaneci scored perfect 10 at 1976 Olympics
+Sports,Hard,What is the rarest achievement in golf?,Hole-in-one,Albatross,Condor,Ostrich,C,Condor is four under par extremely rare
+Sports,Hard,Which Formula 1 driver has the most wins?,Lewis Hamilton,Michael Schumacher,Ayrton Senna,Sebastian Vettel,A,Lewis Hamilton has over 100 race victories
+Sports,Hard,What is a hat trick in cricket?,Three wickets in three balls,Three centuries,Three catches,Three sixes,A,Bowler taking three wickets in consecutive deliveries
+Aptitude,Easy,If 2 + 2 = 4 then 4 + 4 = ?,6,8,10,12,B,Following the same addition pattern
+Aptitude,Easy,What comes next in the sequence: 2 4 6 8 ?,10,12,14,16,A,Sequence increases by 2 each time
+Aptitude,Easy,If A = 1 B = 2 then C = ?,3,4,5,6,A,Alphabetical position pattern continues
+Aptitude,Easy,What is 25% of 100?,20,25,30,35,B,25% means 25 out of 100
+Aptitude,Easy,Which number is the odd one out: 2 4 7 8?,2,4,7,8,C,7 is the only odd number
+Aptitude,Easy,If today is Monday what day is it after 3 days?,Tuesday,Wednesday,Thursday,Friday,C,Monday + 3 days = Thursday
+Aptitude,Easy,What is the next number: 1 1 2 3 5 ?,7,8,9,10,B,Fibonacci sequence: each number is sum of previous two
+Aptitude,Easy,How many sides does a pentagon have?,4,5,6,7,B,Pentagon has 5 sides by definition
+Aptitude,Easy,If x + 5 = 10 then x = ?,3,4,5,6,C,10 - 5 = 5
+Aptitude,Easy,What is half of 50?,20,25,30,35,B,50 divided by 2 equals 25
+Aptitude,Medium,What is the missing number: 3 6 12 24 ?,36,48,60,72,B,Each number doubles: 24 × 2 = 48
+Aptitude,Medium,If BAT = 23120 what does CAT equal?,32120,31320,31230,32130,C,B=2 A=1 T=20 so C=3 A=1 T=20
+Aptitude,Medium,A train travels 60 km in 1 hour. How far in 2.5 hours?,120 km,150 km,180 km,200 km,B,60 km/h × 2.5 h = 150 km
+Aptitude,Medium,What is 15% of 240?,30,36,42,48,B,240 × 0.15 = 36
+Aptitude,Medium,If 3x + 7 = 22 then x = ?,4,5,6,7,B,3x = 15 so x = 5
+Aptitude,Medium,What comes next: 1 4 9 16 25 ?,30,36,42,49,B,Perfect squares: next is 6² = 36
+Aptitude,Medium,A person buys item for $80 sells for $100. What's profit %?,20%,25%,30%,35%,B,Profit = 20 Cost = 80 so 20/80 = 25%
+Aptitude,Medium,Which is different: Circle Triangle Square Pentagon?,Circle,Triangle,Square,Pentagon,A,Circle has no straight sides others do
+Aptitude,Medium,If PEACE = 54135 then CAPE = ?,3154,3145,3415,3451,C,P=5 E=4 A=1 C=3 so CAPE = 3154
+Aptitude,Medium,Water tank fills in 4 hours empties in 6 hours. Net fill time?,12 hours,10 hours,8 hours,6 hours,A,Rate difference: 1/4 - 1/6 = 1/12 per hour
+Aptitude,Hard,If log₂(8) = 3 then log₄(16) = ?,2,3,4,5,A,log₄(16) = log₄(4²) = 2
+Aptitude,Hard,What is the next term: 2 6 12 20 30 ?,42,45,48,50,A,Differences: 4 6 8 10 next difference is 12
+Aptitude,Hard,If 5^x = 125 then x = ?,2,3,4,5,B,125 = 5³ so x = 3
+Aptitude,Hard,A rectangle's length is twice its width. Perimeter is 36. Width?,6,8,10,12,A,2w + 2(2w) = 36 so 6w = 36 w = 6
+Aptitude,Hard,What is sum of angles in a hexagon?,540°,720°,900°,1080°,B,(n-2) × 180° where n=6 gives 720°
+Aptitude,Hard,If f(x) = x² + 2x then f(3) = ?,12,15,18,21,B,f(3) = 9 + 6 = 15
+Aptitude,Hard,Compound interest on $1000 at 10% for 2 years?,200,210,220,231,B,$1000(1.1)² - $1000 = $210
+Aptitude,Hard,What is the geometric mean of 4 and 9?,5,6,6.5,7,B,√(4 × 9) = √36 = 6
+Aptitude,Hard,If matrix A = [1 2; 3 4] what is det(A)?,-2,-1,1,2,A,Determinant = 1×4 - 2×3 = -2
+Aptitude,Hard,Probability of getting sum 7 with two dice?,1/6,1/5,1/4,1/3,A,6 ways to get sum 7 out of 36 total outcomes
+Iconic Figures,Easy,Who painted the ceiling of the Sistine Chapel?,Leonardo da Vinci,Michelangelo,Raphael,Donatello,B,Michelangelo painted famous ceiling frescoes 1508-1512
+Iconic Figures,Easy,Who wrote the play Hamlet?,Charles Dickens,William Shakespeare,Oscar Wilde,George Bernard Shaw,B,Shakespeare wrote Hamlet around 1600-1601
+Iconic Figures,Easy,Who invented the telephone?,Thomas Edison,Alexander Graham Bell,Nikola Tesla,Benjamin Franklin,B,Bell received first telephone patent in 1876
+Iconic Figures,Easy,Who was the first person to walk on the moon?,Buzz Aldrin,Neil Armstrong,John Glenn,Alan Shepard,B,Armstrong first stepped on moon July 20 1969
+Iconic Figures,Easy,Who developed the theory of relativity?,Isaac Newton,Galileo Galilei,Albert Einstein,Stephen Hawking,C,Einstein developed special and general relativity theories
+Iconic Figures,Easy,Who founded Microsoft?,Bill Gates,Steve Jobs,Larry Page,Mark Zuckerberg,A,Gates co-founded Microsoft with Paul Allen in 1975
+Iconic Figures,Easy,Who was known as the King of Pop?,Elvis Presley,Michael Jackson,Prince,Madonna,B,Michael Jackson earned title through global music impact
+Iconic Figures,Easy,Who founded Apple Inc.?,Bill Gates,Steve Jobs,Larry Ellison,Michael Dell,B,Jobs co-founded Apple with Steve Wozniak in 1976
+Iconic Figures,Easy,Who was the first female Prime Minister of the UK?,Margaret Thatcher,Theresa May,Elizabeth II,Golda Meir,A,Thatcher served as PM from 1979-1990
+Iconic Figures,Easy,Who discovered penicillin?,Marie Curie,Alexander Fleming,Louis Pasteur,Robert Koch,B,Fleming discovered penicillin in 1928
+Iconic Figures,Medium,Who was the longest-reigning British monarch?,Victoria,Elizabeth I,Elizabeth II,George III,C,Elizabeth II reigned 70 years from 1952-2022
+Iconic Figures,Medium,Who composed The Four Seasons?,Mozart,Beethoven,Bach,Vivaldi,D,Vivaldi composed famous violin concertos around 1720
+Iconic Figures,Medium,Who founded the Red Cross?,Florence Nightingale,Clara Barton,Henry Dunant,Mother Teresa,C,Dunant founded International Red Cross in 1863
+Iconic Figures,Medium,Who wrote One Hundred Years of Solitude?,Jorge Luis Borges,Gabriel García Márquez,Mario Vargas Llosa,Pablo Neruda,B,García Márquez wrote masterpiece published in 1967
+Iconic Figures,Medium,Who was known as the Iron Chancellor?,Napoleon Bonaparte,Otto von Bismarck,Klemens von Metternich,Frederick the Great,B,Bismarck unified Germany and dominated European politics
+Iconic Figures,Medium,Who painted The Starry Night?,Van Gogh,Monet,Picasso,Renoir,A,Van Gogh painted iconic work in 1889
+Iconic Figures,Medium,Who established the first psychology laboratory?,Sigmund Freud,Wilhelm Wundt,William James,B.F. Skinner,B,Wundt opened first psychology lab at Leipzig 1879
+Iconic Figures,Medium,Who was the first woman to win a Nobel Prize?,Dorothy Hodgkin,Marie Curie,Rosalind Franklin,Barbara McClintock,B,Curie won Physics Nobel in 1903
+Iconic Figures,Medium,Who founded psychoanalysis?,Carl Jung,Alfred Adler,Sigmund Freud,Erik Erikson,C,Freud developed psychoanalytic theory in late 1800s
+Iconic Figures,Medium,Who wrote Silent Spring?,Rachel Carson,Jane Goodall,Dian Fossey,Sylvia Earle,A,Carson's 1962 book launched environmental movement
+Iconic Figures,Hard,Who proved Fermat's Last Theorem?,Leonhard Euler,Carl Friedrich Gauss,Andrew Wiles,Pierre de Fermat,C,Wiles proved theorem in 1995 after 350+ years
+Iconic Figures,Hard,Who developed the uncertainty principle?,Niels Bohr,Werner Heisenberg,Erwin Schrödinger,Max Planck,B,Heisenberg formulated uncertainty principle in 1927
+Iconic Figures,Hard,Who founded the discipline of sociology?,Auguste Comte,Karl Marx,Max Weber,Emile Durkheim,A,Comte coined term sociology and established foundations
+Iconic Figures,Hard,Who created the periodic table?,Dmitri Mendeleev,Antoine Lavoisier,John Dalton,Marie Curie,A,Mendeleev published periodic law in 1869
+Iconic Figures,Hard,Who developed set theory?,Georg Cantor,Gottfried Leibniz,Bertrand Russell,David Hilbert,A,Cantor created mathematical set theory in 1870s
+Iconic Figures,Hard,Who formulated the laws of heredity?,Charles Darwin,Gregor Mendel,Alfred Russel Wallace,Jean-Baptiste Lamarck,B,Mendel discovered inheritance laws through pea plant experiments
+Iconic Figures,Hard,Who invented the World Wide Web?,Tim Berners-Lee,Vint Cerf,Robert Kahn,Marc Andreessen,A,Berners-Lee created WWW at CERN in 1989-1991
+Iconic Figures,Hard,Who developed information theory?,Claude Shannon,Alan Turing,John von Neumann,Norbert Wiener,A,Shannon founded information theory in 1948
+Iconic Figures,Hard,Who discovered the structure of DNA?,Rosalind Franklin,James Watson,Francis Crick,Maurice Wilkins,A,Franklin's X-ray crystallography was crucial for DNA structure
+Iconic Figures,Hard,Who established modern nursing practices?,Clara Barton,Mary Seacole,Florence Nightingale,Dorothea Dix,C,Nightingale revolutionized nursing during Crimean War

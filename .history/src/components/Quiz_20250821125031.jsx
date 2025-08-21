@@ -710,8 +710,10 @@ const onSelect = (optIdx, evt) => {
           </div>
 
           {/* Question card */}
-          <div className="card rounded-3xl p-5 mt-6 mx-4 sm:mx-3 max-h-[65vh] overflow-y-auto">
-
+          <div className="card rounded-3xl p-5 mt-16 mx-4 sm:mx-3">
+            {readOnly && (
+              <div className="mb-2 text-xs text-base-muted text-right">Read-only (from previous)</div>
+            )}
             <p className="text-base font-semibold mb-4">{current?.prompt}</p>
 
             {/* 4×1 options */}

@@ -107,8 +107,8 @@ function buildSession(all, { categorySlug, difficulty, count }) {
 function Toast({ message, onClose }) {
   useEffect(() => { const t = setTimeout(onClose, 1500); return () => clearTimeout(t); }, [onClose]);
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="px-3 py-1.5 rounded-lg bg-white/10 border border-base-border text-sm text-yellow-500">{message}</div>
+    <div className="fixed inset-0 flex items-center justify-left z-50">
+      <div className="px-3 py-1.5 rounded-lg bg-white/10 border border-base-border text-sm">{message}</div>
     </div>
   );
 }
@@ -710,8 +710,10 @@ const onSelect = (optIdx, evt) => {
           </div>
 
           {/* Question card */}
-          <div className="card rounded-3xl p-5 mt-6 mx-4 sm:mx-3 max-h-[65vh] overflow-y-auto">
-
+          <div className="card rounded-3xl p-5 mt-16 mx-4 sm:mx-3">
+            {readOnly && (
+              <div className="mb-2 text-xs text-base-muted text-right">Read-only (from previous)</div>
+            )}
             <p className="text-base font-semibold mb-4">{current?.prompt}</p>
 
             {/* 4×1 options */}

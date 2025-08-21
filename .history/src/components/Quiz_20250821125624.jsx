@@ -710,7 +710,7 @@ const onSelect = (optIdx, evt) => {
           </div>
 
           {/* Question card */}
-          <div className="card rounded-3xl p-5 mt-6 mx-4 sm:mx-3 max-h-[65vh] overflow-y-auto">
+          <div className="card rounded-3xl p-5 mt-16 mx-4 sm:mx-3">
 
             <p className="text-base font-semibold mb-4">{current?.prompt}</p>
 
