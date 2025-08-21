@@ -22,7 +22,7 @@ export default function CoinFly({ startRect, targetRef, count = 12, onDone }) {
     const sx = startRect.left + startRect.width / 2;
     const sy = startRect.top + startRect.height / 2;
 
-    const duration = 200;
+    const duration = 400;
     let finished = 0;
 
     function launch(i) {

@@ -921,15 +921,7 @@ const useAudience = () => {
         </Modal>
         )}
 
-          {toast && (
-            <Toast
-                message={toast}
-                onClose={handleToastClose}
-                duration={1000}   // 1s
-                liftPx={128}      // ~8rem up from bottom
-            />
-            )}
-
+          {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>
       )}
 

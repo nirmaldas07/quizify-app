@@ -1,9 +1,8 @@
 // src/components/Quiz.jsx
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Papa from "papaparse";
 import useSound from "use-sound";
-import { createPortal } from "react-dom";
 
 /* ---------------- LocalStorage Keys ---------------- */
 const LS_RESUME    = "qp_resume";     // { inProgress, slug, mode, category, index, total, remainingSec, startedAt }
@@ -105,26 +104,22 @@ function buildSession(all, { categorySlug, difficulty, count }) {
 }
 
 /* ---------------- Toast (non-blocking) ---------------- */
-function Toast({ message, onClose, duration = 1000, liftPx = 128 }) {
-  const closeRef = useRef(onClose);
-  useEffect(() => { closeRef.current = onClose; }, [onClose]);
-
+function Toast({ message, onClose, duration = 1500 }) {
   useEffect(() => {
-    const t = setTimeout(() => closeRef.current?.(), duration);
+    const t = setTimeout(onClose, duration);
     return () => clearTimeout(t);
-  }, [message, duration]); // not depending on onClose
+  }, [onClose, duration]);
 
-  return createPortal(
+  return (
     <div
-      className="fixed left-1/2 -translate-x-1/2 z-[999] pointer-events-none"
-      style={{ bottom: `calc(env(safe-area-inset-bottom) + ${liftPx}px)` }}
-      aria-live="polite" role="status"
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[120] pointer-events-none"
+      aria-live="polite"
+      role="status"
     >
-      <div className="px-3 py-1.5 rounded-lg bg-black/85 border border-white/15 text-sm text-yellow-300 shadow-lg">
+      <div className="px-3 py-1.5 rounded-lg bg-black/80 border border-white/10 text-sm text-yellow-300 shadow-lg">
         {message}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
 
@@ -193,8 +188,6 @@ export default function Quiz() {
   setToast("");                     // clear first
   setTimeout(() => setToast(msg), 0); // set on next tick
 };
-const handleToastClose = useCallback(() => setToast(""), []);
-
   // Review (for external snapshots too)
   const [reviewSnapshot, setReviewSnapshot] = useState(null); // { questions, answers }
 
@@ -921,15 +914,7 @@ const useAudience = () => {
         </Modal>
         )}
 
-          {toast && (
-            <Toast
-                message={toast}
-                onClose={handleToastClose}
-                duration={1000}   // 1s
-                liftPx={128}      // ~8rem up from bottom
-            />
-            )}
-
+          {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>
       )}
 

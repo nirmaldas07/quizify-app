@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import useSound from "use-sound";
 import Papa from "papaparse";
 import ConfirmStartSheet from "./ConfirmStartSheet";
-import CoinFly from "./CoinFly"; // ✅ NEW
 
 /* ------------ Categories (5 + More) ------------ */
 const primaryCats = [
@@ -194,9 +193,12 @@ function Sheet({ open, onClose, children }) {
   );
 }
 
+
+
 /* ------------ Home ------------ */
 export default function Home() {
   const navigate = useNavigate();
+  
 
   // ✅ hooks only inside components + use public paths for sounds
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
@@ -324,8 +326,51 @@ export default function Home() {
     return ()=> clearInterval(i);
   }, []);
 
-  /* ✅ CoinFly trigger state (replaces old flyCoinsFromRect) */
-  const [coinFly, setCoinFly] = useState(null);
+  /* Coins flight animation */
+  const flyCoinsFromRect = (startRect, count=12, onEnd) => {
+    const endRect = coinPillRef.current?.getBoundingClientRect();
+    if (!endRect) return;
+    const layer = document.getElementById("coin-layer");
+    if (!layer) return;
+    const ex = endRect.left + endRect.width/2;
+    const ey = endRect.top  + endRect.height/2;
+    const sx = startRect.left + startRect.width/2;
+    const sy = startRect.top  + startRect.height/2;
+    const duration = 900;
+
+    let finished = 0;
+    for (let i=0;i<count;i++){
+      const coin = document.createElement("div");
+      coin.textContent = "🪙";
+      coin.style.position = "fixed";
+      coin.style.left = "0px"; coin.style.top = "0px";
+      coin.style.zIndex = "100";
+      coin.style.pointerEvents = "none";
+      coin.style.fontSize = "22px";
+      coin.style.opacity = "1";
+      coin.style.willChange = "transform, opacity";
+      const jitterX = (Math.random()*90 - 45);
+      const jitterY = (Math.random()*40 - 10);
+      const x0 = sx + jitterX, y0 = sy + jitterY;
+      const x1 = ex + (Math.random()*18 - 9), y1 = ey + (Math.random()*12 - 6);
+      const delay = i * 60;
+      coin.style.transform = `translate(${x0}px, ${y0}px) scale(1)`;
+      layer.appendChild(coin);
+      void coin.getBoundingClientRect();
+      coin.style.transition = `transform ${duration}ms cubic-bezier(.2,.8,.2,1), opacity ${duration}ms linear`;
+      coin.style.transitionDelay = `${delay}ms`;
+      requestAnimationFrame(() => {
+        coin.style.transform = `translate(${x1}px, ${y1}px) scale(.6)`;
+        coin.style.opacity = "0.1";
+      });
+      const total = duration + delay + 50;
+      setTimeout(() => {
+        coin.remove();
+        finished += 1;
+        if (finished === count && typeof onEnd === "function") onEnd();
+      }, total);
+    }
+  };
 
   const awardXP = (amount) => {
     let newXP = xp + amount;
@@ -352,15 +397,13 @@ export default function Home() {
 
     if (correct) {
       playCorrect();
-      // ✅ Trigger coin animation using CoinFly
-      if (e?.currentTarget && coinPillRef.current) {
+      if (e?.currentTarget) {
         const rect = e.currentTarget.getBoundingClientRect();
         playCoin();
-        setCoinFly({ startRect: rect, count: 14, amount: DAILY_Q_COINS });
-      } else {
-        // Fallback: award immediately if we can't animate
-        awardXP(DAILY_Q_XP);
-        awardCoins(DAILY_Q_COINS);
+        flyCoinsFromRect(rect, 14, () => {
+          awardXP(DAILY_Q_XP);
+          awardCoins(DAILY_Q_COINS);
+        });
       }
     } else {
       playWrong();
@@ -433,13 +476,13 @@ export default function Home() {
   const [confirmCat, setConfirmCat]   = useState(null);
 
   const openQuizConfig = (catName) => {
-    const cfg = getQuizCfgFor(catName);
-    setQuizCategory(catName);
-    setQuizDifficulty(cfg.difficulty);
-    setQuizCount(cfg.count);
-    setQuizSeconds(cfg.seconds);
-    setShowQuizConfig(true);
-  };
+  const cfg = getQuizCfgFor(catName);
+  setQuizCategory(catName);
+  setQuizDifficulty(cfg.difficulty);
+  setQuizCount(cfg.count);
+  setQuizSeconds(cfg.seconds);
+  setShowQuizConfig(true);
+};
   
   const startQuizWithCfg = (catName) => {
     const cfg = getQuizCfgFor(catName);
@@ -498,19 +541,8 @@ export default function Home() {
 
   return (
     <div className="relative pb-24">
-      {/* ✅ CoinFly animation instance (renders only when coinFly is set) */}
-      {coinFly && (
-        <CoinFly
-          startRect={coinFly.startRect}
-          targetRef={coinPillRef}
-          count={coinFly.count}
-          onDone={() => {
-            awardXP(DAILY_Q_XP);
-            awardCoins(coinFly.amount);
-            setCoinFly(null);
-          }}
-        />
-      )}
+      {/* coin overlay layer */}
+      <div id="coin-layer" className="fixed inset-0 pointer-events-none z-[100]" />
 
       {/* Header */}
       <header className="flex items-center justify-between mb-6 pt-12">

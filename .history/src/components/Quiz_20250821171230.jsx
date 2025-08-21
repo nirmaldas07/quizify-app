@@ -1,9 +1,8 @@
 // src/components/Quiz.jsx
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Papa from "papaparse";
 import useSound from "use-sound";
-import { createPortal } from "react-dom";
 
 /* ---------------- LocalStorage Keys ---------------- */
 const LS_RESUME    = "qp_resume";     // { inProgress, slug, mode, category, index, total, remainingSec, startedAt }
@@ -104,27 +103,13 @@ function buildSession(all, { categorySlug, difficulty, count }) {
   return { questions: qs, poolSize: pool.length };
 }
 
-/* ---------------- Toast (non-blocking) ---------------- */
-function Toast({ message, onClose, duration = 1000, liftPx = 128 }) {
-  const closeRef = useRef(onClose);
-  useEffect(() => { closeRef.current = onClose; }, [onClose]);
-
-  useEffect(() => {
-    const t = setTimeout(() => closeRef.current?.(), duration);
-    return () => clearTimeout(t);
-  }, [message, duration]); // not depending on onClose
-
-  return createPortal(
-    <div
-      className="fixed left-1/2 -translate-x-1/2 z-[999] pointer-events-none"
-      style={{ bottom: `calc(env(safe-area-inset-bottom) + ${liftPx}px)` }}
-      aria-live="polite" role="status"
-    >
-      <div className="px-3 py-1.5 rounded-lg bg-black/85 border border-white/15 text-sm text-yellow-300 shadow-lg">
-        {message}
-      </div>
-    </div>,
-    document.body
+/* ---------------- Toast ---------------- */
+function Toast({ message, onClose }) {
+  useEffect(() => { const t = setTimeout(onClose, 1500); return () => clearTimeout(t); }, [onClose]);
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="px-3 py-1.5 rounded-lg bg-white/10 border border-base-border text-sm text-yellow-500">{message}</div>
+    </div>
   );
 }
 
@@ -188,12 +173,6 @@ export default function Quiz() {
   const [timeUpFor, setTimeUpFor] = useState(null);        // index where time up modal is shown
   const [view, setView] = useState("quiz");                // "quiz" | "results" | "review"
   const [toast, setToast] = useState("");
-  // lets the same message show again if clicked twice
- const showToast = (msg) => {
-  setToast("");                     // clear first
-  setTimeout(() => setToast(msg), 0); // set on next tick
-};
-const handleToastClose = useCallback(() => setToast(""), []);
 
   // Review (for external snapshots too)
   const [reviewSnapshot, setReviewSnapshot] = useState(null); // { questions, answers }
@@ -507,6 +486,22 @@ const onSelect = (optIdx, evt) => {
         0
     );
 
+    // ✅ NEW: trigger coin fly for correct answers
+    if (correct > 0 && coinPillRef?.current) {
+        const srcEl = document.querySelector(".card"); // or submit button if you prefer
+        const rect = srcEl?.getBoundingClientRect();
+        if (rect) {
+        setCoinAnims(prev => [
+            ...prev,
+            {
+            id: Date.now(),
+            startRect: rect,
+            amount: correct * 5, // 5 coins per correct
+            },
+        ]);
+        }
+    }
+
     try {
         const st = safeReadJSON(LS_STATS, { sessions: [] });
         const skippedCnt = skipped.filter(Boolean).length;
@@ -529,7 +524,7 @@ const onSelect = (optIdx, evt) => {
             ? "Daily Challenge"
             : (location.state?.source === "fun_facts" ? "Fun Facts" : "Quiz"));
 
-    // --- Snapshot for RETAKE + Recent (keeps exact same questions) ---
+    // --- Snapshot for RETAKE + Recent ---
     try {
         const snapshot = {
         ts: Date.now(),
@@ -546,7 +541,7 @@ const onSelect = (optIdx, evt) => {
         questions: session.questions.map(q => ({
             id: q.id,
             prompt: q.prompt,
-            options: q.options,          // keep current order for “retake same set”
+            options: q.options,
             answerIndex: q.answerIndex,
             explanation: q.explanation,
             category: q.category,
@@ -557,7 +552,6 @@ const onSelect = (optIdx, evt) => {
         };
         localStorage.setItem(LS_LASTSET, JSON.stringify(snapshot));
 
-        // --- Recent list (keep up to RECENT_LIMIT, not just 5) ---
         const prev = safeReadJSON(LS_RECENT, []);
         const entry = {
         id: snapshot.ts,
@@ -581,6 +575,7 @@ const onSelect = (optIdx, evt) => {
     persistResume(false);
     clearResume();
     };
+
 
   // Retake: same set, reshuffle options
   const retakeSameSet = () => {
@@ -623,32 +618,31 @@ const onSelect = (optIdx, evt) => {
   const goHome = () => navigate("/");
 
   /* -------- Lifelines -------- */
-const use5050 = () => {
-  if (used5050) { showToast("Once per quiz"); return; }
-  if (!current) return;
-  const wrong = [0,1,2,3].filter(i => i !== current.answerIndex);
-  const out = pick(wrong, 2);
-  setElimMap({ ...elimMap, [index]: out });
-  setUsed5050(true);
-};
+  const use5050 = () => {
+    if (used5050) { setToast("One per quiz"); return; }
+    if (!current) return;
+    const wrong = [0,1,2,3].filter(i => i !== current.answerIndex);
+    const out = pick(wrong, 2);
+    setElimMap({ ...elimMap, [index]: out });
+    setUsed5050(true);
+  };
 
-const useAudience = () => {
-  if (usedAudience) { showToast("Once per quiz"); return; }
-  if (!current) return;
-  const base = 40 + Math.floor(Math.random()*26);
-  let remain = 100 - base;
-  const p = [0,0,0,0];
-  p[current.answerIndex] = base;
-  const others = [0,1,2,3].filter(i => i !== current.answerIndex);
-  const a = Math.floor(Math.random() * (remain+1)); remain -= a;
-  const b = Math.floor(Math.random() * (remain+1)); remain -= b;
-  const c = remain;
-  p[others[0]] += a; p[others[1]] += b; p[others[2]] += c;
+  const useAudience = () => {
+    if (usedAudience) { setToast("One per quiz"); return; }
+    if (!current) return;
+    const base = 40 + Math.floor(Math.random()*26); // 40-65 to the correct
+    let remain = 100 - base;
+    const p = [0,0,0,0];
+    p[current.answerIndex] = base;
+    const others = [0,1,2,3].filter(i => i !== current.answerIndex);
+    const a = Math.floor(Math.random() * (remain+1)); remain -= a;
+    const b = Math.floor(Math.random() * (remain+1)); remain -= b;
+    const c = remain;
+    p[others[0]] += a; p[others[1]] += b; p[others[2]] += c;
 
-  setAudienceMap({ ...audienceMap, [index]: p });
-  setUsedAudience(true);
-};
-
+    setAudienceMap({ ...audienceMap, [index]: p });
+    setUsedAudience(true);
+  };
 
   /* -------- Derived -------- */
   const attempted = answers.filter(a => a !== null).length;
@@ -921,15 +915,7 @@ const useAudience = () => {
         </Modal>
         )}
 
-          {toast && (
-            <Toast
-                message={toast}
-                onClose={handleToastClose}
-                duration={1000}   // 1s
-                liftPx={128}      // ~8rem up from bottom
-            />
-            )}
-
+          {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>
       )}
 

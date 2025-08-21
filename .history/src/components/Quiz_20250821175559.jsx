@@ -1,9 +1,8 @@
 // src/components/Quiz.jsx
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Papa from "papaparse";
 import useSound from "use-sound";
-import { createPortal } from "react-dom";
 
 /* ---------------- LocalStorage Keys ---------------- */
 const LS_RESUME    = "qp_resume";     // { inProgress, slug, mode, category, index, total, remainingSec, startedAt }
@@ -104,27 +103,13 @@ function buildSession(all, { categorySlug, difficulty, count }) {
   return { questions: qs, poolSize: pool.length };
 }
 
-/* ---------------- Toast (non-blocking) ---------------- */
-function Toast({ message, onClose, duration = 1000, liftPx = 128 }) {
-  const closeRef = useRef(onClose);
-  useEffect(() => { closeRef.current = onClose; }, [onClose]);
-
-  useEffect(() => {
-    const t = setTimeout(() => closeRef.current?.(), duration);
-    return () => clearTimeout(t);
-  }, [message, duration]); // not depending on onClose
-
-  return createPortal(
-    <div
-      className="fixed left-1/2 -translate-x-1/2 z-[999] pointer-events-none"
-      style={{ bottom: `calc(env(safe-area-inset-bottom) + ${liftPx}px)` }}
-      aria-live="polite" role="status"
-    >
-      <div className="px-3 py-1.5 rounded-lg bg-black/85 border border-white/15 text-sm text-yellow-300 shadow-lg">
-        {message}
-      </div>
-    </div>,
-    document.body
+/* ---------------- Toast ---------------- */
+function Toast({ message, onClose }) {
+  useEffect(() => { const t = setTimeout(onClose, 1500); return () => clearTimeout(t); }, [onClose]);
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="px-3 py-1.5 rounded-lg bg-white/10 border border-base-border text-sm text-yellow-500">{message}</div>
+    </div>
   );
 }
 
@@ -178,6 +163,8 @@ export default function Quiz() {
   const [usedAudience, setUsedAudience] = useState(false);
   const [elimMap, setElimMap] = useState({});              // { [qIndex]: [j,k] }
   const [audienceMap, setAudienceMap] = useState({});      // { [qIndex]: [p0,p1,p2,p3] }
+  const [infoMessage, setInfoMessage] = useState(null);
+
 
   // Practice locks: once you leave a question in practice, you can't change it
   const [lockedMap, setLockedMap] = useState([]);
@@ -188,12 +175,6 @@ export default function Quiz() {
   const [timeUpFor, setTimeUpFor] = useState(null);        // index where time up modal is shown
   const [view, setView] = useState("quiz");                // "quiz" | "results" | "review"
   const [toast, setToast] = useState("");
-  // lets the same message show again if clicked twice
- const showToast = (msg) => {
-  setToast("");                     // clear first
-  setTimeout(() => setToast(msg), 0); // set on next tick
-};
-const handleToastClose = useCallback(() => setToast(""), []);
 
   // Review (for external snapshots too)
   const [reviewSnapshot, setReviewSnapshot] = useState(null); // { questions, answers }
@@ -507,6 +488,22 @@ const onSelect = (optIdx, evt) => {
         0
     );
 
+    // ✅ NEW: trigger coin fly for correct answers
+    if (correct > 0 && coinPillRef?.current) {
+        const srcEl = document.querySelector(".card"); // or submit button if you prefer
+        const rect = srcEl?.getBoundingClientRect();
+        if (rect) {
+        setCoinAnims(prev => [
+            ...prev,
+            {
+            id: Date.now(),
+            startRect: rect,
+            amount: correct * 5, // 5 coins per correct
+            },
+        ]);
+        }
+    }
+
     try {
         const st = safeReadJSON(LS_STATS, { sessions: [] });
         const skippedCnt = skipped.filter(Boolean).length;
@@ -529,7 +526,7 @@ const onSelect = (optIdx, evt) => {
             ? "Daily Challenge"
             : (location.state?.source === "fun_facts" ? "Fun Facts" : "Quiz"));
 
-    // --- Snapshot for RETAKE + Recent (keeps exact same questions) ---
+    // --- Snapshot for RETAKE + Recent ---
     try {
         const snapshot = {
         ts: Date.now(),
@@ -546,7 +543,7 @@ const onSelect = (optIdx, evt) => {
         questions: session.questions.map(q => ({
             id: q.id,
             prompt: q.prompt,
-            options: q.options,          // keep current order for “retake same set”
+            options: q.options,
             answerIndex: q.answerIndex,
             explanation: q.explanation,
             category: q.category,
@@ -557,7 +554,6 @@ const onSelect = (optIdx, evt) => {
         };
         localStorage.setItem(LS_LASTSET, JSON.stringify(snapshot));
 
-        // --- Recent list (keep up to RECENT_LIMIT, not just 5) ---
         const prev = safeReadJSON(LS_RECENT, []);
         const entry = {
         id: snapshot.ts,
@@ -581,6 +577,7 @@ const onSelect = (optIdx, evt) => {
     persistResume(false);
     clearResume();
     };
+
 
   // Retake: same set, reshuffle options
   const retakeSameSet = () => {
@@ -623,32 +620,31 @@ const onSelect = (optIdx, evt) => {
   const goHome = () => navigate("/");
 
   /* -------- Lifelines -------- */
-const use5050 = () => {
-  if (used5050) { showToast("Once per quiz"); return; }
-  if (!current) return;
-  const wrong = [0,1,2,3].filter(i => i !== current.answerIndex);
-  const out = pick(wrong, 2);
-  setElimMap({ ...elimMap, [index]: out });
-  setUsed5050(true);
-};
+  const use5050 = () => {
+    if (used5050) { setToast("One per quiz"); return; }
+    if (!current) return;
+    const wrong = [0,1,2,3].filter(i => i !== current.answerIndex);
+    const out = pick(wrong, 2);
+    setElimMap({ ...elimMap, [index]: out });
+    setUsed5050(true);
+  };
 
-const useAudience = () => {
-  if (usedAudience) { showToast("Once per quiz"); return; }
-  if (!current) return;
-  const base = 40 + Math.floor(Math.random()*26);
-  let remain = 100 - base;
-  const p = [0,0,0,0];
-  p[current.answerIndex] = base;
-  const others = [0,1,2,3].filter(i => i !== current.answerIndex);
-  const a = Math.floor(Math.random() * (remain+1)); remain -= a;
-  const b = Math.floor(Math.random() * (remain+1)); remain -= b;
-  const c = remain;
-  p[others[0]] += a; p[others[1]] += b; p[others[2]] += c;
+  const useAudience = () => {
+    if (usedAudience) { setToast("One per quiz"); return; }
+    if (!current) return;
+    const base = 40 + Math.floor(Math.random()*26); // 40-65 to the correct
+    let remain = 100 - base;
+    const p = [0,0,0,0];
+    p[current.answerIndex] = base;
+    const others = [0,1,2,3].filter(i => i !== current.answerIndex);
+    const a = Math.floor(Math.random() * (remain+1)); remain -= a;
+    const b = Math.floor(Math.random() * (remain+1)); remain -= b;
+    const c = remain;
+    p[others[0]] += a; p[others[1]] += b; p[others[2]] += c;
 
-  setAudienceMap({ ...audienceMap, [index]: p });
-  setUsedAudience(true);
-};
-
+    setAudienceMap({ ...audienceMap, [index]: p });
+    setUsedAudience(true);
+  };
 
   /* -------- Derived -------- */
   const attempted = answers.filter(a => a !== null).length;
@@ -790,32 +786,61 @@ const useAudience = () => {
             )}
 
             {/* Lifelines */}
-            <div className="mt-4 flex items-center justify-center gap-3">
-              <button
-                  onClick={use5050}
-                  disabled={readOnly}
-                  className={["px-3 py-2 rounded-xl border border-base-border bg-white/5", (used5050 || readOnly) ? "opacity-60" : ""].join(" ")}
-                  title="50:50 (eliminate two options)"
-                  aria-disabled={used5050 || readOnly}
-              >
-                  <span className="inline-flex items-center gap-2">
-                  <FiftyFiftyIcon />
-                  <span>50:50</span>
-                  </span>
-              </button>
+            <div className="mt-4 flex flex-col items-center">
+            <div className="flex items-center justify-center gap-6">
+                {/* 50:50 */}
+                <button
+                onClick={() => {
+                    if (!used5050) {
+                    use5050();
+                    setUsed5050(true); // ✅ mark as used
+                    } else {
+                    setInfoMessage("One per quiz");
+                    setTimeout(() => setInfoMessage(null), 2000); // auto-hide
+                    }
+                }}
+                className={[
+                    "px-3 py-2 rounded-xl border border-base-border bg-white/5 transition",
+                    used5050 ? "opacity-50 cursor-not-allowed" : ""
+                ].join(" ")}
+                title="50:50 (eliminate two options)"
+                >
+                <span className="inline-flex items-center gap-2">
+                    <FiftyFiftyIcon />
+                    <span>50:50</span>
+                </span>
+                </button>
 
-              <button
-                  onClick={useAudience}
-                  disabled={readOnly}
-                  className={["px-3 py-2 rounded-xl border border-base-border bg-white/5", (usedAudience || readOnly) ? "opacity-60" : ""].join(" ")}
-                  title="Ask the audience"
-                  aria-disabled={usedAudience || readOnly}
-              >
-                  <span className="inline-flex items-center gap-2">
-                  <AudienceIcon />
-                  <span>Audience</span>
-                  </span>
-              </button>
+                {/* Audience */}
+                <button
+                onClick={() => {
+                    if (!usedAudience) {
+                    useAudience();
+                    setUsedAudience(true); // ✅ mark as used
+                    } else {
+                    setInfoMessage("One per quiz");
+                    setTimeout(() => setInfoMessage(null), 2000); // auto-hide
+                    }
+                }}
+                className={[
+                    "px-3 py-2 rounded-xl border border-base-border bg-white/5 transition",
+                    usedAudience ? "opacity-50 cursor-not-allowed" : ""
+                ].join(" ")}
+                title="Ask the audience"
+                >
+                <span className="inline-flex items-center gap-2">
+                    <AudienceIcon />
+                    <span>Audience</span>
+                </span>
+                </button>
+            </div>
+
+            {/* Message */}
+            {infoMessage && (
+                <div className="mt-2 text-red-500 text-center text-sm">
+                {infoMessage}
+                </div>
+            )}
             </div>
 
             {/* Actions */}
@@ -909,7 +934,11 @@ const useAudience = () => {
                 </button>
                 <button
                 className="btn-primary px-3 py-2 rounded-xl"
-                onClick={onSubmitConfirmed}
+                onClick={() => {
+                    // ✅ Submit first, then close modal
+                    onSubmitConfirmed();
+                    setShowSubmit(false);
+                }}
                 >
                 Submit
                 </button>
@@ -921,15 +950,8 @@ const useAudience = () => {
         </Modal>
         )}
 
-          {toast && (
-            <Toast
-                message={toast}
-                onClose={handleToastClose}
-                duration={1000}   // 1s
-                liftPx={128}      // ~8rem up from bottom
-            />
-            )}
 
+          {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>
       )}
 

@@ -22,10 +22,10 @@ export default function CoinFly({ startRect, targetRef, count = 12, onDone }) {
     const sx = startRect.left + startRect.width / 2;
     const sy = startRect.top + startRect.height / 2;
 
-    const duration = 200;
+    const duration = 900;
     let finished = 0;
 
-    function launch(i) {
+    for (let i = 0; i < count; i++) {
       const coin = document.createElement("div");
       coin.textContent = "🪙";
       Object.assign(coin.style, {
@@ -45,18 +45,23 @@ export default function CoinFly({ startRect, targetRef, count = 12, onDone }) {
       const x1 = ex;
       const y1 = ey;
 
+      // ⚡ tiny stagger so all coins render properly, but still feels like one burst
+      const delay = i * 15;
+
       coin.style.transform = `translate(${x0}px, ${y0}px) scale(1)`;
       container.appendChild(coin);
 
       void coin.getBoundingClientRect(); // force layout
 
       coin.style.transition = `transform ${duration}ms cubic-bezier(.2,.8,.2,1), opacity ${duration}ms linear`;
+      coin.style.transitionDelay = `${delay}ms`;
 
       requestAnimationFrame(() => {
         coin.style.transform = `translate(${x1}px, ${y1}px) scale(.6)`;
         coin.style.opacity = "0.1";
       });
 
+      const total = duration + delay + 50;
       setTimeout(() => {
         coin.remove();
         finished += 1;
@@ -64,12 +69,7 @@ export default function CoinFly({ startRect, targetRef, count = 12, onDone }) {
           container.remove();
           onDone?.();
         }
-      }, duration + 50);
-    }
-
-    // Launch coins sequentially
-    for (let i = 0; i < count; i++) {
-      setTimeout(() => launch(i), i * 60); // ← adjust 60ms for tighter/faster burst
+      }, total);
     }
 
     return () => {
