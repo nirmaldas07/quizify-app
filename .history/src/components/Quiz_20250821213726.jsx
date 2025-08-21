@@ -364,36 +364,6 @@ useEffect(() => {
   }
 }, [view, pendingReward, playCoin]);
 
-useEffect(() => {
-  if (view !== "reward") return;
-
-  // quick white flash
-  setShowFlash(true);
-  const tFlash = setTimeout(() => setShowFlash(false), 180);
-
-  // ease-out count up (1s)
-  const targetCoins = pendingReward?.coins ?? 0;
-  const targetCorrect = lastResult.correct;
-  let raf = 0;
-  const start = performance.now();
-  const dur = 1000;
-
-  const step = (now) => {
-    const p = Math.min(1, (now - start) / dur);
-    const ease = 1 - Math.pow(1 - p, 3); // cubic ease-out
-    setCountCorrect(Math.round(targetCorrect * ease));
-    setCountCoins(Math.round(targetCoins * ease));
-    if (p < 1) raf = requestAnimationFrame(step);
-  };
-
-  setCountCorrect(0);
-  setCountCoins(0);
-  raf = requestAnimationFrame(step);
-
-  return () => { clearTimeout(tFlash); cancelAnimationFrame(raf); };
-}, [view, lastResult.correct, pendingReward?.coins]);
-
-
 
 // Auto-advance from Reward -> Results after 2s
 useEffect(() => {
@@ -780,17 +750,7 @@ const useAudience = () => {
 
   return (
     <ScreenWrap>
-    <style>{`
-      @keyframes popIn {
-        0%   { transform: scale(.9); opacity: 0 }
-        60%  { transform: scale(1.04); opacity: 1 }
-        100% { transform: scale(1) }
-      }
-      @keyframes shine {
-        0%   { transform: translateX(-120%) }
-        100% { transform: translateX(120%) }
-      }
-    `}</style>
+
       {/* NEW — fire the coin animation once Results render */}
 {view === "reward" && pendingReward && pendingReward.coins > 0 && !pendingReward.awarded && (
   <CoinFly
@@ -810,42 +770,37 @@ const useAudience = () => {
 {view === "reward" && (
   <>
     {/* HUD so the CoinFly has a target */}
-    <div className="relative mt-4 card rounded-3xl p-8 text-center overflow-hidden" style={{animation:"popIn 380ms ease-out"}}>
-    {/* flash overlay */}
-    {showFlash && <div className="absolute inset-0 bg-white/70 pointer-events-none rounded-3xl" />}
-
-    {/* shiny sweep */}
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="h-full w-1/3 -skew-x-12 bg-white/10 blur-md"
-            style={{animation:"shine 900ms ease-out forwards 120ms"}} />
+    <div className="mt-3 flex items-center justify-end gap-2 px-3">
+      <XPill level={level} xp={xp} next={nextThreshold} onClick={()=>setShowLevels(true)} />
+      <CoinPill total={coins} onClick={()=>setShowCoins(true)} pillRef={coinPillRef} />
     </div>
 
-    <div className="relative">
-        <div className="text-3xl md:text-4xl font-extrabold mb-2">Rewards</div>
-        <div className="text-sm text-base-muted mb-6">
+    <div className="mt-4 card rounded-3xl p-8 text-center">
+      <div className="text-3xl md:text-4xl font-extrabold mb-2">Rewards</div>
+      <div className="text-sm text-base-muted mb-6">
         {fromSlug(category)} • {isPractice ? "Practice" : "Quiz"}
-        </div>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
         <div className="rounded-2xl border border-base-border bg-white/5 p-5">
-            <div className="text-base-muted text-sm">Correct answers</div>
-            <div className="text-5xl font-black mt-1">{countCorrect}</div>
+          <div className="text-base-muted text-sm">Correct answers</div>
+          <div className="text-4xl md:text-5xl font-bold mt-1">{lastResult.correct}</div>
         </div>
         <div className="rounded-2xl border border-base-border bg-white/5 p-5">
-            <div className="text-base-muted text-sm">Coins</div>
-            <div className="text-5xl font-black mt-1">{countCoins}</div>
-            <div className="text-xs text-base-muted mt-1">
+          <div className="text-base-muted text-sm">Coins</div>
+          <div className="text-4xl md:text-5xl font-bold mt-1">
+            {pendingReward?.coins ?? 0}
+          </div>
+          <div className="text-xs text-base-muted mt-1">
             {lastResult.correct} × 5
-            </div>
+          </div>
         </div>
-        </div>
+      </div>
 
-        <div className="mt-6 text-xs text-base-muted">
+      <div className="mt-6 text-xs text-base-muted">
         Finalizing… <span className="animate-pulse">•••</span>
-        </div>
+      </div>
     </div>
-    </div>
-
   </>
 )}
 
