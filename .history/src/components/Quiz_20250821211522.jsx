@@ -241,7 +241,6 @@ const awardCoins = useCallback((amount) => {
 
   // Auto-next timer (2s) for quiz mode
   const autoNextRef = useRef(null);
-  const rewardPaidRef = useRef(false);
 
   /* -------- handy JSON util -------- */
   const safeReadJSON = (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } };
@@ -356,11 +355,10 @@ const awardCoins = useCallback((amount) => {
 
 // Play coin sound on the Reward screen if there are coins to award
 useEffect(() => {
-  if (view === "reward" && pendingReward?.coins > 0 && !pendingReward.awarded) {
+  if (view === "reward" && pendingReward?.coins > 0) {
     try { playCoin(); } catch {}
   }
 }, [view, pendingReward, playCoin]);
-
 
 // Auto-advance from Reward -> Results after 2s
 useEffect(() => {

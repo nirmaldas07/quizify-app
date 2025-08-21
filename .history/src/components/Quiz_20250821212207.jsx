@@ -241,7 +241,6 @@ const awardCoins = useCallback((amount) => {
 
   // Auto-next timer (2s) for quiz mode
   const autoNextRef = useRef(null);
-  const rewardPaidRef = useRef(false);
 
   /* -------- handy JSON util -------- */
   const safeReadJSON = (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } };
