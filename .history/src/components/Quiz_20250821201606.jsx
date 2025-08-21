@@ -651,7 +651,7 @@ const onSelect = (optIdx, evt) => {
       return { ...q, options: order.map(i => q.options[i]), answerIndex: order.indexOf(q.answerIndex) };
     });
 
-    setSession({ questions: reshuffled });
+    setSession({ questions: reshuffled, pool: reshuffled.length });
     setAnswers(new Array(reshuffled.length).fill(null));
     setSkipped(new Array(reshuffled.length).fill(false));
     setLockedMap(new Array(reshuffled.length).fill(false));

@@ -169,7 +169,7 @@ export default function Quiz() {
   const [err, setErr] = useState("");
 
   /* Session */
-  const [session, setSession] = useState({ questions: [] });
+  const [session, setSession] = useState({ questions: [], pool: 0 });
   const total = session.questions.length;
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState([]);   // selected index | null
@@ -273,7 +273,7 @@ const awardCoins = useCallback((amount) => {
           difficulty,
           count: saved.total || count,
         });
-        setSession({ questions: sess.questions });
+        setSession({ questions: sess.questions, pool: sess.poolSize });
         setIndex(clamp(saved.index, 0, sess.questions.length - 1));
         setAnswers(new Array(sess.questions.length).fill(null));
         setSkipped(new Array(sess.questions.length).fill(false));
@@ -292,7 +292,7 @@ const awardCoins = useCallback((amount) => {
 
     // Fresh
     const sess = buildSession(allQuestions, { categorySlug: category, difficulty, count });
-    setSession({ questions: sess.questions });
+    setSession({ questions: sess.questions, pool: sess.poolSize });
     setAnswers(new Array(sess.questions.length).fill(null));
     setSkipped(new Array(sess.questions.length).fill(false));
     setLockedMap(new Array(sess.questions.length).fill(false));
@@ -651,7 +651,7 @@ const onSelect = (optIdx, evt) => {
       return { ...q, options: order.map(i => q.options[i]), answerIndex: order.indexOf(q.answerIndex) };
     });
 
-    setSession({ questions: reshuffled });
+    setSession({ questions: reshuffled, pool: reshuffled.length });
     setAnswers(new Array(reshuffled.length).fill(null));
     setSkipped(new Array(reshuffled.length).fill(false));
     setLockedMap(new Array(reshuffled.length).fill(false));
@@ -940,7 +940,7 @@ const useAudience = () => {
           )}
             {/* Time up modal */}
             {timeUpFor === index && (
-            <Modal onClose={() => { setTimeUpFor(null); goNext(); }}>
+            <Modal>
                 <div className="text-center">
                 <div className="text-2xl mb-2">⏰</div>
                 <h2 className="text-lg font-bold mb-1">Time's up</h2>
