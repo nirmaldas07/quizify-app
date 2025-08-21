@@ -198,7 +198,21 @@ function Sheet({ open, onClose, children }) {
 /* ------------ Home ------------ */
 export default function Home() {
   const navigate = useNavigate();
-  
+  const [categoryCounts, setCategoryCounts] = useState({});
+
+    useEffect(() => {
+    fetch("/quiz_questions_bank.csv")
+        .then((res) => res.text())
+        .then((text) => {
+        const parsed = Papa.parse(text, { header: true });
+        const counts = {};
+        parsed.data.forEach((row) => {
+            const subj = row.subject?.trim();
+            if (subj) counts[subj] = (counts[subj] || 0) + 1;
+        });
+        setCategoryCounts(counts);
+        });
+    }, []);
 
   // ✅ hooks only inside components + use public paths for sounds
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });

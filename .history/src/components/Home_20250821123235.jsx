@@ -8,17 +8,17 @@ import ConfirmStartSheet from "./ConfirmStartSheet";
 
 /* ------------ Categories (5 + More) ------------ */
 const primaryCats = [
-  { name: "General Knowledge", questions: 50, icon: "🧠" },
-  { name: "Artificial Intelligence", questions: 28, icon: "🤖" },
-  { name: "Fun facts",         questions: 30, icon: "🎉" },
-  { name: "Science",           questions: 45, icon: "🧪" },
-  { name: "History",           questions: 42, icon: "🏺" },
+  { name: "General Knowledge",          icon: "🧠" },
+  { name: "Artificial Intelligence",    icon: "🤖" },
+  { name: "Fun facts",                  icon: "🎉" },
+  { name: "Science",                    icon: "🧪" },
+  { name: "History",                    icon: "🏺" },
 ];
 const extraCats = [
-  { name: "Geography",               questions: 38, icon: "🗺️" },
-  { name: "Computer",                questions: 34, icon: "💻" },
-  { name: "Aptitude",                questions: 36, icon: "📐" },
-  { name: "Iconic Figures",          questions: 26, icon: "🌟" },
+  { name: "Geography",                  icon: "🗺️" },
+  { name: "Computer",                   icon: "💻" },
+  { name: "Aptitude",                   icon: "📐" },
+  { name: "Iconic Figures",             icon: "🌟" },
 ];
 const categories = [...primaryCats, { name: "More", questions: extraCats.length, icon: "➕" }];
 const ALL_CATEGORIES = [...primaryCats, ...extraCats].map(c => c.name);
@@ -198,7 +198,21 @@ function Sheet({ open, onClose, children }) {
 /* ------------ Home ------------ */
 export default function Home() {
   const navigate = useNavigate();
-  
+  const [categoryCounts, setCategoryCounts] = useState({});
+
+    useEffect(() => {
+    fetch("/quiz_questions_bank.csv")
+        .then((res) => res.text())
+        .then((text) => {
+        const parsed = Papa.parse(text, { header: true });
+        const counts = {};
+        parsed.data.forEach((row) => {
+            const subj = row.subject?.trim();
+            if (subj) counts[subj] = (counts[subj] || 0) + 1;
+        });
+        setCategoryCounts(counts);
+        });
+    }, []);
 
   // ✅ hooks only inside components + use public paths for sounds
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
@@ -686,45 +700,60 @@ export default function Home() {
         <span className="text-xs text-base-muted">Tap = Start • ⚙️ = Change</span>
       </div>
 
-      {/* Quiz tiles */}
-      <div ref={categoriesRef} className="grid grid-cols-3 gap-4 mb-4">
-        {categories.map((cat) => (
-          <div key={cat.name} className="relative">
-            {cat.name !== "More" && (
-              <button
-                type="button"
-                onClick={() => { setConfirmCat(cat.name); setConfirmOpen(true); }}
-                className="w-full rounded-2xl p-3 text-left bg-white/5 border border-base-border hover:bg-white/10 transition"
-                aria-label={`Start ${cat.name} quiz`}
-              >
-                <div className="text-2xl mb-2">{cat.icon}</div>
-                <div className="text-[13px] font-medium leading-tight">{cat.name}</div>
-                <div className="text-[10px] text-base-muted mt-1">{cat.questions} questions</div>
-              </button>
-            )}
-            {cat.name === "More" && (
-              <button
-                onClick={() => setShowMoreCats(true)}
-                className="w-full rounded-2xl p-3 text-left bg-white/5 border border-base-border hover:bg-white/10 transition"
-              >
-                <div className="text-2xl mb-2">{cat.icon}</div>
-                <div className="text-[13px] font-medium leading-tight">More</div>
-                <div className="text-[10px] text-base-muted mt-1">See all</div>
-              </button>
-            )}
-            {cat.name !== "More" && (
-              <button
-                className="absolute right-2 top-2 text-xs px-2 py-1 rounded-lg bg-white/5 border border-base-border"
-                onClick={(e)=>{ e.stopPropagation(); openQuizConfig(cat.name); }}
-                aria-label="Customize"
-                title="Customize"
-              >
-                ⚙️
-              </button>
-            )}
+{/* Quiz tiles */}
+<div ref={categoriesRef} className="grid grid-cols-3 gap-4 mb-4">
+  {categories.map((cat) => (
+    <div key={cat.name} className="relative">
+      {cat.name !== "More" && (
+        <button
+          type="button"
+          onClick={() => { setConfirmCat(cat.name); setConfirmOpen(true); }}
+          className="w-full rounded-2xl p-3 text-left bg-white/5 border border-base-border hover:bg-white/10 transition"
+          aria-label={`Start ${cat.name} quiz`}
+        >
+          <div className="text-2xl mb-2">{cat.icon}</div>
+          <div className="text-[13px] font-medium leading-tight">{cat.name}</div>
+          <div
+            className={`text-[10px] mt-1 ${
+              categoryCounts[cat.name] ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {categoryCounts[cat.name] || 0} questions
           </div>
-        ))}
-      </div>
+        </button>
+      )}
+      {cat.name === "More" && (
+        <button
+          onClick={() => setShowMoreCats(true)}
+          className="w-full rounded-2xl p-3 text-left bg-white/5 border border-base-border hover:bg-white/10 transition"
+        >
+          <div className="text-2xl mb-2">{cat.icon}</div>
+          <div className="text-[13px] font-medium leading-tight">More</div>
+          <div className="text-[10px] text-base-muted mt-1">See all</div>
+        </button>
+      )}
+      {cat.name !== "More" && (
+        <button
+          className={`absolute right-2 top-2 text-xs px-2 py-1 rounded-lg border ${
+            categoryCounts[cat.name]
+              ? "bg-white/5 border-base-border hover:bg-white/10"
+              : "bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed"
+          }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (categoryCounts[cat.name]) openQuizConfig(cat.name);
+          }}
+          disabled={!categoryCounts[cat.name]}
+          aria-label="Customize"
+          title="Customize"
+        >
+          ⚙️
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
 
       {/* Daily Challenge */}
       <div className="rounded-3xl border border-base-border p-4 mb-8 bg-gradient-to-br from-brand-blue/25 to-brand-purple/20">

@@ -198,7 +198,8 @@ function Sheet({ open, onClose, children }) {
 /* ------------ Home ------------ */
 export default function Home() {
   const navigate = useNavigate();
-  
+  const [categoryCounts, setCategoryCounts] = useState({});
+
 
   // ✅ hooks only inside components + use public paths for sounds
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
