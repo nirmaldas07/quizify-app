@@ -1,6 +1,5 @@
 // src/components/Home.jsx
 import { useEffect, useMemo, useRef, useState, useLayoutEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import useSound from "use-sound";
 import Papa from "papaparse";
@@ -166,34 +165,32 @@ function Sheet({ open, onClose, children }) {
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.body.classList.add("modal-open");
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
-      document.body.classList.remove("modal-open");
     };
   }, [open, onClose]);
 
   if (!open) return null;
 
-  return createPortal(
-    <div className="fixed inset-0 z-[120] flex items-center justify-center" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/60" />
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/50" onClick={onClose}>
       <div
-        className="relative w-[calc(100%-2rem)] max-w-md mx-auto rounded-2xl
-                   bg-base-card border border-base-border shadow-2xl
-                   p-5 pb-[calc(1rem+env(safe-area-inset-bottom))]
-                   max-h-[90vh] overflow-y-auto overscroll-contain"
+        className={[
+          "absolute inset-x-0 bottom-0 mx-auto w-full max-w-md",
+          "rounded-t-3xl bg-base-card border border-base-border",
+          // ✅ key fixes:
+          "max-h-[88dvh] overflow-y-auto overscroll-contain touch-pan-y",
+          "p-5 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+        ].join(" ")}
         onClick={(e) => e.stopPropagation()}
       >
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/15" />
         {children}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
-
-
 
 /* ------------ Home ------------ */
 export default function Home() {
@@ -474,15 +471,7 @@ export default function Home() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmCat, setConfirmCat]   = useState(null);
 
-  const openQuizConfig = (catName) => {
-  const cfg = getQuizCfgFor(catName);
-  setQuizCategory(catName);
-  setQuizDifficulty(cfg.difficulty);
-  setQuizCount(cfg.count);
-  setQuizSeconds(cfg.seconds);
-  setShowQuizConfig(true);
-};
-  
+  const openQuizConfig = (catName) => { setQuizCategory(catName); setShowQuizConfig(true); };
   const startQuizWithCfg = (catName) => {
     const cfg = getQuizCfgFor(catName);
     saveQuizCfgFor(catName, cfg);
@@ -495,7 +484,6 @@ export default function Home() {
       }
     });
   };
-
   const startPracticeQuick = (catName) => {
     const last = readJSON(LS_LAST_PRACT, defaultPractice);
     const cfg = { difficulty: last?.difficulty || "medium", count: last?.count || 10 };
@@ -916,7 +904,7 @@ export default function Home() {
       </Sheet>
 
       {/* Quiz Config */}
-      <Sheet open={showQuizConfig} onClose={()=>setShowQuizConfig(false)} centered>
+      <Sheet open={showQuizConfig} onClose={()=>setShowQuizConfig(false)}>
         <div className="relative">
           <button
             className="absolute right-0 -top-2 text-sm px-2 py-1 rounded-lg bg-white/5 border border-base-border"
@@ -972,7 +960,7 @@ export default function Home() {
       </Sheet>
 
       {/* Practice Config */}
-      <Sheet open={showPracticeConfig} onClose={()=>setShowPracticeConfig(false)} centered>
+      <Sheet open={showPracticeConfig} onClose={()=>setShowPracticeConfig(false)}>
         <div className="relative">
           <button
             className="absolute right-0 -top-2 text-sm px-2 py-1 rounded-lg bg-white/5 border border-base-border"
@@ -1029,7 +1017,7 @@ export default function Home() {
       </Sheet>
 
       {/* Daily Config */}
-      <Sheet open={showDailyConfig} onClose={()=>setShowDailyConfig(false)} centered>
+      <Sheet open={showDailyConfig} onClose={()=>setShowDailyConfig(false)}>
         <div className="relative">
           <button
             className="absolute right-0 -top-2 text-sm px-2 py-1 rounded-lg bg-white/5 border border-base-border"

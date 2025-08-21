@@ -1,9 +1,8 @@
 // src/components/ConfirmStartSheet.jsx
-import React, { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import React from "react";
 
 /**
- * Micro sheet to confirm starting a quiz (always centered).
+ * Micro sheet to confirm starting a quiz — now always centered.
  * Props:
  * - open: boolean
  * - categoryLabel: string
@@ -26,38 +25,6 @@ export default function ConfirmStartSheet({
   onChange,
   onClose,
 }) {
-  const prevOverflowRef = useRef("");
-  const dialogRef = useRef(null);
-
-  // Body scroll lock, but allow scroll *inside* the dialog
-  useEffect(() => {
-    if (!open) return;
-    prevOverflowRef.current = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("modal-open");
-
-    const stopNativeScroll = (e) => {
-      // If the touch is inside the dialog, let it scroll
-      if (dialogRef.current && dialogRef.current.contains(e.target)) return;
-      e.preventDefault();
-    };
-    document.addEventListener("touchmove", stopNativeScroll, { passive: false });
-
-    return () => {
-      document.body.style.overflow = prevOverflowRef.current || "";
-      document.removeEventListener("touchmove", stopNativeScroll);
-      document.body.classList.remove("modal-open");
-    };
-  }, [open]);
-
-  // Escape to close
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => e.key === "Escape" && onClose?.();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
   if (!open) return null;
 
   const lines = String(summary || "")
@@ -65,24 +32,20 @@ export default function ConfirmStartSheet({
     .map((s) => s.trim())
     .filter(Boolean);
 
-  return createPortal(
+  return (
     <div
-      className="fixed inset-0 z-[120] flex items-center justify-center"
+      className="fixed inset-0 z-[100] flex items-center justify-center" // 🔥 changed from items-end to items-center
+      onClick={onClose}
       role="dialog"
       aria-modal="true"
-      onClick={onClose}
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60" />
 
-      {/* Centered dialog */}
+      {/* Popup (centered) */}
       <div
-        ref={dialogRef}
-        className="relative w-full max-w-md mx-auto
-                   rounded-2xl
-                   bg-base-card border border-base-border shadow-2xl
-                   p-5 pt-4
-                   max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-md rounded-2xl bg-base-card border border-base-border shadow-2xl
+                   p-5 mx-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="h-1 w-12 rounded-full bg-white/15 mx-auto mb-4" />
@@ -91,6 +54,7 @@ export default function ConfirmStartSheet({
           <>
             <h2 className="text-lg font-bold mb-2">Start {categoryLabel} quiz?</h2>
 
+            {/* Current setting block */}
             {lines.length > 0 && (
               <div className="mb-4 rounded-xl border border-base-border bg-white/5 p-3">
                 <div className="text-xs text-base-muted mb-1">Current setting</div>
@@ -158,11 +122,7 @@ export default function ConfirmStartSheet({
             </div>
           </>
         )}
-
-        {/* Spacer */}
-        <div className="mt-2" />
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }

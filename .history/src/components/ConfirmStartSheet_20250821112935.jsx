@@ -34,7 +34,6 @@ export default function ConfirmStartSheet({
     if (!open) return;
     prevOverflowRef.current = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.body.classList.add("modal-open");
 
     const stopNativeScroll = (e) => {
       // If the touch is inside the dialog, let it scroll
@@ -46,7 +45,6 @@ export default function ConfirmStartSheet({
     return () => {
       document.body.style.overflow = prevOverflowRef.current || "";
       document.removeEventListener("touchmove", stopNativeScroll);
-      document.body.classList.remove("modal-open");
     };
   }, [open]);
 

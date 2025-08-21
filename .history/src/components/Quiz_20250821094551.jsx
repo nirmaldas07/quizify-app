@@ -123,7 +123,7 @@ export default function Quiz() {
   const mode        = (location.state?.mode || "quiz");  // "quiz" | "practice"
   const difficulty  = String(location.state?.difficulty || "medium").toLowerCase();
   const count       = clamp(Number(location.state?.count || 10), 1, 50);
-  const timerConfig = location.state?.timer || { type: "per_q", seconds: 45 };
+  const timerConfig = location.state?.timer || { type: "per_q", seconds: 30 };
   const resumeFlag  = Boolean(location.state?.resume);
 
   const isPractice  = mode === "practice";

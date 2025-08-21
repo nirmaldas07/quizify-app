@@ -1,13 +1,12 @@
 // src/components/ConfirmStartSheet.jsx
-import React, { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import React, { useEffect } from "react";
 
 /**
- * Micro sheet to confirm starting a quiz (always centered).
+ * Micro bottom-sheet to confirm starting a quiz.
  * Props:
  * - open: boolean
- * - categoryLabel: string
- * - summary: string
+ * - categoryLabel: string (e.g., "Sports")
+ * - summary: string  (multiline; we render as a "Current setting" block)
  * - hasResume: boolean
  * - resumeInfo?: { index:number, total:number, remainingSec?:number }
  * - onStart(): void
@@ -26,71 +25,61 @@ export default function ConfirmStartSheet({
   onChange,
   onClose,
 }) {
-  const prevOverflowRef = useRef("");
-  const dialogRef = useRef(null);
+  // Don’t render at all if closed
+  if (!open) return null;
 
-  // Body scroll lock, but allow scroll *inside* the dialog
+  // Body scroll lock + Escape to close
   useEffect(() => {
-    if (!open) return;
-    prevOverflowRef.current = document.body.style.overflow;
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.body.classList.add("modal-open");
 
-    const stopNativeScroll = (e) => {
-      // If the touch is inside the dialog, let it scroll
-      if (dialogRef.current && dialogRef.current.contains(e.target)) return;
-      e.preventDefault();
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose?.();
     };
-    document.addEventListener("touchmove", stopNativeScroll, { passive: false });
+    document.addEventListener("keydown", onKey);
 
     return () => {
-      document.body.style.overflow = prevOverflowRef.current || "";
-      document.removeEventListener("touchmove", stopNativeScroll);
-      document.body.classList.remove("modal-open");
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
-
-  // Escape to close
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => e.key === "Escape" && onClose?.();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  if (!open) return null;
+  }, [onClose]);
 
   const lines = String(summary || "")
     .split("\n")
     .map((s) => s.trim())
     .filter(Boolean);
 
-  return createPortal(
+  return (
     <div
-      className="fixed inset-0 z-[120] flex items-center justify-center"
+      className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center"
+      onClick={onClose}
       role="dialog"
       aria-modal="true"
-      onClick={onClose}
+      aria-label="Confirm start"
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60" />
 
-      {/* Centered dialog */}
+      {/* Sheet container (clicks inside should NOT close) */}
       <div
-        ref={dialogRef}
-        className="relative w-full max-w-md mx-auto
-                   rounded-2xl
-                   bg-base-card border border-base-border shadow-2xl
-                   p-5 pt-4
-                   max-h-[90vh] overflow-y-auto"
+        className={[
+          "relative w-full max-w-md mx-auto",
+          // Mobile: bottom sheet; Desktop: centered card
+          "rounded-t-3xl sm:rounded-2xl bg-base-card border border-base-border shadow-2xl",
+          // Scrollability + safe-area padding so CTA is reachable
+          "max-h-[90vh] overflow-y-auto touch-pan-y",
+          "p-5 pb-[calc(1rem+env(safe-area-inset-bottom))]",
+        ].join(" ")}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Handle */}
         <div className="h-1 w-12 rounded-full bg-white/15 mx-auto mb-4" />
 
         {!hasResume ? (
           <>
             <h2 className="text-lg font-bold mb-2">Start {categoryLabel} quiz?</h2>
 
+            {/* Current setting block */}
             {lines.length > 0 && (
               <div className="mb-4 rounded-xl border border-base-border bg-white/5 p-3">
                 <div className="text-xs text-base-muted mb-1">Current setting</div>
@@ -103,11 +92,7 @@ export default function ConfirmStartSheet({
             )}
 
             <div className="flex gap-3">
-              <button
-                onClick={onStart}
-                className="flex-1 btn-primary rounded-xl px-3 py-3"
-                autoFocus
-              >
+              <button onClick={onStart} className="flex-1 btn-primary rounded-xl px-3 py-3" autoFocus>
                 Start
               </button>
               <button
@@ -123,6 +108,9 @@ export default function ConfirmStartSheet({
                 Cancel
               </button>
             </div>
+
+            {/* Bottom spacer to ensure buttons never sit under the home nav */}
+            <div className="mt-3" />
           </>
         ) : (
           <>
@@ -135,11 +123,7 @@ export default function ConfirmStartSheet({
             </div>
 
             <div className="flex gap-3">
-              <button
-                onClick={onResume}
-                className="flex-1 btn-primary rounded-xl px-3 py-3"
-                autoFocus
-              >
+              <button onClick={onResume} className="flex-1 btn-primary rounded-xl px-3 py-3" autoFocus>
                 Resume
               </button>
               <button
@@ -156,13 +140,11 @@ export default function ConfirmStartSheet({
                 Cancel
               </button>
             </div>
+
+            <div className="mt-3" />
           </>
         )}
-
-        {/* Spacer */}
-        <div className="mt-2" />
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }

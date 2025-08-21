@@ -854,7 +854,6 @@ const onSelect = (optIdx, evt) => {
                 <div className="text-2xl mb-2">⏰</div>
                 <h2 className="text-lg font-bold mb-1">Time's up</h2>
                 <p className="text-sm text-base-muted mb-4">Let's move on.</p>
-
                 <div className="flex justify-center">
                     <button
                     className="btn-primary px-3 py-2 rounded-xl"
@@ -863,13 +862,9 @@ const onSelect = (optIdx, evt) => {
                     {index < total - 1 ? "Next question" : "Submit"}
                     </button>
                 </div>
-
-                {/* ✅ proper bottom space */}
-                <div className="mt-4" />
                 </div>
             </Modal>
             )}
-
 
         {/* Submit modal */}
         {showSubmit && (

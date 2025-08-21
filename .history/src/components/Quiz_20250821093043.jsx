@@ -854,7 +854,6 @@ const onSelect = (optIdx, evt) => {
                 <div className="text-2xl mb-2">⏰</div>
                 <h2 className="text-lg font-bold mb-1">Time's up</h2>
                 <p className="text-sm text-base-muted mb-4">Let's move on.</p>
-
                 <div className="flex justify-center">
                     <button
                     className="btn-primary px-3 py-2 rounded-xl"
@@ -863,43 +862,26 @@ const onSelect = (optIdx, evt) => {
                     {index < total - 1 ? "Next question" : "Submit"}
                     </button>
                 </div>
-
-                {/* ✅ proper bottom space */}
-                <div className="mt-4" />
                 </div>
             </Modal>
             )}
 
-
-        {/* Submit modal */}
-        {showSubmit && (
-        <Modal onClose={() => setShowSubmit(false)}>
-            <div className="text-center">
-            <div className="text-2xl mb-2">🚀</div>
-            <h2 className="text-lg font-bold mb-1">Submit quiz?</h2>
-            <p className="text-sm text-base-muted mb-4">
-                Attempted {attempted}/{total} • Skipped {skipped.filter(Boolean).length}
-            </p>
-            <div className="flex justify-center gap-3">
-                <button
-                className="px-3 py-2 rounded-xl border border-base-border bg-white/5"
-                onClick={() => setShowSubmit(false)}
-                >
-                Back
-                </button>
-                <button
-                className="btn-primary px-3 py-2 rounded-xl"
-                onClick={onSubmitConfirmed}
-                >
-                Submit
-                </button>
-            </div>
-
-            {/* 👇 Added bottom space */}
-            <div className="mt-4" />
-            </div>
-        </Modal>
-        )}
+          {/* Submit modal */}
+          {showSubmit && (
+            <Modal onClose={() => setShowSubmit(false)}>
+              <div className="text-center">
+                <div className="text-2xl mb-2">🚀</div>
+                <h2 className="text-lg font-bold mb-1">Submit quiz?</h2>
+                <p className="text-sm text-base-muted mb-4">
+                  Attempted {attempted}/{total} • Skipped {skipped.filter(Boolean).length}
+                </p>
+                <div className="flex justify-center gap-3">
+                  <button className="px-3 py-2 rounded-xl border border-base-border bg-white/5" onClick={() => setShowSubmit(false)}>Back</button>
+                  <button className="btn-primary px-3 py-2 rounded-xl" onClick={onSubmitConfirmed}>Submit</button>
+                </div>
+              </div>
+            </Modal>
+          )}
 
           {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>

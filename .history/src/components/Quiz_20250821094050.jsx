@@ -850,56 +850,55 @@ const onSelect = (optIdx, evt) => {
             {/* Time up modal */}
             {timeUpFor === index && (
             <Modal>
-                <div className="text-center">
+                <div className="bg-base-card border border-base-border rounded-2xl w-full max-w-sm mx-auto p-5 text-center">
                 <div className="text-2xl mb-2">⏰</div>
                 <h2 className="text-lg font-bold mb-1">Time's up</h2>
                 <p className="text-sm text-base-muted mb-4">Let's move on.</p>
 
-                <div className="flex justify-center">
-                    <button
-                    className="btn-primary px-3 py-2 rounded-xl"
+                <button
+                    className="btn-primary px-4 py-2 rounded-xl w-full mt-2"
                     onClick={() => { setTimeUpFor(null); goNext(); }}
-                    >
+                >
                     {index < total - 1 ? "Next question" : "Submit"}
-                    </button>
-                </div>
+                </button>
 
-                {/* ✅ proper bottom space */}
+                {/* extra space at bottom */}
                 <div className="mt-4" />
                 </div>
             </Modal>
             )}
 
 
-        {/* Submit modal */}
-        {showSubmit && (
-        <Modal onClose={() => setShowSubmit(false)}>
-            <div className="text-center">
-            <div className="text-2xl mb-2">🚀</div>
-            <h2 className="text-lg font-bold mb-1">Submit quiz?</h2>
-            <p className="text-sm text-base-muted mb-4">
-                Attempted {attempted}/{total} • Skipped {skipped.filter(Boolean).length}
-            </p>
-            <div className="flex justify-center gap-3">
-                <button
-                className="px-3 py-2 rounded-xl border border-base-border bg-white/5"
-                onClick={() => setShowSubmit(false)}
-                >
-                Back
-                </button>
-                <button
-                className="btn-primary px-3 py-2 rounded-xl"
-                onClick={onSubmitConfirmed}
-                >
-                Submit
-                </button>
-            </div>
+{/* Submit modal */}
+{showSubmit && (
+  <Modal onClose={() => setShowSubmit(false)}>
+    <div className="text-center">
+      <div className="text-2xl mb-2">🚀</div>
+      <h2 className="text-lg font-bold mb-1">Submit quiz?</h2>
+      <p className="text-sm text-base-muted mb-4">
+        Attempted {attempted}/{total} • Skipped {skipped.filter(Boolean).length}
+      </p>
+      <div className="flex justify-center gap-3">
+        <button
+          className="px-3 py-2 rounded-xl border border-base-border bg-white/5"
+          onClick={() => setShowSubmit(false)}
+        >
+          Back
+        </button>
+        <button
+          className="btn-primary px-3 py-2 rounded-xl"
+          onClick={onSubmitConfirmed}
+        >
+          Submit
+        </button>
+      </div>
 
-            {/* 👇 Added bottom space */}
-            <div className="mt-4" />
-            </div>
-        </Modal>
-        )}
+      {/* 👇 Added bottom space */}
+      <div className="mt-4" />
+    </div>
+  </Modal>
+)}
+
 
           {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>

@@ -847,59 +847,50 @@ const onSelect = (optIdx, evt) => {
               </div>
             </Modal>
           )}
-            {/* Time up modal */}
-            {timeUpFor === index && (
+
+          {/* Time up modal */}
+          {timeUpFor === index && (
             <Modal>
-                <div className="text-center">
+              <div className="text-center">
                 <div className="text-2xl mb-2">⏰</div>
                 <h2 className="text-lg font-bold mb-1">Time's up</h2>
                 <p className="text-sm text-base-muted mb-4">Let's move on.</p>
-
-                <div className="flex justify-center">
+                <div className="flex justify-center gap-3">
+                  {index > 0 && (
                     <button
+                      className="px-3 py-2 rounded-xl border border-base-border bg-white/5"
+                      onClick={() => { setTimeUpFor(null); goPrev(); }}
+                    >
+                      Go back
+                    </button>
+                  )}
+                  <button
                     className="btn-primary px-3 py-2 rounded-xl"
                     onClick={() => { setTimeUpFor(null); goNext(); }}
-                    >
+                  >
                     {index < total - 1 ? "Next question" : "Submit"}
-                    </button>
+                  </button>
                 </div>
-
-                {/* ✅ proper bottom space */}
-                <div className="mt-4" />
-                </div>
+              </div>
             </Modal>
-            )}
+          )}
 
-
-        {/* Submit modal */}
-        {showSubmit && (
-        <Modal onClose={() => setShowSubmit(false)}>
-            <div className="text-center">
-            <div className="text-2xl mb-2">🚀</div>
-            <h2 className="text-lg font-bold mb-1">Submit quiz?</h2>
-            <p className="text-sm text-base-muted mb-4">
-                Attempted {attempted}/{total} • Skipped {skipped.filter(Boolean).length}
-            </p>
-            <div className="flex justify-center gap-3">
-                <button
-                className="px-3 py-2 rounded-xl border border-base-border bg-white/5"
-                onClick={() => setShowSubmit(false)}
-                >
-                Back
-                </button>
-                <button
-                className="btn-primary px-3 py-2 rounded-xl"
-                onClick={onSubmitConfirmed}
-                >
-                Submit
-                </button>
-            </div>
-
-            {/* 👇 Added bottom space */}
-            <div className="mt-4" />
-            </div>
-        </Modal>
-        )}
+          {/* Submit modal */}
+          {showSubmit && (
+            <Modal onClose={() => setShowSubmit(false)}>
+              <div className="text-center">
+                <div className="text-2xl mb-2">🚀</div>
+                <h2 className="text-lg font-bold mb-1">Submit quiz?</h2>
+                <p className="text-sm text-base-muted mb-4">
+                  Attempted {attempted}/{total} • Skipped {skipped.filter(Boolean).length}
+                </p>
+                <div className="flex justify-center gap-3">
+                  <button className="px-3 py-2 rounded-xl border border-base-border bg-white/5" onClick={() => setShowSubmit(false)}>Back</button>
+                  <button className="btn-primary px-3 py-2 rounded-xl" onClick={onSubmitConfirmed}>Submit</button>
+                </div>
+              </div>
+            </Modal>
+          )}
 
           {toast && <Toast message={toast} onClose={() => setToast("")} />}
         </>
@@ -1066,7 +1057,7 @@ function Modal({ children, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-[120]" // 👈 bumped up z-index
+      className="fixed inset-0 bg-black/60 flex items-end justify-center z-[100]" // 👈 bumped up z-index
       onClick={onClose}
     >
       <div

@@ -1,9 +1,8 @@
 // src/components/ConfirmStartSheet.jsx
 import React, { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 
 /**
- * Micro sheet to confirm starting a quiz (always centered).
+ * Micro bottom-sheet to confirm starting a quiz.
  * Props:
  * - open: boolean
  * - categoryLabel: string
@@ -27,26 +26,18 @@ export default function ConfirmStartSheet({
   onClose,
 }) {
   const prevOverflowRef = useRef("");
-  const dialogRef = useRef(null);
 
-  // Body scroll lock, but allow scroll *inside* the dialog
+  // Robust body scroll lock (and restore) while the sheet is mounted/open
   useEffect(() => {
     if (!open) return;
     prevOverflowRef.current = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    document.body.classList.add("modal-open");
-
-    const stopNativeScroll = (e) => {
-      // If the touch is inside the dialog, let it scroll
-      if (dialogRef.current && dialogRef.current.contains(e.target)) return;
-      e.preventDefault();
-    };
+    const stopNativeScroll = (e) => e.preventDefault();
+    // Prevent iOS background scroll bounce
     document.addEventListener("touchmove", stopNativeScroll, { passive: false });
-
     return () => {
       document.body.style.overflow = prevOverflowRef.current || "";
       document.removeEventListener("touchmove", stopNativeScroll);
-      document.body.classList.remove("modal-open");
     };
   }, [open]);
 
@@ -65,9 +56,9 @@ export default function ConfirmStartSheet({
     .map((s) => s.trim())
     .filter(Boolean);
 
-  return createPortal(
+  return (
     <div
-      className="fixed inset-0 z-[120] flex items-center justify-center"
+      className="fixed inset-0 z-[120] flex items-end justify-center sm:items-center"
       role="dialog"
       aria-modal="true"
       onClick={onClose}
@@ -75,16 +66,16 @@ export default function ConfirmStartSheet({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60" />
 
-      {/* Centered dialog */}
+      {/* Sheet container (clicks inside should NOT close) */}
       <div
-        ref={dialogRef}
         className="relative w-full max-w-md mx-auto
-                   rounded-2xl
+                   rounded-t-3xl sm:rounded-2xl
                    bg-base-card border border-base-border shadow-2xl
-                   p-5 pt-4
+                   p-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]
                    max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Grabber */}
         <div className="h-1 w-12 rounded-full bg-white/15 mx-auto mb-4" />
 
         {!hasResume ? (
@@ -159,10 +150,9 @@ export default function ConfirmStartSheet({
           </>
         )}
 
-        {/* Spacer */}
-        <div className="mt-2" />
+        {/* Safe bottom spacer so CTAs never hide behind notches/bars */}
+        <div className="mt-4" />
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
