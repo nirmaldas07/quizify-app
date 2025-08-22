@@ -561,18 +561,12 @@ function QuestionCard({
     {/* Confetti behind, only on correct */}
     {isCorrect && (
       <div className="absolute inset-0 pointer-events-none">
-    <Confetti
-      recycle={false}
-      numberOfPieces={160}
-      gravity={0.9}
-      tweenDuration={5200}
-      confettiSource={{
-        x: 0,
-        y: 5, // px from the top of the viewport — increase to move the burst lower
-        w: (typeof window !== "undefined" ? window.innerWidth : 320),
-        h: 16
-      }}
-    />
+        <Confetti
+          recycle={false}
+          numberOfPieces={160}
+          gravity={0.9}
+          tweenDuration={5200}
+        />
       </div>
     )}
 

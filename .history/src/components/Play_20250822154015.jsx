@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Papa from "papaparse";
-import Confetti from "react-confetti";
 
 const PRIMARY_CATS = [
   { name: "General Knowledge", questions: 50, icon: "🧠", color: "#7C3AED" },
@@ -78,7 +77,7 @@ const playSound = (src, volume = 0.7) => {
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
-      <div className="mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-8">
+      <div className="mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+3rem)] pb-8">
         <header className="flex items-center mb-8">
           <button 
             onClick={onNavigateHome}
@@ -86,7 +85,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
           >
             ←
           </button>
-          <h1 className="flex-1 text-center text-xl font-bold mb-12">Choose a game mode</h1>
+          <h1 className="flex-1 text-center text-xl font-bold">Choose a game mode</h1>
         </header>
 
         <div className="space-y-8">
@@ -187,6 +186,22 @@ function WheelClassic({
   showSparkle
 }) {
   const nextThreshold = 100 * level * (level - 1);
+  // --- Top arc progress (above the wheel) ---
+const ARC_CX = 160;          // svg center X (matches 320px width)
+const ARC_CY = 120;           // move DOWN to sit closer to the wheel (e.g., 84–90)
+const ARC_R  = 120;           // bigger = flatter arc; smaller = more curved
+const ARC_SPAN_DEG = 160;    // width of the arc (140–165 looks good)
+const ARC_SEG = ARC_SPAN_DEG / 3;
+const ARC_GAP_DEG = 8;       // gap between segments (deg)
+const ARC_START = 90 + ARC_SPAN_DEG / 2;
+
+const arcTop = (a1, a2) => {
+  const sr = (Math.PI * a1) / 180, er = (Math.PI * a2) / 180;
+  const x1 = ARC_CX + ARC_R * Math.cos(sr), y1 = ARC_CY - ARC_R * Math.sin(sr);
+  const x2 = ARC_CX + ARC_R * Math.cos(er), y2 = ARC_CY - ARC_R * Math.sin(er);
+  return `M ${x1} ${y1} A ${ARC_R} ${ARC_R} 0 0 1 ${x2} ${y2}`;
+};
+
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
@@ -236,40 +251,42 @@ function WheelClassic({
           </div>
         )}
 
-{/* Run progress — straight, 3 segments */}
-<div className="flex justify-center mb-6">
-  <div className="w-80 max-w-full">
-    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
-      {[0,1,2].map((i) => {
-        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
-        const filled = run.progress[i];
-        const isCurrent = i === run.qIndex; // highlight the step you're on
-        return (
-          <div
-            key={i}
-            className={`relative h-full transition-all`}
-            style={{
-              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
-              opacity: filled ? 1 : 0.6,
-              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
-            }}
-          >
-            {showSparkle === i && (
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
-            )}
-          </div>
-        );
-      })}
-    </div>
+{/* Top arc progress (3 segments) */}
+<div className="flex justify-center mb-4">
+  <svg viewBox="0 0 320 110" width="320" height="70" className="block pointer-events-none">
+    {/* Base track */}
+    <path
+      d={arcTop(ARC_START, ARC_START - ARC_SPAN_DEG)}
+      fill="none"
+      stroke="rgba(255,255,255,0.18)"
+      strokeWidth="12"
+      strokeLinecap="round"
+    />
 
-    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
-      <span>Q1</span><span>Q2</span><span>Q3</span>
-    </div>
-  </div>
+    {[0,1,2].map((i) => {
+      const colors = ["#FF9800", "#FFC107", "#4CAF50"]; // filled palette
+      const s = ARC_START - i * ARC_SEG + ARC_GAP_DEG / 2;   // segment start
+      const e = s - (ARC_SEG - ARC_GAP_DEG);                 // segment end
+      const filled = run.progress[i];
+      const isCurrent = i === run.qIndex;
+
+      return (
+        <path
+          key={i}
+          d={arcTop(s, e)}
+          fill="none"
+          stroke={filled ? colors[i] : "rgba(255,255,255,0.35)"}
+          strokeWidth={isCurrent ? 12 : 10}
+          strokeLinecap="round"
+          className="transition-all duration-500"
+        />
+      );
+    })}
+  </svg>
 </div>
 
-        <section className="flex flex-col items-center mt-20 mb-8">
-          <div className="relative w-96 h-96 rounded-full select-none">
+        <section className="flex flex-col items-center mb-8">
+          <div className="relative w-80 h-80 rounded-full select-none">
             {glowColor && (
               <div
                 className="pointer-events-none absolute -inset-4 rounded-full"
@@ -444,7 +461,7 @@ function QuestionCard({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
-      <div className="relative px-5 pt-16 pb-8">
+      <div className="px-5 pt-16 pb-8">
         <div className="mb-4">
           <button
             onClick={onBack}
@@ -556,40 +573,23 @@ function QuestionCard({
           </div>
         )}
 
- {showResult && (
-  <div className="relative text-center">
-    {/* Confetti behind, only on correct */}
-    {isCorrect && (
-      <div className="absolute inset-0 pointer-events-none">
-    <Confetti
-      recycle={false}
-      numberOfPieces={160}
-      gravity={0.9}
-      tweenDuration={5200}
-      confettiSource={{
-        x: 0,
-        y: 5, // px from the top of the viewport — increase to move the burst lower
-        w: (typeof window !== "undefined" ? window.innerWidth : 320),
-        h: 16
-      }}
-    />
-      </div>
-    )}
-
-    {/* Message ABOVE the confetti */}
-    <p className="relative z-10 text-2xl font-bold mb-6">
-      {isCorrect ? 'Correct! +5 coins & +1 XP' : 'Better luck next time!'}
-    </p>
-
-    {/* Keep the continue CTA above confetti as well */}
-    <button
-      onClick={() => onAnswer(isCorrect, null, true)}
-      className="relative z-10 bg-white text-black font-black py-4 px-8 rounded-2xl text-lg hover:bg-gray-100 transition-all active:scale-95"
-    >
-      Continue
-    </button>
-  </div>
-)}
+        {showResult && (
+          <div className="text-center">
+            <div className="text-6xl mb-4 animate-bounce">
+              {isCorrect ? '🎉' : '💭'}
+            </div>
+            <p className="text-2xl font-bold mb-6 text-center">
+              {isCorrect ? 'Correct! +5 coins & +1 XP' : 'Better luck next time!'}
+            </p>
+            
+            <button
+              onClick={() => onAnswer(isCorrect, null, true)}
+              className="bg-white text-black font-black py-4 px-8 rounded-2xl text-lg hover:bg-gray-100 transition-all active:scale-95"
+            >
+              Continue
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -568,7 +568,7 @@ function QuestionCard({
       tweenDuration={5200}
       confettiSource={{
         x: 0,
-        y: 5, // px from the top of the viewport — increase to move the burst lower
+        y: 100, // px from the top of the viewport — increase to move the burst lower
         w: (typeof window !== "undefined" ? window.innerWidth : 320),
         h: 16
       }}

@@ -556,40 +556,23 @@ function QuestionCard({
           </div>
         )}
 
- {showResult && (
-  <div className="relative text-center">
-    {/* Confetti behind, only on correct */}
-    {isCorrect && (
-      <div className="absolute inset-0 pointer-events-none">
-    <Confetti
-      recycle={false}
-      numberOfPieces={160}
-      gravity={0.9}
-      tweenDuration={5200}
-      confettiSource={{
-        x: 0,
-        y: 5, // px from the top of the viewport — increase to move the burst lower
-        w: (typeof window !== "undefined" ? window.innerWidth : 320),
-        h: 16
-      }}
-    />
-      </div>
-    )}
-
-    {/* Message ABOVE the confetti */}
-    <p className="relative z-10 text-2xl font-bold mb-6">
-      {isCorrect ? 'Correct! +5 coins & +1 XP' : 'Better luck next time!'}
-    </p>
-
-    {/* Keep the continue CTA above confetti as well */}
-    <button
-      onClick={() => onAnswer(isCorrect, null, true)}
-      className="relative z-10 bg-white text-black font-black py-4 px-8 rounded-2xl text-lg hover:bg-gray-100 transition-all active:scale-95"
-    >
-      Continue
-    </button>
-  </div>
-)}
+        {showResult && (
+          <div className="text-center">
+            <div className="text-6xl mb-4 animate-bounce">
+              {isCorrect ? '🎉' : '💭'}
+            </div>
+            <p className="text-2xl font-bold mb-6 text-center">
+              {isCorrect ? 'Correct! +5 coins & +1 XP' : 'Better luck next time!'}
+            </p>
+            
+            <button
+              onClick={() => onAnswer(isCorrect, null, true)}
+              className="bg-white text-black font-black py-4 px-8 rounded-2xl text-lg hover:bg-gray-100 transition-all active:scale-95"
+            >
+              Continue
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
