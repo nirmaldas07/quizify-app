@@ -93,7 +93,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
             onClick={() => onModeSelect('classic')}
             className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-400 to-blue-500 p-8 text-left shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 opacity-30">
+            <div className="absolute top-4 right-1 w-32 h-32 opacity-30">
               <svg viewBox="0 0 100 100" className="w-full h-full animate-spin" style={{ animationDuration: '20s' }}>
                 {WHEEL_CATEGORIES.map((cat, i) => {
                   const start = i * sliceAngle;
@@ -125,7 +125,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
             <div className="absolute bottom-4 right-12 text-3xl opacity-60">🍪</div>
             <div className="absolute top-1/2 left-4 text-lg opacity-40">🥨</div>
             
-            <h2 className="text-5xl font-black text-white mb-10 relative z-10 "style={{transform: 'translateX(-20px)'}}>CLASSIC</h2>
+            <h2 className="text-5xl font-black text-white mb-3 relative z-10">CLASSIC</h2>
           </button>
 
           <div className="grid grid-cols-2 gap-4">
@@ -235,38 +235,60 @@ function WheelClassic({
           </div>
         )}
 
-{/* Run progress — straight, 3 segments */}
-<div className="flex justify-center mb-6">
-  <div className="w-80 max-w-full">
-    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
-      {[0,1,2].map((i) => {
-        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
-        const filled = run.progress[i];
-        const isCurrent = i === run.qIndex; // highlight the step you're on
-        return (
-          <div
-            key={i}
-            className={`relative h-full transition-all`}
-            style={{
-              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
-              opacity: filled ? 1 : 0.6,
-              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
-            }}
-          >
-            {showSparkle === i && (
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
-            )}
+        <div className="flex justify-center mb-4">
+          <div className="relative">
+            <svg width="320" height="80" viewBox="0 0 320 80" className="overflow-visible">
+              <path
+                d="M 40 70 A 120 120 0 0 1 280 70"
+                fill="none"
+                stroke="rgba(255,255,255,0.15)"
+                strokeWidth="8"
+                strokeLinecap="round"
+              />
+              
+              {[0, 1, 2].map(i => {
+                const colors = ["#FF9800", "#FFC107", "#4CAF50"];
+                const startAngle = Math.PI + (i * Math.PI / 3);
+                const endAngle = Math.PI + ((i + 1) * Math.PI / 3);
+                const startX = 160 + 120 * Math.cos(startAngle);
+                const startY = 70 - 120 * Math.sin(startAngle);
+                const endX = 160 + 120 * Math.cos(endAngle);
+                const endY = 70 - 120 * Math.sin(endAngle);
+                
+                return (
+                  <g key={i}>
+                    <path
+                      d={`M ${startX} ${startY} A 120 120 0 0 1 ${endX} ${endY}`}
+                      fill="none"
+                      stroke={run.progress[i] ? colors[i] : "rgba(255,255,255,0.15)"}
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      className="transition-all duration-500"
+                    />
+                    
+                    {showSparkle === i && (
+                      <g className="animate-ping">
+                        <circle 
+                          cx={160 + 120 * Math.cos(startAngle + Math.PI / 6)} 
+                          cy={70 - 120 * Math.sin(startAngle + Math.PI / 6)} 
+                          r="4" 
+                          fill="white" 
+                          opacity="0.8"
+                        />
+                        <circle 
+                          cx={160 + 120 * Math.cos(startAngle + Math.PI / 6)} 
+                          cy={70 - 120 * Math.sin(startAngle + Math.PI / 6)} 
+                          r="2" 
+                          fill={colors[i]}
+                        />
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
           </div>
-        );
-      })}
-    </div>
-
-    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
-      <span>Q1</span><span>Q2</span><span>Q3</span>
-    </div>
-  </div>
-</div>
-
+        </div>
 
         <section className="flex flex-col items-center mb-8">
           <div className="relative w-80 h-80 rounded-full select-none">

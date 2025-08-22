@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Papa from "papaparse";
 
+/* ------------------------------ Categories from Home.jsx ------------------------------ */
 const PRIMARY_CATS = [
   { name: "General Knowledge", questions: 50, icon: "🧠", color: "#7C3AED" },
   { name: "Artificial Intelligence", questions: 28, icon: "🤖", color: "#10B981" },
@@ -10,9 +11,11 @@ const PRIMARY_CATS = [
   { name: "Geography", questions: 38, icon: "🗺️", color: "#FACC15" }
 ];
 
+// Use first 6 for wheel
 const WHEEL_CATEGORIES = PRIMARY_CATS.slice(0, 6);
 const sliceAngle = 360 / WHEEL_CATEGORIES.length;
 
+/* ------------------------------ Character System ------------------------------ */
 const CHARACTERS = {
   "general-knowledge": "TINA",
   "artificial-intelligence": "ALBERT", 
@@ -22,6 +25,7 @@ const CHARACTERS = {
   "geography": "HECTOR"
 };
 
+/* ------------------------------ Storage Keys ------------------------------ */
 const STORAGE_KEYS = {
   COINS: "qp_coins",
   XP: "qp_xp",
@@ -30,6 +34,7 @@ const STORAGE_KEYS = {
   SOUND: "play_sound_on"
 };
 
+/* ------------------------------ Spin Config ------------------------------ */
 const SPIN_CONFIG = {
   FULL_TURNS: 6,
   DURATION: 2800,
@@ -37,11 +42,13 @@ const SPIN_CONFIG = {
   SETTLE_DURATION: 350
 };
 
+/* ------------------------------ Motivators ------------------------------ */
 const MOTIVATORS = {
   correct: ["Boom! Nailed it.", "Sharp shot!", "Clean hit.", "Right on.", "Brilliant!", "Amazing!"],
   wrong: ["Close one—next spin's yours.", "Toughie—bank it and roll again.", "Learning unlocks wins.", "Almost there!", "Good try!"]
 };
 
+/* ------------------------------ Utilities ------------------------------ */
 const safeStorage = {
   get: (key, fallback = null) => {
     try {
@@ -66,6 +73,7 @@ const vibrate = (pattern) => {
   } catch {}
 };
 
+/* ------------------------------ Sound Utilities ------------------------------ */
 const playSound = (src, volume = 0.7) => {
   try {
     const audio = new Audio(src);
@@ -74,6 +82,7 @@ const playSound = (src, volume = 0.7) => {
   } catch {}
 };
 
+/* ------------------------------ Modes Grid Component ------------------------------ */
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
@@ -88,12 +97,14 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
           <h1 className="flex-1 text-center text-xl font-bold">Choose a game mode</h1>
         </header>
 
-        <div className="space-y-8">
+        <div className="space-y-6">
+          {/* Classic Mode - Large Card with Auto-Rotating Wheel */}
           <button
             onClick={() => onModeSelect('classic')}
             className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-400 to-blue-500 p-8 text-left shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 opacity-30">
+            {/* Auto-rotating decorative wheel */}
+            <div className="absolute top-6 right-6 w-32 h-32 opacity-30">
               <svg viewBox="0 0 100 100" className="w-full h-full animate-spin" style={{ animationDuration: '20s' }}>
                 {WHEEL_CATEGORIES.map((cat, i) => {
                   const start = i * sliceAngle;
@@ -119,15 +130,18 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
               </svg>
             </div>
             
+            {/* Floating icons */}
             <div className="absolute top-4 left-8 text-3xl opacity-60">🏆</div>
             <div className="absolute top-12 right-16 text-xl opacity-40">⭐</div>
             <div className="absolute bottom-6 left-6 text-2xl opacity-50">🎲</div>
             <div className="absolute bottom-4 right-12 text-3xl opacity-60">🍪</div>
             <div className="absolute top-1/2 left-4 text-lg opacity-40">🥨</div>
             
-            <h2 className="text-5xl font-black text-white mb-10 relative z-10 "style={{transform: 'translateX(-20px)'}}>CLASSIC</h2>
+            <h2 className="text-5xl font-black text-white mb-3 relative z-10">CLASSIC</h2>
+            <p className="text-white/80 text-lg relative z-10">Spin, answer, and collect!</p>
           </button>
 
+          {/* Bottom row - 2x2 grid with increased spacing */}
           <div className="grid grid-cols-2 gap-4">
             <button
               disabled
@@ -167,6 +181,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
   );
 }
 
+/* ------------------------------ Wheel Component ------------------------------ */
 function WheelClassic({ 
   run, 
   coins, 
@@ -190,6 +205,7 @@ function WheelClassic({
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
       <div className="mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(5.25rem+env(safe-area-inset-bottom))]">
+        {/* Header - equidistant layout */}
         <header className="flex items-center justify-between mb-8">
           <button
             onClick={onBack}
@@ -216,6 +232,7 @@ function WheelClassic({
           </button>
         </header>
 
+        {/* Character Shelf */}
         {ownedCharacters.length > 0 && (
           <div className="flex justify-center mb-6">
             <div className="flex gap-2 px-4 py-2 bg-white/10 rounded-2xl backdrop-blur border border-base-border">
@@ -235,41 +252,71 @@ function WheelClassic({
           </div>
         )}
 
-{/* Run progress — straight, 3 segments */}
-<div className="flex justify-center mb-6">
-  <div className="w-80 max-w-full">
-    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
-      {[0,1,2].map((i) => {
-        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
-        const filled = run.progress[i];
-        const isCurrent = i === run.qIndex; // highlight the step you're on
-        return (
-          <div
-            key={i}
-            className={`relative h-full transition-all`}
-            style={{
-              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
-              opacity: filled ? 1 : 0.6,
-              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
-            }}
-          >
-            {showSparkle === i && (
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
-            )}
+        {/* Progress Arc - Longer continuous arc with 3 segments */}
+        <div className="flex justify-center mb-4">
+          <div className="relative">
+            <svg width="320" height="80" viewBox="0 0 320 80" className="overflow-visible">
+              {/* Background arc - longer and wider */}
+              <path
+                d="M 40 70 A 120 120 0 0 1 280 70"
+                fill="none"
+                stroke="rgba(255,255,255,0.15)"
+                strokeWidth="8"
+                strokeLinecap="round"
+              />
+              
+              {/* Progress segments - 3 equal parts */}
+              {[0, 1, 2].map(i => {
+                const colors = ["#FF9800", "#FFC107", "#4CAF50"];
+                
+                // Calculate segment paths
+                const startAngle = Math.PI + (i * Math.PI / 3);
+                const endAngle = Math.PI + ((i + 1) * Math.PI / 3);
+                const startX = 160 + 120 * Math.cos(startAngle);
+                const startY = 70 - 120 * Math.sin(startAngle);
+                const endX = 160 + 120 * Math.cos(endAngle);
+                const endY = 70 - 120 * Math.sin(endAngle);
+                
+                return (
+                  <g key={i}>
+                    <path
+                      d={`M ${startX} ${startY} A 120 120 0 0 1 ${endX} ${endY}`}
+                      fill="none"
+                      stroke={run.progress[i] ? colors[i] : "rgba(255,255,255,0.15)"}
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      className="transition-all duration-500"
+                    />
+                    
+                    {/* Sparkle effect */}
+                    {showSparkle === i && (
+                      <g className="animate-ping">
+                        <circle 
+                          cx={160 + 120 * Math.cos(startAngle + Math.PI / 6)} 
+                          cy={70 - 120 * Math.sin(startAngle + Math.PI / 6)} 
+                          r="4" 
+                          fill="white" 
+                          opacity="0.8"
+                        />
+                        <circle 
+                          cx={160 + 120 * Math.cos(startAngle + Math.PI / 6)} 
+                          cy={70 - 120 * Math.sin(startAngle + Math.PI / 6)} 
+                          r="2" 
+                          fill={colors[i]}
+                        />
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
           </div>
-        );
-      })}
-    </div>
+        </div>
 
-    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
-      <span>Q1</span><span>Q2</span><span>Q3</span>
-    </div>
-  </div>
-</div>
-
-
+        {/* Wheel */}
         <section className="flex flex-col items-center mb-8">
           <div className="relative w-80 h-80 rounded-full select-none">
+            {/* Glow effect */}
             {glowColor && (
               <div
                 className="pointer-events-none absolute -inset-4 rounded-full"
@@ -362,8 +409,67 @@ function WheelClassic({
       </div>
     </div>
   );
+}"
+                      />
+                      <text
+                        x={iconX}
+                        y={iconY}
+                        fill="white"
+                        fontSize="8"
+                        dominantBaseline="middle"
+                        textAnchor="middle"
+                        className="font-bold"
+                      >
+                        {cat.icon}
+                      </text>
+                    </g>
+                  );
+                })}
+                <circle cx="50" cy="50" r="12" fill="white" stroke="#ddd" strokeWidth="1" />
+              </svg>
+
+              <button
+                onClick={onSpin}
+                disabled={spinning}
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-white text-black font-black text-lg shadow-lg transition-all ${
+                  spinning ? "opacity-60 cursor-not-allowed scale-95" : "hover:scale-105 active:scale-95"
+                }`}
+              >
+                {spinning ? "..." : "SPIN"}
+              </button>
+            </div>
+
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-2 z-20">
+              <div className="w-6 h-8 bg-white rounded-lg shadow-md flex items-start justify-center pt-1">
+                <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-gray-600"/>
+              </div>
+            </div>
+
+            {showCallout && result && (
+              <div className="absolute left-1/2 -translate-x-1/2 -top-16 z-30">
+                <div className="px-4 py-2 rounded-2xl bg-base-card border border-base-border shadow-lg font-semibold">
+                  <span className="mr-2">{result.cat.icon}</span>
+                  {result.cat.name}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <div className="text-center">
+          <button 
+            disabled
+            className="text-base-muted underline opacity-60 cursor-not-allowed text-sm"
+          >
+            Party Spin (pass & play)
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
+/* ------------------------------ Result Interstitial ------------------------------ */
 function ResultInterstitial({ category, onComplete, isBonus = false }) {
   useEffect(() => {
     const timer = setTimeout(onComplete, 2000);
@@ -405,6 +511,7 @@ function ResultInterstitial({ category, onComplete, isBonus = false }) {
   );
 }
 
+/* ------------------------------ Question Card ------------------------------ */
 function QuestionCard({ 
   question, 
   category, 
@@ -427,17 +534,49 @@ function QuestionCard({
     setShowResult(true);
     
     const correct = optionIndex === question.correctIndex;
+    const motivator = MOTIVATORS[correct ? 'correct' : 'wrong'][
+      Math.floor(Math.random() * MOTIVATORS[correct ? 'correct' : 'wrong'].length)
+    ];
     
+    // Instant feedback - no delay
     vibrate(correct ? [50, 30, 50] : [200]);
     if (correct) {
       playSound("/sounds/correct.mp3", 0.7);
+      // Trigger confetti instantly
+      triggerConfetti();
     } else {
       playSound("/sounds/wrong.mp3", 0.7);
     }
     
     setTimeout(() => {
-      onAnswer(correct, null);
+      onAnswer(correct, motivator);
     }, 1500);
+  };
+
+  const triggerConfetti = () => {
+    // Create confetti elements
+    const confettiCount = 30;
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
+    
+    for (let i = 0; i < confettiCount; i++) {
+      const confetti = document.createElement('div');
+      confetti.style.position = 'fixed';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.top = '-10px';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = '50%';
+      confetti.style.pointerEvents = 'none';
+      confetti.style.zIndex = '9999';
+      confetti.style.animation = `confettiFall 3s linear forwards`;
+      
+      document.body.appendChild(confetti);
+      
+      setTimeout(() => {
+        confetti.remove();
+      }, 3000);
+    }
   };
 
   const isCorrect = selectedAnswer === question.correctIndex;
@@ -445,6 +584,7 @@ function QuestionCard({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
       <div className="px-5 pt-16 pb-8">
+        {/* Back Button */}
         <div className="mb-4">
           <button
             onClick={onBack}
@@ -495,7 +635,7 @@ function QuestionCard({
             let opacity = "opacity-100";
             
             if (isEliminated) {
-              opacity = "opacity-30";
+              opacity = "opacity-30"; // Fade out instead of remove
             } else if (showResult && selected) {
               bgClass = correct 
                 ? "bg-green-500/30 border-green-400" 
@@ -514,6 +654,10 @@ function QuestionCard({
                 className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-300 ${bgClass} ${opacity} ${
                   !showResult && !isEliminated ? 'hover:bg-white/15 active:scale-98' : ''
                 }`}
+                style={{
+                  animationDelay: `${index * 120}ms`,
+                  animation: 'slideInUp 0.4s ease-out both'
+                }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm">
@@ -574,10 +718,30 @@ function QuestionCard({
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes confettiFall {
+          to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 }
 
+/* ------------------------------ Character Picker ------------------------------ */
 function CharacterPicker({ onSelect }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-600 text-white">
@@ -609,6 +773,7 @@ function CharacterPicker({ onSelect }) {
   );
 }
 
+/* ------------------------------ Main Play Component ------------------------------ */
 export default function Play() {
   const [gameState, setGameState] = useState('modes');
   
@@ -952,9 +1117,9 @@ export default function Play() {
   };
 
   const handleNavigateHome = () => {
-    // Replace this with your actual navigation logic
-    window.location.href = '/'; // or use your router navigation
+    // In real app, use React Router: navigate('/')
     console.log('Navigate to home');
+    // For demo purposes - you can replace this with your actual navigation
   };
 
   const handleBack = () => {
@@ -1070,7 +1235,6 @@ export default function Play() {
           onUseLifeline={() => {}}
           eliminatedOptions={[]}
           audienceData={null}
-          onBack={() => setGameState('modes')}
         />
       );
       

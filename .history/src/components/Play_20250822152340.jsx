@@ -187,6 +187,22 @@ function WheelClassic({
 }) {
   const nextThreshold = 100 * level * (level - 1);
 
+    // ---- progress ring geometry (concentric with the wheel) ----
+  const RING_R = 49;            // radius; 45 (wheel slices) + ~border -> sit just outside
+  const ARC_SPAN = 150;         // total width of the arc (deg). 140–160 looks good
+  const SEGMENTS = 3;
+  const SEG = ARC_SPAN / SEGMENTS;
+  const START = 90 + ARC_SPAN / 2; // left tip of arc, centered at top (90°)
+
+  const arcPath = (r, a1, a2) => {
+    const sr = (Math.PI * a1) / 180, er = (Math.PI * a2) / 180;
+    const x1 = 50 + r * Math.cos(sr), y1 = 50 - r * Math.sin(sr);
+    const x2 = 50 + r * Math.cos(er), y2 = 50 - r * Math.sin(er);
+    const large = Math.abs(a1 - a2) > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 0 ${x2} ${y2}`;
+  };
+
+
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
       <div className="mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(5.25rem+env(safe-area-inset-bottom))]">
@@ -235,37 +251,7 @@ function WheelClassic({
           </div>
         )}
 
-{/* Run progress — straight, 3 segments */}
-<div className="flex justify-center mb-6">
-  <div className="w-80 max-w-full">
-    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
-      {[0,1,2].map((i) => {
-        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
-        const filled = run.progress[i];
-        const isCurrent = i === run.qIndex; // highlight the step you're on
-        return (
-          <div
-            key={i}
-            className={`relative h-full transition-all`}
-            style={{
-              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
-              opacity: filled ? 1 : 0.6,
-              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
-            }}
-          >
-            {showSparkle === i && (
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
-            )}
-          </div>
-        );
-      })}
-    </div>
 
-    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
-      <span>Q1</span><span>Q2</span><span>Q3</span>
-    </div>
-  </div>
-</div>
 
 
         <section className="flex flex-col items-center mb-8">
@@ -276,6 +262,41 @@ function WheelClassic({
                 style={{ boxShadow: `0 0 0 8px ${glowColor}40, 0 0 40px 12px ${glowColor}60` }}
               />
             )}
+
+    {/* Concentric progress ring (static, does not rotate) */}
+    <svg viewBox="0 0 100 100" className="absolute inset-0 pointer-events-none z-10">
+      {/* base track */}
+      <path
+        d={arcPath(RING_R, START, START - ARC_SPAN)}
+        fill="none"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+
+      {/* 3 segments */}
+      {[0,1,2].map((i) => {
+        const colors = ["#FF9800", "#FFC107", "#4CAF50"];
+        const gap = 4;                         // deg gap between segments
+        const s = START - i * SEG + gap/2;     // segment start
+        const e = s - (SEG - gap);             // segment end
+        const filled = run.progress[i];
+        const isCurrent = i === run.qIndex;
+
+        return (
+          <path
+            key={i}
+            d={arcPath(RING_R, s, e)}
+            fill="none"
+            stroke={filled ? colors[i] : "rgba(255,255,255,0.35)"}
+            strokeWidth={isCurrent ? 7 : 6}
+            strokeLinecap="round"
+            className="transition-all duration-500"
+          />
+        );
+      })}
+    </svg>
+
 
             <div
               className="absolute inset-0 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden will-change-transform bg-base-card"

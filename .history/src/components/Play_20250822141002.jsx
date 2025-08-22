@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Papa from "papaparse";
 
+/* ------------------------------ Categories from Home.jsx ------------------------------ */
 const PRIMARY_CATS = [
   { name: "General Knowledge", questions: 50, icon: "🧠", color: "#7C3AED" },
   { name: "Artificial Intelligence", questions: 28, icon: "🤖", color: "#10B981" },
@@ -10,9 +11,11 @@ const PRIMARY_CATS = [
   { name: "Geography", questions: 38, icon: "🗺️", color: "#FACC15" }
 ];
 
+// Use first 6 for wheel
 const WHEEL_CATEGORIES = PRIMARY_CATS.slice(0, 6);
 const sliceAngle = 360 / WHEEL_CATEGORIES.length;
 
+/* ------------------------------ Character System ------------------------------ */
 const CHARACTERS = {
   "general-knowledge": "TINA",
   "artificial-intelligence": "ALBERT", 
@@ -22,6 +25,7 @@ const CHARACTERS = {
   "geography": "HECTOR"
 };
 
+/* ------------------------------ Storage Keys ------------------------------ */
 const STORAGE_KEYS = {
   COINS: "qp_coins",
   XP: "qp_xp",
@@ -30,6 +34,7 @@ const STORAGE_KEYS = {
   SOUND: "play_sound_on"
 };
 
+/* ------------------------------ Spin Config ------------------------------ */
 const SPIN_CONFIG = {
   FULL_TURNS: 6,
   DURATION: 2800,
@@ -37,11 +42,13 @@ const SPIN_CONFIG = {
   SETTLE_DURATION: 350
 };
 
+/* ------------------------------ Motivators ------------------------------ */
 const MOTIVATORS = {
   correct: ["Boom! Nailed it.", "Sharp shot!", "Clean hit.", "Right on.", "Brilliant!", "Amazing!"],
   wrong: ["Close one—next spin's yours.", "Toughie—bank it and roll again.", "Learning unlocks wins.", "Almost there!", "Good try!"]
 };
 
+/* ------------------------------ Utilities ------------------------------ */
 const safeStorage = {
   get: (key, fallback = null) => {
     try {
@@ -66,6 +73,7 @@ const vibrate = (pattern) => {
   } catch {}
 };
 
+/* ------------------------------ Sound Utilities ------------------------------ */
 const playSound = (src, volume = 0.7) => {
   try {
     const audio = new Audio(src);
@@ -74,6 +82,7 @@ const playSound = (src, volume = 0.7) => {
   } catch {}
 };
 
+/* ------------------------------ Modes Grid Component ------------------------------ */
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
@@ -83,18 +92,20 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
             onClick={onNavigateHome}
             className="h-10 w-10 rounded-full border border-base-border grid place-items-center bg-white/5 hover:bg-white/10 transition"
           >
-            ←
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
           </button>
           <h1 className="flex-1 text-center text-xl font-bold">Choose a game mode</h1>
         </header>
 
-        <div className="space-y-8">
+        <div className="space-y-4">
           <button
             onClick={() => onModeSelect('classic')}
-            className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-400 to-blue-500 p-8 text-left shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
+            className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-400 to-blue-500 p-6 text-left shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 opacity-30">
-              <svg viewBox="0 0 100 100" className="w-full h-full animate-spin" style={{ animationDuration: '20s' }}>
+            <div className="absolute top-4 right-4 w-20 h-20 opacity-20">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
                 {WHEEL_CATEGORIES.map((cat, i) => {
                   const start = i * sliceAngle;
                   const end = start + sliceAngle;
@@ -119,13 +130,27 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
               </svg>
             </div>
             
-            <div className="absolute top-4 left-8 text-3xl opacity-60">🏆</div>
-            <div className="absolute top-12 right-16 text-xl opacity-40">⭐</div>
-            <div className="absolute bottom-6 left-6 text-2xl opacity-50">🎲</div>
-            <div className="absolute bottom-4 right-12 text-3xl opacity-60">🍪</div>
-            <div className="absolute top-1/2 left-4 text-lg opacity-40">🥨</div>
+            <div className="absolute top-2 left-8 text-2xl opacity-60">🏆</div>
+            <div className="absolute top-8 right-12 text-xl opacity-40">⭐</div>
+            <div className="absolute bottom-4 left-4 text-lg opacity-50">🎲</div>
+            <div className="absolute bottom-2 right-8 text-2xl opacity-60">🍪</div>
+            <div className="absolute top-1/2 left-2 text-sm opacity-40">🥨</div>
             
-            <h2 className="text-5xl font-black text-white mb-10 relative z-10 "style={{transform: 'translateX(-20px)'}}>CLASSIC</h2>
+            <h2 className="text-4xl font-black text-white mb-2 relative z-10">CLASSIC</h2>
+          </button>
+
+          <button
+            disabled
+            className="w-full rounded-3xl bg-gradient-to-r from-emerald-400 to-emerald-500 p-6 text-left opacity-60"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex gap-2">
+                <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">📱</div>
+                <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">🇺🇸</div>
+                <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">🦕</div>
+              </div>
+              <h3 className="text-2xl font-black text-white">TOPICS</h3>
+            </div>
           </button>
 
           <div className="grid grid-cols-2 gap-4">
@@ -167,6 +192,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
   );
 }
 
+/* ------------------------------ Wheel Component ------------------------------ */
 function WheelClassic({ 
   run, 
   coins, 
@@ -190,7 +216,7 @@ function WheelClassic({
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
       <div className="mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(5.25rem+env(safe-area-inset-bottom))]">
-        <header className="flex items-center justify-between mb-8">
+        <header className="flex items-center justify-between mb-6">
           <button
             onClick={onBack}
             className="h-10 w-10 rounded-full border border-base-border grid place-items-center bg-white/5 hover:bg-white/10 transition"
@@ -198,15 +224,7 @@ function WheelClassic({
             ←
           </button>
 
-          <div className="flex items-center gap-3">
-            <button className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border text-left">
-              <div className="text-[11px]">Lvl {level} • {xp}/{nextThreshold}</div>
-              <div className="mt-1 h-1 w-full bg-white/10 rounded">
-                <div className="h-1 bg-brand-blue rounded" style={{ width: `${Math.min(xp / nextThreshold, 1) * 100}%` }} />
-              </div>
-            </button>
-            <button className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border">🪙 {coins}</button>
-          </div>
+          <h1 className="text-xl font-bold">Play</h1>
 
           <button
             onClick={() => setSoundOn(!soundOn)}
@@ -216,8 +234,18 @@ function WheelClassic({
           </button>
         </header>
 
+        <div className="flex items-center justify-end gap-2 mb-6">
+          <button className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border text-left">
+            <div className="text-[11px]">Lvl {level} • {xp}/{nextThreshold}</div>
+            <div className="mt-1 h-1 w-full bg-white/10 rounded">
+              <div className="h-1 bg-brand-blue rounded" style={{ width: `${Math.min(xp / nextThreshold, 1) * 100}%` }} />
+            </div>
+          </button>
+          <button className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border">🪙 {coins}</button>
+        </div>
+
         {ownedCharacters.length > 0 && (
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-4">
             <div className="flex gap-2 px-4 py-2 bg-white/10 rounded-2xl backdrop-blur border border-base-border">
               {ownedCharacters.map(charSlug => {
                 const cat = WHEEL_CATEGORIES.find(c => toSlug(c.name) === charSlug);
@@ -235,38 +263,59 @@ function WheelClassic({
           </div>
         )}
 
-{/* Run progress — straight, 3 segments */}
-<div className="flex justify-center mb-6">
-  <div className="w-80 max-w-full">
-    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
-      {[0,1,2].map((i) => {
-        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
-        const filled = run.progress[i];
-        const isCurrent = i === run.qIndex; // highlight the step you're on
-        return (
-          <div
-            key={i}
-            className={`relative h-full transition-all`}
-            style={{
-              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
-              opacity: filled ? 1 : 0.6,
-              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
-            }}
-          >
-            {showSparkle === i && (
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
-            )}
+        <div className="flex justify-center mb-2">
+          <div className="relative">
+            <svg width="280" height="70" viewBox="0 0 280 70" className="overflow-visible">
+              <path
+                d="M 40 60 A 100 100 0 0 1 240 60"
+                fill="none"
+                stroke="rgba(255,255,255,0.15)"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+              
+              {[0, 1, 2].map(i => {
+                const colors = ["#FF9800", "#FFC107", "#4CAF50"];
+                const segmentPath = [
+                  "M 40 60 A 100 100 0 0 1 106.67 35",
+                  "M 106.67 35 A 100 100 0 0 1 173.33 35", 
+                  "M 173.33 35 A 100 100 0 0 1 240 60"
+                ];
+                
+                return (
+                  <g key={i}>
+                    <path
+                      d={segmentPath[i]}
+                      fill="none"
+                      stroke={run.progress[i] ? colors[i] : "rgba(255,255,255,0.15)"}
+                      strokeWidth="6"
+                      strokeLinecap="round"
+                      className="transition-all duration-500"
+                    />
+                    
+                    {showSparkle === i && (
+                      <g className="animate-ping">
+                        <circle 
+                          cx={i === 0 ? 73 : i === 1 ? 140 : 207} 
+                          cy={i === 1 ? 30 : 47} 
+                          r="3" 
+                          fill="white" 
+                          opacity="0.8"
+                        />
+                        <circle 
+                          cx={i === 0 ? 73 : i === 1 ? 140 : 207} 
+                          cy={i === 1 ? 30 : 47} 
+                          r="1.5" 
+                          fill={colors[i]}
+                        />
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
           </div>
-        );
-      })}
-    </div>
-
-    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
-      <span>Q1</span><span>Q2</span><span>Q3</span>
-    </div>
-  </div>
-</div>
-
+        </div>
 
         <section className="flex flex-col items-center mb-8">
           <div className="relative w-80 h-80 rounded-full select-none">
@@ -364,6 +413,7 @@ function WheelClassic({
   );
 }
 
+/* ------------------------------ Result Interstitial ------------------------------ */
 function ResultInterstitial({ category, onComplete, isBonus = false }) {
   useEffect(() => {
     const timer = setTimeout(onComplete, 2000);
@@ -405,6 +455,7 @@ function ResultInterstitial({ category, onComplete, isBonus = false }) {
   );
 }
 
+/* ------------------------------ Question Card ------------------------------ */
 function QuestionCard({ 
   question, 
   category, 
@@ -414,8 +465,7 @@ function QuestionCard({
   usedLifelines, 
   onUseLifeline,
   eliminatedOptions,
-  audienceData,
-  onBack
+  audienceData 
 }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
@@ -427,16 +477,14 @@ function QuestionCard({
     setShowResult(true);
     
     const correct = optionIndex === question.correctIndex;
+    const motivator = MOTIVATORS[correct ? 'correct' : 'wrong'][
+      Math.floor(Math.random() * MOTIVATORS[correct ? 'correct' : 'wrong'].length)
+    ];
     
     vibrate(correct ? [50, 30, 50] : [200]);
-    if (correct) {
-      playSound("/sounds/correct.mp3", 0.7);
-    } else {
-      playSound("/sounds/wrong.mp3", 0.7);
-    }
     
     setTimeout(() => {
-      onAnswer(correct, null);
+      onAnswer(correct, motivator);
     }, 1500);
   };
 
@@ -445,15 +493,6 @@ function QuestionCard({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
       <div className="px-5 pt-16 pb-8">
-        <div className="mb-4">
-          <button
-            onClick={onBack}
-            className="h-10 w-10 rounded-full border border-base-border grid place-items-center bg-white/5 hover:bg-white/10 transition"
-          >
-            ←
-          </button>
-        </div>
-
         <div className="text-center mb-6">
           <div className={`text-4xl font-black mb-2 ${timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-white'}`}>
             {timeLeft}
@@ -487,16 +526,14 @@ function QuestionCard({
 
         <div className="space-y-3 mb-6">
           {question.options.map((option, index) => {
-            const isEliminated = eliminatedOptions.includes(index);
+            if (eliminatedOptions.includes(index)) return null;
+            
             const selected = selectedAnswer === index;
             const correct = index === question.correctIndex;
             
             let bgClass = "bg-white/10 border-white/20";
-            let opacity = "opacity-100";
             
-            if (isEliminated) {
-              opacity = "opacity-30";
-            } else if (showResult && selected) {
+            if (showResult && selected) {
               bgClass = correct 
                 ? "bg-green-500/30 border-green-400" 
                 : "bg-red-500/30 border-red-400";
@@ -510,10 +547,14 @@ function QuestionCard({
               <button
                 key={index}
                 onClick={() => handleAnswer(index)}
-                disabled={showResult || isEliminated}
-                className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-300 ${bgClass} ${opacity} ${
-                  !showResult && !isEliminated ? 'hover:bg-white/15 active:scale-98' : ''
+                disabled={showResult}
+                className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-300 ${bgClass} ${
+                  !showResult ? 'hover:bg-white/15 active:scale-98' : ''
                 }`}
+                style={{
+                  animationDelay: `${index * 120}ms`,
+                  animation: 'slideInUp 0.4s ease-out both'
+                }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm">
@@ -521,7 +562,7 @@ function QuestionCard({
                   </div>
                   <span className="font-medium flex-1">{option}</span>
                   {audienceData && (
-                    <span className="text-xs text-base-muted">{Math.round(audienceData[index])}%</span>
+                    <span className="text-xs text-base-muted">{audienceData[index]}%</span>
                   )}
                 </div>
               </button>
@@ -574,10 +615,24 @@ function QuestionCard({
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }
 
+/* ------------------------------ Character Picker ------------------------------ */
 function CharacterPicker({ onSelect }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-600 text-white">
@@ -609,6 +664,7 @@ function CharacterPicker({ onSelect }) {
   );
 }
 
+/* ------------------------------ Main Play Component ------------------------------ */
 export default function Play() {
   const [gameState, setGameState] = useState('modes');
   
@@ -952,18 +1008,12 @@ export default function Play() {
   };
 
   const handleNavigateHome = () => {
-    // Replace this with your actual navigation logic
-    window.location.href = '/'; // or use your router navigation
     console.log('Navigate to home');
   };
 
   const handleBack = () => {
     setGameState('modes');
     resetRun();
-  };
-
-  const handleBackToWheel = () => {
-    setGameState('wheel');
   };
 
   switch (gameState) {
@@ -1017,7 +1067,6 @@ export default function Play() {
           onUseLifeline={handleUseLifeline}
           eliminatedOptions={eliminatedOptions}
           audienceData={audienceData}
-          onBack={handleBackToWheel}
         />
       );
       
@@ -1070,7 +1119,6 @@ export default function Play() {
           onUseLifeline={() => {}}
           eliminatedOptions={[]}
           audienceData={null}
-          onBack={() => setGameState('modes')}
         />
       );
       

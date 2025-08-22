@@ -497,7 +497,7 @@ export default function Home() {
   const handleConfirmChange = () => { if (!confirmCat) return; setConfirmOpen(false); openQuizConfig(confirmCat); };
 
   return (
-    <div className="relative pb-24 pt-[max(env(safe-area-inset-top))]">
+    <div className="relative pb-24 pt-[max(env(safe-area-inset-top),2px)]">
       {/* ✅ CoinFly animation instance (renders only when coinFly is set) */}
       {coinFly && (
         <CoinFly

@@ -235,37 +235,61 @@ function WheelClassic({
           </div>
         )}
 
-{/* Run progress — straight, 3 segments */}
+{/* Run progress — arced, 3 segments */}
 <div className="flex justify-center mb-6">
-  <div className="w-80 max-w-full">
-    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
-      {[0,1,2].map((i) => {
-        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
-        const filled = run.progress[i];
-        const isCurrent = i === run.qIndex; // highlight the step you're on
-        return (
-          <div
-            key={i}
-            className={`relative h-full transition-all`}
-            style={{
-              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
-              opacity: filled ? 1 : 0.6,
-              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
-            }}
-          >
-            {showSparkle === i && (
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
-            )}
-          </div>
-        );
-      })}
-    </div>
+  <svg width="420" height="60" viewBox="0 0 420 60" className="block">
+    {/* base track */}
+    <path
+      d={`M ${160 - 90} 100 A 90 90 0 0 1 ${160 + 90} 100`}
+      fill="none"
+      stroke="rgba(255,255,255,0.15)"
+      strokeWidth="10"
+      strokeLinecap="round"
+    />
 
-    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
-      <span>Q1</span><span>Q2</span><span>Q3</span>
-    </div>
-  </div>
+    {([0,1,2]).map((i) => {
+      const colors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette
+      const cx = 160, cy = 100, r = 90;
+      const seg = Math.PI / 3;            // 180° / 3
+      const start = Math.PI + (i * seg);  // from 180° to 0° over three steps
+      const end   = Math.PI + ((i + 1) * seg);
+
+      const x1 = cx + r * Math.cos(start);
+      const y1 = cy + r * Math.sin(start);
+      const x2 = cx + r * Math.cos(end);
+      const y2 = cy + r * Math.sin(end);
+
+      const filled = run.progress[i];
+      const isCurrent = i === run.qIndex;
+
+      return (
+        <g key={i} className="transition-all duration-500">
+          <path
+            d={`M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`}
+            fill="none"
+            stroke={filled ? colors[i] : "rgba(255,255,255,0.28)"}
+            strokeWidth={isCurrent ? 12 : 10}
+            strokeLinecap="round"
+          />
+
+          {/* sparkle ping when a segment gets filled */}
+          {showSparkle === i && (() => {
+            const mid = (start + end) / 2;
+            const sx = cx + (r + 6) * Math.cos(mid);
+            const sy = cy + (r + 6) * Math.sin(mid);
+            return (
+              <g>
+                <circle cx={sx} cy={sy} r="3" fill="white" className="animate-ping" />
+                <circle cx={sx} cy={sy} r="2" fill={colors[i]} />
+              </g>
+            );
+          })()}
+        </g>
+      );
+    })}
+  </svg>
 </div>
+
 
 
         <section className="flex flex-col items-center mb-8">
