@@ -268,7 +268,6 @@ function WheelClassic({
         </header>
 
         {ownedCharacters.length > 0 && (
-
           <div className="flex justify-center mb-6">
             <div className="flex gap-2 px-4 py-2 bg-white/10 rounded-2xl backdrop-blur border border-base-border">
               {ownedCharacters.map(charSlug => {
@@ -287,8 +286,8 @@ function WheelClassic({
           </div>
         )}
 
-        {/* Run progress — straight, animated segments */}
-        <div className="flex justify-center mt-12 sm:mt-16 mb-6">
+        {/* Run progress bar — straight, animated segments */}
+        <div className="flex justify-center mb-6">
           <div className="w-80 max-w-full">
             <style>{`
               @keyframes qp_sweep { from { transform: translateX(0); } to { transform: translateX(100%); } }

@@ -288,7 +288,7 @@ function WheelClassic({
         )}
 
         {/* Run progress — straight, animated segments */}
-        <div className="flex justify-center mt-12 sm:mt-16 mb-6">
+        <div className="flex justify-center mt-8 sm:mt-6 mb-6">
           <div className="w-80 max-w-full">
             <style>{`
               @keyframes qp_sweep { from { transform: translateX(0); } to { transform: translateX(100%); } }

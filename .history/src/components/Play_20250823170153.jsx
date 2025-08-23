@@ -241,7 +241,7 @@ function WheelClassic({
   return (
     <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
       <div className="h-full overflow-y-auto mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
-        <header className="flex items-center justify-between mb-8">
+        <header className="flex items-center justify-between mb-16">
           <button
             onClick={onBack}
             className="h-10 w-10 rounded-full border border-base-border grid place-items-center bg-white/5 hover:bg-white/10 transition translate-y-[4px]"
@@ -268,7 +268,6 @@ function WheelClassic({
         </header>
 
         {ownedCharacters.length > 0 && (
-
           <div className="flex justify-center mb-6">
             <div className="flex gap-2 px-4 py-2 bg-white/10 rounded-2xl backdrop-blur border border-base-border">
               {ownedCharacters.map(charSlug => {
@@ -288,7 +287,7 @@ function WheelClassic({
         )}
 
         {/* Run progress — straight, animated segments */}
-        <div className="flex justify-center mt-12 sm:mt-16 mb-6">
+        <div className="flex justify-center mb-6">
           <div className="w-80 max-w-full">
             <style>{`
               @keyframes qp_sweep { from { transform: translateX(0); } to { transform: translateX(100%); } }
@@ -340,7 +339,7 @@ function WheelClassic({
           </div>
         </div>
 
-        <section className="flex flex-col items-center mt-28 sm:mt-32 mb-10">
+        <section className="flex flex-col items-center mt-20 mb-8">
           <div ref={wheelRef} className="relative w-96 h-96 rounded-full select-none">
             {glowColor && (
               <div
