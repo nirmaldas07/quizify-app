@@ -53,8 +53,6 @@ export default function Layout() {
 
   // ✅ Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);
-  const [leaveConfirm, setLeaveConfirm] = useState({ open: false, go: null });
-
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setModalOpen(document.body.classList.contains("modal-open"));
@@ -119,41 +117,37 @@ export default function Layout() {
 
   const NavItem = ({ path, icon, label }) => {
     const active = isActive(path);
-
+    
     const handleClick = () => {
-    // remember scroll before any nav
+    // remember scroll
     saveScroll();
 
-    // what to do after user confirms
-    const go = () => {
-        if (path === "/play") {
+    // if user is in a question, confirm before leaving
+    const inQuestion = localStorage.getItem('qp_in_question') === 'true';
+    if (inQuestion) {
+        const ok = window.confirm('Want to quit?');
+        if (!ok) return;
+    }
+
+    // Always reset Play tab to Modes
+    if (path === "/play") {
         navigate(`/play?view=modes&reset=${Date.now()}`);
         if (navigator.vibrate) navigator.vibrate(15);
         return;
-        }
-
-        if (active) {
-        const now = Date.now();
-        if (now - lastTapRef.current < 500) {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            if (navigator.vibrate) navigator.vibrate(30);
-        }
-        lastTapRef.current = now;
-        } else {
-        navigate(path);
-        }
-    };
-
-    // if user is mid-question, ask first via styled modal
-    const inQuestion = localStorage.getItem("qp_in_question") === "true";
-    if (inQuestion) {
-        setLeaveConfirm({ open: true, go });
-        return;
     }
 
-    go();
+    // default behavior for other tabs
+    if (active) {
+        const now = Date.now();
+        if (now - lastTapRef.current < 500) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (navigator.vibrate) navigator.vibrate(30);
+        }
+        lastTapRef.current = now;
+    } else {
+        navigate(path);
+    }
     };
-
 
     return (
       <button
@@ -208,34 +202,6 @@ export default function Layout() {
       >
         <Outlet />
       </main>
-
-      {leaveConfirm.open && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
-            <div className="w-full max-w-sm rounded-2xl bg-base-card border border-base-border p-5 text-center">
-            <div className="text-lg font-bold mb-2">Want to quit?</div>
-            <p className="text-base-muted mb-5">You’ll lose this question’s progress.</p>
-            <div className="flex gap-3">
-                <button
-                onClick={() => setLeaveConfirm({ open: false, go: null })}
-                className="flex-1 py-3 rounded-xl border border-base-border bg-white/5 hover:bg-white/10 transition"
-                >
-                Cancel
-                </button>
-                <button
-                onClick={() => {
-                    const fn = leaveConfirm.go;
-                    setLeaveConfirm({ open: false, go: null });
-                    fn?.();
-                }}
-                className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition"
-                >
-                Leave
-                </button>
-            </div>
-            </div>
-        </div>
-)}
-
 
       {!hideNav && (
         <nav role="navigation" aria-label="Bottom navigation" className="fixed inset-x-0 bottom-0 z-50">

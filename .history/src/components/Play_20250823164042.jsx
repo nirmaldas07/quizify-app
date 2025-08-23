@@ -79,8 +79,8 @@ const playSound = (src, volume = 0.7) => {
 
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-base-bg text-base-text">
+      <div className="mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-8">
         <header className="flex items-center mb-8">
           <button 
             onClick={onNavigateHome}
@@ -239,8 +239,8 @@ function WheelClassic({
 
 
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-base-bg text-base-text">
+      <div className="mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(5.25rem+env(safe-area-inset-bottom))]">
         <header className="flex items-center justify-between mb-8">
           <button
             onClick={onBack}
@@ -298,7 +298,7 @@ function WheelClassic({
               className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15"
             >
               {[0,1,2].map((i) => {
-                const colors = ["#FF9800", "#FFC107", "#cadd75ff"];
+                const colors = ["#FF9800", "#FFC107", "#4CAF50"];
                 const filled = !!run.progress[i];
 
                 return (
@@ -591,8 +591,8 @@ function QuestionCard({
       // }, [showResult]);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden">
-      <div ref={questionBoxRef} className="relative h-full overflow-y-auto px-5 pt-16 pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
+      <div ref={questionBoxRef} className="relative px-5 pt-16 pb-8">
         <div className="mb-4">
           <button
             onClick={() => setConfirmQuit(true)}

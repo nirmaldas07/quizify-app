@@ -210,8 +210,8 @@ export default function Layout() {
       </main>
 
       {leaveConfirm.open && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
-            <div className="w-full max-w-sm rounded-2xl bg-base-card border border-base-border p-5 text-center">
+        <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center px-6">
+            <div className="w-64 rounded-2xl bg-base-card border border-base-border p-5 text-center">
             <div className="text-lg font-bold mb-2">Want to quit?</div>
             <p className="text-base-muted mb-5">You’ll lose this question’s progress.</p>
             <div className="flex gap-3">

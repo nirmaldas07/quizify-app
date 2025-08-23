@@ -79,8 +79,8 @@ const playSound = (src, volume = 0.7) => {
 
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-base-bg text-base-text">
+      <div className="mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-8">
         <header className="flex items-center mb-8">
           <button 
             onClick={onNavigateHome}
@@ -186,61 +186,13 @@ function WheelClassic({
   glowColor,
   soundOn,
   setSoundOn,
-  showSparkle,
-  pulseIdx,
-  nextProgressIdx,        // ← added
-  pendingProgressIdx,
-  coinBurstTick,
-  lastAnswerWasCorrect
+  showSparkle
 }) {
-
   const nextThreshold = 100 * level * (level - 1);
 
-  const [armFill, setArmFill] = useState(false);
-  const lastCoinTickRef = useRef(0);   // prevents double-run per tick
-  const coinTargetRef = useRef(null);
-  const wheelRef = useRef(null);
-  const [coinVector, setCoinVector] = useState({ dx: 110, dy: -260 });
-
- useEffect(() => {
-  if (pendingProgressIdx == null) return;
-  setArmFill(false);
-  const id = setTimeout(() => setArmFill(true), 30);
-  return () => clearTimeout(id);
-}, [pendingProgressIdx]);
-
-
-  // FIX: simple coin burst when coinBurstTick changes
-  const [showCoinAnim, setShowCoinAnim] = useState(false);
- 
-    useEffect(() => {
-        if (!coinBurstTick || !lastAnswerWasCorrect) return;
-         if (coinBurstTick === lastCoinTickRef.current) return; // already handled this tick
-         lastCoinTickRef.current = coinBurstTick;
-      // compute vector and trigger the burst
-      try {
-        const wheel = wheelRef?.current?.getBoundingClientRect?.();
-        const pill  = coinTargetRef?.current?.getBoundingClientRect?.();
-        if (wheel && pill) {
-          const originX = wheel.left + wheel.width / 2;
-          const originY = wheel.top  + wheel.height / 2;
-          const targetX = pill.left  + pill.width / 2;
-          const targetY = pill.top   + pill.height / 2;
-          setCoinVector({ dx: targetX - originX, dy: targetY - originY });
-        }
-      } catch {}
-
-      if (soundOn) playSound("/sounds/coin.mp3", 0.7); // coin “fly” sound here
-
-      setShowCoinAnim(true);
-      const t = setTimeout(() => setShowCoinAnim(false), 700);
-      return () => clearTimeout(t);
-    }, [coinBurstTick, soundOn]);
-
-
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-base-bg text-base-text">
+      <div className="mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(5.25rem+env(safe-area-inset-bottom))]">
         <header className="flex items-center justify-between mb-8">
           <button
             onClick={onBack}
@@ -256,7 +208,7 @@ function WheelClassic({
                 <div className="h-1 bg-brand-blue rounded" style={{ width: `${Math.min(xp / nextThreshold, 1) * 100}%` }} />
               </div>
             </button>
-            <button ref={coinTargetRef} className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border translate-y-[4px]">🪙 {coins}</button>
+            <button className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border translate-y-[4px]">🪙 {coins}</button>
           </div>
 
           <button
@@ -286,61 +238,40 @@ function WheelClassic({
           </div>
         )}
 
-        {/* Run progress — straight, animated segments */}
-        <div className="flex justify-center mb-6">
-          <div className="w-80 max-w-full">
-            <style>{`
-              @keyframes qp_sweep { from { transform: translateX(0); } to { transform: translateX(100%); } }
-            `}</style>
-
-            <div
-              key={run.qIndex}
-              className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15"
-            >
-              {[0,1,2].map((i) => {
-                const colors = ["#FF9800", "#FFC107", "#cadd75ff"];
-                const filled = !!run.progress[i];
-
-                return (
-                  <div key={i} className="relative h-full bg-white/10">
-                    {/* static or animated fill */}
-                    <div
-                      className="absolute inset-y-0 left-0 rounded-[6px]"
-                  style={{
-                    width: filled
-                      ? (i === pendingProgressIdx
-                          ? (armFill ? "100%" : "0%")                       // animate this one
-                          : ((nextProgressIdx === i && pendingProgressIdx == null)
-                              ? "0%"                                       // hold at 0% until we trigger
-                              : "100%"))
-                      : "0%",
-                    backgroundColor: colors[i],
-                    transition: i === pendingProgressIdx ? "width 1200ms ease-out" : "none" // ≥1s fill
-                  }}
-
-                    />
-                    {/* sweep line */}
-                    {pulseIdx === i && (
-                      <span className="absolute inset-y-0 left-0 w-full overflow-hidden pointer-events-none">
-                        <span
-                          className="absolute inset-y-0 left-0 w-1 rounded bg-white/80"
-                          style={{ animation: "qp_sweep 1200ms ease-out forwards" }}
-                        />
-                      </span>
-                    )}
-                    {/* sparkle */}
-                    {showSparkle === i && (
-                      <span className="absolute right-[-2px] top-1/2 -translate-y-1/2 text-xs select-none">✨</span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+{/* Run progress — straight, 3 segments */}
+<div className="flex justify-center mb-6">
+  <div className="w-80 max-w-full">
+    <div className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15">
+      {[0,1,2].map((i) => {
+        const filledColors = ["#FF9800", "#FFC107", "#4CAF50"]; // same palette as before
+        const filled = run.progress[i];
+        const isCurrent = i === run.qIndex; // highlight the step you're on
+        return (
+          <div
+            key={i}
+            className={`relative h-full transition-all`}
+            style={{
+              backgroundColor: filled ? filledColors[i] : "rgba(255,255,255,0.15)",
+              opacity: filled ? 1 : 0.6,
+              boxShadow: isCurrent ? "0 0 0 1px rgba(255,255,255,0.35) inset" : "none",
+            }}
+          >
+            {showSparkle === i && (
+              <span className="absolute right-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-ping" />
+            )}
           </div>
-        </div>
+        );
+      })}
+    </div>
+
+    <div className="mt-2 flex justify-between text-[11px] text-base-muted">
+      <span>Q1</span><span>Q2</span><span>Q3</span>
+    </div>
+  </div>
+</div>
 
         <section className="flex flex-col items-center mt-20 mb-8">
-          <div ref={wheelRef} className="relative w-96 h-96 rounded-full select-none">
+          <div className="relative w-96 h-96 rounded-full select-none">
             {glowColor && (
               <div
                 className="pointer-events-none absolute -inset-4 rounded-full"
@@ -348,67 +279,67 @@ function WheelClassic({
               />
             )}
 
-            {/* Rotating wheel layer — NO BUTTON INSIDE */}
-            <div
-              className="absolute inset-0 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden will-change-transform bg-base-card"
-              style={{ transform: `rotate(${angle}deg)`, transition }}
-            >
-              <svg width="100%" height="100%" viewBox="0 0 100 100" className="block">
-                {WHEEL_CATEGORIES.map((cat, i) => {
-                  const start = i * sliceAngle;
-                  const end = start + sliceAngle;
-                  const largeArc = sliceAngle > 180 ? 1 : 0;
-                  const sr = (Math.PI * start) / 180;
-                  const er = (Math.PI * end) / 180;
-                  const x1 = 50 + 45 * Math.cos(sr);
-                  const y1 = 50 - 45 * Math.sin(sr);
-                  const x2 = 50 + 45 * Math.cos(er);
-                  const y2 = 50 - 45 * Math.sin(er);
+        {/* Rotating wheel layer — NO BUTTON INSIDE */}
+        <div
+          className="absolute inset-0 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden will-change-transform bg-base-card"
+          style={{ transform: `rotate(${angle}deg)`, transition }}
+        >
+          <svg width="100%" height="100%" viewBox="0 0 100 100" className="block">
+            {WHEEL_CATEGORIES.map((cat, i) => {
+              const start = i * sliceAngle;
+              const end = start + sliceAngle;
+              const largeArc = sliceAngle > 180 ? 1 : 0;
+              const sr = (Math.PI * start) / 180;
+              const er = (Math.PI * end) / 180;
+              const x1 = 50 + 45 * Math.cos(sr);
+              const y1 = 50 - 45 * Math.sin(sr);
+              const x2 = 50 + 45 * Math.cos(er);
+              const y2 = 50 - 45 * Math.sin(er);
 
-                  const iconAngle = start + sliceAngle / 2;
-                  const iconRadius = 28;
-                  const iconX = 50 + iconRadius * Math.cos((iconAngle * Math.PI) / 180);
-                  const iconY = 50 - iconRadius * Math.sin((iconAngle * Math.PI) / 180);
+              const iconAngle = start + sliceAngle / 2;
+              const iconRadius = 28;
+              const iconX = 50 + iconRadius * Math.cos((iconAngle * Math.PI) / 180);
+              const iconY = 50 - iconRadius * Math.sin((iconAngle * Math.PI) / 180);
 
-                  return (
-                    <g key={i}>
-                      <path
-                        d={`M50,50 L${x1},${y1} A45,45 0 ${largeArc} 0 ${x2},${y2} Z`}
-                        fill={cat.color}
-                        stroke="rgba(255,255,255,0.3)"
-                        strokeWidth="0.5"
-                      />
-                      <text
-                        x={iconX}
-                        y={iconY}
-                        fill="white"
-                        fontSize="8"
-                        dominantBaseline="middle"
-                        textAnchor="middle"
-                        className="font-bold"
-                      >
-                        {cat.icon}
-                      </text>
-                    </g>
-                  );
-                })}
-                <circle cx="50" cy="50" r="12" fill="white" stroke="#ddd" strokeWidth="1" />
-              </svg>
-            </div>
+              return (
+                <g key={i}>
+                  <path
+                    d={`M50,50 L${x1},${y1} A45,45 0 ${largeArc} 0 ${x2},${y2} Z`}
+                    fill={cat.color}
+                    stroke="rgba(255,255,255,0.3)"
+                    strokeWidth="0.5"
+                  />
+                  <text
+                    x={iconX}
+                    y={iconY}
+                    fill="white"
+                    fontSize="8"
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                    className="font-bold"
+                  >
+                    {cat.icon}
+                  </text>
+                </g>
+              );
+            })}
+            <circle cx="50" cy="50" r="12" fill="white" stroke="#ddd" strokeWidth="1" />
+          </svg>
+        </div>
 
-            {/* Center SPIN button — sibling so it DOES NOT rotate */}
-            <button
-              onClick={onSpin}
-              disabled={spinning}
-              className={`absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+        {/* Center SPIN button — sibling so it DOES NOT rotate */}
+        <button
+          onClick={onSpin}
+          disabled={spinning}
+          className={`absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                       w-24 h-24 rounded-full bg-white text-black font-black text-lg shadow-lg transition-all ${
                         spinning ? "opacity-60 cursor-not-allowed scale-95" : "hover:scale-105 active:scale-95"
                       }`}
-            >
-              SPIN
-            </button>
+        >
+          SPIN
+        </button>
 
-            {/* pointer */}
+
             <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-2 z-20">
               <div className="w-6 h-8 bg-white rounded-lg shadow-md flex items-start justify-center pt-1">
                 <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-gray-600"/>
@@ -422,33 +353,6 @@ function WheelClassic({
                   {result.cat.name}
                 </div>
               </div>
-            )}
-
-            {/* FIX: simple coin trajectory from center to header coin pill */}
-            {showCoinAnim && (
-              <>
-                <style>{`
-                    @keyframes coinFly {
-                      0%   { transform: translate(-50%, -50%) scale(0.9); opacity: 1; }
-                      100% { transform: translate(var(--coin-dx), var(--coin-dy)) scale(0.4); opacity: 0; }
-                    }
-                `}</style>
-                {[0,1,2].map((i) => (
-                  <div
-                    key={i}
-                    className="pointer-events-none absolute z-30 top-1/2 left-1/2"
-                    style={{
-                      animation: `coinFly 600ms ease-out ${i * 80}ms forwards`,
-                      ['--coin-dx']: `${coinVector.dx}px`,
-                      ['--coin-dy']: `${coinVector.dy}px`
-                    }}
-                  >
-                    <div className="w-6 h-6 rounded-full grid place-items-center bg-yellow-400 text-black font-bold">
-                      🪙
-                    </div>
-                  </div>
-                ))}
-              </>
             )}
           </div>
         </section>
@@ -466,14 +370,12 @@ function WheelClassic({
   );
 }
 
-function ResultInterstitial({ category, onComplete, isBonus = false, soundOn = true }) {
-
-useEffect(() => {
-      if (soundOn) playSound("/sounds/flush.mp3", 0.8);
-      const timer = setTimeout(onComplete, 1000); // 1s flash
-      vibrate([50]);
-      return () => clearTimeout(timer);
-    }, [onComplete, soundOn]);
+function ResultInterstitial({ category, onComplete, isBonus = false }) {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 2000);
+    vibrate([50]);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
 
   if (isBonus) {
     return (
@@ -511,20 +413,6 @@ useEffect(() => {
 
 }
 
-// FIX: quick 3-streak flash screen
-function ThreeStreakFlash({ onDone }) {
-  useEffect(() => {
-    const t = setTimeout(onDone, 1000);
-    return () => clearTimeout(t);
-  }, [onDone]);
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-green-600 text-white">
-      <h2 className="text-2xl font-black">Whohoo!! 3 correct in a row 🎉</h2>
-    </div>
-  );
-}
-
 function QuestionCard({ 
   question, 
   category, 
@@ -537,28 +425,11 @@ function QuestionCard({
   audienceData,
   onBack,
   timeUp,
-  onTimeUpBackToWheel,
-  soundOn
+  onTimeUpBackToWheel
 }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [confirmQuit, setConfirmQuit] = useState(false);
-  const promptRef = useRef(null);
-  const questionBoxRef = useRef(null);
-  const [confettiBox, setConfettiBox] = useState(null);
-
-  useEffect(() => {
-      if (!showResult || !promptRef.current) return;
-      const r = promptRef.current.getBoundingClientRect();
-      setConfettiBox({
-        x: r.left,
-        y: r.top - 300,  // nudge to the very top edge of the question
-        w: r.width,
-        h: 8           // thin strip so pieces fall from the top, not the bottom
-      });
-    }, [showResult]);
-  
-
   const handleAnswer = (optionIndex) => {
     if (showResult) return;
     
@@ -568,31 +439,22 @@ function QuestionCard({
     const correct = optionIndex === question.correctIndex;
     
     vibrate(correct ? [50, 30, 50] : [200]);
-    if (soundOn) playSound(correct ? "/sounds/correct.mp3" : "/sounds/wrong.mp3", 0.7);
-
-    // FIX: remove sound here; sound plays in Play.handleAnswer
+    if (correct) {
+      playSound("/sounds/correct.mp3", 0.7);
+    } else {
+      playSound("/sounds/wrong.mp3", 0.7);
+    }
+    
     setTimeout(() => {
       onAnswer(correct, null);
     }, 1500);
   };
 
   const isCorrect = selectedAnswer === question.correctIndex;
-      // useEffect(() => {
-      //   const el = promptRef.current;
-      //   if (showResult && el) {
-      //     const r = el.getBoundingClientRect();
-      //     setConfettiBox({
-      //       x: r.left,
-      //       y: r.top,                // start right at the prompt
-      //       w: r.width,
-      //       h: Math.max(16, r.height)
-      //     });
-      //   }
-      // }, [showResult]);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden">
-      <div ref={questionBoxRef} className="relative h-full overflow-y-auto px-5 pt-16 pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
+      <div className="relative px-5 pt-16 pb-8">
         <div className="mb-4">
           <button
             onClick={() => setConfirmQuit(true)}
@@ -629,7 +491,7 @@ function QuestionCard({
           </div>
         </div>
 
-        <h2 ref={promptRef} className="text-xl font-semibold mb-6 leading-relaxed">
+        <h2 className="text-xl font-semibold mb-6 leading-relaxed">
           {question.prompt}
         </h2>
 
@@ -704,54 +566,57 @@ function QuestionCard({
           </div>
         )}
 
-        {showResult && (
-          <div className="relative text-center">
-            {/* Confetti behind, only on correct */}
-            {isCorrect && (
-              <div className="absolute inset-0 pointer-events-none">
-                <Confetti
-                  recycle={false}
-                  numberOfPieces={120}    // FIX: fewer
-                  gravity={0.9}
-                  tweenDuration={1800}   // FIX: shorter
-                  confettiSource={confettiBox || {
-                    x: 0,
-                    y: 0,
-                    w: (typeof window !== "undefined" ? window.innerWidth : 320),
-                    h: 1
-                  }}
-
-                />
-              </div>
-            )}
-            
-            {/* Result message removed — label shown on the selected option */}
-
-            {/* Keep the continue CTA above confetti as well */}
-            <button
-              onClick={() => onAnswer(isCorrect, null, true)}
-              className="relative z-10 bg-white text-black font-black py-4 px-8 rounded-2xl text-lg hover:bg-gray-100 transition-all active:scale-95"
-            >
-              Continue
-            </button>
-          </div> 
-        )}
-
-        {timeUp && (
-          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
-            <div className="w-full max-w-sm rounded-2xl bg-base-card border border-base-border p-5 text-center">
-              <div className="text-lg font-bold mb-2">Time’s up</div>
-              <p className="text-base-muted mb-5">You ran out of time.</p>
-              <button
-                onClick={onTimeUpBackToWheel}
-                className="mx-auto w-48 py-3 rounded-xl bg-brand-blue text-white font-semibold hover:bg-brand-blue/90 transition"
-              >
-                Back to Wheel
-              </button>
-            </div>
+    {showResult && (
+      <div className="relative text-center">
+        {/* Confetti behind, only on correct */}
+        {isCorrect && (
+          <div className="absolute inset-0 pointer-events-none">
+        <Confetti
+          recycle={false}
+          numberOfPieces={160}
+          gravity={0.9}
+          tweenDuration={5200}
+          confettiSource={{
+            x: 0,
+            y: 5, // px from the top of the viewport — increase to move the burst lower
+            w: (typeof window !== "undefined" ? window.innerWidth : 320),
+            h: 16
+          }}
+        />
           </div>
         )}
 
+        {/* Message ABOVE the confetti */}
+        <p className="relative z-10 text-2xl font-bold mb-6">
+          {isCorrect ? 'Correct! +5 coins & +1 XP' : 'Better luck next time!'}
+        </p>
+
+        {/* Keep the continue CTA above confetti as well */}
+        <button
+          onClick={() => onAnswer(isCorrect, null, true)}
+          className="relative z-10 bg-white text-black font-black py-4 px-8 rounded-2xl text-lg hover:bg-gray-100 transition-all active:scale-95"
+        >
+          Continue
+        </button>
+      </div> 
+    )}
+
+        {timeUp && (
+      <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-8">
+        <div className="w-full max-w-sm rounded-2xl bg-base-card border border-base-border p-5 text-center">
+          <div className="text-lg font-bold mb-2">Time’s up</div>
+          <p className="text-base-muted mb-5">You ran out of time.</p>
+          <button
+            onClick={onTimeUpBackToWheel}
+            className="mx-auto w-48 py-3 rounded-xl bg-brand-blue text-white font-semibold hover:bg-brand-blue/90 transition"
+          >
+            Back to Wheel
+          </button>
+        </div>
+      </div>
+    )}
+
+    {/* ✅ Paste the confirm modal here */}
         {confirmQuit && (
           <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
             <div className="w-full max-w-sm rounded-2xl bg-base-card border border-base-border p-5 text-center">
@@ -766,7 +631,7 @@ function QuestionCard({
                 </button>
                 <button
                   onClick={onBack}
-                  className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition"
+                  className="flex-1 py-3 rounded-xl bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition"
                 >
                   Yes
                 </button>
@@ -774,10 +639,10 @@ function QuestionCard({
             </div>
           </div>
         )}
-      </div>
-    </div>
-  );
-}
+          </div>
+        </div>
+      );
+    }
 
 function CharacterPicker({ onSelect }) {
   return (
@@ -842,30 +707,15 @@ export default function Play() {
   const [showCallout, setShowCallout] = useState(false);
   const [glowColor, setGlowColor] = useState(null);
   const [showSparkle, setShowSparkle] = useState(-1);
-  const [coinBurstTick, setCoinBurstTick] = useState(0);
-  const [pendingProgressIdx, setPendingProgressIdx] = useState(null);   // FIX
-  const [nextProgressIdx, setNextProgressIdx] = useState(null);
-  const [lastAnswerWasCorrect, setLastAnswerWasCorrect] = useState(false);
-  const [postWheelNext, setPostWheelNext] = useState(null);             // FIX
-  const [pulseIdx, setPulseIdx] = useState(-1);                         // FIX
-  const [runResults, setRunResults] = useState([false, false, false]);  // FIX
-  const [pendingCoinBurst, setPendingCoinBurst] = useState(false);      // FIX
-  // const [coinBurstTick, setCoinBurstTick] = useState(0);                // FIX
-  const [timerPaused, setTimerPaused] = useState(false);                // FIX
 
   const timerRef = useRef(null);
   const spinAudioRef = useRef(null);
-  const spinSoundTimerRef = useRef(null);
+  const spinSoundTimerRef = useRef(null); // NEW
 
   const prefersReduced = useMemo(
     () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches || false,
     []
   );
-
-  useEffect(() => {
-    try { localStorage.setItem('qp_in_question', JSON.stringify(gameState === 'question')); } catch {}
-    return () => { try { localStorage.removeItem('qp_in_question'); } catch {} };
-  }, [gameState]);
 
   useEffect(() => {
     loadQuestions();
@@ -879,9 +729,8 @@ export default function Play() {
   useEffect(() => safeStorage.set(STORAGE_KEYS.OWNED_CHARACTERS, ownedCharacters), [ownedCharacters]);
   useEffect(() => safeStorage.set(STORAGE_KEYS.SOUND, soundOn), [soundOn]);
 
-  // FIX: timer runs only when not paused
   useEffect(() => {
-    if (gameState === 'question' && timeLeft > 0 && !timerPaused) {
+    if (gameState === 'question' && timeLeft > 0) {
       timerRef.current = setTimeout(() => {
         setTimeLeft(prev => {
           const next = prev - 1;
@@ -892,55 +741,16 @@ export default function Play() {
         });
       }, 1000);
     } else if (gameState === 'question' && timeLeft === 0) {
-      setTimeUp(true);
+      setTimeUp(true); // show modal instead of auto-handling answer
     }
+
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [gameState, timeLeft, soundOn, timerPaused]);
-
-  // FIX: wheel-side progress anim + routing AFTER anim + coin burst
-  useEffect(() => {
-    if (gameState !== "wheel" || pendingProgressIdx == null) return;
-
-    setShowSparkle(pendingProgressIdx);
-    if (soundOn) playSound("/sounds/progress.mp3", 0.6);
-    setPulseIdx(pendingProgressIdx);
-
-    // if (pendingCoinBurst) {
-    //   setCoinBurstTick(t => t + 1);
-    //   setPendingCoinBurst(false);
-    // }
-
-    const t0 = setTimeout(() => setPulseIdx(-1), 900);
-    const t1 = setTimeout(() => setShowSparkle(-1), 900);
-    const t2 = setTimeout(() => {
-      if (postWheelNext) {
-        if (postWheelNext === "streakFlash") {
-          setGameState("streakFlash");
-        } else if (postWheelNext === "characterPicker") {
-          setGameState("characterPicker");
-        } else {
-          setGameState("modes");
-          resetRun();
-        }
-        setPostWheelNext(null);
-      }
-      setPendingProgressIdx(null);
-    }, 1800); // 800ms fill + ~1s hold
-
-    return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2); };
-  }, [gameState, pendingProgressIdx, postWheelNext, soundOn, pendingCoinBurst]);
-
-// Trigger coin fly immediately on landing at the wheel (before progress anim)
-    useEffect(() => {
-      if (gameState !== 'wheel' || !pendingCoinBurst) return;
-      setCoinBurstTick(t => t + 1);   // kicks the WheelClassic coin animation immediately
-      setPendingCoinBurst(false);     // consume the flag so it doesn't repeat
-    }, [gameState, pendingCoinBurst]);
+  }, [gameState, timeLeft, soundOn]);
 
   const loadQuestions = async () => {
     try {
@@ -996,42 +806,50 @@ export default function Play() {
   };
 
   const cleanup = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    if (spinSoundTimerRef.current) {
-      clearTimeout(spinSoundTimerRef.current);
-      spinSoundTimerRef.current = null;
-    }
-    if (spinAudioRef.current) {
-      try { spinAudioRef.current.pause(); } catch {}
-      spinAudioRef.current = null;
-    }
-  };
+  // question countdown
+  if (timerRef.current) clearTimeout(timerRef.current);
 
-  const startSpinSound = () => {
-    if (soundOn && spinAudioRef.current) {
-      try {
-        spinAudioRef.current.currentTime = 0;
-        spinAudioRef.current.play();
-      } catch {}
-      if (spinSoundTimerRef.current) clearTimeout(spinSoundTimerRef.current);
-      spinSoundTimerRef.current = setTimeout(() => {
-        stopSpinSound();
-      }, 2000);
-    }
-  };
+  // 🔊 stop the 2s spin-sound timer too
+  if (spinSoundTimerRef.current) {
+    clearTimeout(spinSoundTimerRef.current);
+    spinSoundTimerRef.current = null;
+  }
 
-  const stopSpinSound = () => {
-    if (spinSoundTimerRef.current) {
-      clearTimeout(spinSoundTimerRef.current);
-      spinSoundTimerRef.current = null;
-    }
-    if (spinAudioRef.current) {
-      try {
-        spinAudioRef.current.pause();
-        spinAudioRef.current.currentTime = 0;
-      } catch {}
-    }
-  };
+  // audio element
+  if (spinAudioRef.current) {
+    try { spinAudioRef.current.pause(); } catch {}
+    spinAudioRef.current = null;
+  }
+};
+
+
+const startSpinSound = () => {
+  if (soundOn && spinAudioRef.current) {
+    try {
+      spinAudioRef.current.currentTime = 0;
+      spinAudioRef.current.play();
+    } catch {}
+    // stop the sound after 2s, no matter what
+    if (spinSoundTimerRef.current) clearTimeout(spinSoundTimerRef.current);
+    spinSoundTimerRef.current = setTimeout(() => {
+      stopSpinSound();
+    }, 2000);
+  }
+};
+
+const stopSpinSound = () => {
+  if (spinSoundTimerRef.current) {
+    clearTimeout(spinSoundTimerRef.current);
+    spinSoundTimerRef.current = null;
+  }
+  if (spinAudioRef.current) {
+    try {
+      spinAudioRef.current.pause();
+      spinAudioRef.current.currentTime = 0;
+    } catch {}
+  }
+};
+
 
   const resetRun = () => {
     setRun({
@@ -1039,14 +857,13 @@ export default function Play() {
       progress: [false, false, false],
       lifelines: { fifty: false, audience: false }
     });
-    setRunResults([false, false, false]); // FIX
     setCurrentQuestion(null);
     setCurrentCategory(null);
     setSelectedCharacter(null);
     setEliminatedOptions([]);
     setAudienceData(null);
     setTimeUp(false);
-    setCoinBurstTick(0);
+
   };
 
   const spin = () => {
@@ -1116,7 +933,6 @@ export default function Play() {
       setEliminatedOptions([]);
       setAudienceData(null);
       setTimeUp(false);
-      setTimerPaused(false); // FIX: resume for next question
       setGameState('question');
     } else {
       setGameState('wheel');
@@ -1124,49 +940,44 @@ export default function Play() {
   };
 
   const handleAnswer = (correct, motivator, isContinue = false) => {
-    // first phase: option clicked on QuestionCard
-    if (!isContinue) {
-      setTimerPaused(true); // FIX: stop timer immediately on first click
-      // if (soundOn) {
-      //   playSound(correct ? "/sounds/correct.mp3" : "/sounds/wrong.mp3", 0.7);
-      // }
-      return;
-    }
-
-    // second phase: "Continue" pressed
-    const currentIdx = run.qIndex;
-    const nextProgress = [...run.progress];
-    nextProgress[currentIdx] = true;
-
-    const updatedResults = [...runResults];   // FIX: track correctness
-    updatedResults[currentIdx] = !!correct;
-    setRunResults(updatedResults);
-
-    setRun(prev => ({
-      ...prev,
-      progress: nextProgress,
-      qIndex: prev.qIndex + 1
-    }));
+    if (isContinue) {
+      const newProgress = [...run.progress];
+      newProgress[run.qIndex] = correct;
+      
+      setRun(prev => ({
+        ...prev,
+        progress: newProgress,
+        qIndex: prev.qIndex + 1
+      }));
 
       if (correct) {
-        setCoins(p => p + 5);
-        setXp(p => p + 1);
-        setPendingCoinBurst(true); // coin fly + sound happens in WheelClassic only
+        setCoins(prev => prev + 5);
+        setXp(prev => prev + 1);
+        if (soundOn) playSound("/sounds/coin.mp3", 0.8);
       }
 
+      setShowSparkle(run.qIndex);
+      if (soundOn) playSound("/sounds/correct.mp3", 0.5);
+      setTimeout(() => setShowSparkle(-1), 1000);
 
-    // 3) Queue which segment should animate (we'll trigger it on Wheel after coin fly)
-      setNextProgressIdx(currentIdx);
-      setLastAnswerWasCorrect(!!correct);
-
-    if (currentIdx === 2) {
-      const perfect = updatedResults.every(Boolean);
-      setPostWheelNext(perfect ? "streakFlash" : "modes"); // FIX
+      if (run.qIndex >= 2) {
+        const perfectRun = newProgress.every(Boolean);
+        if (perfectRun) {
+          setTimeout(() => setGameState('characterPicker'), 1000);
+        } else {
+          setTimeout(() => {
+            setGameState('modes');
+            resetRun();
+          }, 1500);
+        }
+      } else {
+        setTimeout(() => setGameState('wheel'), 1000);
+      }
     } else {
-      setPostWheelNext(null);
+      if (soundOn) {
+        playSound(correct ? "/sounds/correct.mp3" : "/sounds/wrong.mp3", 0.7);
+      }
     }
-
-    setGameState("wheel"); // go show the progress animation
   };
 
   const handleTimeUp = () => {
@@ -1234,7 +1045,8 @@ export default function Play() {
   };
 
   const handleNavigateHome = () => {
-    window.location.href = '/';
+    // Replace this with your actual navigation logic
+    window.location.href = '/'; // or use your router navigation
     console.log('Navigate to home');
   };
 
@@ -1246,26 +1058,18 @@ export default function Play() {
   const handleBackToWheel = () => {
     setGameState('wheel');
   };
-
-  useEffect(() => {
-      if (gameState !== 'wheel' || nextProgressIdx == null) return;
-      const delay = lastAnswerWasCorrect ? 1800 : 0; // let coins fly first if correct
-      const t = setTimeout(() => {
-        setPendingProgressIdx(nextProgressIdx);
-        setNextProgressIdx(null);
-      }, delay);
-      return () => clearTimeout(t);
-    }, [gameState, nextProgressIdx, lastAnswerWasCorrect]);
-
-
+  // Jump back to Play home (modes) when URL has ?view=modes (from bottom nav)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get("view") === "modes" || params.get("view") === "home") {
       resetRun();
       setGameState("modes");
+      // clean the URL so the query doesn't linger
       navigate("/play", { replace: true });
     }
   }, [location.search]);
+
+
 
   switch (gameState) {
     case 'modes':
@@ -1295,12 +1099,6 @@ export default function Play() {
           soundOn={soundOn}
           setSoundOn={setSoundOn}
           showSparkle={showSparkle}
-          pulseIdx={pulseIdx}
-          coinBurstTick={coinBurstTick}
-          pendingProgressIdx={pendingProgressIdx}  // FIX
-          // coinBurstTick={coinBurstTick}            // FIX
-          lastAnswerWasCorrect={lastAnswerWasCorrect}
-          nextProgressIdx={nextProgressIdx}
         />
       );
       
@@ -1309,13 +1107,7 @@ export default function Play() {
         <ResultInterstitial 
           category={currentCategory}
           onComplete={startQuestion}
-          soundOn={soundOn}
         />
-      );
-
-    case 'streakFlash':  // FIX
-      return (
-        <ThreeStreakFlash onDone={() => setGameState('bonusInterstitial')} />
       );
       
     case 'question':
@@ -1333,8 +1125,6 @@ export default function Play() {
           onBack={handleBackToWheel}
           timeUp={timeUp}
           onTimeUpBackToWheel={() => { setTimeUp(false); setGameState('wheel'); }}
-          soundOn={soundOn}
-
         />
       );
       
@@ -1349,9 +1139,7 @@ export default function Play() {
           category={WHEEL_CATEGORIES.find(c => toSlug(c.name) === selectedCharacter)}
           onComplete={() => setGameState('bonusQuestion')}
           isBonus={true}
-          soundOn={soundOn}
         />
-
       );
       
     case 'bonusQuestion':

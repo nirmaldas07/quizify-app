@@ -79,8 +79,8 @@ const playSound = (src, volume = 0.7) => {
 
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-base-bg text-base-text">
+      <div className="mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-8">
         <header className="flex items-center mb-8">
           <button 
             onClick={onNavigateHome}
@@ -188,35 +188,27 @@ function WheelClassic({
   setSoundOn,
   showSparkle,
   pulseIdx,
-  nextProgressIdx,        // ← added
-  pendingProgressIdx,
-  coinBurstTick,
-  lastAnswerWasCorrect
+  pendingProgressIdx,      // FIX: prop
+  coinBurstTick            // FIX: prop
 }) {
-
   const nextThreshold = 100 * level * (level - 1);
 
   const [armFill, setArmFill] = useState(false);
-  const lastCoinTickRef = useRef(0);   // prevents double-run per tick
   const coinTargetRef = useRef(null);
   const wheelRef = useRef(null);
   const [coinVector, setCoinVector] = useState({ dx: 110, dy: -260 });
 
- useEffect(() => {
-  if (pendingProgressIdx == null) return;
-  setArmFill(false);
-  const id = setTimeout(() => setArmFill(true), 30);
-  return () => clearTimeout(id);
-}, [pendingProgressIdx]);
-
+  useEffect(() => {
+    setArmFill(false);
+    const id = setTimeout(() => setArmFill(true), 30);
+    return () => clearTimeout(id);
+  }, [run.qIndex]);
 
   // FIX: simple coin burst when coinBurstTick changes
   const [showCoinAnim, setShowCoinAnim] = useState(false);
  
     useEffect(() => {
-        if (!coinBurstTick || !lastAnswerWasCorrect) return;
-         if (coinBurstTick === lastCoinTickRef.current) return; // already handled this tick
-         lastCoinTickRef.current = coinBurstTick;
+      if (!coinBurstTick) return; // ignore 0 / initial
       // compute vector and trigger the burst
       try {
         const wheel = wheelRef?.current?.getBoundingClientRect?.();
@@ -239,8 +231,8 @@ function WheelClassic({
 
 
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-base-bg text-base-text">
+      <div className="mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(5.25rem+env(safe-area-inset-bottom))]">
         <header className="flex items-center justify-between mb-8">
           <button
             onClick={onBack}
@@ -298,7 +290,7 @@ function WheelClassic({
               className="relative grid grid-cols-3 gap-1 h-3 rounded-full overflow-hidden bg-white/10 border border-white/15"
             >
               {[0,1,2].map((i) => {
-                const colors = ["#FF9800", "#FFC107", "#cadd75ff"];
+                const colors = ["#FF9800", "#FFC107", "#4CAF50"];
                 const filled = !!run.progress[i];
 
                 return (
@@ -306,25 +298,20 @@ function WheelClassic({
                     {/* static or animated fill */}
                     <div
                       className="absolute inset-y-0 left-0 rounded-[6px]"
-                  style={{
-                    width: filled
-                      ? (i === pendingProgressIdx
-                          ? (armFill ? "100%" : "0%")                       // animate this one
-                          : ((nextProgressIdx === i && pendingProgressIdx == null)
-                              ? "0%"                                       // hold at 0% until we trigger
-                              : "100%"))
-                      : "0%",
-                    backgroundColor: colors[i],
-                    transition: i === pendingProgressIdx ? "width 1200ms ease-out" : "none" // ≥1s fill
-                  }}
-
+                      style={{
+                        width: filled
+                          ? (i === pendingProgressIdx ? (armFill ? "100%" : "0%") : "100%")
+                          : "0%",
+                        backgroundColor: colors[i],
+                        transition: i === pendingProgressIdx ? "width 800ms ease-out" : "none"
+                      }}
                     />
                     {/* sweep line */}
                     {pulseIdx === i && (
                       <span className="absolute inset-y-0 left-0 w-full overflow-hidden pointer-events-none">
                         <span
                           className="absolute inset-y-0 left-0 w-1 rounded bg-white/80"
-                          style={{ animation: "qp_sweep 1200ms ease-out forwards" }}
+                          style={{ animation: "qp_sweep 800ms ease-out forwards" }}
                         />
                       </span>
                     )}
@@ -547,17 +534,6 @@ function QuestionCard({
   const questionBoxRef = useRef(null);
   const [confettiBox, setConfettiBox] = useState(null);
 
-  useEffect(() => {
-      if (!showResult || !promptRef.current) return;
-      const r = promptRef.current.getBoundingClientRect();
-      setConfettiBox({
-        x: r.left,
-        y: r.top - 300,  // nudge to the very top edge of the question
-        w: r.width,
-        h: 8           // thin strip so pieces fall from the top, not the bottom
-      });
-    }, [showResult]);
-  
 
   const handleAnswer = (optionIndex) => {
     if (showResult) return;
@@ -577,22 +553,24 @@ function QuestionCard({
   };
 
   const isCorrect = selectedAnswer === question.correctIndex;
-      // useEffect(() => {
-      //   const el = promptRef.current;
-      //   if (showResult && el) {
-      //     const r = el.getBoundingClientRect();
-      //     setConfettiBox({
-      //       x: r.left,
-      //       y: r.top,                // start right at the prompt
-      //       w: r.width,
-      //       h: Math.max(16, r.height)
-      //     });
-      //   }
-      // }, [showResult]);
+      useEffect(() => {
+      const el = promptRef.current;
+      if (showResult && el) {
+        const r = el.getBoundingClientRect();
+        setConfettiBox({
+          x: r.left,
+          y: r.top,                // start right at the prompt
+          w: r.width,
+          h: Math.max(16, r.height)
+        });
+      }
+    }, [showResult]);
+
+
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden">
-      <div ref={questionBoxRef} className="relative h-full overflow-y-auto px-5 pt-16 pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
+      <div ref={questionBoxRef} className="relative px-5 pt-16 pb-8">
         <div className="mb-4">
           <button
             onClick={() => setConfirmQuit(true)}
@@ -718,7 +696,7 @@ function QuestionCard({
                     x: 0,
                     y: 0,
                     w: (typeof window !== "undefined" ? window.innerWidth : 320),
-                    h: 1
+                    h: 24
                   }}
 
                 />
@@ -910,10 +888,10 @@ export default function Play() {
     if (soundOn) playSound("/sounds/progress.mp3", 0.6);
     setPulseIdx(pendingProgressIdx);
 
-    // if (pendingCoinBurst) {
-    //   setCoinBurstTick(t => t + 1);
-    //   setPendingCoinBurst(false);
-    // }
+    if (pendingCoinBurst) {
+      setCoinBurstTick(t => t + 1);
+      setPendingCoinBurst(false);
+    }
 
     const t0 = setTimeout(() => setPulseIdx(-1), 900);
     const t1 = setTimeout(() => setShowSparkle(-1), 900);
@@ -934,13 +912,6 @@ export default function Play() {
 
     return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2); };
   }, [gameState, pendingProgressIdx, postWheelNext, soundOn, pendingCoinBurst]);
-
-// Trigger coin fly immediately on landing at the wheel (before progress anim)
-    useEffect(() => {
-      if (gameState !== 'wheel' || !pendingCoinBurst) return;
-      setCoinBurstTick(t => t + 1);   // kicks the WheelClassic coin animation immediately
-      setPendingCoinBurst(false);     // consume the flag so it doesn't repeat
-    }, [gameState, pendingCoinBurst]);
 
   const loadQuestions = async () => {
     try {
@@ -1148,12 +1119,13 @@ export default function Play() {
       qIndex: prev.qIndex + 1
     }));
 
-      if (correct) {
-        setCoins(p => p + 5);
-        setXp(p => p + 1);
-        setPendingCoinBurst(true); // coin fly + sound happens in WheelClassic only
-      }
-
+    if (correct) {
+      setCoins(p => p + 5);
+      setXp(p => p + 1);
+      if (soundOn) playSound("/sounds/coin.mp3", 0.8);
+      setPendingCoinBurst(true); // FIX: trigger coin flight
+    }
+    if (correct) setCoinBurstTick(t => t + 1);
 
     // 3) Queue which segment should animate (we'll trigger it on Wheel after coin fly)
       setNextProgressIdx(currentIdx);
@@ -1249,7 +1221,7 @@ export default function Play() {
 
   useEffect(() => {
       if (gameState !== 'wheel' || nextProgressIdx == null) return;
-      const delay = lastAnswerWasCorrect ? 1800 : 0; // let coins fly first if correct
+      const delay = lastAnswerWasCorrect ? 700 : 0; // let coins fly first if correct
       const t = setTimeout(() => {
         setPendingProgressIdx(nextProgressIdx);
         setNextProgressIdx(null);
@@ -1299,8 +1271,6 @@ export default function Play() {
           coinBurstTick={coinBurstTick}
           pendingProgressIdx={pendingProgressIdx}  // FIX
           // coinBurstTick={coinBurstTick}            // FIX
-          lastAnswerWasCorrect={lastAnswerWasCorrect}
-          nextProgressIdx={nextProgressIdx}
         />
       );
       

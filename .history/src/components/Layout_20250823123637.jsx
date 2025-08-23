@@ -209,34 +209,6 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      {leaveConfirm.open && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-6">
-            <div className="w-full max-w-sm rounded-2xl bg-base-card border border-base-border p-5 text-center">
-            <div className="text-lg font-bold mb-2">Want to quit?</div>
-            <p className="text-base-muted mb-5">You’ll lose this question’s progress.</p>
-            <div className="flex gap-3">
-                <button
-                onClick={() => setLeaveConfirm({ open: false, go: null })}
-                className="flex-1 py-3 rounded-xl border border-base-border bg-white/5 hover:bg-white/10 transition"
-                >
-                Cancel
-                </button>
-                <button
-                onClick={() => {
-                    const fn = leaveConfirm.go;
-                    setLeaveConfirm({ open: false, go: null });
-                    fn?.();
-                }}
-                className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition"
-                >
-                Leave
-                </button>
-            </div>
-            </div>
-        </div>
-)}
-
-
       {!hideNav && (
         <nav role="navigation" aria-label="Bottom navigation" className="fixed inset-x-0 bottom-0 z-50">
           <div
