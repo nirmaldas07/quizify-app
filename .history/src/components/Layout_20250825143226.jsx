@@ -203,7 +203,7 @@ export default function Layout() {
             height: hideNav
             ? "100dvh"
             : "calc(100dvh - (5.25rem + env(safe-area-inset-bottom)))",
-            paddingTop: "calc(env(safe-area-inset-top) + 12px)", // add 24px top space
+            paddingTop: "calc(env(safe-area-inset-top) + 20px)", // add 24px top space
             overflowY: "auto",
             transform: pulling ? `translateY(${pullDist}px)` : undefined,
             transition: (pulling || refreshing) ? "transform 0.3s ease" : undefined,

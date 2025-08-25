@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function Screen({ title, subtitle, children }) {
   const navigate = useNavigate();
   return (
-    <div className="min-h-full bg-black text-white px-4 pt-12">
+    <div className="min-h-full bg-black text-white px-4 pt-6">
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => navigate(-1)}
