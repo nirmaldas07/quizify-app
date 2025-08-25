@@ -182,7 +182,7 @@ export default function History() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 px-0">
       {/* Header */}
       <div className="bg-gradient-to-b from-black/30 to-transparent">
         <div className="px-4 pt-4 pb-4">

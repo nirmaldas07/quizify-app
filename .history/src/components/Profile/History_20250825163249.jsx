@@ -185,7 +185,7 @@ export default function History() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
       {/* Header */}
       <div className="bg-gradient-to-b from-black/30 to-transparent">
-        <div className="px-4 pt-4 pb-4">
+        <div className="px-1 pt-4 pb-4">
           <div className="flex items-center justify-between mb-3">
             <button 
               onClick={() => window.history.back()}
