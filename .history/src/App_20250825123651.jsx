@@ -7,10 +7,12 @@ import Play from "./components/Play.jsx";
 import Quiz from "./components/Quiz";
 import PartySpin from "./components/PartySpin.jsx";
 
-// Explicit imports from Profile folder (only files you have now)
-import ProfileHome from "./components/Profile/ProfileHome";
-import ProfileLeaderboard from "./components/Profile/Leaderboard";
-import ProfileHistory from "./components/Profile/History";
+// 🔽 Only import components that exist
+import ProfileHome from "./components/Profile/ProfileHome.jsx";
+import ProfileLeaderboard from "./components/Profile/Leaderboard.jsx";
+import ProfileHistory from "./components/Profile/History.jsx";
+import ProfileSettings from "./components/Profile/Settings.jsx";
+import ProfileStreaks from "./components/Profile/Streaks.jsx";
 
 export default function App() {
   return (
@@ -19,13 +21,15 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/play" element={<Play />} />
         <Route path="/play/party" element={<PartySpin />} />
-
-        {/* Profile routes */}
+        
+        {/* Profile routes - only existing components */}
         <Route path="/profile" element={<ProfileHome />} />
         <Route path="/profile/leaderboard" element={<ProfileLeaderboard />} />
         <Route path="/profile/history" element={<ProfileHistory />} />
+        <Route path="/profile/settings" element={<ProfileSettings />} />
+        <Route path="/profile/streaks" element={<ProfileStreaks />} />
 
-        {/* Old leaders path → redirect */}
+        {/* Old leaders path -> redirect to new */}
         <Route path="/leaders" element={<Navigate to="/profile/leaderboard" replace />} />
 
         {/* Quiz flow */}

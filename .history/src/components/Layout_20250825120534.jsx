@@ -63,8 +63,7 @@ export default function Layout() {
     return () => observer.disconnect();
   }, []);
 
-  const HIDE_ROUTES = [/^\/quiz\//, /^\/practice\//];
-  const hideNav = modalOpen || HIDE_ROUTES.some(r => r.test(pathname));
+  const hideNav = modalOpen; // nav hidden when modal is open
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -249,7 +248,7 @@ export default function Layout() {
             <div className="flex h-16 items-center justify-around rounded-2xl border border-base-border bg-base-card shadow-xl">
               <NavItem path="/"            icon={<span className="text-xl">🏠</span>} label="Home" />
               <NavItem path="/play"        icon={<WheelIcon size={24} />}      label="Play" />
-              <NavItem path="/profile" icon={<span className="text-xl">👤</span>} label="Profile" />
+              <NavItem path="/leaderboard" icon={<span className="text-xl">👤</span>} label="Profile" />
             </div>
           </div>
         </nav>

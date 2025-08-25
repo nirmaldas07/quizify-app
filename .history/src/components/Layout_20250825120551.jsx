@@ -63,8 +63,7 @@ export default function Layout() {
     return () => observer.disconnect();
   }, []);
 
-  const HIDE_ROUTES = [/^\/quiz\//, /^\/practice\//];
-  const hideNav = modalOpen || HIDE_ROUTES.some(r => r.test(pathname));
+  const hideNav = modalOpen; // nav hidden when modal is open
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
