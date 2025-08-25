@@ -80,7 +80,7 @@ const playSound = (src, volume = 0.7) => {
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
     <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+      <div className="h-full overflow-y-auto mx-auto max-w-md px-8 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
         <header className="flex items-center mb-8">
           <button 
             onClick={onNavigateHome}
@@ -240,7 +240,7 @@ function WheelClassic({
 
   return (
     <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
-      <div className="h-full overflow-y-auto mx-auto max-w-md px-5 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
+      <div className="h-full overflow-y-auto mx-auto max-w-md px-0 pt-[calc(env(safe-area-inset-top)+3rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
         <header className="flex items-center justify-between mb-8">
           <button
             onClick={onBack}

@@ -88,7 +88,9 @@ export default function ProfileHome() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-2 rounded-xl bg-white/5">
-              <div className="text-orange-400 font-bold text-lg">🔥 {userStats.streak}</div>
+              <div className="text-orange-400 font-bold text-lg">
+                <span className="inline-block animate-bounce">🔥</span> {userStats.streak}
+            </div>
               <div className="text-white/60 text-xs">Day Streak</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-white/5">

@@ -88,7 +88,29 @@ export default function ProfileHome() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-2 rounded-xl bg-white/5">
-              <div className="text-orange-400 font-bold text-lg">🔥 {userStats.streak}</div>
+              <div className="text-orange-400 font-bold text-lg flex items-center gap-1">
+                <svg width="18" height="18" viewBox="0 0 24 24" className="text-orange-500">
+                    <path fill="currentColor" d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13 4.85 13.95 3C13.07 3.13 12.25 3.47 11.52 4.05C10.07 5.04 9.07 6.53 8.84 8.24C8.6 10.24 9.38 12.21 10.89 13.65C11.92 14.65 12.45 16.13 12.09 17.47C11.64 19.25 9.87 20.16 8.16 19.65C8.17 19.77 8.19 19.89 8.22 20.01C8.48 21.36 9.24 22.47 10.38 23.05C11.53 23.63 12.92 23.54 14 22.85C15.3 22.01 15.9 20.22 15.54 18.51C15.24 17.13 14.39 15.54 14.8 14.15C15.12 13.15 15.96 12.19 17.66 11.2Z">
+                    <animateTransform
+                        attributeName="transform"
+                        attributeType="XML"
+                        type="scale"
+                        values="1 1;1.1 0.9;1 1"
+                        dur="1s"
+                        repeatCount="indefinite"
+                    />
+                    </path>
+                    <path fill="#FFD700" d="M13.5 0.67s0.74 2.65 0.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73c0-2.15 0.74-4.8 0.74-4.8S8.6 1.33 10 2.27C11.4 3.21 13.5 0.67 13.5 0.67Z">
+                    <animate
+                        attributeName="opacity"
+                        values="0.7;1;0.7"
+                        dur="0.8s"
+                        repeatCount="indefinite"
+                    />
+                    </path>
+                </svg>
+                {userStats.streak}
+                </div>
               <div className="text-white/60 text-xs">Day Streak</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-white/5">

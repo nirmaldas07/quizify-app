@@ -39,7 +39,7 @@ export default function ProfileHome() {
   const xpPercentage = (userStats.xp % 1000) / 10; // Assuming 1000 XP per level
 
   return (
-    <div className="min-h-full bg-[#0B0C10] text-white pt-12">
+    <div className="min-h-full bg-[#0B0C10] text-white px-4 pt-12">
       {/* Enhanced Header with User Info */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">

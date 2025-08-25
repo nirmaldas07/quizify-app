@@ -53,20 +53,6 @@ export default function Leaderboard() {
   const top3 = currentData.slice(0, 3);
   const rest = currentData.slice(3);
 
-  // Android back button fix
-  useEffect(() => {
-    const handleBackButton = (e) => {
-      e.preventDefault();
-      navigate(-1);
-    };
-
-    window.addEventListener('popstate', handleBackButton);
-    
-    return () => {
-      window.removeEventListener('popstate', handleBackButton);
-    };
-  }, [navigate]);
-
   // Countdown timer
   useEffect(() => {
     const interval = setInterval(() => {
@@ -180,19 +166,13 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      {/* Hall of Fame - With Background, Wider Gap & Animations */}
+      {/* Hall of Fame - With Background & Lower Numbers */}
       <div className="mb-6">
         <h3 className="text-center text-sm font-semibold text-white/80 mb-4">👑 Hall of Fame</h3>
         
-        {/* Background for Hall of Fame with animations */}
-        <div className="bg-gradient-to-b from-white/5 to-white/10 rounded-2xl p-4 border border-white/10 relative overflow-hidden">
-          {/* Animated background elements */}
-          <div className="absolute top-4 left-6 text-2xl opacity-40 animate-pulse">🏆</div>
-          <div className="absolute top-8 right-8 text-lg opacity-40 animate-bounce" style={{ animationDelay: '1s' }}>✨</div>
-          <div className="absolute bottom-6 left-12 text-xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }}>🥇</div>
-          <div className="absolute bottom-4 right-6 text-lg opacity-40 animate-bounce" style={{ animationDelay: '0.5s' }}>⭐</div>
-          
-          <div className="flex items-end justify-center gap-8 relative z-10">
+        {/* Background for Hall of Fame */}
+        <div className="bg-gradient-to-b from-white/5 to-white/10 rounded-2xl p-4 border border-white/10">
+          <div className="flex items-end justify-center gap-10">
             {/* #2 (Silver) */}
             {top3[1] && (
               <div className="flex flex-col items-center">

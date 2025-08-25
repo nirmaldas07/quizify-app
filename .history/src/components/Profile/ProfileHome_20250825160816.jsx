@@ -88,7 +88,21 @@ export default function ProfileHome() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-2 rounded-xl bg-white/5">
-              <div className="text-orange-400 font-bold text-lg">🔥 {userStats.streak}</div>
+              <div className="text-orange-400 font-bold text-lg flex items-center justify-center gap-1">
+                <svg width="18" height="22" viewBox="0 0 24 28" className="text-orange-500">
+                  <path fill="#FF6B35" d="M12 2c1.5 4 4 6 4 10 0 4-2 6-4 6s-4-2-4-6c0-4 2.5-6 4-10z">
+                    <animate attributeName="d" 
+                      values="M12 2c1.5 4 4 6 4 10 0 4-2 6-4 6s-4-2-4-6c0-4 2.5-6 4-10z;
+                              M12 2c2 4 4.5 6.5 4 10.5 0 4-2 5.5-4 5.5s-4-1.5-4-5.5c0-4 2-6.5 4-10.5z;
+                              M12 2c1.5 4 4 6 4 10 0 4-2 6-4 6s-4-2-4-6c0-4 2.5-6 4-10z"
+                      dur="1.5s" repeatCount="indefinite"/>
+                  </path>
+                  <path fill="#FFD700" d="M12 6c1 2 2 3 2 5 0 2-1 3-2 3s-2-1-2-3c0-2 1-3 2-5z">
+                    <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+                  </path>
+                </svg>
+                {userStats.streak}
+              </div>
               <div className="text-white/60 text-xs">Day Streak</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-white/5">
@@ -183,7 +197,18 @@ export default function ProfileHome() {
             className={`${TILE} bg-gradient-to-r from-orange-600/80 to-red-600/80 backdrop-blur-sm border border-orange-500/30`}
           >
             <div className="flex items-center gap-3">
-              <div className="text-2xl">🔥</div>
+              <svg width="20" height="24" viewBox="0 0 24 28" className="text-orange-500">
+                <path fill="#FF6B35" d="M12 2c1.5 4 4 6 4 10 0 4-2 6-4 6s-4-2-4-6c0-4 2.5-6 4-10z">
+                  <animate attributeName="d" 
+                    values="M12 2c1.5 4 4 6 4 10 0 4-2 6-4 6s-4-2-4-6c0-4 2.5-6 4-10z;
+                            M12 2c2 4 4.5 6.5 4 10.5 0 4-2 5.5-4 5.5s-4-1.5-4-5.5c0-4 2-6.5 4-10.5z;
+                            M12 2c1.5 4 4 6 4 10 0 4-2 6-4 6s-4-2-4-6c0-4 2.5-6 4-10z"
+                    dur="1.5s" repeatCount="indefinite"/>
+                </path>
+                <path fill="#FFD700" d="M12 6c1 2 2 3 2 5 0 2-1 3-2 3s-2-1-2-3c0-2 1-3 2-5z">
+                  <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+                </path>
+              </svg>
               <div>
                 <div className="text-sm font-bold">STREAK</div>
                 <div className="text-[11px] opacity-80">{userStats.streak} days strong</div>

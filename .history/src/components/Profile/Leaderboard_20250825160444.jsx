@@ -187,10 +187,10 @@ export default function Leaderboard() {
         {/* Background for Hall of Fame with animations */}
         <div className="bg-gradient-to-b from-white/5 to-white/10 rounded-2xl p-4 border border-white/10 relative overflow-hidden">
           {/* Animated background elements */}
-          <div className="absolute top-4 left-6 text-2xl opacity-40 animate-pulse">🏆</div>
-          <div className="absolute top-8 right-8 text-lg opacity-40 animate-bounce" style={{ animationDelay: '1s' }}>✨</div>
+          <div className="absolute top-4 left-6 text-2xl opacity-80 animate-pulse">🏆</div>
+          <div className="absolute top-8 right-8 text-lg opacity-50 animate-bounce" style={{ animationDelay: '1s' }}>✨</div>
           <div className="absolute bottom-6 left-12 text-xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }}>🥇</div>
-          <div className="absolute bottom-4 right-6 text-lg opacity-40 animate-bounce" style={{ animationDelay: '0.5s' }}>⭐</div>
+          <div className="absolute bottom-4 right-6 text-lg opacity-20 animate-bounce" style={{ animationDelay: '0.5s' }}>⭐</div>
           
           <div className="flex items-end justify-center gap-8 relative z-10">
             {/* #2 (Silver) */}

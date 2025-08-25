@@ -44,7 +44,7 @@ const leagues = [
 
 export default function Leaderboard() {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState({ days: 2, hours: 14, minutes: 17 });
+  const [timeLeft, setTimeLeft] = useState({ days: 2, hours: 14, minutes: 22 });
   const [filter, setFilter] = useState("global");
   
   // Get current data based on filter
@@ -52,20 +52,6 @@ export default function Leaderboard() {
   const currentUser = currentData.find(u => u.you);
   const top3 = currentData.slice(0, 3);
   const rest = currentData.slice(3);
-
-  // Android back button fix
-  useEffect(() => {
-    const handleBackButton = (e) => {
-      e.preventDefault();
-      navigate(-1);
-    };
-
-    window.addEventListener('popstate', handleBackButton);
-    
-    return () => {
-      window.removeEventListener('popstate', handleBackButton);
-    };
-  }, [navigate]);
 
   // Countdown timer
   useEffect(() => {
@@ -80,22 +66,14 @@ export default function Leaderboard() {
     return () => clearInterval(interval);
   }, []);
 
-  // League logic - changes based on user's score and competition level
   const getUserLeague = (score) => {
-    // Dynamic league calculation based on current leaderboard
-    const topScore = Math.max(...currentData.map(u => u.score));
-    const userPercentile = (score / topScore) * 100;
-    
-    if (userPercentile >= 90) return leagues[0]; // Diamond (top 10%)
-    if (userPercentile >= 70) return leagues[1]; // Gold (top 30%)
-    if (userPercentile >= 40) return leagues[2]; // Silver (top 60%)
-    return leagues[3]; // Bronze (bottom 40%)
+    return leagues.find(league => score >= league.min) || leagues[leagues.length - 1];
   };
 
   return (
-    <div className="min-h-screen bg-black text-white pt-12">
-      {/* Enhanced Header - More Compact */}
-      <div className="flex items-center justify-between mb-5">
+    <div className="min-h-screen bg-black text-white px-4 pt-6 pb-8">
+      {/* Enhanced Header */}
+      <div className="flex items-center justify-between mb-6">
         <button onClick={() => navigate(-1)} className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-sm hover:bg-white/10 transition">
           ← Back
         </button>
@@ -110,23 +88,15 @@ export default function Leaderboard() {
         </button>
       </div>
 
-      {/* League Banner - Dynamic Updates */}
-      <div className={`mb-5 rounded-2xl bg-gradient-to-r ${getUserLeague(currentUser?.score).color} p-4 text-center relative overflow-hidden`}>
-        {/* Animated background elements */}
-        <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10 animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-8 -translate-x-8"></div>
-        
-        <div className="relative z-10">
-          <div className="text-2xl mb-1">{getUserLeague(currentUser?.score).icon}</div>
-          <div className="text-sm font-bold text-white">{getUserLeague(currentUser?.score).name} League</div>
-          <div className="text-xs text-white/80">
-            {filter === 'friends' ? 'Competing with friends!' : 'You\'re competing with the best!'}
-          </div>
-        </div>
+      {/* League Banner */}
+      <div className={`mb-6 rounded-2xl bg-gradient-to-r ${getUserLeague(currentUser?.score).color} p-4 text-center`}>
+        <div className="text-2xl mb-1">{getUserLeague(currentUser?.score).icon}</div>
+        <div className="text-sm font-bold text-white">{getUserLeague(currentUser?.score).name} League</div>
+        <div className="text-xs text-white/80">You're competing with the best!</div>
       </div>
 
-      {/* Filter Tabs - More Compact */}
-      <div className="flex gap-2 mb-5">
+      {/* Filter Tabs with Real Data */}
+      <div className="flex gap-2 mb-6">
         {[
           { key: "global", label: "🌍 Global", count: "10M+" },
           { key: "friends", label: "👥 Friends", count: leaderboardData.friends.length },
@@ -135,7 +105,7 @@ export default function Leaderboard() {
           <button
             key={tab.key}
             onClick={() => setFilter(tab.key)}
-            className={`flex-1 px-2 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
+            className={`flex-1 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
               filter === tab.key 
                 ? 'bg-lime-500 text-black shadow-lg scale-105' 
                 : 'border border-white/10 bg-white/5 hover:bg-white/10'
@@ -149,117 +119,105 @@ export default function Leaderboard() {
         ))}
       </div>
 
-      {/* Your Position Card - Compact */}
-      <div className="mb-5 rounded-2xl bg-gradient-to-r from-lime-500/20 to-green-500/20 border border-lime-500/30 p-3">
+      {/* Your Position Card - Dynamic Based on Filter */}
+      <div className="mb-6 rounded-2xl bg-gradient-to-r from-lime-500/20 to-green-500/20 border border-lime-500/30 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-lime-500/20 grid place-items-center text-lg">
+            <div className="w-12 h-12 rounded-xl bg-lime-500/20 grid place-items-center text-xl">
               🧑‍💻
             </div>
             <div>
-              <div className="font-bold text-lime-400 text-sm">Your Position</div>
+              <div className="font-bold text-lime-400">Your Position</div>
               <div className="text-xs text-white/70 flex items-center gap-2">
                 <span>Rank #{currentUser?.rank}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                   currentUser?.trend.startsWith('+') ? 'bg-green-500/20 text-green-400' :
                   currentUser?.trend.startsWith('-') ? 'bg-red-500/20 text-red-400' :
                   'bg-gray-500/20 text-gray-400'
                 }`}>
                   {currentUser?.trend}
                 </span>
-                <span className="text-white/50 text-[10px]">
+                <span className="text-white/50">
                   in {filter === 'global' ? 'Global' : filter === 'friends' ? 'Friends' : 'India'}
                 </span>
               </div>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-lg font-bold text-lime-400">{currentUser?.score} {COIN}</div>
+            <div className="text-xl font-bold text-lime-400">{currentUser?.score} {COIN}</div>
             <div className="text-xs text-white/60">🔥 {currentUser?.streak} streak</div>
           </div>
         </div>
       </div>
 
-      {/* Hall of Fame - With Background, Wider Gap & Animations */}
-      <div className="mb-6">
-        <h3 className="text-center text-sm font-semibold text-white/80 mb-4">👑 Hall of Fame</h3>
+      {/* Cleaned Hall of Fame */}
+      <div className="mb-8">
+        <h3 className="text-center text-sm font-semibold text-white/80 mb-6">👑 Hall of Fame</h3>
         
-        {/* Background for Hall of Fame with animations */}
-        <div className="bg-gradient-to-b from-white/5 to-white/10 rounded-2xl p-4 border border-white/10 relative overflow-hidden">
-          {/* Animated background elements */}
-          <div className="absolute top-4 left-6 text-2xl opacity-40 animate-pulse">🏆</div>
-          <div className="absolute top-8 right-8 text-lg opacity-40 animate-bounce" style={{ animationDelay: '1s' }}>✨</div>
-          <div className="absolute bottom-6 left-12 text-xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }}>🥇</div>
-          <div className="absolute bottom-4 right-6 text-lg opacity-40 animate-bounce" style={{ animationDelay: '0.5s' }}>⭐</div>
-          
-          <div className="flex items-end justify-center gap-8 relative z-10">
-            {/* #2 (Silver) */}
-            {top3[1] && (
-              <div className="flex flex-col items-center">
-                <div className="relative mb-2">
-                  <AvatarCircle src={top3[1].avatar} fallback={top3[1].name} size={56} />
-                  {/* Number positioned lower */}
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-7 h-7 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full grid place-items-center text-sm font-bold text-black shadow-lg">
-                    2
-                  </div>
+        <div className="flex items-end justify-center gap-6">
+          {/* #2 (Silver) */}
+          {top3[1] && (
+            <div className="flex flex-col items-center">
+              <div className="relative mb-3">
+                <AvatarCircle src={top3[1].avatar} fallback={top3[1].name} size={64} />
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-8 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full grid place-items-center text-sm font-bold text-black shadow-lg">
+                  2
                 </div>
-                <div className="text-sm font-semibold mb-1 mt-1">{trimName(top3[1].name, 8)}</div>
-                <div className="text-xs text-lime-400 font-bold">{top3[1].score} {COIN}</div>
               </div>
-            )}
+              <div className="text-sm font-semibold mb-1">{trimName(top3[1].name, 10)}</div>
+              <div className="text-xs text-lime-400 font-bold">{top3[1].score} {COIN}</div>
+            </div>
+          )}
 
-            {/* #1 (Gold) - Elevated */}
-            {top3[0] && (
-              <div className="flex flex-col items-center -mb-3">
-                <div className="relative mb-2">
-                  <AvatarCircle src={top3[0].avatar} fallback={top3[0].name} size={72} />
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Crown />
-                  </div>
-                  {/* Number positioned lower */}
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full grid place-items-center text-base font-bold text-black shadow-lg animate-pulse">
-                    1
-                  </div>
+          {/* #1 (Gold) - Elevated */}
+          {top3[0] && (
+            <div className="flex flex-col items-center -mb-4">
+              <div className="relative mb-3">
+                <AvatarCircle src={top3[0].avatar} fallback={top3[0].name} size={80} />
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <Crown />
                 </div>
-                <div className="text-sm font-bold mb-1 mt-1">{trimName(top3[0].name, 8)}</div>
-                <div className="text-sm text-lime-400 font-bold mb-1">{top3[0].score} {COIN}</div>
-                <div className="px-2 py-1 bg-yellow-400/20 rounded-full text-[9px] text-yellow-400 font-bold">
-                  CHAMPION
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full grid place-items-center text-lg font-bold text-black shadow-lg animate-pulse">
+                  1
                 </div>
               </div>
-            )}
+              <div className="text-base font-bold mb-1">{trimName(top3[0].name, 10)}</div>
+              <div className="text-sm text-lime-400 font-bold mb-1">{top3[0].score} {COIN}</div>
+              <div className="px-3 py-1 bg-yellow-400/20 rounded-full text-[10px] text-yellow-400 font-bold">
+                CHAMPION
+              </div>
+            </div>
+          )}
 
-            {/* #3 (Bronze) */}
-            {top3[2] && (
-              <div className="flex flex-col items-center">
-                <div className="relative mb-2">
-                  <AvatarCircle src={top3[2].avatar} fallback={top3[2].name} size={56} />
-                  {/* Number positioned lower */}
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-7 h-7 bg-gradient-to-br from-orange-600 to-red-600 rounded-full grid place-items-center text-sm font-bold text-white shadow-lg">
-                    3
-                  </div>
+          {/* #3 (Bronze) */}
+          {top3[2] && (
+            <div className="flex flex-col items-center">
+              <div className="relative mb-3">
+                <AvatarCircle src={top3[2].avatar} fallback={top3[2].name} size={64} />
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-8 bg-gradient-to-br from-orange-600 to-red-600 rounded-full grid place-items-center text-sm font-bold text-white shadow-lg">
+                  3
                 </div>
-                <div className="text-sm font-semibold mb-1 mt-1">{trimName(top3[2].name, 8)}</div>
-                <div className="text-xs text-lime-400 font-bold">{top3[2].score} {COIN}</div>
               </div>
-            )}
-          </div>
+              <div className="text-sm font-semibold mb-1">{trimName(top3[2].name, 10)}</div>
+              <div className="text-xs text-lime-400 font-bold">{top3[2].score} {COIN}</div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Rankings - Reduced Row Height */}
+      {/* Rest of Leaderboard */}
       {rest.length > 0 && (
-        <div className="rounded-3xl bg-white/5 border border-white/10 p-2 mb-4">
-          <div className="flex justify-between items-center mb-2 px-2">
+        <div className="rounded-3xl bg-white/5 border border-white/10 p-3">
+          <div className="flex justify-between items-center mb-3 px-2">
             <h3 className="text-sm font-semibold">Rankings</h3>
             <div className="text-xs text-white/60">Live updates</div>
           </div>
           
-          <ul className="space-y-1.5">
+          <ul className="space-y-2">
             {rest.map((u, index) => (
               <li
                 key={`${filter}-${u.rank}`}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-300 ${
+                className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 ${
                   u.you 
                     ? "bg-lime-500/90 text-black shadow-lg shadow-lime-500/20 scale-[1.02]" 
                     : "bg-white/5 hover:bg-white/10"
@@ -269,17 +227,17 @@ export default function Leaderboard() {
                   animation: "fadeInUp 0.6s ease-out forwards"
                 }}
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-3">
                   <RankBadge n={u.rank} you={u.you} />
-                  <AvatarCircle src={u.avatar} fallback={u.name} size={36} />
+                  <AvatarCircle src={u.avatar} fallback={u.name} size={44} />
                   
                   <div className="flex flex-col leading-tight">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold">{trimName(u.name, 12)}</span>
+                      <span className="text-sm font-semibold">{u.name}</span>
                       <span className="text-xs">{u.country}</span>
-                      {u.friend && <span className="text-[9px] bg-blue-500/20 text-blue-400 px-1 py-0.5 rounded-full">Friend</span>}
+                      {u.friend && <span className="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded-full">Friend</span>}
                     </div>
-                    <div className={`text-xs flex items-center gap-1.5 ${
+                    <div className={`text-xs flex items-center gap-2 ${
                       u.you ? "text-black/70" : "text-white/60"
                     }`}>
                       <span>{u.handle}</span>
@@ -293,7 +251,7 @@ export default function Leaderboard() {
                     <span>{u.score}</span>
                     <span className={u.you ? "opacity-90" : "opacity-80"}>{COIN}</span>
                   </div>
-                  <div className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
+                  <div className={`text-xs px-2 py-0.5 rounded-full font-bold ${
                     u.trend.startsWith('+') ? 'bg-green-500/20 text-green-400' :
                     u.trend.startsWith('-') ? 'bg-red-500/20 text-red-400' :
                     'bg-gray-500/20 text-gray-400'
@@ -307,9 +265,9 @@ export default function Leaderboard() {
         </div>
       )}
 
-      {/* Dynamic Call to Action - More Compact */}
+      {/* Dynamic Call to Action */}
       {currentUser && currentUser.rank > 1 && (
-        <div className="mb-4 p-3 rounded-2xl bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 text-center">
+        <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 text-center">
           <div className="text-sm font-semibold mb-2">🚀 Climb Higher!</div>
           <div className="text-xs text-white/70 mb-3">
             {filter === 'friends' && currentUser.rank === 1 
@@ -320,7 +278,7 @@ export default function Leaderboard() {
           {!(filter === 'friends' && currentUser.rank === 1) && (
             <button 
               onClick={() => navigate("/play")}
-              className="px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-sm font-bold hover:scale-105 transition-transform"
+              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-sm font-bold hover:scale-105 transition-transform"
             >
               Play Now 🎮
             </button>
@@ -344,7 +302,7 @@ export default function Leaderboard() {
   );
 }
 
-/* ================= Helper Components ================= */
+/* ================= Cleaned Helper Components ================= */
 
 function AvatarCircle({ src, fallback, size = 56 }) {
   const initials = getInitials(fallback);
@@ -356,7 +314,7 @@ function AvatarCircle({ src, fallback, size = 56 }) {
       {src ? (
         <img src={src} alt="" className="w-full h-full object-cover" />
       ) : (
-        <span className="text-sm font-semibold">{initials}</span>
+        <span className="text-lg font-semibold">{initials}</span>
       )}
     </div>
   );
@@ -364,7 +322,7 @@ function AvatarCircle({ src, fallback, size = 56 }) {
 
 function Crown() {
   return (
-    <div className="w-7 h-5 bg-gradient-to-t from-yellow-400 to-yellow-300 rounded-b-lg shadow-lg relative">
+    <div className="w-8 h-6 bg-gradient-to-t from-yellow-400 to-yellow-300 rounded-b-lg shadow-lg relative">
       <svg viewBox="0 0 100 40" className="w-full h-full">
         <path d="M15,35 L15,18 L35,28 L50,10 L65,28 L85,18 L85,35 Z" fill="url(#crownGradient)" />
         <defs>
@@ -374,7 +332,7 @@ function Crown() {
           </linearGradient>
         </defs>
       </svg>
-      <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>
+      <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-400 rounded-full animate-pulse"></div>
     </div>
   );
 }
@@ -382,7 +340,7 @@ function Crown() {
 function RankBadge({ n, you }) {
   return (
     <div
-      className={`w-7 h-7 grid place-items-center rounded-full text-sm font-bold ${
+      className={`w-8 h-8 grid place-items-center rounded-full text-sm font-bold ${
         you 
           ? "bg-black/10 text-black" 
           : "bg-white/10 text-white"
