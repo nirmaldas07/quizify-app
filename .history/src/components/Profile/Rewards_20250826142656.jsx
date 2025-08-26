@@ -320,8 +320,9 @@ const RewardsJourney = () => {
 
         .title-row {
           display: flex;
-          justify-content: space-between;
+          flex-direction: column;
           align-items: center;
+          gap: 12px;
           margin-bottom: 8px;
         }
 

@@ -2,40 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RewardsJourney = () => {
-  // Track navigation source
-  const [navigationSource, setNavigationSource] = useState(null);
-  
-  useEffect(() => {
-    // Check if we came from profile
-    if (typeof window !== 'undefined') {
-      const source = sessionStorage.getItem('navigationSource');
-      if (source) {
-        setNavigationSource(source);
-      }
-    }
-  }, []);
-
   // Navigation handlers
   const handleNavigation = (path) => {
     if (typeof window !== 'undefined') {
-      // Store current location as source for next navigation
-      sessionStorage.setItem('navigationSource', '/rewards');
       window.location.href = path;
     }
   };
   
   const handleBack = () => {
     if (typeof window !== 'undefined') {
-      // If we came from profile, go back to profile
-      const source = sessionStorage.getItem('navigationSource');
-      if (source === '/profile') {
-        window.location.href = '/profile';
-      } else {
-        // Default back to profile
-        window.location.href = '/profile';
-      }
-      // Clear the source after using
-      sessionStorage.removeItem('navigationSource');
+      // Navigate back to profile/rewards instead of general back
+      window.location.href = '/profile';
     }
   };
   
@@ -124,20 +101,6 @@ const RewardsJourney = () => {
     }
   };
 
-  const scrollToReward = (index) => {
-    const element = journeyRef.current?.querySelector(`[data-index="${index}"]`);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const targetY = rect.top + scrollTop - (window.innerHeight / 2) + 50;
-      
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   const claimReward = (index, reward) => {
     if (claimedRewards.includes(index)) {
       return;
@@ -212,21 +175,23 @@ const RewardsJourney = () => {
       // After animations, move to next reward
       setTimeout(() => {
         if (currentProgress < rewards.length - 1) {
+          setIsMoving(true);
+          playSound(progressSound);
+          
+          // Auto-scroll to next reward FIRST (like in reference code)
           const nextIndex = currentProgress + 1;
+          const nextElement = journeyRef.current?.querySelector(`[data-index="${nextIndex}"]`);
+          if (nextElement) {
+            const rect = nextElement.getBoundingClientRect();
+            const offset = window.pageYOffset + rect.top - (window.innerHeight / 2) + 100;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+          }
           
-          // First scroll to the next reward
-          scrollToReward(nextIndex);
-          
-          // Play sound and update progress simultaneously
+          // Then move progress after scroll starts
           setTimeout(() => {
-            setIsMoving(true);
-            playSound(progressSound);
-            setCurrentProgress(nextIndex);
-            
-            setTimeout(() => {
-              setIsMoving(false);
-            }, 500);
-          }, 300);
+            setCurrentProgress(prev => prev + 1);
+            setIsMoving(false);
+          }, 1000);
         }
       }, 1200);
     }, 1500);
@@ -276,7 +241,7 @@ const RewardsJourney = () => {
         }
 
         .non-sticky-header {
-          padding: 40px 16px 16px 16px;
+          padding: 16px;
         }
 
         .back-button {
@@ -454,78 +419,68 @@ const RewardsJourney = () => {
 
         .cards-section {
           grid-column: span 3;
-          padding: 12px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 8px;
           background: rgba(255, 255, 255, 0.02);
           border-radius: 8px;
         }
 
         .cards-label {
-          font-size: 11px;
+          font-size: 10px;
           color: rgba(255, 255, 255, 0.5);
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          margin-bottom: 10px;
-          text-align: center;
         }
 
-        .card-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-          gap: 10px;
-          max-width: 300px;
-          margin: 0 auto;
+        .card-deck {
+          display: flex;
+          gap: -14px;
+          flex: 1;
+          justify-content: center;
         }
 
-        .card-item {
+        .card-wrapper {
           position: relative;
           cursor: pointer;
           transition: all 0.2s;
+          z-index: 1;
         }
 
-        .card-item:hover {
-          transform: translateY(-4px) scale(1.05);
+        .card-wrapper:hover {
+          transform: translateY(-6px) rotate(-3deg);
+          z-index: 10;
         }
 
-        .large-card {
-          width: 100%;
-          height: 90px;
+        .reward-card {
+          width: 36px;
+          height: 48px;
           background: linear-gradient(135deg, #ffffff 0%, #f5f5f7 100%);
-          border-radius: 10px;
+          border-radius: 6px;
           display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 4px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          font-size: 18px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
           border: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .large-card-icon {
-          font-size: 32px;
-        }
-
-        .large-card-name {
-          font-size: 10px;
-          color: #333;
-          font-weight: 600;
         }
 
         .card-count-badge {
           position: absolute;
-          bottom: -4px;
-          right: -4px;
+          top: -5px;
+          right: -5px;
           background: #5E5CE6;
           color: white;
-          min-width: 20px;
-          height: 20px;
-          border-radius: 10px;
+          min-width: 16px;
+          height: 16px;
+          border-radius: 8px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 11px;
+          font-size: 9px;
           font-weight: 700;
-          padding: 0 6px;
-          box-shadow: 0 2px 6px rgba(94, 92, 230, 0.4);
+          padding: 0 4px;
         }
 
         .cards-section.animating {
@@ -754,7 +709,7 @@ const RewardsJourney = () => {
             opacity: 1;
           }
           100% {
-            transform: translate(calc(50vw - var(--startX)), calc(-50vh + 200px)) scale(0.5);
+            transform: translate(calc(50vw - var(--startX)), calc(-50vh + 150px)) scale(0.5);
             opacity: 0;
           }
         }
@@ -914,21 +869,21 @@ const RewardsJourney = () => {
               <div className="info-label">Vehicle</div>
             </div>
             <div className={`cards-section ${cardSectionAnimating ? 'animating' : ''}`}>
-              <div className="cards-label">Your Cards</div>
-              <div className="card-grid">
+              <div className="cards-label">Cards</div>
+              <div className="card-deck">
                 {collectedCards.map((card, index) => (
                   <div 
                     key={index} 
-                    className="card-item"
+                    className="card-wrapper" 
+                    style={{ marginLeft: index > 0 ? '-14px' : '0' }}
                     onClick={() => setShowCardDetail(card)}
                   >
-                    <div className="large-card">
-                      <div className="large-card-icon">{card.icon}</div>
-                      <div className="large-card-name">{card.name}</div>
+                    <div className="reward-card">
+                      {card.icon}
+                      {card.count > 1 && (
+                        <div className="card-count-badge">{card.count}</div>
+                      )}
                     </div>
-                    {card.count > 1 && (
-                      <div className="card-count-badge">{card.count}</div>
-                    )}
                   </div>
                 ))}
               </div>

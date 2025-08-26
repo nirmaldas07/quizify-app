@@ -276,7 +276,7 @@ const RewardsJourney = () => {
         }
 
         .non-sticky-header {
-          padding: 40px 16px 16px 16px;
+          padding: 24px 16px 16px 16px;
         }
 
         .back-button {

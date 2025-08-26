@@ -276,7 +276,7 @@ const RewardsJourney = () => {
         }
 
         .non-sticky-header {
-          padding: 40px 16px 16px 16px;
+          padding: 24px 16px 16px 16px;
         }
 
         .back-button {
@@ -859,7 +859,7 @@ const RewardsJourney = () => {
         }
       `}</style>
 
-      <div className="non-sticky-header">
+      <div className="non-sticky-header pt-12">
         <button className="back-button" onClick={handleBack}>
           ← Back
         </button>

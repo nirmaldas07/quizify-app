@@ -22,7 +22,7 @@ export default function Badges() {
       <style jsx>{`
         .badges-screen {
           min-height: 100vh;
-          background: linear-gradient(180deg, #3d4491 0%, #6b63b5 50%, #8679c7 100%);
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           padding: 20px;
           font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
@@ -59,7 +59,6 @@ export default function Badges() {
           cursor: pointer;
           transition: all 0.2s;
           margin-bottom: 20px;
-          margin-top: 12px;
         }
 
         .back-button:hover {
@@ -324,7 +323,7 @@ export default function Badges() {
         }
 
         .modal-content {
-          background: linear-gradient(135deg, rgba(45, 45, 65, 0.98), rgba(55, 55, 75, 0.95));
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
           border-radius: 24px;
           padding: 28px;
           max-width: 320px;
@@ -332,7 +331,6 @@ export default function Badges() {
           text-align: center;
           animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
-          border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         @keyframes slideUp {
@@ -359,7 +357,7 @@ export default function Badges() {
         .modal-title {
           font-size: 24px;
           font-weight: 700;
-          color: #ffffff;
+          color: #1a1a1a;
           margin-bottom: 8px;
         }
 
@@ -380,13 +378,13 @@ export default function Badges() {
 
         .modal-description {
           font-size: 14px;
-          color: rgba(255, 255, 255, 0.7);
+          color: #4B5563;
           line-height: 1.5;
           margin-bottom: 16px;
         }
 
         .modal-progress-section {
-          background: rgba(255, 255, 255, 0.08);
+          background: #F3F4F6;
           border-radius: 12px;
           padding: 12px;
           margin-bottom: 20px;
@@ -394,14 +392,14 @@ export default function Badges() {
 
         .modal-progress-label {
           font-size: 12px;
-          color: rgba(255, 255, 255, 0.5);
+          color: #6B7280;
           margin-bottom: 8px;
         }
 
         .modal-progress-bar {
           width: 100%;
           height: 8px;
-          background: rgba(255, 255, 255, 0.15);
+          background: #E5E7EB;
           border-radius: 100px;
           overflow: hidden;
         }
@@ -416,7 +414,7 @@ export default function Badges() {
         .modal-progress-text {
           font-size: 18px;
           font-weight: 700;
-          color: #ffffff;
+          color: #1a1a1a;
           margin-top: 8px;
         }
 

@@ -2,40 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RewardsJourney = () => {
-  // Track navigation source
-  const [navigationSource, setNavigationSource] = useState(null);
-  
-  useEffect(() => {
-    // Check if we came from profile
-    if (typeof window !== 'undefined') {
-      const source = sessionStorage.getItem('navigationSource');
-      if (source) {
-        setNavigationSource(source);
-      }
-    }
-  }, []);
-
   // Navigation handlers
   const handleNavigation = (path) => {
     if (typeof window !== 'undefined') {
-      // Store current location as source for next navigation
-      sessionStorage.setItem('navigationSource', '/rewards');
       window.location.href = path;
     }
   };
   
   const handleBack = () => {
     if (typeof window !== 'undefined') {
-      // If we came from profile, go back to profile
-      const source = sessionStorage.getItem('navigationSource');
-      if (source === '/profile') {
-        window.location.href = '/profile';
-      } else {
-        // Default back to profile
-        window.location.href = '/profile';
-      }
-      // Clear the source after using
-      sessionStorage.removeItem('navigationSource');
+      // Navigate back to profile/rewards instead of general back
+      window.location.href = '/profile';
     }
   };
   
@@ -124,20 +101,6 @@ const RewardsJourney = () => {
     }
   };
 
-  const scrollToReward = (index) => {
-    const element = journeyRef.current?.querySelector(`[data-index="${index}"]`);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const targetY = rect.top + scrollTop - (window.innerHeight / 2) + 50;
-      
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   const claimReward = (index, reward) => {
     if (claimedRewards.includes(index)) {
       return;
@@ -212,21 +175,21 @@ const RewardsJourney = () => {
       // After animations, move to next reward
       setTimeout(() => {
         if (currentProgress < rewards.length - 1) {
+          setIsMoving(true);
+          playSound(progressSound);
+          
+          // Auto-scroll to next reward FIRST (like in reference code)
           const nextIndex = currentProgress + 1;
+          const nextElement = journeyRef.current?.querySelector(`[data-index="${nextIndex}"]`);
+          if (nextElement) {
+            nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
           
-          // First scroll to the next reward
-          scrollToReward(nextIndex);
-          
-          // Play sound and update progress simultaneously
+          // Then move progress after scroll starts
           setTimeout(() => {
-            setIsMoving(true);
-            playSound(progressSound);
-            setCurrentProgress(nextIndex);
-            
-            setTimeout(() => {
-              setIsMoving(false);
-            }, 500);
-          }, 300);
+            setCurrentProgress(prev => prev + 1);
+            setIsMoving(false);
+          }, 1000);
         }
       }, 1200);
     }, 1500);
@@ -276,136 +239,113 @@ const RewardsJourney = () => {
         }
 
         .non-sticky-header {
-          padding: 40px 16px 16px 16px;
+          padding: 20px;
         }
 
         .back-button {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          padding: 8px 16px;
-          background: rgba(255, 255, 255, 0.06);
+          gap: 8px;
+          padding: 10px 20px;
+          background: rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 10px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 14px;
           color: white;
-          font-size: 14px;
+          font-size: 15px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s;
         }
 
         .back-button:hover {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.12);
         }
 
         .sticky-section {
           position: sticky;
           top: 0;
           z-index: 50;
-          background: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
-          backdrop-filter: blur(20px);
-          padding: 12px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-wrapper {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 12px;
-          margin-bottom: 10px;
-        }
-
-        .title-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 8px;
+          background: linear-gradient(180deg, rgba(26, 26, 46, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%);
+          backdrop-filter: blur(30px);
+          padding: 0 16px 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .title {
-          font-size: 22px;
+          font-size: 28px;
           font-weight: 700;
-          margin: 0;
-          letter-spacing: -0.3px;
+          margin: 0 0 4px;
+          padding-top: 16px;
+          letter-spacing: -0.5px;
         }
 
         .subtitle {
-          font-size: 12px;
-          color: rgba(255, 255, 255, 0.5);
-          margin: 0;
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.6);
+          margin-bottom: 16px;
+          font-weight: 400;
         }
 
-        .play-quiz-btn {
-          padding: 7px 16px;
-          background: #5E5CE6;
-          border: none;
-          border-radius: 8px;
-          color: white;
-          font-size: 12px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .play-quiz-btn:hover {
-          background: #6E6CF6;
-        }
-
-        .balance-row {
+        .balance-section {
+          padding: 14px;
+          background: rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
           display: flex;
+          justify-content: space-between;
           align-items: center;
-          gap: 16px;
+          margin-bottom: 12px;
         }
 
-        .balance-item {
+        .balance-left {
           flex: 1;
-          display: flex;
-          align-items: center;
-          gap: 6px;
+          position: relative;
         }
 
         .balance-label {
-          font-size: 10px;
-          color: rgba(255, 255, 255, 0.4);
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.5);
+          margin-bottom: 6px;
           text-transform: uppercase;
-          letter-spacing: 0.8px;
+          letter-spacing: 1.2px;
+          font-weight: 600;
         }
 
         .balance-value {
-          font-size: 20px;
-          font-weight: 600;
+          font-size: 28px;
+          font-weight: 700;
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 8px;
+          letter-spacing: -0.5px;
           position: relative;
         }
 
         .balance-value.animating {
-          animation: pulse 0.4s ease;
+          animation: pulse 0.5s ease;
         }
 
         @keyframes pulse {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
+          50% { transform: scale(1.1); }
         }
 
         .value-change {
           position: absolute;
-          top: -14px;
+          top: -20px;
           right: 0;
-          font-size: 11px;
+          font-size: 18px;
           font-weight: 600;
           color: #34C759;
-          animation: slideUp 0.8s ease forwards;
+          animation: slideUp 1s ease forwards;
         }
 
         @keyframes slideUp {
           from {
             opacity: 0;
-            transform: translateY(5px);
+            transform: translateY(10px);
           }
           to {
             opacity: 1;
@@ -413,132 +353,139 @@ const RewardsJourney = () => {
           }
         }
 
-        .stats-cards-container {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 10px;
+        .earn-more {
+          text-align: right;
         }
 
-        .info-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 8px;
-        }
-
-        .info-card {
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 10px;
-          padding: 8px;
-          text-align: center;
-        }
-
-        .info-icon {
-          font-size: 18px;
-          margin-bottom: 2px;
-        }
-
-        .info-value {
+        .play-quiz-btn {
+          padding: 10px 24px;
+          background: #5E5CE6;
+          border: none;
+          border-radius: 12px;
+          color: white;
           font-size: 14px;
           font-weight: 600;
-          margin-bottom: 2px;
-        }
-
-        .info-label {
-          font-size: 9px;
-          color: rgba(255, 255, 255, 0.4);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-
-        .cards-section {
-          grid-column: span 3;
-          padding: 12px;
-          background: rgba(255, 255, 255, 0.02);
-          border-radius: 8px;
-        }
-
-        .cards-label {
-          font-size: 11px;
-          color: rgba(255, 255, 255, 0.5);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 10px;
-          text-align: center;
-        }
-
-        .card-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-          gap: 10px;
-          max-width: 300px;
-          margin: 0 auto;
-        }
-
-        .card-item {
-          position: relative;
           cursor: pointer;
           transition: all 0.2s;
         }
 
-        .card-item:hover {
-          transform: translateY(-4px) scale(1.05);
+        .play-quiz-btn:hover {
+          background: #6E6CF6;
+          transform: scale(1.02);
         }
 
-        .large-card {
-          width: 100%;
-          height: 90px;
+        .stats-row {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 12px;
+          justify-content: center;
+        }
+
+        .stat-card {
+          flex: 1;
+          max-width: 150px;
+          padding: 12px;
+          background: rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          position: relative;
+        }
+
+        .stat-card.animating {
+          animation: pulse 0.5s ease;
+        }
+
+        .rewards-inventory {
+          padding: 14px;
+          background: rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          transition: all 0.3s;
+        }
+
+        .rewards-inventory.animating {
+          animation: highlight 0.5s ease;
+        }
+
+        @keyframes highlight {
+          0%, 100% { 
+            background: rgba(255, 255, 255, 0.06);
+            transform: scale(1);
+          }
+          50% { 
+            background: rgba(94, 92, 230, 0.15);
+            transform: scale(1.02);
+          }
+        }
+
+        .inventory-label {
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.5);
+          margin-bottom: 14px;
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 1.2px;
+          font-weight: 600;
+        }
+
+        .card-deck {
+          display: flex;
+          gap: -20px;
+          justify-content: center;
+          padding: 0 20px;
+          overflow-x: auto;
+          overflow-y: visible;
+        }
+
+        .card-wrapper {
+          position: relative;
+          cursor: pointer;
+          transition: all 0.3s;
+          z-index: 1;
+        }
+
+        .card-wrapper:hover {
+          transform: translateY(-10px) rotate(-5deg);
+          z-index: 10;
+        }
+
+        .reward-card {
+          width: 52px;
+          height: 68px;
           background: linear-gradient(135deg, #ffffff 0%, #f5f5f7 100%);
           border-radius: 10px;
           display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 4px;
+          font-size: 26px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           border: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .large-card-icon {
-          font-size: 32px;
-        }
-
-        .large-card-name {
-          font-size: 10px;
-          color: #333;
-          font-weight: 600;
+          position: relative;
         }
 
         .card-count-badge {
           position: absolute;
-          bottom: -4px;
-          right: -4px;
+          top: -8px;
+          right: -8px;
           background: #5E5CE6;
           color: white;
-          min-width: 20px;
-          height: 20px;
-          border-radius: 10px;
+          min-width: 22px;
+          height: 22px;
+          border-radius: 11px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 11px;
           font-weight: 700;
           padding: 0 6px;
-          box-shadow: 0 2px 6px rgba(94, 92, 230, 0.4);
-        }
-
-        .cards-section.animating {
-          animation: highlight 0.4s ease;
-        }
-
-        @keyframes highlight {
-          0%, 100% { 
-            background: rgba(255, 255, 255, 0.02);
-          }
-          50% { 
-            background: rgba(94, 92, 230, 0.12);
-          }
         }
 
         .scrollable-journey {
@@ -866,73 +813,57 @@ const RewardsJourney = () => {
       </div>
 
       <div className="sticky-section">
-        <div className="header-wrapper">
-          <div className="title-row">
-            <div>
-              <h1 className="title">Rewards</h1>
-              <p className="subtitle">Claim amazing prizes</p>
+        <h1 className="title">Rewards</h1>
+        <p className="subtitle">Claim amazing prizes</p>
+
+        <div className="balance-section">
+          <div className="balance-left">
+            <div className="balance-label">Your Balance</div>
+            <div className={`balance-value ${animatingCoins ? 'animating' : ''}`}>
+              {totalCoins.toLocaleString()} 🪙
+              {animatingCoins && (
+                <span className="value-change">+{coinChange}</span>
+              )}
             </div>
+          </div>
+          <div className="earn-more">
+            <div className="balance-label">Earn More</div>
             <button className="play-quiz-btn" onClick={() => handleNavigation('/play')}>
               Play Quiz
             </button>
           </div>
-          <div className="balance-row">
-            <div className="balance-item">
-              <div>
-                <div className="balance-label">Balance</div>
-                <div className={`balance-value ${animatingCoins ? 'animating' : ''}`}>
-                  {totalCoins.toLocaleString()} 🪙
-                  {animatingCoins && (
-                    <span className="value-change">+{coinChange}</span>
-                  )}
-                </div>
-              </div>
-            </div>
+        </div>
+
+        <div className="stats-row">
+          <div className={`stat-card ${animatingLives ? 'animating' : ''}`}>
+            ❤️ {totalLives}
+            {animatingLives && (
+              <span className="value-change">+{lifeChange}</span>
+            )}
+          </div>
+          <div className="stat-card">
+            ⭐ Level 5
           </div>
         </div>
 
-        <div className="stats-cards-container">
-          <div className="info-grid">
-            <div className="info-card">
-              <div className="info-icon">❤️</div>
-              <div className={`info-value ${animatingLives ? 'animating' : ''}`}>
-                {totalLives}
-                {animatingLives && (
-                  <span className="value-change">+{lifeChange}</span>
-                )}
+        <div className={`rewards-inventory ${cardSectionAnimating ? 'animating' : ''}`}>
+          <div className="inventory-label">Your Cards</div>
+          <div className="card-deck">
+            {collectedCards.map((card, index) => (
+              <div 
+                key={index} 
+                className="card-wrapper" 
+                style={{ marginLeft: index > 0 ? '-20px' : '0' }}
+                onClick={() => setShowCardDetail(card)}
+              >
+                <div className="reward-card">
+                  {card.icon}
+                  {card.count > 1 && (
+                    <div className="card-count-badge">{card.count}</div>
+                  )}
+                </div>
               </div>
-              <div className="info-label">Lives</div>
-            </div>
-            <div className="info-card">
-              <div className="info-icon">⭐</div>
-              <div className="info-value">5</div>
-              <div className="info-label">Level</div>
-            </div>
-            <div className="info-card">
-              <div className="info-icon">{vehicles[currentVehicle].icon}</div>
-              <div className="info-value">{vehicles[currentVehicle].name}</div>
-              <div className="info-label">Vehicle</div>
-            </div>
-            <div className={`cards-section ${cardSectionAnimating ? 'animating' : ''}`}>
-              <div className="cards-label">Your Cards</div>
-              <div className="card-grid">
-                {collectedCards.map((card, index) => (
-                  <div 
-                    key={index} 
-                    className="card-item"
-                    onClick={() => setShowCardDetail(card)}
-                  >
-                    <div className="large-card">
-                      <div className="large-card-icon">{card.icon}</div>
-                      <div className="large-card-name">{card.name}</div>
-                    </div>
-                    {card.count > 1 && (
-                      <div className="card-count-badge">{card.count}</div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
