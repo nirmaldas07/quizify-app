@@ -3,11 +3,14 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --host",
+    "build:mobile": "vite build && npx cap copy && npx cap sync"
   },
   "devDependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/ios": "^7.4.3",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
@@ -15,6 +18,8 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@capacitor/cli": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
     "framer-motion": "^12.23.12",
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
