@@ -6,7 +6,7 @@ import CoinFly from "./CoinFly";
 
 /* Categories Configuration */
 const categories = [
-  { name: "GK", slug: "general-knowledge", questions: 50, icon: "🧠", color: "#FF6B6B", gradient: "from-red-500 to-pink-500" },
+  { name: "General Knowledge", slug: "general-knowledge", questions: 50, icon: "🧠", color: "#FF6B6B", gradient: "from-red-500 to-pink-500" },
   { name: "Science", slug: "science", questions: 45, icon: "🧪", color: "#4ECDC4", gradient: "from-cyan-500 to-teal-500" },
   { name: "Fun Facts", slug: "fun-facts", questions: 30, icon: "🎉", color: "#FFD93D", gradient: "from-yellow-400 to-orange-500" },
   { name: "History", slug: "history", questions: 42, icon: "🏺", color: "#A8E6CF", gradient: "from-green-400 to-emerald-500" },
@@ -236,16 +236,6 @@ export default function Home() {
             100% { background-position: 200% center; }
           }
           
-          @keyframes coinRotate {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-          }
-          
-          @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
-          }
-          
           .flip-card {
             perspective: 1000px;
           }
@@ -265,22 +255,6 @@ export default function Home() {
           
           .flip-card-back {
             transform: rotateY(180deg);
-          }
-          
-          .coin-3d {
-            animation: coinRotate 2s linear infinite;
-            transform-style: preserve-3d;
-          }
-          
-          .magic-gradient {
-            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B6B, #FF1493, #9370DB, #4169E1, #00CED1, #FFD700);
-            background-size: 400% 400%;
-            animation: gradientShift 8s ease infinite;
-          }
-          
-          @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
           }
         `}</style>
 
@@ -455,27 +429,9 @@ export default function Home() {
 
         {/* Quiz Configuration Modal */}
         {showQuizConfig && selectedCategory && (
-          <div 
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setShowQuizConfig(false);
-              }
-            }}
-          >
-            <div 
-              className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">{selectedCategory.name} Quiz</h3>
-                <button
-                  onClick={() => setShowQuizConfig(false)}
-                  className="w-8 h-8 rounded-lg bg-white/5 border border-base-border grid place-items-center hover:bg-white/10 transition"
-                >
-                  ✕
-                </button>
-              </div>
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border">
+              <h3 className="text-xl font-bold mb-4">{selectedCategory.name} Quiz</h3>
               
               <div className="mb-4">
                 <label className="text-sm text-base-muted mb-2 block">Difficulty</label>
@@ -547,27 +503,9 @@ export default function Home() {
 
         {/* Practice Configuration Modal - Grid Layout */}
         {showPracticeConfig && (
-          <div 
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setShowPracticeConfig(false);
-              }
-            }}
-          >
-            <div 
-              className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">Practice Mode</h3>
-                <button
-                  onClick={() => setShowPracticeConfig(false)}
-                  className="w-8 h-8 rounded-lg bg-white/5 border border-base-border grid place-items-center hover:bg-white/10 transition"
-                >
-                  ✕
-                </button>
-              </div>
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border max-h-[90vh] overflow-y-auto">
+              <h3 className="text-xl font-bold mb-4">Practice Mode</h3>
               
               <div className="mb-4">
                 <label className="text-sm text-base-muted mb-2 block">Category</label>
@@ -647,23 +585,13 @@ export default function Home() {
 
         {/* More Categories Modal */}
         {showMoreCategories && (
-          <div 
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setShowMoreCategories(false);
-              }
-            }}
-          >
-            <div 
-              className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border"
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">More categories</h3>
                 <button
                   onClick={() => setShowMoreCategories(false)}
-                  className="w-8 h-8 rounded-lg bg-white/5 border border-base-border grid place-items-center hover:bg-white/10 transition"
+                  className="w-8 h-8 rounded-lg bg-white/5 border border-base-border grid place-items-center"
                 >
                   ✕
                 </button>
@@ -678,11 +606,11 @@ export default function Home() {
                       setSelectedCategory(cat);
                       setShowQuizConfig(true);
                     }}
-                    className={`bg-gradient-to-br ${cat.gradient} p-4 rounded-2xl flex flex-col items-center gap-2 hover:scale-105 transition-transform`}
+                    className="bg-white/5 border border-base-border p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-white/10 transition"
                   >
-                    <div className="text-3xl">{cat.icon}</div>
-                    <div className="text-sm font-bold text-white">{cat.name}</div>
-                    <div className="text-xs text-white/80">{cat.questions} questions</div>
+                    <div className="text-2xl">{cat.icon}</div>
+                    <div className="text-sm font-bold">{cat.name}</div>
+                    <div className="text-xs text-base-muted">{cat.questions} questions</div>
                   </button>
                 ))}
               </div>
@@ -690,131 +618,35 @@ export default function Home() {
           </div>
         )}
 
-        {/* Enhanced Coins Info Modal */}
+        {/* Coins Info Modal */}
         {showCoinsInfo && (
-          <div 
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setShowCoinsInfo(false);
-              }
-            }}
-          >
-            <div 
-              className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border relative overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Animated background pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="magic-gradient h-full"></div>
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-base-card rounded-3xl p-6 w-full max-w-md border border-base-border">
+              <h3 className="text-xl font-bold mb-4">Earn Coins</h3>
+              <div className="space-y-3 mb-4">
+                <div className="p-3 rounded-xl bg-white/5 border border-base-border">
+                  <div className="font-medium">Complete Quizzes</div>
+                  <div className="text-xs text-base-muted">5 coins per correct answer</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-base-border">
+                  <div className="font-medium">Daily Challenge</div>
+                  <div className="text-xs text-base-muted">5 coins daily</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-base-border">
+                  <div className="font-medium">Spin & Play</div>
+                  <div className="text-xs text-base-muted">Win up to 50 coins</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-base-border">
+                  <div className="font-medium">Achievements</div>
+                  <div className="text-xs text-base-muted">Special rewards for milestones</div>
+                </div>
               </div>
-              
-              <div className="relative">
-                {/* Header with 3D coin animation */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="coin-3d text-5xl" style={{ animation: 'coinRotate 2s linear infinite, glow 2s ease-in-out infinite' }}>
-                      🪙
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                        Your Treasure
-                      </h3>
-                      <p className="text-3xl font-bold text-white mt-1">{coins} Coins</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setShowCoinsInfo(false)}
-                    className="w-8 h-8 rounded-lg bg-white/5 border border-base-border grid place-items-center hover:bg-white/10 transition"
-                  >
-                    ✕
-                  </button>
-                </div>
-                
-                {/* Ways to Earn with animated cards */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-medium text-base-muted mb-3">Ways to Earn</h4>
-                  <div className="space-y-3">
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 hover:scale-[1.02] transition-transform">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium flex items-center gap-2">
-                            <span className="text-2xl">✅</span>
-                            Complete Quizzes
-                          </div>
-                          <div className="text-xs text-base-muted mt-1">+5 coins per correct answer</div>
-                        </div>
-                        <div className="text-green-400 font-bold">+5</div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 hover:scale-[1.02] transition-transform">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium flex items-center gap-2">
-                            <span className="text-2xl">🎯</span>
-                            Daily Challenge
-                          </div>
-                          <div className="text-xs text-base-muted mt-1">Complete daily for bonus</div>
-                        </div>
-                        <div className="text-blue-400 font-bold">+5</div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 hover:scale-[1.02] transition-transform">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium flex items-center gap-2">
-                            <span className="text-2xl">🎰</span>
-                            Spin & Play
-                          </div>
-                          <div className="text-xs text-base-muted mt-1">Test your luck!</div>
-                        </div>
-                        <div className="text-purple-400 font-bold">+50</div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 hover:scale-[1.02] transition-transform">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium flex items-center gap-2">
-                            <span className="text-2xl">🏆</span>
-                            Achievements
-                          </div>
-                          <div className="text-xs text-base-muted mt-1">Unlock special rewards</div>
-                        </div>
-                        <div className="text-orange-400 font-bold">+???</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Progress indicator */}
-                <div className="mb-6">
-                  <div className="flex justify-between text-xs text-base-muted mb-2">
-                    <span>Next reward</span>
-                    <span>{100 - (coins % 100)} coins to go</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all"
-                      style={{ width: `${(coins % 100)}%` }}
-                    />
-                  </div>
-                </div>
-                
-                {/* Call to action */}
-                <button
-                  onClick={() => {
-                    setShowCoinsInfo(false);
-                    navigate('/play');
-                  }}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold hover:scale-[1.02] transition-transform shadow-lg"
-                  style={{ boxShadow: '0 10px 30px rgba(251, 191, 36, 0.3)' }}
-                >
-                  Start Earning Now! 🚀
-                </button>
-              </div>
+              <button
+                onClick={() => setShowCoinsInfo(false)}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-blue to-brand-purple text-white font-medium"
+              >
+                Got it!
+              </button>
             </div>
           </div>
         )}
