@@ -248,19 +248,19 @@ export default function Achievements() {
           overflow: hidden;
         }
 
-        // .progress-overview::before {
-        //   content: '';
-        //   position: absolute;
-        //   top: -2px;
-        //   left: -2px;
-        //   right: -2px;
-        //   bottom: -2px;
-        //   background: linear-gradient(45deg, #FFD93D, #FF6B6B, #4ECDC4, #FFD93D);
-        //   border-radius: 24px;
-        //   opacity: 0.5;
-        //   z-index: -1;
-        //   animation: rotate-border 3s linear infinite;
-        // }
+        .progress-overview::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(45deg, #FFD93D, #FF6B6B, #4ECDC4, #FFD93D);
+          border-radius: 24px;
+          opacity: 0.5;
+          z-index: -1;
+          animation: rotate-border 3s linear infinite;
+        }
 
         @keyframes rotate-border {
           from { transform: rotate(0deg); }
@@ -668,7 +668,7 @@ export default function Achievements() {
         }
       `}</style>
 
-      {/* <div className="animated-background">
+      <div className="animated-background">
         {sparkles.map(sparkle => (
           <div
             key={sparkle.id}
@@ -681,7 +681,7 @@ export default function Achievements() {
             }}
           />
         ))}
-      </div> */}
+      </div>
 
       <div className="floating-shapes">
         <div className="shape shape-1"></div>

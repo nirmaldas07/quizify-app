@@ -88,7 +88,7 @@ export default function Achievements() {
           position: absolute;
           border-radius: 50%;
           background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-        //   animation: twinkle 3s ease-out forwards;
+          animation: twinkle 3s ease-out forwards;
         }
 
         @keyframes twinkle {
@@ -118,7 +118,7 @@ export default function Achievements() {
         .shape {
           position: absolute;
           opacity: 0.05;
-        //   animation: float 20s infinite ease-in-out;
+          animation: float 20s infinite ease-in-out;
         }
 
         .shape-1 {
@@ -201,7 +201,7 @@ export default function Achievements() {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           text-shadow: 0 0 30px rgba(255, 217, 61, 0.3);
-        //   animation: glow 3s ease-in-out infinite;
+          animation: glow 3s ease-in-out infinite;
         }
 
         @keyframes glow {
@@ -228,7 +228,7 @@ export default function Achievements() {
           font-size: 20px;
           color: #1a1a1a;
           box-shadow: 0 4px 15px rgba(255, 217, 61, 0.4);
-        //   animation: float-coin 3s ease-in-out infinite;
+          animation: float-coin 3s ease-in-out infinite;
         }
 
         @keyframes float-coin {
@@ -248,19 +248,19 @@ export default function Achievements() {
           overflow: hidden;
         }
 
-        // .progress-overview::before {
-        //   content: '';
-        //   position: absolute;
-        //   top: -2px;
-        //   left: -2px;
-        //   right: -2px;
-        //   bottom: -2px;
-        //   background: linear-gradient(45deg, #FFD93D, #FF6B6B, #4ECDC4, #FFD93D);
-        //   border-radius: 24px;
-        //   opacity: 0.5;
-        //   z-index: -1;
-        //   animation: rotate-border 3s linear infinite;
-        // }
+        .progress-overview::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(45deg, #FFD93D, #FF6B6B, #4ECDC4, #FFD93D);
+          border-radius: 24px;
+          opacity: 0.5;
+          z-index: -1;
+          animation: rotate-border 3s linear infinite;
+        }
 
         @keyframes rotate-border {
           from { transform: rotate(0deg); }
@@ -302,7 +302,7 @@ export default function Achievements() {
         .trophy-icon {
           font-size: 32px;
           filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        //   animation: bounce-trophy 2s ease-in-out infinite;
+          animation: bounce-trophy 2s ease-in-out infinite;
         }
 
         @keyframes bounce-trophy {
@@ -346,7 +346,7 @@ export default function Achievements() {
           right: 0;
           bottom: 0;
           background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-        //   animation: shimmer 2s infinite;
+          animation: shimmer 2s infinite;
         }
 
         @keyframes shimmer {
@@ -364,7 +364,7 @@ export default function Achievements() {
 
         .achievement-card {
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-        //   backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
           border-radius: 24px;
           padding: 20px;
           position: relative;
@@ -440,7 +440,7 @@ export default function Achievements() {
           flex-shrink: 0;
           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
           position: relative;
-        //   animation: icon-float 3s ease-in-out infinite;
+          animation: icon-float 3s ease-in-out infinite;
         }
 
         @keyframes icon-float {
@@ -456,7 +456,7 @@ export default function Achievements() {
           border-radius: 20px;
           opacity: 0.5;
           z-index: -1;
-        //   animation: rotate-border 2s linear infinite;
+          animation: rotate-border 2s linear infinite;
         }
 
         .achievement-details {
@@ -531,7 +531,7 @@ export default function Achievements() {
           font-size: 12px;
           font-weight: 700;
           box-shadow: 0 2px 8px rgba(255, 217, 61, 0.3);
-        //   animation: pulse-reward 2s ease-in-out infinite;
+          animation: pulse-reward 2s ease-in-out infinite;
         }
 
         @keyframes pulse-reward {
@@ -558,7 +558,7 @@ export default function Achievements() {
           background: linear-gradient(135deg, #10B981, #059669);
           color: white;
           box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        //   animation: pulse-button 2s ease-in-out infinite;
+          animation: pulse-button 2s ease-in-out infinite;
         }
 
         @keyframes pulse-button {
@@ -668,7 +668,7 @@ export default function Achievements() {
         }
       `}</style>
 
-      {/* <div className="animated-background">
+      <div className="animated-background">
         {sparkles.map(sparkle => (
           <div
             key={sparkle.id}
@@ -681,7 +681,7 @@ export default function Achievements() {
             }}
           />
         ))}
-      </div> */}
+      </div>
 
       <div className="floating-shapes">
         <div className="shape shape-1"></div>
