@@ -458,11 +458,11 @@ const startQuiz = () => {
                 onClick={() => handleCategorySelect(cat)}
                 className={`bg-gradient-to-br ${cat.gradient} aspect-square rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transform transition-all hover:scale-105 hover:shadow-lg relative`}
               >
-                {/* {player.energy < 1 && (
+                {player.energy < 1 && (
                 <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
                     <span className="text-xs text-yellow-400">Need 1⚡</span>
                 </div>
-                )} */}
+                )}
                 <div className="text-3xl">{cat.icon}</div>
                 <div className="text-xs font-bold text-white text-center">{cat.name}</div>
                 {cat.questions > 0 && (
@@ -476,11 +476,7 @@ const startQuiz = () => {
         {/* Practice Mode - Always available (no energy cost) */}
         <button
           onClick={() => setShowPracticeConfig(true)}
-            className={`w-full rounded-2xl p-5 flex justify-between items-center transition-all ${
-                player.energy < 10 
-                ? 'bg-green-500/20 border-2 border-green-500 animate-pulse' 
-                : 'bg-white/5 border border-base-border hover:bg-white/10'
-            }`}
+            className="w-full rounded-2xl p-5 flex justify-between items-center transition-all bg-white/5 border border-base-border hover:bg-white/10"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl grid place-items-center text-2xl">
@@ -593,7 +589,7 @@ const startQuiz = () => {
                     </div>
                 </div>
                 </div>
- 
+              
               <div className="mb-4">
                 <label className="text-sm text-base-muted mb-2 block">Difficulty</label>
                 <div className="grid grid-cols-3 gap-2">
@@ -796,11 +792,11 @@ const startQuiz = () => {
                     }}
                     className={`bg-gradient-to-br ${cat.gradient} p-4 rounded-2xl flex flex-col items-center gap-2 hover:scale-105 transition-transform relative`}
                   >
-                    {/* {player.energy < 1 && (
+                    {player.energy < 1 && (
                     <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
                         <span className="text-xs text-yellow-400">Need 1⚡</span>
                     </div>
-                    )} */}
+                    )}
                     <div className="text-3xl">{cat.icon}</div>
                     <div className="text-sm font-bold text-white">{cat.name}</div>
                     <div className="text-xs text-white/80">{cat.questions} questions</div>

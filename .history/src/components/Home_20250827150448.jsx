@@ -173,6 +173,12 @@ const handleCategorySelect = (category) => {
     return;
   }
   
+  // Check energy for quiz mode
+  if (player.energy < 1) {
+    alert("Not enough energy for Quiz mode. Try Practice mode instead!");
+    return;
+  }
+  
   setSelectedCategory(category);
   setShowQuizConfig(true);
 };
@@ -180,6 +186,13 @@ const handleCategorySelect = (category) => {
 const startQuiz = () => {
   console.log("Starting quiz with energy:", player.energy);
   console.log("Category:", selectedCategory.slug);
+  
+  // Double check energy before navigation
+  if (player.energy < 1) {
+    alert("Not enough energy!");
+    setShowQuizConfig(false);
+    return;
+  }
   
   navigate(`/quiz/${selectedCategory.slug}`, {
     state: { 
@@ -458,11 +471,11 @@ const startQuiz = () => {
                 onClick={() => handleCategorySelect(cat)}
                 className={`bg-gradient-to-br ${cat.gradient} aspect-square rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transform transition-all hover:scale-105 hover:shadow-lg relative`}
               >
-                {/* {player.energy < 1 && (
+                {player.energy < 10 && cat.slug !== "more" && (
                 <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
-                    <span className="text-xs text-yellow-400">Need 1⚡</span>
+                    <span className="text-xs">Need 10⚡</span>
                 </div>
-                )} */}
+                )}
                 <div className="text-3xl">{cat.icon}</div>
                 <div className="text-xs font-bold text-white text-center">{cat.name}</div>
                 {cat.questions > 0 && (
@@ -582,18 +595,15 @@ const startQuiz = () => {
                   ✕
                 </button>
               </div>
-
-              {/* Show selected category info */}
-                <div className="mb-4 p-3 rounded-xl bg-blue-500/10 border border-blue-500/30">
-                <div className="flex items-center gap-3">
-                    <div className="text-2xl">{selectedCategory.icon}</div>
-                    <div>
-                    <div className="font-medium">Category: {selectedCategory.name}</div>
-                    <div className="text-xs text-base-muted">{selectedCategory.questions} questions available</div>
-                    </div>
+              
+              {/* Energy cost notice */}
+              <div className="mb-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
+                <div className="flex items-center gap-2 text-sm">
+                  <span>⚡</span>
+                  <span>This quiz will use 1 energy</span>
                 </div>
-                </div>
- 
+              </div>
+              
               <div className="mb-4">
                 <label className="text-sm text-base-muted mb-2 block">Difficulty</label>
                 <div className="grid grid-cols-3 gap-2">
@@ -791,16 +801,17 @@ const startQuiz = () => {
                   <button
                     key={cat.name}
                     onClick={() => {
-                    setShowMoreCategories(false);
-                    handleCategorySelect(cat);
+                      setShowMoreCategories(false);
+                      setSelectedCategory(cat);
+                      setShowQuizConfig(true);
                     }}
                     className={`bg-gradient-to-br ${cat.gradient} p-4 rounded-2xl flex flex-col items-center gap-2 hover:scale-105 transition-transform relative`}
                   >
-                    {/* {player.energy < 1 && (
+                    {player.energy < 10 && (
                     <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
-                        <span className="text-xs text-yellow-400">Need 1⚡</span>
+                        <span className="text-xs text-yellow-400">Need 10⚡</span>
                     </div>
-                    )} */}
+                    )}
                     <div className="text-3xl">{cat.icon}</div>
                     <div className="text-sm font-bold text-white">{cat.name}</div>
                     <div className="text-xs text-white/80">{cat.questions} questions</div>

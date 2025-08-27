@@ -1,10 +1,11 @@
 // src/components/Quiz.jsx
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Papa from "papaparse";
 import QuizSession from "./Quiz/QuizSession";
 import QuizResults from "./Quiz/QuizResults";
 import QuizReview from "./Quiz/QuizReview";
+import { useGame } from "../contexts/GameContext";
 import { useGame } from "../App";
 
 /* ---------------- LocalStorage Keys ---------------- */
@@ -94,37 +95,15 @@ async function loadQuestions() {
 
 /* ---------------- Build Session ---------------- */
 function buildSession(allQuestions, { categorySlug, difficulty, count }) {
-  console.log("=== BUILD SESSION DEBUG ===");
-  console.log("categorySlug:", categorySlug);
-  console.log("difficulty:", difficulty);
-  console.log("count:", count);
-  console.log("Total questions available:", allQuestions.length);
-  
   const wantMixed = categorySlug === "mixed";
   const catFilter = wantMixed 
     ? () => true 
-    : (q) => {
-        const matches = toSlug(q.category) === categorySlug;
-        return matches;
-      };
-  
+    : (q) => toSlug(q.category) === categorySlug;
   const difFilter = difficulty 
     ? (q) => (q.difficulty || "medium") === difficulty 
     : () => true;
 
   const pool = allQuestions.filter(q => catFilter(q) && difFilter(q));
-  
-  console.log("Filtered pool size:", pool.length);
-  console.log("Sample categories from all questions:", 
-    [...new Set(allQuestions.slice(0, 10).map(q => `"${q.category}" -> "${toSlug(q.category)}"`))]
-  );
-  
-  if (pool.length === 0) {
-    console.error("No questions match the filter criteria!");
-    console.log("Available categories:", [...new Set(allQuestions.map(q => toSlug(q.category)))]);
-    return { questions: [], poolSize: 0 };
-  }
-  
   const chosen = pick(pool, Math.min(count, pool.length));
 
   // Shuffle options per question
@@ -135,7 +114,6 @@ function buildSession(allQuestions, { categorySlug, difficulty, count }) {
     return { ...q, options: newOpts, answerIndex: newAnswer };
   });
 
-  console.log("Final questions:", questions.length);
   return { questions, poolSize: pool.length };
 }
 
@@ -152,34 +130,24 @@ export default function Quiz() {
   const isRetakeQS = qs.get("retake") === "1";
   
   // Config from router state
-  const routerState = location.state || {};
-  const mode = routerState.mode || "quiz";
-  const difficulty = String(routerState.difficulty || "medium").toLowerCase();
-  const count = clamp(Number(routerState.count || 10), 1, 50);
-  const timerConfig = routerState.timer || { type: "per_q", seconds: 45 };
-  const resumeFlag = Boolean(routerState.resume);
-  const isDaily = Boolean(routerState.daily);
-  const sourceTag = routerState.source || null;
-  const isRetake = isRetakeQS || Boolean(routerState.retake);
-  const fromHistory = Boolean(routerState.fromHistory);
+  const mode = location.state?.mode || "quiz";
+  const difficulty = String(location.state?.difficulty || "medium").toLowerCase();
+  const count = clamp(Number(location.state?.count || 10), 1, 50);
+  const timerConfig = location.state?.timer || { type: "per_q", seconds: 45 };
+  const resumeFlag = Boolean(location.state?.resume);
+  const isDaily = Boolean(location.state?.daily);
+  const sourceTag = location.state?.source || null;
+  const isRetake = isRetakeQS || Boolean(location.state?.retake);
+  const fromHistory = Boolean(location.state?.fromHistory);
   
   const isPractice = mode === "practice";
-  
-  // Debug logging
-  console.log("Quiz Component - Mode Detection:", {
-    routerState,
-    mode,
-    isPractice,
-    location: location.pathname,
-    state: location.state
-  });
   
   // States
   const [allQuestions, setAllQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [session, setSession] = useState({ questions: [] });
-  const [view, setView] = useState("quiz");
+  const [view, setView] = useState("quiz"); // "quiz" | "results" | "review"
   const [reviewSnapshot, setReviewSnapshot] = useState(null);
   const [startTs, setStartTs] = useState(null);
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -222,30 +190,13 @@ export default function Quiz() {
 
   // Initialize session
   useEffect(() => {
-    console.log("=== SESSION INIT DEBUG ===");
-    console.log("isReview:", isReview);
-    console.log("loading:", loading);
-    console.log("error:", error);
-    console.log("allQuestions.length:", allQuestions.length);
-    console.log("category:", category);
-    console.log("mode:", mode);
-    console.log("isPractice:", isPractice);
-    
-    if (isReview || loading || error) {
-      console.log("Exiting early - isReview/loading/error");
-      return;
-    }
-    if (!allQuestions.length) {
-      console.log("Exiting early - no questions loaded");
-      return;
-    }
+    if (isReview || loading || error) return;
+    if (!allQuestions.length) return;
 
     // Check for resume
     if (resumeFlag) {
-      console.log("Checking for resume...");
       const saved = safeReadJSON(LS_RESUME, null);
       if (saved?.slug === category && saved?.inProgress) {
-        console.log("Resuming saved session");
         const sess = buildSession(allQuestions, {
           categorySlug: category,
           difficulty,
@@ -258,31 +209,24 @@ export default function Quiz() {
       }
     }
 
+    // Check energy for non-practice modes
+    if (!isPractice) {
+      const energyCost = 10; // Standard energy cost
+      if (energy < energyCost) {
+        alert("Not enough energy! You need 10 energy to start a quiz.");
+        navigate("/");
+        return;
+      }
+      // Deduct energy
+      useEnergy(energyCost);
+    }
+
     // Build fresh session
-    console.log("Building fresh session with params:", {
-      categorySlug: category,
-      difficulty,
-      count
-    });
-    
     const sess = buildSession(allQuestions, {
       categorySlug: category,
       difficulty,
       count
     });
-    
-    console.log("Built session result:", {
-      questionsCount: sess.questions.length,
-      poolSize: sess.poolSize,
-      firstQuestion: sess.questions[0]?.prompt
-    });
-    
-    if (sess.questions.length === 0) {
-      console.error("No questions found for category:", category, "difficulty:", difficulty);
-      setError(`No questions found for category "${fromSlug(category)}" with difficulty "${difficulty}"`);
-      return;
-    }
-    
     setSession(sess);
     setStartTs(Date.now());
     setElapsedMs(0);
@@ -295,7 +239,10 @@ export default function Quiz() {
     count, 
     resumeFlag, 
     isReview,
-    mode
+    isPractice,
+    energy,
+    useEnergy,
+    navigate
   ]);
 
   // Track elapsed time
@@ -310,15 +257,8 @@ export default function Quiz() {
   }, [view, startTs]);
 
   // Handlers
-  const handleQuizComplete = useCallback((results) => {
-    console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
-    
-    if (!results || !results.questions) {
-      console.error("Invalid results object:", results);
-      return;
-    }
-
-    // Save mistakes (for both modes - helps with learning)
+  const handleQuizComplete = (results) => {
+    // Save mistakes
     const wrongIds = results.questions
       .filter((q, i) => results.answers[i] !== null && results.answers[i] !== q.answerIndex)
       .map(q => q.id);
@@ -331,52 +271,43 @@ export default function Quiz() {
       console.error("Error saving mistakes:", e);
     }
 
-    // Save stats with proper mode differentiation
+    // Save stats
     try {
       const stats = safeReadJSON(LS_STATS, { sessions: [] });
       stats.sessions.push({
         cat: fromSlug(category),
-        mode: isPractice ? "practice" : "quiz",
+        mode,
         total: results.total,
         correct: results.correct,
         skipped: results.skipped.filter(Boolean).length,
-        ms: elapsedMs,
-        timestamp: Date.now(),
-        earnedXP: isPractice ? 0 : results.correct * 10,
-        earnedCoins: isPractice ? 0 : results.correct * 5
+        ms: elapsedMs
       });
       localStorage.setItem(LS_STATS, JSON.stringify(stats));
     } catch (e) {
       console.error("Error saving stats:", e);
     }
 
-    // Save snapshot for retake and review
+    // Save snapshot for retake
     const snapshot = {
       ts: Date.now(),
       slug: category,
       categoryLabel: fromSlug(category),
-      mode: isPractice ? "practice" : "quiz",
+      mode,
       difficulty,
       total: results.total,
-      timer: isPractice ? null : timerConfig,
+      timer: timerConfig,
       ms: elapsedMs,
       attempted: results.answers.filter(a => a !== null).length,
       correct: results.correct,
       questions: results.questions,
       answers: results.answers,
-      skipped: results.skipped,
-      isPractice
+      skipped: results.skipped
     };
     
     try {
       localStorage.setItem(LS_LASTSET, JSON.stringify(snapshot));
       
-      localStorage.setItem(REVIEW_KEY, JSON.stringify({
-        questions: results.questions,
-        answers: results.answers,
-        skipped: results.skipped
-      }));
-      
+      // Add to recent
       const prev = safeReadJSON(LS_RECENT, []);
       const entry = {
         id: snapshot.ts,
@@ -398,47 +329,36 @@ export default function Quiz() {
     // Clear resume
     localStorage.removeItem(LS_RESUME);
 
-    // Update results
+    // Update results and switch view
     setReviewSnapshot({
       ...results,
       category: fromSlug(category),
-      mode: isPractice ? "practice" : "quiz",
-      elapsedMs,
-      isPractice,
-      hasTimer: !isPractice,
-      earnedXP: isPractice ? 0 : results.correct * 10,
-      earnedCoins: isPractice ? 0 : results.correct * 5
+      mode,
+      elapsedMs
     });
     setView("results");
-  }, [category, mode, timerConfig, elapsedMs, isPractice]);
+  };
 
-  const handleQuit = useCallback(() => {
+  const handleQuit = () => {
     if (fromHistory) {
       navigate("/profile/history", { replace: true, state: null });
     } else {
       navigate("/");
     }
-  }, [fromHistory, navigate]);
+  };
 
-  const handleRetake = useCallback(() => {
-    console.log("Retake requested - Mode:", mode, "isPractice:", isPractice);
-    
+  const handleRetake = () => {
     const last = safeReadJSON(LS_LASTSET, null);
     if (!last || last.slug !== category) {
+      // Fresh retake
       navigate(`/quiz/${category}?r=${Date.now()}`, {
         replace: true,
-        state: { 
-          mode: isPractice ? "practice" : "quiz", 
-          difficulty, 
-          count, 
-          timer: isPractice ? null : timerConfig,
-          retake: true 
-        }
+        state: { mode, difficulty, count, timer: timerConfig, retake: true }
       });
       return;
     }
 
-    // Reshuffle same questions
+    // Same set retake
     const reshuffled = last.questions.map(q => {
       const order = shuffle([0, 1, 2, 3]);
       return { 
@@ -448,36 +368,27 @@ export default function Quiz() {
       };
     });
 
-    setSession({ questions: reshuffled, poolSize: reshuffled.length });
+    setSession({ questions: reshuffled });
     setStartTs(Date.now());
     setElapsedMs(0);
     setView("quiz");
     window.scrollTo(0, 0);
-  }, [category, mode, difficulty, count, timerConfig, navigate, isPractice]);
+  };
 
-  const handleReview = useCallback((snapshot = null) => {
+  const handleReview = (snapshot = null) => {
     if (snapshot) {
       setReviewSnapshot(snapshot);
-    } else if (!reviewSnapshot) {
-      const saved = safeReadJSON(REVIEW_KEY, null);
-      if (saved) {
-        setReviewSnapshot({
-          questions: saved.questions || [],
-          answers: saved.answers || [],
-          skipped: saved.skipped || []
-        });
-      }
     }
     setView("review");
-  }, [reviewSnapshot]);
+  };
 
-  const handleBackFromReview = useCallback(() => {
+  const handleBackFromReview = () => {
     if (fromHistory) {
       navigate("/profile/history", { replace: true });
     } else {
       setView("results");
     }
-  }, [fromHistory, navigate]);
+  };
 
   // Loading/Error states
   if (loading) {
@@ -496,23 +407,20 @@ export default function Quiz() {
     );
   }
 
-  console.log("Render - Current view:", view, "Session questions:", session.questions.length, "Mode:", mode, "isPractice:", isPractice);
-
   // Render based on view
   return (
     <div className="fixed inset-0 bg-inherit text-white z-0 overflow-x-hidden max-w-[100vw]">
       <div className="h-full overflow-y-auto overscroll-y-none overflow-x-hidden touch-pan-y px-0 pt-[max(env(safe-area-inset-top),72px)] pb-[clamp(12px,env(safe-area-inset-bottom),20px)]">
         
-        {view === "quiz" && session.questions.length > 0 && (
+        {view === "quiz" && (
           <QuizSession
             session={session}
-            mode={isPractice ? "practice" : "quiz"}
+            mode={mode}
             category={fromSlug(category)}
             difficulty={difficulty}
-            timerConfig={isPractice ? null : timerConfig}
+            timerConfig={timerConfig}
             onComplete={handleQuizComplete}
             onQuit={handleQuit}
-            isPractice={isPractice}
           />
         )}
 
@@ -520,7 +428,7 @@ export default function Quiz() {
           <QuizResults
             results={reviewSnapshot}
             onRetake={handleRetake}
-            onReview={() => handleReview(reviewSnapshot)}
+            onReview={() => handleReview()}
             isRetake={isRetake}
             isPractice={isPractice}
           />
@@ -528,13 +436,12 @@ export default function Quiz() {
 
         {view === "review" && reviewSnapshot && (
           <QuizReview
-            questions={reviewSnapshot.questions || []}
+            questions={reviewSnapshot.questions || session.questions}
             answers={reviewSnapshot.answers || []}
             skipped={reviewSnapshot.skipped || []}
             onBack={handleBackFromReview}
             onRetake={handleRetake}
             fromHistory={fromHistory}
-            isPractice={isPractice}
           />
         )}
         

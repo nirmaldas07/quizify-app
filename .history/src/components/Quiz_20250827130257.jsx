@@ -94,37 +94,15 @@ async function loadQuestions() {
 
 /* ---------------- Build Session ---------------- */
 function buildSession(allQuestions, { categorySlug, difficulty, count }) {
-  console.log("=== BUILD SESSION DEBUG ===");
-  console.log("categorySlug:", categorySlug);
-  console.log("difficulty:", difficulty);
-  console.log("count:", count);
-  console.log("Total questions available:", allQuestions.length);
-  
   const wantMixed = categorySlug === "mixed";
   const catFilter = wantMixed 
     ? () => true 
-    : (q) => {
-        const matches = toSlug(q.category) === categorySlug;
-        return matches;
-      };
-  
+    : (q) => toSlug(q.category) === categorySlug;
   const difFilter = difficulty 
     ? (q) => (q.difficulty || "medium") === difficulty 
     : () => true;
 
   const pool = allQuestions.filter(q => catFilter(q) && difFilter(q));
-  
-  console.log("Filtered pool size:", pool.length);
-  console.log("Sample categories from all questions:", 
-    [...new Set(allQuestions.slice(0, 10).map(q => `"${q.category}" -> "${toSlug(q.category)}"`))]
-  );
-  
-  if (pool.length === 0) {
-    console.error("No questions match the filter criteria!");
-    console.log("Available categories:", [...new Set(allQuestions.map(q => toSlug(q.category)))]);
-    return { questions: [], poolSize: 0 };
-  }
-  
   const chosen = pick(pool, Math.min(count, pool.length));
 
   // Shuffle options per question
@@ -135,7 +113,6 @@ function buildSession(allQuestions, { categorySlug, difficulty, count }) {
     return { ...q, options: newOpts, answerIndex: newAnswer };
   });
 
-  console.log("Final questions:", questions.length);
   return { questions, poolSize: pool.length };
 }
 
@@ -152,37 +129,30 @@ export default function Quiz() {
   const isRetakeQS = qs.get("retake") === "1";
   
   // Config from router state
-  const routerState = location.state || {};
-  const mode = routerState.mode || "quiz";
-  const difficulty = String(routerState.difficulty || "medium").toLowerCase();
-  const count = clamp(Number(routerState.count || 10), 1, 50);
-  const timerConfig = routerState.timer || { type: "per_q", seconds: 45 };
-  const resumeFlag = Boolean(routerState.resume);
-  const isDaily = Boolean(routerState.daily);
-  const sourceTag = routerState.source || null;
-  const isRetake = isRetakeQS || Boolean(routerState.retake);
-  const fromHistory = Boolean(routerState.fromHistory);
+  // IMPORTANT: Check if mode is explicitly set, otherwise determine from navigation source
+  const mode = location.state?.mode || "quiz";
+  const difficulty = String(location.state?.difficulty || "medium").toLowerCase();
+  const count = clamp(Number(location.state?.count || 10), 1, 50);
+  const timerConfig = location.state?.timer || { type: "per_q", seconds: 45 };
+  const resumeFlag = Boolean(location.state?.resume);
+  const isDaily = Boolean(location.state?.daily);
+  const sourceTag = location.state?.source || null;
+  const isRetake = isRetakeQS || Boolean(location.state?.retake);
+  const fromHistory = Boolean(location.state?.fromHistory);
   
+  // Determine if practice mode based on explicit mode or navigation source
   const isPractice = mode === "practice";
-  
-  // Debug logging
-  console.log("Quiz Component - Mode Detection:", {
-    routerState,
-    mode,
-    isPractice,
-    location: location.pathname,
-    state: location.state
-  });
   
   // States
   const [allQuestions, setAllQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [session, setSession] = useState({ questions: [] });
-  const [view, setView] = useState("quiz");
+  const [view, setView] = useState("quiz"); // "quiz" | "results" | "review"
   const [reviewSnapshot, setReviewSnapshot] = useState(null);
   const [startTs, setStartTs] = useState(null);
   const [elapsedMs, setElapsedMs] = useState(0);
+  const [energyDeducted, setEnergyDeducted] = useState(false); // Track energy deduction
   
   // Load questions on mount
   useEffect(() => {
@@ -222,30 +192,13 @@ export default function Quiz() {
 
   // Initialize session
   useEffect(() => {
-    console.log("=== SESSION INIT DEBUG ===");
-    console.log("isReview:", isReview);
-    console.log("loading:", loading);
-    console.log("error:", error);
-    console.log("allQuestions.length:", allQuestions.length);
-    console.log("category:", category);
-    console.log("mode:", mode);
-    console.log("isPractice:", isPractice);
-    
-    if (isReview || loading || error) {
-      console.log("Exiting early - isReview/loading/error");
-      return;
-    }
-    if (!allQuestions.length) {
-      console.log("Exiting early - no questions loaded");
-      return;
-    }
+    if (isReview || loading || error) return;
+    if (!allQuestions.length) return;
 
     // Check for resume
     if (resumeFlag) {
-      console.log("Checking for resume...");
       const saved = safeReadJSON(LS_RESUME, null);
       if (saved?.slug === category && saved?.inProgress) {
-        console.log("Resuming saved session");
         const sess = buildSession(allQuestions, {
           categorySlug: category,
           difficulty,
@@ -258,31 +211,30 @@ export default function Quiz() {
       }
     }
 
+    // Check energy ONLY for quiz mode (adventure), NOT for practice mode
+    if (!isPractice && !energyDeducted) {
+      const energyCost = 10;
+      if (energy < energyCost) {
+        // If not enough energy for quiz mode, redirect to home
+        navigate("/", { 
+          state: { 
+            message: "Not enough energy for Adventure mode. Try Practice mode instead!",
+            openPractice: false // Don't automatically open practice
+          } 
+        });
+        return;
+      }
+      // Deduct energy only when starting quiz mode
+      useEnergy(energyCost);
+      setEnergyDeducted(true);
+    }
+
     // Build fresh session
-    console.log("Building fresh session with params:", {
-      categorySlug: category,
-      difficulty,
-      count
-    });
-    
     const sess = buildSession(allQuestions, {
       categorySlug: category,
       difficulty,
       count
     });
-    
-    console.log("Built session result:", {
-      questionsCount: sess.questions.length,
-      poolSize: sess.poolSize,
-      firstQuestion: sess.questions[0]?.prompt
-    });
-    
-    if (sess.questions.length === 0) {
-      console.error("No questions found for category:", category, "difficulty:", difficulty);
-      setError(`No questions found for category "${fromSlug(category)}" with difficulty "${difficulty}"`);
-      return;
-    }
-    
     setSession(sess);
     setStartTs(Date.now());
     setElapsedMs(0);
@@ -295,7 +247,11 @@ export default function Quiz() {
     count, 
     resumeFlag, 
     isReview,
-    mode
+    isPractice,
+    energyDeducted,
+    energy,
+    useEnergy,
+    navigate
   ]);
 
   // Track elapsed time
@@ -309,16 +265,18 @@ export default function Quiz() {
     return () => clearInterval(interval);
   }, [view, startTs]);
 
-  // Handlers
+  // Handlers with useCallback to prevent re-creation
   const handleQuizComplete = useCallback((results) => {
-    console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
+    console.log("Quiz completed with results:", results);
+    console.log("Current mode:", mode, "isPractice:", isPractice);
     
+    // Ensure results object is valid
     if (!results || !results.questions) {
       console.error("Invalid results object:", results);
       return;
     }
 
-    // Save mistakes (for both modes - helps with learning)
+    // Save mistakes
     const wrongIds = results.questions
       .filter((q, i) => results.answers[i] !== null && results.answers[i] !== q.answerIndex)
       .map(q => q.id);
@@ -331,7 +289,7 @@ export default function Quiz() {
       console.error("Error saving mistakes:", e);
     }
 
-    // Save stats with proper mode differentiation
+    // Save stats
     try {
       const stats = safeReadJSON(LS_STATS, { sessions: [] });
       stats.sessions.push({
@@ -341,9 +299,7 @@ export default function Quiz() {
         correct: results.correct,
         skipped: results.skipped.filter(Boolean).length,
         ms: elapsedMs,
-        timestamp: Date.now(),
-        earnedXP: isPractice ? 0 : results.correct * 10,
-        earnedCoins: isPractice ? 0 : results.correct * 5
+        timestamp: Date.now()
       });
       localStorage.setItem(LS_STATS, JSON.stringify(stats));
     } catch (e) {
@@ -358,25 +314,26 @@ export default function Quiz() {
       mode: isPractice ? "practice" : "quiz",
       difficulty,
       total: results.total,
-      timer: isPractice ? null : timerConfig,
+      timer: timerConfig,
       ms: elapsedMs,
       attempted: results.answers.filter(a => a !== null).length,
       correct: results.correct,
       questions: results.questions,
       answers: results.answers,
-      skipped: results.skipped,
-      isPractice
+      skipped: results.skipped
     };
     
     try {
       localStorage.setItem(LS_LASTSET, JSON.stringify(snapshot));
       
+      // IMPORTANT: Also save to REVIEW_KEY for review functionality
       localStorage.setItem(REVIEW_KEY, JSON.stringify({
         questions: results.questions,
         answers: results.answers,
         skipped: results.skipped
       }));
       
+      // Add to recent
       const prev = safeReadJSON(LS_RECENT, []);
       const entry = {
         id: snapshot.ts,
@@ -398,16 +355,13 @@ export default function Quiz() {
     // Clear resume
     localStorage.removeItem(LS_RESUME);
 
-    // Update results
+    // Update results and switch view
     setReviewSnapshot({
       ...results,
       category: fromSlug(category),
       mode: isPractice ? "practice" : "quiz",
       elapsedMs,
-      isPractice,
-      hasTimer: !isPractice,
-      earnedXP: isPractice ? 0 : results.correct * 10,
-      earnedCoins: isPractice ? 0 : results.correct * 5
+      isPractice // Explicitly pass this for results display
     });
     setView("results");
   }, [category, mode, timerConfig, elapsedMs, isPractice]);
@@ -421,24 +375,26 @@ export default function Quiz() {
   }, [fromHistory, navigate]);
 
   const handleRetake = useCallback(() => {
-    console.log("Retake requested - Mode:", mode, "isPractice:", isPractice);
-    
     const last = safeReadJSON(LS_LASTSET, null);
     if (!last || last.slug !== category) {
+      // Fresh retake - reset energy deduction flag for quiz mode
+      if (!isPractice) {
+        setEnergyDeducted(false);
+      }
       navigate(`/quiz/${category}?r=${Date.now()}`, {
         replace: true,
         state: { 
           mode: isPractice ? "practice" : "quiz", 
           difficulty, 
           count, 
-          timer: isPractice ? null : timerConfig,
+          timer: timerConfig, 
           retake: true 
         }
       });
       return;
     }
 
-    // Reshuffle same questions
+    // Same set retake
     const reshuffled = last.questions.map(q => {
       const order = shuffle([0, 1, 2, 3]);
       return { 
@@ -448,17 +404,36 @@ export default function Quiz() {
       };
     });
 
+    // For quiz mode retake, check and deduct energy again
+    if (!isPractice && energy < 10) {
+      navigate("/", { 
+        state: { 
+          message: "Not enough energy for retake. Try Practice mode!",
+          openPractice: false
+        } 
+      });
+      return;
+    }
+    
+    if (!isPractice) {
+      useEnergy(10);
+    }
+
     setSession({ questions: reshuffled, poolSize: reshuffled.length });
     setStartTs(Date.now());
     setElapsedMs(0);
     setView("quiz");
     window.scrollTo(0, 0);
-  }, [category, mode, difficulty, count, timerConfig, navigate, isPractice]);
+  }, [category, mode, difficulty, count, timerConfig, navigate, isPractice, energy, useEnergy]);
 
   const handleReview = useCallback((snapshot = null) => {
+    console.log("handleReview called with snapshot:", snapshot);
+    console.log("Current reviewSnapshot:", reviewSnapshot);
+    
     if (snapshot) {
       setReviewSnapshot(snapshot);
     } else if (!reviewSnapshot) {
+      // Try to load from localStorage if no snapshot
       const saved = safeReadJSON(REVIEW_KEY, null);
       if (saved) {
         setReviewSnapshot({
@@ -496,7 +471,8 @@ export default function Quiz() {
     );
   }
 
-  console.log("Render - Current view:", view, "Session questions:", session.questions.length, "Mode:", mode, "isPractice:", isPractice);
+  // Debug log
+  console.log("Current view:", view, "Session questions:", session.questions.length, "Mode:", mode);
 
   // Render based on view
   return (
@@ -506,13 +482,12 @@ export default function Quiz() {
         {view === "quiz" && session.questions.length > 0 && (
           <QuizSession
             session={session}
-            mode={isPractice ? "practice" : "quiz"}
+            mode={mode}
             category={fromSlug(category)}
             difficulty={difficulty}
-            timerConfig={isPractice ? null : timerConfig}
+            timerConfig={timerConfig}
             onComplete={handleQuizComplete}
             onQuit={handleQuit}
-            isPractice={isPractice}
           />
         )}
 
@@ -534,7 +509,6 @@ export default function Quiz() {
             onBack={handleBackFromReview}
             onRetake={handleRetake}
             fromHistory={fromHistory}
-            isPractice={isPractice}
           />
         )}
         

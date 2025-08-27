@@ -1,8 +1,10 @@
 // src/components/Quiz/QuizResults.jsx
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGame } from "../../App";
+import { useGame } from "../../contexts/GameContext"; // Import the game context
 import CoinFly from "../CoinFly";
+import XPill from "../XPill";
+import CoinPill from "../CoinPill";
 
 const COIN_TO_XP = 2;
 const COINS_PER_CORRECT = 5;
@@ -23,8 +25,7 @@ const QuizResults = ({
     addXP, 
     addCoins, 
     updateCombo,
-    nextThreshold,
-    levelProgress
+    nextThreshold 
   } = useGame();
 
   const [showReward, setShowReward] = useState(true);
@@ -135,15 +136,8 @@ const QuizResults = ({
 
         {/* HUD */}
         <div className="mt-3 flex items-center justify-end gap-2 px-3">
-          <div className="px-3 py-1 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-xs">
-            Level {level}
-          </div>
-          <div 
-            ref={coinPillRef}
-            className="px-3 py-1 rounded-xl bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 text-xs"
-          >
-            {coins} coins
-          </div>
+          <XPill level={level} xp={xp} next={nextThreshold} />
+          <CoinPill ref={coinPillRef} total={coins} />
         </div>
 
         {/* Reward Card */}
@@ -210,12 +204,8 @@ const QuizResults = ({
           ← Home
         </button>
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-xs">
-            Level {level}
-          </div>
-          <div className="px-3 py-1 rounded-xl bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 text-xs">
-            {coins} coins
-          </div>
+          <XPill level={level} xp={xp} next={nextThreshold} />
+          <CoinPill total={coins} />
         </div>
       </div>
 
@@ -225,18 +215,6 @@ const QuizResults = ({
         <div className="text-sm text-base-muted mb-4">
           {category} • {mode === "practice" ? "Practice" : "Quiz"}
         </div>
-
-        {/* Practice mode indicator */}
-        {isPractice && (
-          <div className="mb-4 p-3 rounded-xl bg-green-500/10 border border-green-500/30">
-            <div className="text-green-400 text-sm">
-              📚 Practice Mode - No rewards earned
-            </div>
-            <div className="text-xs text-base-muted mt-1">
-              Great for learning! Switch to Quiz mode to earn XP and coins.
-            </div>
-          </div>
-        )}
 
         {/* Metrics */}
         <div className="grid grid-cols-3 gap-3 mb-5">
@@ -255,7 +233,7 @@ const QuizResults = ({
         </div>
 
         {/* Combo indicator */}
-        {combo > 0 && !isPractice && (
+        {combo > 0 && (
           <div className="mb-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30 p-3">
             <div className="text-yellow-400">
               🔥 Combo Streak: {combo}
@@ -283,7 +261,7 @@ const QuizResults = ({
               className="flex-1 max-w-[140px] py-3 rounded-2xl border border-white/20 text-white font-medium text-sm"
               onClick={onRetake}
             >
-              {isPractice ? "Practice Again" : "Retake Quiz"}
+              Retake Quiz
             </button>
           </div>
           <div className="flex gap-2 justify-center">
