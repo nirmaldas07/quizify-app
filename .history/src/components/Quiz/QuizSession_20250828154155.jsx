@@ -452,6 +452,8 @@ const QuizSession = ({
 
       {/* Top Status Bar - Sticky with proper overflow hidden */}
       <div className="sticky top-0 flex items-center justify-between px-4 py-2 bg-gray-900 flex-shrink-0 z-40 border-b border-gray-800 shadow-lg">
+        {/* Overlay mask to ensure content doesn't show through */}
+<div className="sticky top-[60px] h-1 bg-gray-900 z-39 -mt-1"></div>
         <button 
           onClick={() => setShowQuit(true)}
           className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"

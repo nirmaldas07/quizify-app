@@ -34,14 +34,12 @@ const QuizSession = ({
   const [showExplanation, setShowExplanation] = useState(false);
   const [coinAnimation, setCoinAnimation] = useState(false);
   const [timerActive, setTimerActive] = useState(true);
-  const [showQuizSummary, setShowQuizSummary] = useState(false);
   
   // Star and coin system for gamification
   const [earnedStars, setEarnedStars] = useState(0);
   const [earnedCoins, setEarnedCoins] = useState(0);
   const [streak, setStreak] = useState(0);
   const [showReward, setShowReward] = useState(null);
-  const [finalQuizCoins, setFinalQuizCoins] = useState(0);
   
   const autoNextRef = useRef(null);
   const timerRef = useRef(null);
@@ -193,35 +191,33 @@ const QuizSession = ({
       clearInterval(timerRef.current);
     }
 
-    // Check if correct and award points
-    if (nextAnswers[index] === currentQuestion.answerIndex) {
-      const newStreak = streak + 1;
-      setStreak(newStreak);
+// Check if correct and award points
+if (nextAnswers[index] === currentQuestion.answerIndex) {
+  const newStreak = streak + 1;
+  setStreak(newStreak);
+  if (isPractice) {
+    setEarnedStars(prev => prev + 1);
+    const coinsEarned = 10 * newStreak;
+    setEarnedCoins(prev => prev + coinsEarned);
       
-      // Only award coins and show feedback in practice mode
-      if (isPractice) {
-        setEarnedStars(prev => prev + 1);
-        const coinsEarned = 10 * newStreak;
-        setEarnedCoins(prev => prev + coinsEarned);
-        
-        // Play sounds and show animations only in practice mode
-        playSound('/sounds/correct.mp3');
-        setTimeout(() => playSound('/sounds/coin.mp3'), 500);
-        
-        // Trigger coin animation
-        setCoinAnimation(true);
-        setTimeout(() => setCoinAnimation(false), 2000);
-        
-        // Show reward animation
-        setShowReward({ type: 'correct', stars: 1, coins: coinsEarned });
-        setTimeout(() => setShowReward(null), 2000);
-      }
-    } else if (nextAnswers[index] !== null) {
-      setStreak(0);
-      // Only play wrong sound in practice mode
-      if (isPractice) {
-        playSound('/sounds/wrong.mp3');
-      }
+if (isPractice) {
+  // Play sounds and show animations only in practice mode
+  playSound('/sounds/correct.mp3');
+  setTimeout(() => playSound('/sounds/coin.mp3'), 500);
+
+  // Trigger coin animation
+  setCoinAnimation(true);
+  setTimeout(() => setCoinAnimation(false), 2000);
+
+  // Show reward animation
+  setShowReward({ type: 'correct', stars: 1, coins: coinsEarned });
+  setTimeout(() => setShowReward(null), 2000);
+}
+} else if (nextAnswers[index] !== null) {
+setStreak(0);
+if (isPractice) {
+  playSound('/sounds/wrong.mp3');
+}
     }
 
     // Reset skipped status if answered
@@ -314,51 +310,18 @@ const QuizSession = ({
       0
     );
     
-    // Calculate final coins for quiz mode
-    if (!isPractice) {
-      const quizCoins = correct * 10; // 10 coins per correct answer
-      setFinalQuizCoins(quizCoins);
-      setShowQuizSummary(true);
-      
-      // Play coin sound and show animation after a delay
-      setTimeout(() => {
-        playSound('/sounds/coin.mp3');
-        setCoinAnimation(true);
-        setTimeout(() => setCoinAnimation(false), 3000);
-      }, 1000);
-    } else {
-      // For practice mode, go directly to completion
-      if (onComplete) {
-        onComplete({
-          questions,
-          answers,
-          skipped,
-          correct,
-          total,
-          mode,
-          category,
-          difficulty,
-          earnedStars,
-          earnedCoins,
-          finalStreak: streak
-        });
-      }
-    }
-  };
-
-  const handleQuizSummaryComplete = () => {
     if (onComplete) {
       onComplete({
         questions,
         answers,
         skipped,
-        correct: questions.reduce((sum, q, i) => sum + (answers[i] === q.answerIndex ? 1 : 0), 0),
+        correct,
         total,
         mode,
         category,
         difficulty,
-        earnedStars: 0,
-        earnedCoins: finalQuizCoins,
+        earnedStars,
+        earnedCoins,
         finalStreak: streak
       });
     }
@@ -416,7 +379,6 @@ const QuizSession = ({
   const attempted = answers.filter(a => a !== null).length;
   const skippedCount = skipped.filter(Boolean).length;
   const currentTimer = questionTimers[index] || 0;
-  const correctCount = questions.reduce((sum, q, i) => sum + (answers[i] === q.answerIndex ? 1 : 0), 0);
 
   return (
     <div className="h-dvh bg-gray-900 text-white relative flex flex-col">
@@ -433,15 +395,15 @@ const QuizSession = ({
       {/* Coin Flying Animation */}
       {coinAnimation && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
-          {[...Array(8)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="absolute text-3xl animate-ping"
+              className="absolute text-2xl animate-ping"
               style={{
-                left: `${-30 + Math.random() * 60}px`,
-                top: `${-30 + Math.random() * 60}px`,
-                animationDelay: `${i * 150}ms`,
-                animationDuration: '2s'
+                left: `${-20 + Math.random() * 40}px`,
+                top: `${-20 + Math.random() * 40}px`,
+                animationDelay: `${i * 100}ms`,
+                animationDuration: '1s'
               }}
             >
               🪙
@@ -450,8 +412,8 @@ const QuizSession = ({
         </div>
       )}
 
-      {/* Top Status Bar - Sticky with proper overflow hidden */}
-      <div className="sticky top-0 flex items-center justify-between px-4 py-2 bg-gray-900 flex-shrink-0 z-40 border-b border-gray-800 shadow-lg">
+      {/* Top Status Bar */}
+      <div className="sticky top-0 flex items-center justify-between px-4 py-2 bg-gray-800/90 backdrop-blur-sm flex-shrink-0 z-40">
         <button 
           onClick={() => setShowQuit(true)}
           className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
@@ -465,22 +427,17 @@ const QuizSession = ({
         <div className="flex-1"></div>
 
         <div className="flex items-center gap-2">
-          {/* Only show coins and streak in practice mode */}
-          {isPractice && (
-            <>
-              {/* Coins */}
-              <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                <span className="text-yellow-400 text-sm">🪙</span>
-                <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
-              </div>
-              
-              {/* Streak - Always visible in practice */}
-              <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                <span className="text-orange-400 text-sm">🔥</span>
-                <span className="text-orange-200 font-semibold text-sm">{streak}</span>
-              </div>
-            </>
-          )}
+          {/* Coins */}
+          <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+            <span className="text-yellow-400 text-sm">🪙</span>
+            <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
+          </div>
+          
+          {/* Streak - Always visible */}
+          <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+            <span className="text-orange-400 text-sm">🔥</span>
+            <span className="text-orange-200 font-semibold text-sm">{streak}</span>
+          </div>
           
           {/* Timer */}
           <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
@@ -494,7 +451,7 @@ const QuizSession = ({
       </div>
 
       {/* Progress Bar */}
-      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900 relative z-30">
+      <div className="px-4 pb-1 flex-shrink-0">
         <div className="flex justify-between items-center mb-1">
           <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
           <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
@@ -556,7 +513,7 @@ const QuizSession = ({
           </div>
         </div>
 
-        {/* Options Grid - Enhanced styling with no quiz mode feedback */}
+        {/* Options Grid - Enhanced styling */}
         <div className="grid grid-cols-1 gap-3 mb-2 flex-shrink-0">
           {currentQuestion.options.map((option, optIndex) => {
             const isSelected = selected === optIndex;
@@ -571,21 +528,21 @@ const QuizSession = ({
             } else {
               cardClass += "cursor-pointer ";
               
-              if (showFeedback) {
-                if (isSelected && isCorrect) {
-                  cardClass += "bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/25";
-                } else if (isSelected && !isCorrect) {
-                  cardClass += "bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/25";
-                } else if (!isSelected && isCorrect) {
-                  cardClass += "bg-green-600/20 border-green-500 text-green-300 animate-pulse";
-                } else {
-                  cardClass += "bg-gray-700 border-gray-600 text-gray-400";
-                }
-              } else if (isSelected) {
-                cardClass += "bg-gray-600 border-gray-500 text-white";
-              } else {
-                cardClass += "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-750 hover:border-gray-600";
-              }
+ if (showFeedback) {
+  if (isSelected && isCorrect) {
+    cardClass += "bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/25";
+  } else if (isSelected && !isCorrect) {
+    cardClass += "bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/25";
+  } else if (!isSelected && isCorrect) {
+    cardClass += "bg-green-600/20 border-green-500 text-green-300 animate-pulse";
+  } else {
+    cardClass += "bg-gray-700 border-gray-600 text-gray-400";
+  }
+} else if (isSelected) {
+  cardClass += "bg-gray-600 border-gray-500 text-white";
+} else {
+  cardClass += "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-750 hover:border-gray-600";
+}
             }
 
             const optionLabels = ['🅰️', '🅱️', '🅲️', '🅳️'];
@@ -606,22 +563,22 @@ const QuizSession = ({
                       {audienceMap[index][optIndex]}%
                     </div>
                   )}
-                  {showFeedback && isSelected && isCorrect && !isEliminated && (
-                    <div className="text-lg animate-bounce">🎉</div>
-                  )}
-                  {showFeedback && isSelected && !isCorrect && !isEliminated && (
-                    <div className="text-lg">😔</div>
-                  )}
-                  {showFeedback && !isSelected && isCorrect && !isEliminated && (
-                    <div className="text-base animate-pulse">✨</div>
-                  )}
+{showFeedback && isSelected && isCorrect && !isEliminated && (
+  <div className="text-lg animate-bounce">🎉</div>
+)}
+{showFeedback && isSelected && !isCorrect && !isEliminated && (
+  <div className="text-lg">😔</div>
+)}
+{showFeedback && !isSelected && isCorrect && !isEliminated && (
+  <div className="text-base animate-pulse">✨</div>
+)}
                 </div>
               </button>
             );
           })}
         </div>
 
-        {/* Explanation (Inline) - Only in practice mode */}
+        {/* Explanation (Inline) - Compact */}
         {isPractice && showExplanation && selected !== null && (
           <div className="bg-gray-800 rounded-xl p-4 mb-2 mt-4 border border-gray-700 flex-shrink-0">
             <div className="flex gap-3">
@@ -711,49 +668,6 @@ const QuizSession = ({
         </button>
       </div>
 
-      {/* Quiz Summary Modal */}
-      {showQuizSummary && (
-        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
-            <div className="text-4xl mb-4">🎉</div>
-            <h3 className="text-xl font-bold mb-2">Quiz Complete!</h3>
-            <p className="text-gray-400 mb-6">Here's how you performed</p>
-            
-            <div className="bg-gray-700/50 rounded-2xl p-4 mb-6 space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Questions Attempted:</span>
-                <span className="text-white font-semibold">{attempted} / {total}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Correct Answers:</span>
-                <span className="text-green-400 font-semibold">{correctCount}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Accuracy:</span>
-                <span className="text-blue-400 font-semibold">
-                  {attempted > 0 ? Math.round((correctCount / attempted) * 100) : 0}%
-                </span>
-              </div>
-              <div className="border-t border-gray-600 pt-3 mt-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-yellow-300 flex items-center gap-1">
-                    🪙 Coins Earned:
-                  </span>
-                  <span className="text-yellow-400 font-bold text-lg">{finalQuizCoins}</span>
-                </div>
-              </div>
-            </div>
-            
-            <button
-              onClick={handleQuizSummaryComplete}
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-3 rounded-xl font-medium transition-colors"
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Modals */}
       {showQuit && (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
@@ -779,7 +693,7 @@ const QuizSession = ({
         </div>
       )}
 
-      {showSubmit && !showQuizSummary && (
+      {showSubmit && (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
             <div className="text-4xl mb-4">🏆</div>
@@ -787,22 +701,20 @@ const QuizSession = ({
             <p className="text-gray-400 mb-4">
               {attempted} of {total} answered • {skippedCount} skipped
             </p>
-            {isPractice && (
-              <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 p-4 rounded-2xl mb-6 border border-yellow-600/30">
-                <div className="flex justify-center gap-6">
-                  <div className="text-center">
-                    <div className="text-2xl mb-1">⭐</div>
-                    <div className="text-yellow-400 font-bold">{earnedStars}</div>
-                    <div className="text-xs text-gray-400">Stars</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl mb-1">🪙</div>
-                    <div className="text-yellow-400 font-bold">{earnedCoins}</div>
-                    <div className="text-xs text-gray-400">Coins</div>
-                  </div>
+            <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 p-4 rounded-2xl mb-6 border border-yellow-600/30">
+              <div className="flex justify-center gap-6">
+                <div className="text-center">
+                  <div className="text-2xl mb-1">⭐</div>
+                  <div className="text-yellow-400 font-bold">{earnedStars}</div>
+                  <div className="text-xs text-gray-400">Stars</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl mb-1">🪙</div>
+                  <div className="text-yellow-400 font-bold">{earnedCoins}</div>
+                  <div className="text-xs text-gray-400">Coins</div>
                 </div>
               </div>
-            )}
+            </div>
             <div className="flex gap-3">
               <button
                 onClick={() => {
@@ -815,12 +727,7 @@ const QuizSession = ({
                 Back
               </button>
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('Submit button clicked'); // Debug log
-                  handleSubmit();
-                }}
+                onClick={handleSubmit}
                 className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-xl font-medium"
               >
                 Submit

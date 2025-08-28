@@ -451,7 +451,7 @@ const QuizSession = ({
       )}
 
       {/* Top Status Bar - Sticky with proper overflow hidden */}
-      <div className="sticky top-0 flex items-center justify-between px-4 py-2 bg-gray-900 flex-shrink-0 z-40 border-b border-gray-800 shadow-lg">
+      <div className="sticky top-0 flex items-center justify-between px-4 py-4 bg-gray-900 flex-shrink-0 z-40 border-b border-gray-800">
         <button 
           onClick={() => setShowQuit(true)}
           className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
@@ -494,7 +494,7 @@ const QuizSession = ({
       </div>
 
       {/* Progress Bar */}
-      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900 relative z-30">
+      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900">
         <div className="flex justify-between items-center mb-1">
           <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
           <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>

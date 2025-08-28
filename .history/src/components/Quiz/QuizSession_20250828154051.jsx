@@ -494,7 +494,7 @@ const QuizSession = ({
       </div>
 
       {/* Progress Bar */}
-      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900 relative z-30">
+      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900">
         <div className="flex justify-between items-center mb-1">
           <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
           <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
