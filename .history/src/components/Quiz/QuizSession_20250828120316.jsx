@@ -449,13 +449,13 @@ const QuizSession = ({
         </div>
         
         {/* Category Name - After progress dots */}
-        <div className="text-center mt-1">
+        <div className="text-center mt-2">
           <span className="text-xs text-gray-500">{currentQuestion.category}</span>
         </div>
       </div>
 
       {/* Main Content - Scrollable when explanation is shown */}
-      <div className={`flex-1 px-4 py-8 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+      <div className={`flex-1 px-4 py-4 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
         {/* Question Card */}
         <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-6 mb-4 flex-shrink-0">
           <div className="text-center">
@@ -466,7 +466,7 @@ const QuizSession = ({
         </div>
 
         {/* Options Grid */}
-        <div className="flex-1 grid grid-cols-1 gap-3 mb-4">
+        <div className="flex-1 grid grid-cols-1 gap-3 mb-16">
           {currentQuestion.options.map((option, optIndex) => {
             const isSelected = selected === optIndex;
             const isCorrect = optIndex === currentQuestion.answerIndex;

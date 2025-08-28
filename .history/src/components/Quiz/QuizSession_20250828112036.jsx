@@ -12,7 +12,7 @@ const QuizSession = ({
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [skipped, setSkipped] = useState([]);
-  const [questionTimers, setQuestionTimers] = useState([]); // Track time spent per question
+  const [remaining, setRemaining] = useState(timerConfig?.seconds || 45);
   const [paused, setPaused] = useState(false);
   const [timeUpFor, setTimeUpFor] = useState(null);
   
@@ -32,7 +32,6 @@ const QuizSession = ({
   const [toast, setToast] = useState("");
   const [showExplanation, setShowExplanation] = useState(false);
   const [coinAnimation, setCoinAnimation] = useState(false);
-  const [timerActive, setTimerActive] = useState(true);
   
   // Star and coin system for gamification
   const [earnedStars, setEarnedStars] = useState(0);
@@ -41,7 +40,6 @@ const QuizSession = ({
   const [showReward, setShowReward] = useState(null);
   
   const autoNextRef = useRef(null);
-  const timerRef = useRef(null);
   const isPractice = mode === "practice";
   const selected = answers[index];
 
@@ -101,63 +99,8 @@ const QuizSession = ({
       setAnswers(new Array(questions.length).fill(null));
       setSkipped(new Array(questions.length).fill(false));
       setLockedMap(new Array(questions.length).fill(false));
-      // Initialize timer array with default time for each question
-      setQuestionTimers(new Array(questions.length).fill(timerConfig?.seconds || 45));
     }
-  }, [questions.length, timerConfig?.seconds]);
-
-  // Lifeline handlers
-  const handleFiftyFifty = () => {
-    if (used5050 || selected !== null) {
-      setToast("Already used or answer selected");
-      setTimeout(() => setToast(""), 2000);
-      return;
-    }
-    
-    if (!currentQuestion) return;
-    
-    // Find wrong answers and eliminate 2 of them
-    const wrongOptions = [0,1,2,3].filter(i => i !== currentQuestion.answerIndex);
-    const toEliminate = wrongOptions.sort(() => Math.random() - 0.5).slice(0, 2);
-    
-    setElimMap({ ...elimMap, [index]: toEliminate });
-    setUsed5050(true);
-  };
-
-  const handleAudience = () => {
-    if (usedAudience || selected !== null) {
-      setToast("Already used or answer selected");
-      setTimeout(() => setToast(""), 2000);
-      return;
-    }
-    
-    if (!currentQuestion) return;
-    
-    // Generate realistic audience poll percentages
-    const correctAnswer = currentQuestion.answerIndex;
-    const percentages = [0, 0, 0, 0];
-    
-    // Correct answer gets 40-70% of votes
-    const correctPercentage = 40 + Math.floor(Math.random() * 31);
-    percentages[correctAnswer] = correctPercentage;
-    
-    // Distribute remaining percentage among other options
-    let remaining = 100 - correctPercentage;
-    const otherOptions = [0,1,2,3].filter(i => i !== correctAnswer);
-    
-    for (let i = 0; i < otherOptions.length - 1; i++) {
-      const maxPossible = Math.min(remaining - (otherOptions.length - 1 - i), remaining / 2);
-      const percentage = Math.floor(Math.random() * (maxPossible + 1));
-      percentages[otherOptions[i]] = percentage;
-      remaining -= percentage;
-    }
-    
-    // Give remaining to last option
-    percentages[otherOptions[otherOptions.length - 1]] = remaining;
-    
-    setAudienceMap({ ...audienceMap, [index]: percentages });
-    setUsedAudience(true);
-  };
+  }, [questions.length]);
 
   // Handle answer selection with rewards
   const onSelect = useCallback((optIdx, evt) => {
@@ -167,12 +110,6 @@ const QuizSession = ({
     const nextAnswers = [...answers];
     nextAnswers[index] = answers[index] === optIdx ? null : optIdx;
     setAnswers(nextAnswers);
-
-    // Stop timer immediately when answer is selected
-    if (nextAnswers[index] !== null) {
-      setTimerActive(false);
-      clearInterval(timerRef.current);
-    }
 
     // Check if correct and award points
     if (nextAnswers[index] === currentQuestion.answerIndex) {
@@ -215,7 +152,7 @@ const QuizSession = ({
       });
     }
 
-    // Auto-advance in quiz mode after 5 seconds
+    // Auto-advance in quiz mode
     if (!isPractice && nextAnswers[index] !== null) {
       clearTimeout(autoNextRef.current);
       autoNextRef.current = setTimeout(() => {
@@ -225,27 +162,20 @@ const QuizSession = ({
           setShowSubmit(true);
           setPaused(true);
         }
-      }, 5000); // Wait 5 seconds before auto-advance
+      }, 2000);
     }
   }, [currentQuestion, isPractice, lockedMap, index, answers, skipped, total, streak]);
 
   // Navigation functions
   const goPrev = () => {
     if (index > 0) {
-      clearInterval(timerRef.current);
-      setTimerActive(false);
       setIndex(i => i - 1);
+      setRemaining(timerConfig?.seconds || 45);
       setShowExplanation(false);
-      // Show explanation for previous question if it was answered in practice mode
-      if (isPractice && answers[index - 1] !== null) {
-        setTimeout(() => setShowExplanation(true), 100);
-      }
     }
   };
 
   const goNext = () => {
-    clearInterval(timerRef.current);
-    
     // Mark as skipped if moving next without answering
     if (selected === null) {
       const next = [...skipped];
@@ -254,18 +184,10 @@ const QuizSession = ({
       setStreak(0);
     }
 
-    setTimerActive(false);
-    setShowExplanation(false);
-
     if (index < total - 1) {
       setIndex(i => i + 1);
-      // Show explanation for next question if it was answered in practice mode
-      if (isPractice && answers[index + 1] !== null) {
-        setTimeout(() => setShowExplanation(true), 100);
-      } else {
-        // Start timer for unanswered questions
-        setTimeout(() => setTimerActive(true), 100);
-      }
+      setRemaining(timerConfig?.seconds || 45);
+      setShowExplanation(false);
     } else {
       setShowSubmit(true);
     }
@@ -304,41 +226,73 @@ const QuizSession = ({
 
   // Timer functions
   useEffect(() => {
-    if (paused || timeUpFor !== null || showSubmit || !timerActive || answers[index] !== null) {
-      return;
-    }
+    if (paused || timeUpFor !== null) return;
     
-    timerRef.current = setInterval(() => {
-      setQuestionTimers(prev => {
-        const newTimers = [...prev];
-        const currentTime = newTimers[index];
-        
-        if (currentTime <= 1) {
-          clearInterval(timerRef.current);
-          if (index === total - 1) {
-            setShowSubmit(true);
-            return newTimers;
-          }
+    const timer = setInterval(() => {
+      setRemaining(prev => {
+        if (prev <= 1) {
           setTimeUpFor(index);
-          return newTimers;
+          return 0;
         }
-        
-        newTimers[index] = currentTime - 1;
-        return newTimers;
+        return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timerRef.current);
-  }, [paused, timeUpFor, index, showSubmit, total, timerActive, answers]);
+    return () => clearInterval(timer);
+  }, [paused, timeUpFor, index]);
 
-  // Start timer when moving to unanswered question
-  useEffect(() => {
-    if (answers[index] === null && !showSubmit && !timeUpFor) {
-      setTimerActive(true);
-    } else {
-      setTimerActive(false);
+  // Lifeline handlers
+  const use5050 = () => {
+    if (used5050 || selected !== null) {
+      setToast("Already used or answer selected");
+      setTimeout(() => setToast(""), 2000);
+      return;
     }
-  }, [index, answers, showSubmit, timeUpFor]);
+    
+    if (!currentQuestion) return;
+    
+    // Find wrong answers and eliminate 2 of them
+    const wrongOptions = [0,1,2,3].filter(i => i !== currentQuestion.answerIndex);
+    const toEliminate = wrongOptions.sort(() => Math.random() - 0.5).slice(0, 2);
+    
+    setElimMap({ ...elimMap, [index]: toEliminate });
+    setUsed5050(true);
+  };
+
+  const useAudience = () => {
+    if (usedAudience || selected !== null) {
+      setToast("Already used or answer selected");
+      setTimeout(() => setToast(""), 2000);
+      return;
+    }
+    
+    if (!currentQuestion) return;
+    
+    // Generate realistic audience poll percentages
+    const correctAnswer = currentQuestion.answerIndex;
+    const percentages = [0, 0, 0, 0];
+    
+    // Correct answer gets 40-70% of votes
+    const correctPercentage = 40 + Math.floor(Math.random() * 31);
+    percentages[correctAnswer] = correctPercentage;
+    
+    // Distribute remaining percentage among other options
+    let remaining = 100 - correctPercentage;
+    const otherOptions = [0,1,2,3].filter(i => i !== correctAnswer);
+    
+    for (let i = 0; i < otherOptions.length - 1; i++) {
+      const maxPossible = Math.min(remaining - (otherOptions.length - 1 - i), remaining / 2);
+      const percentage = Math.floor(Math.random() * (maxPossible + 1));
+      percentages[otherOptions[i]] = percentage;
+      remaining -= percentage;
+    }
+    
+    // Give remaining to last option
+    percentages[otherOptions[otherOptions.length - 1]] = remaining;
+    
+    setAudienceMap({ ...audienceMap, [index]: percentages });
+    setUsedAudience(true);
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -349,7 +303,6 @@ const QuizSession = ({
   const progress = ((index + 1) / questions.length) * 100;
   const attempted = answers.filter(a => a !== null).length;
   const skippedCount = skipped.filter(Boolean).length;
-  const currentTimer = questionTimers[index] || 0;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden flex flex-col">
@@ -393,8 +346,10 @@ const QuizSession = ({
           </svg>
           <span className="text-sm font-medium">Back</span>
         </button>
-        
-        <div className="flex-1"></div>
+
+        <div className="text-center">
+          <h1 className="text-lg font-bold text-white">{category}</h1>
+        </div>
 
         <div className="flex items-center gap-3">
           {/* Coins */}
@@ -411,11 +366,11 @@ const QuizSession = ({
           
           {/* Timer */}
           <div className={`px-3 py-1 rounded-full font-mono font-semibold ${
-            currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
-            currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
+            remaining <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
+            remaining <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
             'bg-green-600/20 text-green-400'
           }`}>
-            {formatTime(currentTimer)}
+            {formatTime(remaining)}
           </div>
         </div>
       </div>
@@ -434,7 +389,7 @@ const QuizSession = ({
         </div>
         
         {/* Progress Dots */}
-        <div className="flex justify-center gap-1 mt-2">
+        <div className="flex justify-center gap-1 mt-3">
           {Array.from({length: total}).map((_, i) => (
             <div
               key={i}
@@ -447,17 +402,12 @@ const QuizSession = ({
             />
           ))}
         </div>
-        
-        {/* Category Name - After progress dots */}
-        <div className="text-center mt-1">
-          <span className="text-xs text-gray-500">{currentQuestion.category}</span>
-        </div>
       </div>
 
       {/* Main Content - Scrollable when explanation is shown */}
-      <div className={`flex-1 px-4 py-8 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+      <div className={`flex-1 px-4 py-6 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
         {/* Question Card */}
-        <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-6 mb-4 flex-shrink-0">
+        <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-6 mb-6 flex-shrink-0">
           <div className="text-center">
             <h2 className="text-xl font-semibold leading-relaxed text-white mb-4">
               {currentQuestion.prompt}
@@ -466,17 +416,17 @@ const QuizSession = ({
         </div>
 
         {/* Options Grid */}
-        <div className="flex-1 grid grid-cols-1 gap-3 mb-4">
+        <div className="flex-1 grid grid-cols-1 gap-3 mb-6 max-w-lg mx-auto">
           {currentQuestion.options.map((option, optIndex) => {
             const isSelected = selected === optIndex;
             const isCorrect = optIndex === currentQuestion.answerIndex;
-            const showFeedback = (isPractice && selected !== null) || showExplanation;
+            const showFeedback = isPractice && selected !== null;
             const isEliminated = elimMap[index] && elimMap[index].includes(optIndex);
             
             // Skip eliminated options in 50:50
             if (isEliminated) return null;
             
-            let cardClass = "p-3 rounded-xl transition-all duration-200 transform border-2 min-h-[48px] flex items-center cursor-pointer ";
+            let cardClass = "p-4 rounded-2xl transition-all duration-200 transform border-2 min-h-[64px] flex items-center cursor-pointer ";
             
             if (showFeedback) {
               if (isSelected && isCorrect) {
@@ -503,9 +453,9 @@ const QuizSession = ({
                 disabled={isPractice && lockedMap[index]}
                 className={cardClass}
               >
-                <div className="flex items-center gap-3 w-full">
-                  <div className="text-xl flex-shrink-0">{optionLabels[optIndex]}</div>
-                  <div className="flex-1 text-left font-medium text-sm">{option}</div>
+                <div className="flex items-center gap-4 w-full">
+                  <div className="text-2xl flex-shrink-0">{optionLabels[optIndex]}</div>
+                  <div className="flex-1 text-left font-medium">{option}</div>
                   {/* Show audience percentage if active */}
                   {audienceMap[index] && audienceMap[index][optIndex] > 0 && (
                     <div className="bg-purple-600/20 px-2 py-1 rounded-full text-xs text-purple-300">
@@ -513,13 +463,13 @@ const QuizSession = ({
                     </div>
                   )}
                   {showFeedback && isSelected && isCorrect && (
-                    <div className="text-xl animate-bounce">🎉</div>
+                    <div className="text-2xl animate-bounce">🎉</div>
                   )}
                   {showFeedback && isSelected && !isCorrect && (
-                    <div className="text-xl">😔</div>
+                    <div className="text-2xl">😔</div>
                   )}
                   {showFeedback && !isSelected && isCorrect && (
-                    <div className="text-lg animate-pulse">✨</div>
+                    <div className="text-xl animate-pulse">✨</div>
                   )}
                 </div>
               </button>
@@ -529,7 +479,7 @@ const QuizSession = ({
 
         {/* Explanation (Inline) */}
         {isPractice && showExplanation && selected !== null && (
-          <div className="bg-gray-800 rounded-2xl p-4 mb-4 border border-gray-700 flex-shrink-0">
+          <div className="bg-gray-800 rounded-2xl p-4 mb-6 border border-gray-700 flex-shrink-0">
             <div className="flex gap-3">
               <div className="text-2xl flex-shrink-0">
                 {selected === currentQuestion.answerIndex ? '🎊' : '💡'}
@@ -554,13 +504,13 @@ const QuizSession = ({
         )}
       </div>
 
-      {/* Bottom Controls - Positioned higher */}
+      {/* Bottom Controls - Always visible */}
       <div className="bg-gray-800/50 backdrop-blur-sm p-4 flex-shrink-0">
         {/* Lifelines */}
         {!isPractice && (
-          <div className="flex justify-center gap-3 mb-3">
+          <div className="flex justify-center gap-3 mb-4">
             <button
-              onClick={handleFiftyFifty}
+              onClick={use5050}
               disabled={used5050 || selected !== null}
               className="bg-orange-600 hover:bg-orange-700 disabled:bg-gray-700 disabled:text-gray-500 px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2"
             >
@@ -568,7 +518,7 @@ const QuizSession = ({
               50:50
             </button>
             <button
-              onClick={handleAudience}
+              onClick={useAudience}
               disabled={usedAudience || selected !== null}
               className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:text-gray-500 px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2"
             >
@@ -579,11 +529,11 @@ const QuizSession = ({
         )}
 
         {/* Navigation */}
-        <div className="flex gap-2 mb-3">
+        <div className="flex gap-3 mb-3">
           <button
             onClick={goPrev}
             disabled={index === 0}
-            className="flex-1 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors text-sm"
+            className="flex-1 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors"
           >
             Previous
           </button>
@@ -591,14 +541,14 @@ const QuizSession = ({
           <button
             onClick={onSkip}
             disabled={selected !== null}
-            className="flex-1 bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors text-sm"
+            className="flex-1 bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors"
           >
             Skip
           </button>
           
           <button
             onClick={goNext}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium transition-colors text-sm"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium transition-colors"
           >
             {index === total - 1 ? 'Finish' : 'Next'}
           </button>
@@ -662,10 +612,7 @@ const QuizSession = ({
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => {
-                  setShowSubmit(false);
-                  setTimeUpFor(null); // Clear any timeUpFor state
-                }}
+                onClick={() => setShowSubmit(false)}
                 className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium"
               >
                 Back
@@ -681,21 +628,14 @@ const QuizSession = ({
         </div>
       )}
 
-      {timeUpFor === index && !showSubmit && (
+      {timeUpFor === index && (
         <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
             <div className="text-4xl mb-4 animate-pulse">⏰</div>
             <h3 className="text-xl font-bold mb-2">Time's Up!</h3>
             <p className="text-gray-400 mb-6">Let's move to the next question</p>
             <button
-              onClick={() => { 
-                setTimeUpFor(null);
-                if (index < questions.length - 1) {
-                  goNext();
-                } else {
-                  setShowSubmit(true);
-                }
-              }}
+              onClick={() => { setTimeUpFor(null); goNext(); }}
               className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium"
             >
               {index < questions.length - 1 ? "Continue" : "See Results"}

@@ -455,7 +455,7 @@ const QuizSession = ({
       </div>
 
       {/* Main Content - Scrollable when explanation is shown */}
-      <div className={`flex-1 px-4 py-8 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+      <div className={`flex-1 px-4 py-4 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
         {/* Question Card */}
         <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-6 mb-4 flex-shrink-0">
           <div className="text-center">

@@ -12,7 +12,7 @@ const QuizSession = ({
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [skipped, setSkipped] = useState([]);
-  const [questionTimers, setQuestionTimers] = useState([]); // Track time spent per question
+  const [remaining, setRemaining] = useState(timerConfig?.seconds || 45);
   const [paused, setPaused] = useState(false);
   const [timeUpFor, setTimeUpFor] = useState(null);
   
@@ -32,7 +32,6 @@ const QuizSession = ({
   const [toast, setToast] = useState("");
   const [showExplanation, setShowExplanation] = useState(false);
   const [coinAnimation, setCoinAnimation] = useState(false);
-  const [timerActive, setTimerActive] = useState(true);
   
   // Star and coin system for gamification
   const [earnedStars, setEarnedStars] = useState(0);
@@ -41,7 +40,6 @@ const QuizSession = ({
   const [showReward, setShowReward] = useState(null);
   
   const autoNextRef = useRef(null);
-  const timerRef = useRef(null);
   const isPractice = mode === "practice";
   const selected = answers[index];
 
@@ -101,10 +99,8 @@ const QuizSession = ({
       setAnswers(new Array(questions.length).fill(null));
       setSkipped(new Array(questions.length).fill(false));
       setLockedMap(new Array(questions.length).fill(false));
-      // Initialize timer array with default time for each question
-      setQuestionTimers(new Array(questions.length).fill(timerConfig?.seconds || 45));
     }
-  }, [questions.length, timerConfig?.seconds]);
+  }, [questions.length]);
 
   // Lifeline handlers
   const handleFiftyFifty = () => {
@@ -168,12 +164,6 @@ const QuizSession = ({
     nextAnswers[index] = answers[index] === optIdx ? null : optIdx;
     setAnswers(nextAnswers);
 
-    // Stop timer immediately when answer is selected
-    if (nextAnswers[index] !== null) {
-      setTimerActive(false);
-      clearInterval(timerRef.current);
-    }
-
     // Check if correct and award points
     if (nextAnswers[index] === currentQuestion.answerIndex) {
       const newStreak = streak + 1;
@@ -215,7 +205,7 @@ const QuizSession = ({
       });
     }
 
-    // Auto-advance in quiz mode after 5 seconds
+    // Auto-advance in quiz mode
     if (!isPractice && nextAnswers[index] !== null) {
       clearTimeout(autoNextRef.current);
       autoNextRef.current = setTimeout(() => {
@@ -225,27 +215,20 @@ const QuizSession = ({
           setShowSubmit(true);
           setPaused(true);
         }
-      }, 5000); // Wait 5 seconds before auto-advance
+      }, 2000);
     }
   }, [currentQuestion, isPractice, lockedMap, index, answers, skipped, total, streak]);
 
   // Navigation functions
   const goPrev = () => {
     if (index > 0) {
-      clearInterval(timerRef.current);
-      setTimerActive(false);
       setIndex(i => i - 1);
+      setRemaining(timerConfig?.seconds || 45);
       setShowExplanation(false);
-      // Show explanation for previous question if it was answered in practice mode
-      if (isPractice && answers[index - 1] !== null) {
-        setTimeout(() => setShowExplanation(true), 100);
-      }
     }
   };
 
   const goNext = () => {
-    clearInterval(timerRef.current);
-    
     // Mark as skipped if moving next without answering
     if (selected === null) {
       const next = [...skipped];
@@ -254,18 +237,10 @@ const QuizSession = ({
       setStreak(0);
     }
 
-    setTimerActive(false);
-    setShowExplanation(false);
-
     if (index < total - 1) {
       setIndex(i => i + 1);
-      // Show explanation for next question if it was answered in practice mode
-      if (isPractice && answers[index + 1] !== null) {
-        setTimeout(() => setShowExplanation(true), 100);
-      } else {
-        // Start timer for unanswered questions
-        setTimeout(() => setTimerActive(true), 100);
-      }
+      setRemaining(timerConfig?.seconds || 45);
+      setShowExplanation(false);
     } else {
       setShowSubmit(true);
     }
@@ -304,41 +279,25 @@ const QuizSession = ({
 
   // Timer functions
   useEffect(() => {
-    if (paused || timeUpFor !== null || showSubmit || !timerActive || answers[index] !== null) {
-      return;
-    }
+    if (paused || timeUpFor !== null || showSubmit) return;
     
-    timerRef.current = setInterval(() => {
-      setQuestionTimers(prev => {
-        const newTimers = [...prev];
-        const currentTime = newTimers[index];
-        
-        if (currentTime <= 1) {
-          clearInterval(timerRef.current);
+    const timer = setInterval(() => {
+      setRemaining(prev => {
+        if (prev <= 1) {
+          // Don't show timeUpFor on last question if already showing submit
           if (index === total - 1) {
             setShowSubmit(true);
-            return newTimers;
+            return 0;
           }
           setTimeUpFor(index);
-          return newTimers;
+          return 0;
         }
-        
-        newTimers[index] = currentTime - 1;
-        return newTimers;
+        return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timerRef.current);
-  }, [paused, timeUpFor, index, showSubmit, total, timerActive, answers]);
-
-  // Start timer when moving to unanswered question
-  useEffect(() => {
-    if (answers[index] === null && !showSubmit && !timeUpFor) {
-      setTimerActive(true);
-    } else {
-      setTimerActive(false);
-    }
-  }, [index, answers, showSubmit, timeUpFor]);
+    return () => clearInterval(timer);
+  }, [paused, timeUpFor, index, showSubmit, total]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -349,7 +308,6 @@ const QuizSession = ({
   const progress = ((index + 1) / questions.length) * 100;
   const attempted = answers.filter(a => a !== null).length;
   const skippedCount = skipped.filter(Boolean).length;
-  const currentTimer = questionTimers[index] || 0;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden flex flex-col">
@@ -411,11 +369,11 @@ const QuizSession = ({
           
           {/* Timer */}
           <div className={`px-3 py-1 rounded-full font-mono font-semibold ${
-            currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
-            currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
+            remaining <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
+            remaining <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
             'bg-green-600/20 text-green-400'
           }`}>
-            {formatTime(currentTimer)}
+            {formatTime(remaining)}
           </div>
         </div>
       </div>
@@ -433,6 +391,11 @@ const QuizSession = ({
           />
         </div>
         
+        {/* Category Name */}
+        <div className="text-center mt-2">
+          <span className="text-xs text-gray-500">{currentQuestion.category}</span>
+        </div>
+        
         {/* Progress Dots */}
         <div className="flex justify-center gap-1 mt-2">
           {Array.from({length: total}).map((_, i) => (
@@ -447,17 +410,12 @@ const QuizSession = ({
             />
           ))}
         </div>
-        
-        {/* Category Name - After progress dots */}
-        <div className="text-center mt-1">
-          <span className="text-xs text-gray-500">{currentQuestion.category}</span>
-        </div>
       </div>
 
       {/* Main Content - Scrollable when explanation is shown */}
-      <div className={`flex-1 px-4 py-8 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+      <div className={`flex-1 px-4 py-6 flex flex-col min-h-0 ${showExplanation ? 'overflow-y-auto' : 'overflow-hidden'}`}>
         {/* Question Card */}
-        <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-6 mb-4 flex-shrink-0">
+        <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-6 mb-6 flex-shrink-0">
           <div className="text-center">
             <h2 className="text-xl font-semibold leading-relaxed text-white mb-4">
               {currentQuestion.prompt}
@@ -466,11 +424,12 @@ const QuizSession = ({
         </div>
 
         {/* Options Grid */}
-        <div className="flex-1 grid grid-cols-1 gap-3 mb-4">
+        {/* <div className="flex-1 grid grid-cols-1 gap-2 mb-6 max-w-lg mx-auto"> */}
+        <div className="flex-1 grid grid-cols-1 gap-3 mb-16">
           {currentQuestion.options.map((option, optIndex) => {
             const isSelected = selected === optIndex;
             const isCorrect = optIndex === currentQuestion.answerIndex;
-            const showFeedback = (isPractice && selected !== null) || showExplanation;
+            const showFeedback = isPractice && selected !== null;
             const isEliminated = elimMap[index] && elimMap[index].includes(optIndex);
             
             // Skip eliminated options in 50:50
@@ -529,7 +488,7 @@ const QuizSession = ({
 
         {/* Explanation (Inline) */}
         {isPractice && showExplanation && selected !== null && (
-          <div className="bg-gray-800 rounded-2xl p-4 mb-4 border border-gray-700 flex-shrink-0">
+          <div className="bg-gray-800 rounded-2xl p-4 mb-6 border border-gray-700 flex-shrink-0">
             <div className="flex gap-3">
               <div className="text-2xl flex-shrink-0">
                 {selected === currentQuestion.answerIndex ? '🎊' : '💡'}
@@ -554,11 +513,11 @@ const QuizSession = ({
         )}
       </div>
 
-      {/* Bottom Controls - Positioned higher */}
+      {/* Bottom Controls - Always visible */}
       <div className="bg-gray-800/50 backdrop-blur-sm p-4 flex-shrink-0">
         {/* Lifelines */}
         {!isPractice && (
-          <div className="flex justify-center gap-3 mb-3">
+          <div className="flex justify-center gap-3 mb-4">
             <button
               onClick={handleFiftyFifty}
               disabled={used5050 || selected !== null}
@@ -579,11 +538,11 @@ const QuizSession = ({
         )}
 
         {/* Navigation */}
-        <div className="flex gap-2 mb-3">
+        <div className="flex gap-3 mb-3">
           <button
             onClick={goPrev}
             disabled={index === 0}
-            className="flex-1 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors text-sm"
+            className="flex-1 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors"
           >
             Previous
           </button>
@@ -591,14 +550,14 @@ const QuizSession = ({
           <button
             onClick={onSkip}
             disabled={selected !== null}
-            className="flex-1 bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors text-sm"
+            className="flex-1 bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-800 py-3 rounded-xl font-medium transition-colors"
           >
             Skip
           </button>
           
           <button
             onClick={goNext}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium transition-colors text-sm"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium transition-colors"
           >
             {index === total - 1 ? 'Finish' : 'Next'}
           </button>

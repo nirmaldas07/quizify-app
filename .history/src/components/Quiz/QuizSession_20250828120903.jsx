@@ -434,7 +434,7 @@ const QuizSession = ({
         </div>
         
         {/* Progress Dots */}
-        <div className="flex justify-center gap-1 mt-2">
+        <div className="flex justify-center gap-2 mt-2">
           {Array.from({length: total}).map((_, i) => (
             <div
               key={i}
