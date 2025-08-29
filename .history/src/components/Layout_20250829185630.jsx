@@ -414,9 +414,8 @@ useEffect(() => {
               <div className="relative flex h-[72px] items-center justify-around rounded-3xl border border-white/10 bg-gradient-to-b from-base-card/95 to-base-card/80 shadow-2xl backdrop-blur-xl">
                 <NavItem path="/" emoji="🏠" label="Home" />
                 <NavItem path="/play" icon={<WheelIcon size={26} spinning={navAnimating} />} label="Play" />
-                <NavItem path="/swipe" emoji="📚" label="Swipe" />
                 <NavItem path="/profile" emoji="👤" label="Profile" />
-                
+                <NavItem path="/swipe" emoji="📚" label="Swipe" />
               </div>
             </div>
           </div>
