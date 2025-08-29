@@ -290,67 +290,68 @@ useEffect(() => {
   };
   
   const handleBackClick = () => {
-  setTargetNavigation('/');
-  setShowQuitModal(true);
-};
+    setShowQuitModal(true);
+  };
   
-const handleQuitConfirm = () => {
-  setShowResults(true);
-  setShowQuitModal(false);
-};
+  const handleQuitConfirm = () => {
+    setShowResults(true);
+    setShowQuitModal(false);
+  };
   
- // Results Screen Component
-const ResultsScreen = () => {
-  const correctAnswers = Object.keys(answers).filter(qId => {
-    const question = questions.find(q => q.id === qId);
-    return answers[qId] === question?.answerIndex;
-  }).length;
-  
-  // Auto-dismiss after 2 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      addCoins(sessionCoins);
-      navigate(targetNavigation || '/');
-    }, 2000);
+  // Results Screen Component
+  const ResultsScreen = () => {
+    const correctAnswers = Object.keys(answers).filter(qId => {
+      const question = questions.find(q => q.id === qId);
+      return answers[qId] === question?.answerIndex;
+    }).length;
     
-    return () => clearTimeout(timer);
-  }, []);
-  
-  return (
-    <div className="fixed inset-0 bg-gray-900 z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-800 rounded-3xl p-8 max-w-md w-full text-center border border-gray-700">
-        <div className="text-5xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold text-white mb-4">Session Complete!</h2>
-        
-        <div className="space-y-4">
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Questions Answered</div>
-            <div className="text-2xl font-bold text-white">{Object.keys(answers).length}</div>
-          </div>
+    const handleContinue = () => {
+      addCoins(sessionCoins);
+      navigate('/');
+    };
+    
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex items-center justify-center p-4">
+        <div className="bg-gray-800 rounded-3xl p-8 max-w-md w-full text-center border border-gray-700">
+          <div className="text-5xl mb-4">🎉</div>
+          <h2 className="text-2xl font-bold text-white mb-4">Session Complete!</h2>
           
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Correct Answers</div>
-            <div className="text-2xl font-bold text-green-400">{correctAnswers}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Coins Earned</div>
-            <div className="text-2xl font-bold text-yellow-400">🪙 {sessionCoins}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Lives Remaining</div>
-            <div className="text-2xl font-bold text-red-400">
-              {Array.from({ length: 5 }, (_, i) => (
-                <span key={i} className={i < lives ? '' : 'opacity-30'}>❤️</span>
-              ))}
+          <div className="space-y-4 mb-6">
+            <div className="bg-gray-700/50 rounded-xl p-4">
+              <div className="text-gray-400 text-sm mb-1">Questions Answered</div>
+              <div className="text-2xl font-bold text-white">{Object.keys(answers).length}</div>
+            </div>
+            
+            <div className="bg-gray-700/50 rounded-xl p-4">
+              <div className="text-gray-400 text-sm mb-1">Correct Answers</div>
+              <div className="text-2xl font-bold text-green-400">{correctAnswers}</div>
+            </div>
+            
+            <div className="bg-gray-700/50 rounded-xl p-4">
+              <div className="text-gray-400 text-sm mb-1">Coins Earned</div>
+              <div className="text-2xl font-bold text-yellow-400">🪙 {sessionCoins}</div>
+            </div>
+            
+            <div className="bg-gray-700/50 rounded-xl p-4">
+              <div className="text-gray-400 text-sm mb-1">Lives Remaining</div>
+              <div className="text-2xl font-bold text-red-400">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <span key={i} className={i < lives ? '' : 'opacity-30'}>❤️</span>
+                ))}
+              </div>
             </div>
           </div>
+          
+          <button
+            onClick={handleContinue}
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 py-3 rounded-xl text-white font-bold"
+          >
+            Collect Coins & Continue
+          </button>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
   
   if (showResults) {
     return <ResultsScreen />;

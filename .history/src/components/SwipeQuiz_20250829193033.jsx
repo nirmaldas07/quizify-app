@@ -20,10 +20,9 @@ const SwipeQuiz = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showMotivationCard, setShowMotivationCard] = useState(false);
   const [motivationMessage, setMotivationMessage] = useState('');
-  const [showNoLivesModal, setShowNoLivesModal] = useState(false);
-  const [showQuitModal, setShowQuitModal] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [isInQuiz, setIsInQuiz] = useState(false);
+  
+  // Stats for questions
+  const [questionStats, setQuestionStats] = useState({});
   
   // Lifelines
   const [used5050, setUsed5050] = useState(0);
@@ -38,71 +37,8 @@ const SwipeQuiz = () => {
   // Random animal emoji for each question
   const animalEmojis = ['🐼', '🐱', '🐶', '🦊', '🐰', '🐨', '🐯', '🦁', '🐸', '🐵'];
   
-  // Reset discovery view when component mounts
-  useEffect(() => {
-    setShowDiscovery(true);
-    setSelectedCategory(null);
-  }, []);
-  
-  // Track when in quiz
-  useEffect(() => {
-    if (!showDiscovery && questions.length > 0) {
-      setIsInQuiz(true);
-    }
-  }, [showDiscovery, questions.length]);
-  
-// Intercept navigation
-const [targetNavigation, setTargetNavigation] = useState(null);
-
-useEffect(() => {
-  const handleNavClick = (e) => {
-    if (isInQuiz && !showResults) {
-      const navButton = e.target.closest('button[type="button"]');
-      const navText = navButton?.querySelector('.text-\\[10px\\]')?.textContent;
-      
-      if (navText && ['Home', 'Play', 'Profile', 'Swipe'].includes(navText)) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Store where user wants to go
-        const paths = { 'Home': '/', 'Play': '/play', 'Profile': '/profile', 'Swipe': '/swipe' };
-        setTargetNavigation(paths[navText]);
-        setShowQuitModal(true);
-      }
-    }
-  };
-  
-  document.addEventListener('click', handleNavClick, true);
-  return () => document.removeEventListener('click', handleNavClick, true);
-}, [isInQuiz, showResults]);
-  
-  // Detect scroll to control swipe behavior
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    
-    let scrollTimeout;
-    const handleScroll = () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        const scrollPosition = container.scrollTop;
-        const windowHeight = window.innerHeight;
-        const newIndex = Math.round(scrollPosition / windowHeight);
-        
-        if (newIndex !== currentIndex && newIndex >= 0 && newIndex < questions.length) {
-          setCurrentIndex(newIndex);
-          const targetScroll = newIndex * windowHeight;
-          container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-        }
-      }, 100);
-    };
-    
-    container.addEventListener('scroll', handleScroll);
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, [currentIndex, questions.length]);
+  // Motivation card milestones
+  const motivationMilestones = [1, 3, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50];
   
   // Load questions
   const loadQuestions = async (category) => {
@@ -127,6 +63,7 @@ useEffect(() => {
           category: row.category || 'General Knowledge',
           difficulty: row.difficulty?.toLowerCase() || 'medium',
           explanation: row.explanation || '',
+          // Add random stats
           stats: {
             views: Math.floor(Math.random() * 10000) + 1000,
             attempted: Math.floor(Math.random() * 5000) + 500,
@@ -170,6 +107,7 @@ useEffect(() => {
       playCorrect();
       setStreak(prev => prev + 1);
       setSessionCoins(prev => prev + 10);
+      addCoins(10);
       createConfetti();
       
       if (shouldShowMotivation(questionIndex + 1)) {
@@ -181,15 +119,9 @@ useEffect(() => {
     } else {
       playWrong();
       setStreak(0);
-      setLives(prev => {
-        const newLives = Math.max(0, prev - 1);
-        if (newLives === 0) {
-          setTimeout(() => setShowNoLivesModal(true), 500);
-        }
-        return newLives;
-      });
+      setLives(prev => Math.max(0, prev - 1));
       
-      if (lives > 1 && shouldShowMotivation(questionIndex + 1)) {
+      if (shouldShowMotivation(questionIndex + 1)) {
         const messages = ['Keep trying!', 'You got this!', "Don't give up!", 'Stay strong!', 'Keep going!'];
         setMotivationMessage(messages[Math.floor(Math.random() * messages.length)]);
         setShowMotivationCard(true);
@@ -197,11 +129,10 @@ useEffect(() => {
       }
     }
     
-    if (lives > 1 || isCorrect) {
-      setTimeout(() => {
-        scrollToNext();
-      }, 3500);
-    }
+    // Auto-scroll after 3.5s (increased from 1.5s)
+    setTimeout(() => {
+      scrollToNext();
+    }, 3500);
   };
   
   const createConfetti = () => {
@@ -289,73 +220,6 @@ useEffect(() => {
     loadQuestions(category);
   };
   
-  const handleBackClick = () => {
-  setTargetNavigation('/');
-  setShowQuitModal(true);
-};
-  
-const handleQuitConfirm = () => {
-  setShowResults(true);
-  setShowQuitModal(false);
-};
-  
- // Results Screen Component
-const ResultsScreen = () => {
-  const correctAnswers = Object.keys(answers).filter(qId => {
-    const question = questions.find(q => q.id === qId);
-    return answers[qId] === question?.answerIndex;
-  }).length;
-  
-  // Auto-dismiss after 2 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      addCoins(sessionCoins);
-      navigate(targetNavigation || '/');
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  return (
-    <div className="fixed inset-0 bg-gray-900 z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-800 rounded-3xl p-8 max-w-md w-full text-center border border-gray-700">
-        <div className="text-5xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold text-white mb-4">Session Complete!</h2>
-        
-        <div className="space-y-4">
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Questions Answered</div>
-            <div className="text-2xl font-bold text-white">{Object.keys(answers).length}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Correct Answers</div>
-            <div className="text-2xl font-bold text-green-400">{correctAnswers}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Coins Earned</div>
-            <div className="text-2xl font-bold text-yellow-400">🪙 {sessionCoins}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Lives Remaining</div>
-            <div className="text-2xl font-bold text-red-400">
-              {Array.from({ length: 5 }, (_, i) => (
-                <span key={i} className={i < lives ? '' : 'opacity-30'}>❤️</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-  
-  if (showResults) {
-    return <ResultsScreen />;
-  }
-  
   if (showDiscovery) {
     return <SwipeDiscovery onSelect={handleCategorySelect} />;
   }
@@ -371,11 +235,11 @@ const ResultsScreen = () => {
   return (
     <div className="h-screen bg-gray-900 relative">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 bg-gray-900/95 backdrop-blur z-50 border-b border-gray-800 pt-8">
+      <div className="fixed top-0 left-0 right-0 bg-gray-900/95 backdrop-blur z-50 border-b border-gray-800">
         <div className="flex items-center justify-between px-4 py-3">
           <button 
-            onClick={handleBackClick}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/15 rounded-xl text-white text-sm font-medium hover:bg-white/15 transition-all"
+            onClick={() => navigate('/')}
+            className="text-white bg-gray-800 px-3 py-1 rounded-lg"
           >
             ← Back
           </button>
@@ -389,20 +253,20 @@ const ResultsScreen = () => {
               <span className="font-bold text-orange-400">{streak}</span>
             </div>
           </div>
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
             {Array.from({ length: 5 }, (_, i) => (
-                <span key={i} className={i < lives ? 'text-red-500' : 'text-gray-600 opacity-30'}>
+              <span key={i} className={i < lives ? 'text-red-500' : 'text-gray-600'}>
                 ❤️
-                </span>
+              </span>
             ))}
-            </div>
+          </div>
         </div>
       </div>
       
       {/* Questions Container */}
       <div 
         ref={containerRef}
-        className="h-full overflow-y-scroll snap-y snap-mandatory pt-24"
+        className="h-full overflow-y-scroll snap-y snap-mandatory pt-16"
         style={{ scrollBehavior: 'smooth' }}
       >
         {questions.map((question, index) => (
@@ -421,48 +285,6 @@ const ResultsScreen = () => {
           />
         ))}
       </div>
-      
-      {/* No Lives Modal */}
-      {showNoLivesModal && (
-        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
-            <div className="text-5xl mb-4">😔</div>
-            <h3 className="text-xl font-bold mb-2 text-white">No Lives Left!</h3>
-            <p className="text-gray-400 mb-6">Sorry, you have no lives left to continue swiping.</p>
-            <button
-              onClick={() => setShowResults(true)}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-3 rounded-xl text-white font-medium"
-            >
-              View Results
-            </button>
-          </div>
-        </div>
-      )}
-      
-      {/* Quit Modal */}
-      {showQuitModal && (
-        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
-            <div className="text-4xl mb-4">🤔</div>
-            <h3 className="text-xl font-bold mb-2 text-white">Leave Swipe Mode?</h3>
-            <p className="text-gray-400 mb-6">Your progress will be saved</p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowQuitModal(false)}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium text-white"
-              >
-                Stay
-              </button>
-              <button
-                onClick={handleQuitConfirm}
-                className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium text-white"
-              >
-                Leave
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       
       {/* Motivation Card */}
       {showMotivationCard && (
@@ -507,7 +329,7 @@ const ResultsScreen = () => {
   );
 };
 
-// Question Slide Component
+// Updated Question Slide Component
 const QuestionSlide = ({ 
   question, 
   index, 
@@ -531,19 +353,18 @@ const QuestionSlide = ({
   return (
     <div 
       id={`question-${index}`}
-      className="h-screen snap-start flex flex-col px-4 pt-24 pb-8"
+      className="h-screen snap-start flex flex-col justify-between px-4 py-8"
     >
-      {/* Mascot */}
-      <div className="flex justify-center py-4">
-        <span className="text-8xl" style={{ animation: 'float 3s ease-in-out infinite' }}>
+      {/* Mascot between top bar and question */}
+      <div className="flex justify-center py-8 mt-16">
+        <span className="text-6xl animate-pulse" style={{ animation: 'float 3s ease-in-out infinite' }}>
           {question.mascot}
         </span>
       </div>
       
-      {/* Main content */}
-      <div className="flex-1 flex flex-col justify-start max-w-md mx-auto w-full">
+      <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
         {/* Question */}
-        <div className={`bg-gradient-to-br ${getDifficultyColor(question.difficulty)} p-6 rounded-3xl mb-4`}>
+        <div className={`bg-gradient-to-br ${getDifficultyColor(question.difficulty)} p-6 rounded-3xl mb-6`}>
           <div className="text-white/80 text-sm mb-2">Question {index + 1}</div>
           <h2 className="text-2xl font-bold text-white">
             {question.prompt}
@@ -551,7 +372,7 @@ const QuestionSlide = ({
         </div>
         
         {/* Options */}
-        <div className="space-y-3 mb-3">
+        <div className="space-y-3 mb-4">
           {question.options.map((option, optIdx) => {
             const isAnswered = answered !== undefined;
             const isSelected = answered === optIdx;
@@ -600,9 +421,9 @@ const QuestionSlide = ({
           })}
         </div>
         
-        {/* Lifelines */}
+        {/* Lifelines below options */}
         {!answered && (
-          <div className="flex justify-center gap-3 mb-3">
+          <div className="flex justify-center gap-3">
             <button
               onClick={onFiftyFifty}
               disabled={!canUseFiftyFifty}
@@ -627,19 +448,15 @@ const QuestionSlide = ({
             </button>
           </div>
         )}
-        
-        {/* Stats */}
-        <div className="text-center mt-3 mb-4">
-          <div className="text-gray-500 text-xs">
-            {question.stats.views.toLocaleString()} views • {question.stats.attempted.toLocaleString()} attempted • {question.stats.correctRate}% correct
-          </div>
+      </div>
+      
+      {/* Stats and swipe hint */}
+      <div className="text-center">
+        <div className="text-gray-500 text-xs mb-2">
+          {question.stats.views.toLocaleString()} views • {question.stats.attempted.toLocaleString()} attempted • {question.stats.correctRate}% correct
         </div>
-        
-        {/* Swipe hint */}
-        <div className="text-center mt-auto">
-          <div className="text-gray-500 text-sm animate-bounce">
-            Swipe up for next
-          </div>
+        <div className="text-gray-500 text-sm animate-bounce">
+          Swipe up for next
         </div>
       </div>
     </div>

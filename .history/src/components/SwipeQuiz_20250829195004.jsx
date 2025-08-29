@@ -22,8 +22,9 @@ const SwipeQuiz = () => {
   const [motivationMessage, setMotivationMessage] = useState('');
   const [showNoLivesModal, setShowNoLivesModal] = useState(false);
   const [showQuitModal, setShowQuitModal] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [isInQuiz, setIsInQuiz] = useState(false);
+  
+  // Stats for questions
+  const [questionStats, setQuestionStats] = useState({});
   
   // Lifelines
   const [used5050, setUsed5050] = useState(0);
@@ -44,38 +45,6 @@ const SwipeQuiz = () => {
     setSelectedCategory(null);
   }, []);
   
-  // Track when in quiz
-  useEffect(() => {
-    if (!showDiscovery && questions.length > 0) {
-      setIsInQuiz(true);
-    }
-  }, [showDiscovery, questions.length]);
-  
-// Intercept navigation
-const [targetNavigation, setTargetNavigation] = useState(null);
-
-useEffect(() => {
-  const handleNavClick = (e) => {
-    if (isInQuiz && !showResults) {
-      const navButton = e.target.closest('button[type="button"]');
-      const navText = navButton?.querySelector('.text-\\[10px\\]')?.textContent;
-      
-      if (navText && ['Home', 'Play', 'Profile', 'Swipe'].includes(navText)) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Store where user wants to go
-        const paths = { 'Home': '/', 'Play': '/play', 'Profile': '/profile', 'Swipe': '/swipe' };
-        setTargetNavigation(paths[navText]);
-        setShowQuitModal(true);
-      }
-    }
-  };
-  
-  document.addEventListener('click', handleNavClick, true);
-  return () => document.removeEventListener('click', handleNavClick, true);
-}, [isInQuiz, showResults]);
-  
   // Detect scroll to control swipe behavior
   useEffect(() => {
     const container = containerRef.current;
@@ -89,6 +58,7 @@ useEffect(() => {
         const windowHeight = window.innerHeight;
         const newIndex = Math.round(scrollPosition / windowHeight);
         
+        // Snap to closest question
         if (newIndex !== currentIndex && newIndex >= 0 && newIndex < questions.length) {
           setCurrentIndex(newIndex);
           const targetScroll = newIndex * windowHeight;
@@ -157,52 +127,51 @@ useEffect(() => {
     return false;
   };
   
-  const handleAnswer = (questionId, optionIndex) => {
-    if (answers[questionId] !== undefined) return;
+const handleAnswer = (questionId, optionIndex) => {
+  if (answers[questionId] !== undefined) return;
+  
+  const question = questions.find(q => q.id === questionId);
+  const isCorrect = optionIndex === question.answerIndex;
+  const questionIndex = questions.findIndex(q => q.id === questionId);
+  
+  setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
+  
+  if (isCorrect) {
+    playCorrect();
+    setStreak(prev => prev + 1);
+    setSessionCoins(prev => prev + 10);
+    // Don't add coins here - wait for results screen
+    createConfetti();
     
-    const question = questions.find(q => q.id === questionId);
-    const isCorrect = optionIndex === question.answerIndex;
-    const questionIndex = questions.findIndex(q => q.id === questionId);
-    
-    setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
-    
-    if (isCorrect) {
-      playCorrect();
-      setStreak(prev => prev + 1);
-      setSessionCoins(prev => prev + 10);
-      createConfetti();
-      
-      if (shouldShowMotivation(questionIndex + 1)) {
-        const messages = ['Awesome!', 'Perfect!', 'Brilliant!', 'Outstanding!', 'Incredible!'];
-        setMotivationMessage(messages[Math.floor(Math.random() * messages.length)]);
-        setShowMotivationCard(true);
-        setTimeout(() => setShowMotivationCard(false), 2000);
-      }
-    } else {
-      playWrong();
-      setStreak(0);
-      setLives(prev => {
-        const newLives = Math.max(0, prev - 1);
-        if (newLives === 0) {
-          setTimeout(() => setShowNoLivesModal(true), 500);
-        }
-        return newLives;
-      });
-      
-      if (lives > 1 && shouldShowMotivation(questionIndex + 1)) {
-        const messages = ['Keep trying!', 'You got this!', "Don't give up!", 'Stay strong!', 'Keep going!'];
-        setMotivationMessage(messages[Math.floor(Math.random() * messages.length)]);
-        setShowMotivationCard(true);
-        setTimeout(() => setShowMotivationCard(false), 2000);
-      }
+    if (shouldShowMotivation(questionIndex + 1)) {
+      const messages = ['Awesome!', 'Perfect!', 'Brilliant!', 'Outstanding!', 'Incredible!'];
+      setMotivationMessage(messages[Math.floor(Math.random() * messages.length)]);
+      setShowMotivationCard(true);
+      setTimeout(() => setShowMotivationCard(false), 2000);
     }
+  } else {
+    playWrong();
+    setStreak(0);
+    setLives(prev => {
+      const newLives = Math.max(0, prev - 1);
+      if (newLives === 0) {
+        setTimeout(() => setShowNoLivesModal(true), 500);
+      }
+      return newLives;
+    });
     
-    if (lives > 1 || isCorrect) {
-      setTimeout(() => {
-        scrollToNext();
-      }, 3500);
+    if (shouldShowMotivation(questionIndex + 1)) {
+      const messages = ['Keep trying!', 'You got this!', "Don't give up!", 'Stay strong!', 'Keep going!'];
+      setMotivationMessage(messages[Math.floor(Math.random() * messages.length)]);
+      setShowMotivationCard(true);
+      setTimeout(() => setShowMotivationCard(false), 2000);
     }
-  };
+  }
+  
+  setTimeout(() => {
+    scrollToNext();
+  }, 3500);
+};
   
   const createConfetti = () => {
     const container = document.createElement('div');
@@ -290,71 +259,8 @@ useEffect(() => {
   };
   
   const handleBackClick = () => {
-  setTargetNavigation('/');
-  setShowQuitModal(true);
-};
-  
-const handleQuitConfirm = () => {
-  setShowResults(true);
-  setShowQuitModal(false);
-};
-  
- // Results Screen Component
-const ResultsScreen = () => {
-  const correctAnswers = Object.keys(answers).filter(qId => {
-    const question = questions.find(q => q.id === qId);
-    return answers[qId] === question?.answerIndex;
-  }).length;
-  
-  // Auto-dismiss after 2 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      addCoins(sessionCoins);
-      navigate(targetNavigation || '/');
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  return (
-    <div className="fixed inset-0 bg-gray-900 z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-800 rounded-3xl p-8 max-w-md w-full text-center border border-gray-700">
-        <div className="text-5xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold text-white mb-4">Session Complete!</h2>
-        
-        <div className="space-y-4">
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Questions Answered</div>
-            <div className="text-2xl font-bold text-white">{Object.keys(answers).length}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Correct Answers</div>
-            <div className="text-2xl font-bold text-green-400">{correctAnswers}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Coins Earned</div>
-            <div className="text-2xl font-bold text-yellow-400">🪙 {sessionCoins}</div>
-          </div>
-          
-          <div className="bg-gray-700/50 rounded-xl p-4">
-            <div className="text-gray-400 text-sm mb-1">Lives Remaining</div>
-            <div className="text-2xl font-bold text-red-400">
-              {Array.from({ length: 5 }, (_, i) => (
-                <span key={i} className={i < lives ? '' : 'opacity-30'}>❤️</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-  
-  if (showResults) {
-    return <ResultsScreen />;
-  }
+    setShowQuitModal(true);
+  };
   
   if (showDiscovery) {
     return <SwipeDiscovery onSelect={handleCategorySelect} />;
@@ -389,13 +295,13 @@ const ResultsScreen = () => {
               <span className="font-bold text-orange-400">{streak}</span>
             </div>
           </div>
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
             {Array.from({ length: 5 }, (_, i) => (
-                <span key={i} className={i < lives ? 'text-red-500' : 'text-gray-600 opacity-30'}>
+              <span key={i} className={`text-lg ${i < lives ? 'text-red-500' : 'text-gray-600'}`}>
                 ❤️
-                </span>
+              </span>
             ))}
-            </div>
+          </div>
         </div>
       </div>
       
@@ -430,10 +336,10 @@ const ResultsScreen = () => {
             <h3 className="text-xl font-bold mb-2 text-white">No Lives Left!</h3>
             <p className="text-gray-400 mb-6">Sorry, you have no lives left to continue swiping.</p>
             <button
-              onClick={() => setShowResults(true)}
+              onClick={() => navigate('/')}
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-3 rounded-xl text-white font-medium"
             >
-              View Results
+              Back to Home
             </button>
           </div>
         </div>
@@ -445,7 +351,7 @@ const ResultsScreen = () => {
           <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
             <div className="text-4xl mb-4">🤔</div>
             <h3 className="text-xl font-bold mb-2 text-white">Leave Swipe Mode?</h3>
-            <p className="text-gray-400 mb-6">Your progress will be saved</p>
+            <p className="text-gray-400 mb-6">Your progress will be lost</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowQuitModal(false)}
@@ -454,7 +360,7 @@ const ResultsScreen = () => {
                 Stay
               </button>
               <button
-                onClick={handleQuitConfirm}
+                onClick={() => navigate('/')}
                 className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium text-white"
               >
                 Leave
@@ -507,7 +413,7 @@ const ResultsScreen = () => {
   );
 };
 
-// Question Slide Component
+// Updated Question Slide Component
 const QuestionSlide = ({ 
   question, 
   index, 
@@ -540,7 +446,7 @@ const QuestionSlide = ({
         </span>
       </div>
       
-      {/* Main content */}
+      {/* Main content moved up */}
       <div className="flex-1 flex flex-col justify-start max-w-md mx-auto w-full">
         {/* Question */}
         <div className={`bg-gradient-to-br ${getDifficultyColor(question.difficulty)} p-6 rounded-3xl mb-4`}>
@@ -628,15 +534,11 @@ const QuestionSlide = ({
           </div>
         )}
         
-        {/* Stats */}
-        <div className="text-center mt-3 mb-4">
-          <div className="text-gray-500 text-xs">
+        {/* Stats and swipe hint */}
+        <div className="text-center mt-auto">
+          <div className="text-gray-500 text-xs mb-2">
             {question.stats.views.toLocaleString()} views • {question.stats.attempted.toLocaleString()} attempted • {question.stats.correctRate}% correct
           </div>
-        </div>
-        
-        {/* Swipe hint */}
-        <div className="text-center mt-auto">
           <div className="text-gray-500 text-sm animate-bounce">
             Swipe up for next
           </div>
