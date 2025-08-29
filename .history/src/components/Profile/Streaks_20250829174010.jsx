@@ -46,32 +46,27 @@ export default function Streaks() {
     localStorage.setItem('streaks_claimed', JSON.stringify(filtered));
     return filtered;
   });
+// Scroll to top on mount
+useEffect(() => {
+  // Multiple attempts to ensure scroll works
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0; // For Safari
+  
+  // Force scroll after a brief delay
+  const timer = setTimeout(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, 100);
+  
+  return () => clearTimeout(timer);
+}, []);
 
-    // Force scroll to top on mount
-    useEffect(() => {
-    const scrollToTop = () => {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        // Also reset the main container
-        const mainElement = document.querySelector('main');
-        if (mainElement) {
-        mainElement.scrollTop = 0;
-        }
-    };
-    
-    scrollToTop();
-    requestAnimationFrame(scrollToTop);
-    
-    const timer = setTimeout(scrollToTop, 100);
-    return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+  // Always show for testing
+  setShowCelebration(true);
+  setTimeout(() => setShowCelebration(false), 3000);
+}, []);
 
-    useEffect(() => {
-    // Always show for testing
-    setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 3000);
-    }, []);
   
   // Week structure with proper day tracking
   const weekDays = [
@@ -223,14 +218,14 @@ export default function Streaks() {
         }
 
         .streaks-screen {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        padding: 32px 16px 16px 16px;  /* Increased top padding from 16px to 32px */
-        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-        color: white;
-        position: relative;
-        overflow-x: hidden;
-        max-width: 100vw;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+          padding: 16px;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+          color: white;
+          position: relative;
+          overflow-x: hidden;
+          max-width: 100vw;
         }
 
         .header {

@@ -46,32 +46,27 @@ export default function Streaks() {
     localStorage.setItem('streaks_claimed', JSON.stringify(filtered));
     return filtered;
   });
+// Scroll to top on mount
+useEffect(() => {
+  // Multiple attempts to ensure scroll works
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0; // For Safari
+  
+  // Force scroll after a brief delay
+  const timer = setTimeout(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, 100);
+  
+  return () => clearTimeout(timer);
+}, []);
 
-    // Force scroll to top on mount
-    useEffect(() => {
-    const scrollToTop = () => {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        // Also reset the main container
-        const mainElement = document.querySelector('main');
-        if (mainElement) {
-        mainElement.scrollTop = 0;
-        }
-    };
-    
-    scrollToTop();
-    requestAnimationFrame(scrollToTop);
-    
-    const timer = setTimeout(scrollToTop, 100);
-    return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+  // Always show for testing
+  setShowCelebration(true);
+  setTimeout(() => setShowCelebration(false), 3000);
+}, []);
 
-    useEffect(() => {
-    // Always show for testing
-    setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 3000);
-    }, []);
   
   // Week structure with proper day tracking
   const weekDays = [

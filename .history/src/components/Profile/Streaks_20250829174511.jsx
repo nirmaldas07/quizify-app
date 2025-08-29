@@ -46,32 +46,38 @@ export default function Streaks() {
     localStorage.setItem('streaks_claimed', JSON.stringify(filtered));
     return filtered;
   });
+// Force scroll to top on mount
+useEffect(() => {
+  // Immediate scroll
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  
+  // Delayed scroll to ensure it happens after render
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+  
+  // Try multiple times to ensure it works
+  const timer1 = setTimeout(scrollToTop, 0);
+  const timer2 = setTimeout(scrollToTop, 100);
+  const timer3 = setTimeout(scrollToTop, 300);
+  
+  return () => {
+    clearTimeout(timer1);
+    clearTimeout(timer2);
+    clearTimeout(timer3);
+  };
+}, []);
 
-    // Force scroll to top on mount
-    useEffect(() => {
-    const scrollToTop = () => {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        // Also reset the main container
-        const mainElement = document.querySelector('main');
-        if (mainElement) {
-        mainElement.scrollTop = 0;
-        }
-    };
-    
-    scrollToTop();
-    requestAnimationFrame(scrollToTop);
-    
-    const timer = setTimeout(scrollToTop, 100);
-    return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+  // Always show for testing
+  setShowCelebration(true);
+  setTimeout(() => setShowCelebration(false), 3000);
+}, []);
 
-    useEffect(() => {
-    // Always show for testing
-    setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 3000);
-    }, []);
   
   // Week structure with proper day tracking
   const weekDays = [
