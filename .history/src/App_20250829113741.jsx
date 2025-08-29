@@ -70,9 +70,10 @@ export default function App() {
 
           {/* Quiz flow - Update this path when you move Quiz.jsx to Quiz folder */}
           <Route path="/quiz/:category" element={<Quiz />} />
-          
-
-
+          <Route 
+              path="/quiz/:category" 
+              element={<Quiz key={window.location.pathname + window.location.search} />} 
+            />
           {/* Fallback */}
           <Route path="*" element={<Home />} />
         </Route>

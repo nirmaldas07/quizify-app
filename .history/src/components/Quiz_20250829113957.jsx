@@ -146,7 +146,7 @@ export default function Quiz() {
   const { category } = useParams();
   const location = useLocation();
   const { energy, useEnergy, player } = useGame();
-//   const [routeKey, setRouteKey] = useState('');
+  const [routeKey, setRouteKey] = useState('');
 
   
   // Query params
@@ -187,22 +187,22 @@ export default function Quiz() {
   const [startTs, setStartTs] = useState(null);
   const [elapsedMs, setElapsedMs] = useState(0);
     
-    // useEffect(() => {
-    //     // Create unique key for this route instance
-    //     const key = `${category}-${location.search}-${JSON.stringify(location.state)}`;
-    //     if (key !== routeKey) {
-    //     setRouteKey(key);
-    //     // Reset everything for new quiz
-    //     setAllQuestions([]);
-    //     setLoading(true);
-    //     setError("");
-    //     setSession({ questions: [] });
-    //     setView("quiz");
-    //     setReviewSnapshot(null);
-    //     setStartTs(null);
-    //     setElapsedMs(0);
-    //     }
-    // }, [category, location.search, location.state]);
+    useEffect(() => {
+        // Create unique key for this route instance
+        const key = `${category}-${location.search}-${JSON.stringify(location.state)}`;
+        if (key !== routeKey) {
+        setRouteKey(key);
+        // Reset everything for new quiz
+        setAllQuestions([]);
+        setLoading(true);
+        setError("");
+        setSession({ questions: [] });
+        setView("quiz");
+        setReviewSnapshot(null);
+        setStartTs(null);
+        setElapsedMs(0);
+        }
+    }, [category, location.search, location.state]);
 
 
   // Load questions on mount
@@ -223,177 +223,101 @@ export default function Quiz() {
     return () => { alive = false; };
   }, []);
 
-  // Initialize session when questions are loaded or route changes
+  // Handle external review
   useEffect(() => {
-    // Skip if still loading, has error, or is review mode
-    if (loading || error || isReview) return;
+    if (!isReview) return;
+    try {
+      const raw = localStorage.getItem(REVIEW_KEY);
+      if (!raw) return;
+      const snap = JSON.parse(raw);
+      setReviewSnapshot({
+        questions: snap?.questions || [],
+        answers: snap?.answers || [],
+        skipped: snap?.skipped || []
+      });
+      setView("review");
+    } catch (e) {
+      console.error("Error loading review snapshot:", e);
+    }
+  }, [isReview]);
+
+  // Initialize session
+  useEffect(() => {
+    console.log("=== SESSION INIT DEBUG ===");
+    console.log("isReview:", isReview);
+    console.log("loading:", loading);
+    console.log("error:", error);
+    console.log("allQuestions.length:", allQuestions.length);
+    console.log("category:", category);
+    console.log("mode:", mode);
+    console.log("isPractice:", isPractice);
     
-    // Skip if no questions loaded yet
-    if (allQuestions.length === 0) return;
+    if (isReview || loading || error) {
+      console.log("Exiting early - isReview/loading/error");
+      return;
+    }
+    if (!allQuestions.length) {
+      console.log("Exiting early - no questions loaded");
+      return;
+    }
+
+    // Check for resume
+    if (resumeFlag) {
+      console.log("Checking for resume...");
+      const saved = safeReadJSON(LS_RESUME, null);
+      if (saved?.slug === category && saved?.inProgress) {
+        console.log("Resuming saved session");
+        const sess = buildSession(allQuestions, {
+          categorySlug: category,
+          difficulty,
+          count: saved.total || count,
+        });
+        setSession(sess);
+        setStartTs(saved.startedAt || Date.now());
+        setElapsedMs(0);
+        return;
+      }
+    }
+
+    // Build fresh session
+    console.log("Building fresh session with params:", {
+      categorySlug: category,
+      difficulty,
+      count
+    });
     
-    console.log("=== SESSION INIT ===");
-    console.log("Category:", category);
-    console.log("Mode:", mode);
-    console.log("Difficulty:", difficulty);
-    console.log("Count:", count);
-    
-    // Build the session
     const sess = buildSession(allQuestions, {
       categorySlug: category,
       difficulty,
       count
     });
     
+    console.log("Built session result:", {
+      questionsCount: sess.questions.length,
+      poolSize: sess.poolSize,
+      firstQuestion: sess.questions[0]?.prompt
+    });
+    
     if (sess.questions.length === 0) {
-      console.error("No questions found!");
-      console.log("Looking for category:", category);
-      console.log("Available categories (first 10):", [...new Set(allQuestions.map(q => toSlug(q.category)))].slice(0, 10));
-      setError(`No questions found for "${fromSlug(category)}" with difficulty "${difficulty}"`);
+      console.error("No questions found for category:", category, "difficulty:", difficulty);
+      setError(`No questions found for category "${fromSlug(category)}" with difficulty "${difficulty}"`);
       return;
     }
     
-    console.log("Session built with", sess.questions.length, "questions");
-    
-    // Set the session and start
     setSession(sess);
     setStartTs(Date.now());
     setElapsedMs(0);
-    setView("quiz");
-    
-  }, [allQuestions, category, mode, difficulty, count, location.state, location.search]);
-
-
-
-
-// // Add this NEW useEffect right after your existing load questions useEffect
-// useEffect(() => {
-//   // Force re-initialization when navigating to a new quiz
-//   if (!loading && allQuestions.length > 0 && !isReview) {
-//     console.log("Navigation detected, reinitializing session");
-    
-//     // Build new session immediately
-//     const sess = buildSession(allQuestions, {
-//       categorySlug: category,
-//       difficulty,
-//       count
-//     });
-    
-//     if (sess.questions.length > 0) {
-//       setSession(sess);
-//       setStartTs(Date.now());
-//       setElapsedMs(0);
-//       setView("quiz");
-//     }
-//   }
-// }, [category, location.state?.mode, location.state?.difficulty, location.state?.count]); // Trigger on navigation changes
-
-
-
-//   // Handle external review
-//   useEffect(() => {
-//     if (!isReview) return;
-//     try {
-//       const raw = localStorage.getItem(REVIEW_KEY);
-//       if (!raw) return;
-//       const snap = JSON.parse(raw);
-//       setReviewSnapshot({
-//         questions: snap?.questions || [],
-//         answers: snap?.answers || [],
-//         skipped: snap?.skipped || []
-//       });
-//       setView("review");
-//     } catch (e) {
-//       console.error("Error loading review snapshot:", e);
-//     }
-//   }, [isReview]);
-
-//   // In Quiz.jsx, modify the session initialization useEffect
-// useEffect(() => {
-//   console.log("=== SESSION INIT DEBUG ===");
-//   console.log("isReview:", isReview);
-//   console.log("loading:", loading);
-//   console.log("error:", error);
-//   console.log("allQuestions.length:", allQuestions.length);
-//   console.log("category:", category);
-//   console.log("mode:", mode);
-//   console.log("isPractice:", isPractice);
-  
-//   if (isReview || loading || error) {
-//     console.log("Exiting early - isReview/loading/error");
-//     return;
-//   }
-  
-//   // THIS IS THE KEY FIX: Wait for questions to actually load
-//   if (!allQuestions || allQuestions.length === 0) {
-//     console.log("Exiting early - no questions loaded yet");
-//     return;
-//   }
-
-//   // Add a small delay to ensure state is settled
-//   const timer = setTimeout(() => {
-//     // Check for resume
-//     if (resumeFlag) {
-//       console.log("Checking for resume...");
-//       const saved = safeReadJSON(LS_RESUME, null);
-//       if (saved?.slug === category && saved?.inProgress) {
-//         console.log("Resuming saved session");
-//         const sess = buildSession(allQuestions, {
-//           categorySlug: category,
-//           difficulty,
-//           count: saved.total || count,
-//         });
-//         setSession(sess);
-//         setStartTs(saved.startedAt || Date.now());
-//         setElapsedMs(0);
-//         return;
-//       }
-//     }
-
-//     // Build fresh session
-//     console.log("Building fresh session with params:", {
-//       categorySlug: category,
-//       difficulty,
-//       count
-//     });
-    
-//     const sess = buildSession(allQuestions, {
-//       categorySlug: category,
-//       difficulty,
-//       count
-//     });
-    
-//     console.log("Built session result:", {
-//       questionsCount: sess.questions.length,
-//       poolSize: sess.poolSize,
-//       firstQuestion: sess.questions[0]?.prompt
-//     });
-    
-//     if (sess.questions.length === 0) {
-//       console.error("No questions found for category:", category, "difficulty:", difficulty);
-//       setError(`No questions found for category "${fromSlug(category)}" with difficulty "${difficulty}"`);
-//       return;
-//     }
-    
-//     setSession(sess);
-//     setStartTs(Date.now());
-//     setElapsedMs(0);
-//     setLoading(false); // Set loading to false here
-//   }, 100); // Small delay to ensure everything is ready
-
-//   return () => clearTimeout(timer);
-// }, [
-//   loading, 
-//   error, 
-//   allQuestions, 
-//   category, 
-//   difficulty, 
-//   count, 
-//   resumeFlag, 
-//   isReview,
-//   mode,
-//   location.search, // Add this to trigger re-init on navigation
-//   location.state   // Add this too
-// ]);
+  }, [
+    loading, 
+    error, 
+    allQuestions, 
+    category, 
+    difficulty, 
+    count, 
+    resumeFlag, 
+    isReview,
+    mode
+  ]);
 
   // Track elapsed time
   useEffect(() => {
@@ -579,22 +503,22 @@ export default function Quiz() {
     }
   }, [fromHistory, navigate]);
 
-// Loading/Error states
-if (loading) {
-  return (
-    <div className="fixed inset-0 bg-inherit text-white flex items-center justify-center">
-      <div className="text-sm text-base-muted">Loading questions…</div>
-    </div>
-  );
-}
+  // Loading/Error states
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-inherit text-white flex items-center justify-center">
+        <div className="text-sm text-base-muted">Loading questions…</div>
+      </div>
+    );
+  }
 
-if (error) {
-  return (
-    <div className="fixed inset-0 bg-inherit text-white flex items-center justify-center">
-      <div className="text-sm text-red-400">{error}</div>
-    </div>
-  );
-}
+  if (error) {
+    return (
+      <div className="fixed inset-0 bg-inherit text-white flex items-center justify-center">
+        <div className="text-sm text-red-400">{error}</div>
+      </div>
+    );
+  }
 
   console.log("Render - Current view:", view, "Session questions:", session.questions.length, "Mode:", mode, "isPractice:", isPractice);
 
