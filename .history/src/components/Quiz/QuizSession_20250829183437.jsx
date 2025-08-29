@@ -263,7 +263,7 @@ if (isCorrect) {
     setTimeout(() => {
     setFeedbackMessage(feedback);
     setTimeout(() => setFeedbackMessage(null), 3000);
-    }, 3000); // Delay showing feedback by 3 second
+    }, 1000); // Delay showing feedback by 1 second
         
     playSound('/sounds/correct.mp3');
     setTimeout(() => playSound('/sounds/coin.mp3'), 500);
@@ -307,10 +307,8 @@ if (isCorrect) {
       feedback = messages[Math.floor(Math.random() * messages.length)];
     }
     
-    setTimeout(() => {
-      setFeedbackMessage(feedback);
-      setTimeout(() => setFeedbackMessage(null), 3000);
-    }, 1000); // Add 1 second delay like correct answers
+    setFeedbackMessage(feedback);
+    setTimeout(() => setFeedbackMessage(null), 3000);
     
     playSound('/sounds/wrong.mp3');
   }
@@ -528,10 +526,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
 {/* Contextual Feedback Message - Practice Mode Only */}
 {isPractice && feedbackMessage && (
   <div className="fixed top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none animate-fadeInOut max-w-2xl w-full px-4">
-    <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-700/50">
-
-
-
+    <div className="bg-gray-700/95 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-600">
       <div className="text-center">
         <div className="text-4xl mb-3">{feedbackMessage.emoji}</div>
         <div className="text-xl font-bold leading-relaxed tracking-wide">

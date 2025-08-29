@@ -528,7 +528,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
 {/* Contextual Feedback Message - Practice Mode Only */}
 {isPractice && feedbackMessage && (
   <div className="fixed top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none animate-fadeInOut max-w-2xl w-full px-4">
-    <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-700/50">
+    <div className="bg-gradient-to-br from-blue-950/90 to-indigo-950/90 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-sm border border-blue-800/30">
 
 
 
