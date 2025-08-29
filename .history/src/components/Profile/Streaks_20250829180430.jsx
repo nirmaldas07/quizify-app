@@ -150,28 +150,31 @@ export default function Streaks() {
       playCorrect();
       
     // Process reward after box opens
+    setTimeout(() => {
+    if (reward.type === 'coins') {
+        const amount = parseInt(reward.reward);
+        
+        // Delay coin animation by 800ms after box opens
         setTimeout(() => {
-        if (reward.type === 'coins') {
-            const amount = parseInt(reward.reward);
-            
-            // Use gift box position for coin animation
-            if (giftBoxRef.current && coinPillRef.current) {
+        if (giftBoxRef.current && coinPillRef.current) {
             const giftRect = giftBoxRef.current.getBoundingClientRect();
             playCoin();
             setCoinFly({ 
-                startRect: giftRect, 
-                count: 10, 
-                amount 
+            startRect: giftRect, 
+            count: 10, 
+            amount 
             });
-            }
         }
-        // Mark as claimed
-        const claimKey = `week_${getWeekId()}_day_${day}`;
-        const newClaimed = [...claimedRewards, claimKey];
-        setClaimedRewards(newClaimed);
-        localStorage.setItem('streaks_claimed', JSON.stringify(newClaimed));
-      }, 500);
-      
+        }, 800); // Delay for coin animation
+    }
+
+    // Mark as claimed
+    const claimKey = `week_${getWeekId()}_day_${day}`;
+    const newClaimed = [...claimedRewards, claimKey];
+    setClaimedRewards(newClaimed);
+    localStorage.setItem('streaks_claimed', JSON.stringify(newClaimed));
+    }, 500);
+
       // Hide modal after animation
       setTimeout(() => {
         setShowRewardModal(null);

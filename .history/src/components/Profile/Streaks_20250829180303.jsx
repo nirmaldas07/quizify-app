@@ -160,7 +160,7 @@ export default function Streaks() {
             playCoin();
             setCoinFly({ 
                 startRect: giftRect, 
-                count: 10, 
+                count: 20, 
                 amount 
             });
             }
