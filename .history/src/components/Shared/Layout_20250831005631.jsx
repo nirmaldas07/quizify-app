@@ -121,11 +121,14 @@ useEffect(() => {
     observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, []);
-const HIDE_ROUTES = [
-  /^\/quiz\//,
-  /^\/practice\//,
+  const HIDE_ROUTES = [
+  /^\/quiz\//, 
+  /^\/practice\//, 
   /^\/profile\//,
-  /^\/play\/classic/,  // This will hide nav for all classic mode screens
+  /^\/play\/modes\/classic\/wheel/,
+  /^\/play\/modes\/classic\/category/,
+  /^\/play\/modes\/classic\/question/,
+  /^\/play\/modes\/classic\/result/
 ];
   const hideNav = modalOpen || hideBottomNav || HIDE_ROUTES.some(r => r.test(pathname));
 

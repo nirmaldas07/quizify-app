@@ -125,7 +125,7 @@ const HIDE_ROUTES = [
   /^\/quiz\//,
   /^\/practice\//,
   /^\/profile\//,
-  /^\/play\/classic/,  // This will hide nav for all classic mode screens
+  // /^\/play\/classic/,  // This will hide nav for all classic mode screens
 ];
   const hideNav = modalOpen || hideBottomNav || HIDE_ROUTES.some(r => r.test(pathname));
 
