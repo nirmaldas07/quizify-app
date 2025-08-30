@@ -18,7 +18,7 @@ const SwipeDiscovery = ({ onSelect }) => {
           <button
             key={cat.id}
             onClick={() => onSelect(cat.id, cat.title)}
-            className={`rounded-3xl bg-gradient-to-br ${cat.color} p-6 flex flex-col items-center justify-center gap-3 transform hover:scale-105 transition-all shadow-xl`}
+            className={`rounded-3xl bg-gradient-to-br ${cat.color} p-20 flex flex-col items-center justify-center gap-3 transform hover:scale-105 transition-all shadow-xl`}
           >
             <span className="text-5xl">{cat.emoji}</span>
             <span className="text-white font-bold text-lg text-center">{cat.title}</span>

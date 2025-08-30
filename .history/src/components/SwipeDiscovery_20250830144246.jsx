@@ -10,10 +10,10 @@ const SwipeDiscovery = ({ onSelect }) => {
   return (
     <div className="fixed inset-0 bg-gray-900 overflow-hidden flex flex-col justify-center items-center px-4">
       {/* Header with margin bottom for spacing */}
-      <h1 className="text-2xl font-bold text-white mb-20">Choose a swipe mode</h1>
+      <h1 className="text-2xl font-bold text-white mb-8">Choose a swipe mode</h1>
       
       {/* Categories Grid */}
-      <div className="grid grid-cols-2 gap-4 w-full max-w-md h-[55vh]">
+      <div className="grid grid-cols-2 gap-4 w-full max-w-md h-[65vh]">
         {categories.map(cat => (
           <button
             key={cat.id}
