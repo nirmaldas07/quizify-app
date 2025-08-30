@@ -4,13 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useSound from "use-sound";
 import Papa from "papaparse";
-import CoinFly from "./CoinFly";
-import { useGame } from '../App';
-import AvatarDisplay from './GameSystem/AvatarDisplay';
-import XPBar from './GameSystem/XPBar';
-import EnergyMeter from './GameSystem/EnergyMeter';
-import { GAME_CONSTANTS } from '../utils/gameConstants';
-import { categories, moreCategories, allCategories } from '../utils/categories';
+import CoinFly from "../Shared/CoinFly";
+import { useGame } from '../../App';
+import AvatarDisplay from '../GameSystem/AvatarDisplay';
+import XPBar from '../GameSystem/XPBar';
+import EnergyMeter from '../GameSystem/EnergyMeter';
+import { GAME_CONSTANTS } from '../../utils/gameConstants';
+import { categories, moreCategories, allCategories } from '../../utils/categories';
+import HeroCard from './HeroCard';
+import QuickActions from './QuickActions';
+import CategoryGrid from './CategoryGrid';
+import PracticeModeButton from './PracticeModeButton';
+import DailyChallenge from './DailyChallenge';
+
 
 // /* Categories Configuration */
 // const categories = [
@@ -359,160 +365,30 @@ const startQuiz = () => {
           />
         </div>
 
-        {/* Hero Card - Spin & Win */}
-        <div 
-          className="relative overflow-hidden rounded-3xl p-8 mb-6 cursor-pointer transform transition-all hover:scale-[1.02]"
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            boxShadow: '0 10px 40px rgba(102, 126, 234, 0.3)',
-            animation: 'pulse 3s infinite'
-          }}
-          onClick={() => navigate("/play")}
-        >
-          <div className="absolute top-[-50px] right-[-50px] w-[200px] h-[200px] rounded-full bg-white/10" 
-               style={{ animation: 'float 4s ease-in-out infinite' }} />
-          <div className="absolute bottom-[-30px] left-[-30px] w-[150px] h-[150px] rounded-full bg-white/10" 
-               style={{ animation: 'float 4s ease-in-out infinite reverse' }} />
-          
-          <h2 className="text-3xl font-bold mb-2">🎰 Spin & Win</h2>
-          <p className="text-base opacity-90 mb-4">Test your luck, win amazing prizes!</p>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
-               style={{
-                 background: 'linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 100%)',
-                 backgroundSize: '200% auto',
-                 animation: 'shimmer 2s linear infinite'
-               }}>
-            Play Now →
-          </div>
-        </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-4 gap-3 mb-8">
-          {quickActions.map((action, idx) => (
-            <button
-              key={idx}
-              onClick={action.action}
-              className={`${action.color} aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 transform transition-all hover:scale-105`}
-            >
-              <div className="text-2xl">{action.icon}</div>
-              <div className="text-[10px] font-medium text-white">{action.label}</div>
-            </button>
-          ))}
-        </div>
+  {/* Quick Actions */}
+  <QuickActions actions={quickActions} />
 
-        {/* Daily Challenge - Only show if not completed */}
-        {!dailyCompleted && dailyQ && (
-          <div className="flip-card mb-6">
-            <div className={`flip-card-inner ${isFlipped ? 'flipped' : ''}`}>
-              {/* Front - Question */}
-              <div className="flip-card-front">
-                <div className="rounded-3xl bg-white/5 border border-base-border p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-bold">🎯 Daily Challenge</h3>
-                    <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-medium">
-                      +{DAILY_Q_COINS} coins +{DAILY_Q_XP} XP
-                    </span>
-                  </div>
-                  
-                  <p className="text-sm mb-4 text-base-muted">{dailyQ.prompt}</p>
-                  
-                  <div className="grid grid-cols-2 gap-3">
-                    {dailyQ.options.map((opt, idx) => {
-                      const isCorrect = idx === dailyQ.answerIndex;
-                      const isPicked = picked === idx;
-                      const showResult = picked !== null;
-                      
-                      return (
-                        <button
-                          key={idx}
-                          onClick={(e) => handleDailyAnswer(idx, e)}
-                          disabled={picked !== null}
-                          className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
-                            showResult
-                              ? (isCorrect ? 'border-green-500 bg-green-500/20' : (isPicked ? 'border-red-500 bg-red-500/20' : 'border-base-border bg-white/5'))
-                              : 'border-base-border bg-white/5 hover:bg-white/10'
-                          } ${picked !== null ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                        >
-                          {opt}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
 
-              {/* Back - Success */}
-              <div className="flip-card-back absolute inset-0">
-                <div className="rounded-3xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 p-6 h-full flex flex-col items-center justify-center">
-                  <div className="text-6xl mb-4" style={{ animation: 'float 2s ease-in-out infinite' }}>🎉</div>
-                  <h3 className="text-2xl font-bold text-green-400 mb-2">Awesome!</h3>
-                  <p className="text-sm text-base-muted text-center">You've earned {DAILY_Q_COINS} coins & {DAILY_Q_XP} XP!</p>
-                  <p className="text-xs text-base-muted/70 mt-2">Come back tomorrow for more</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+  {/* Daily Challenge */}
+  <DailyChallenge 
+    dailyQ={dailyQ}
+    isFlipped={isFlipped}
+    picked={picked}
+    onAnswer={handleDailyAnswer}
+    dailyCompleted={dailyCompleted}
+    DAILY_Q_COINS={DAILY_Q_COINS}
+    DAILY_Q_XP={DAILY_Q_XP}
+  />
 
-        {/* Show completion message if daily is done */}
-        {dailyCompleted && (
-          <div className="rounded-3xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 p-6 mb-6">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">✅</span>
-              <div>
-                <h3 className="font-bold">Daily Challenge Complete!</h3>
-                <p className="text-sm text-base-muted">Come back tomorrow for a new challenge</p>
-              </div>
-            </div>
-          </div>
-        )}
+    {/* Categories Section */}
+    <CategoryGrid categories={categories} onCategorySelect={handleCategorySelect} />
 
-        {/* Categories Section */}
-        <div className="mb-6">
-          <h3 className="text-lg font-bold mb-4">Choose Your Adventure</h3>
-          <div className="grid grid-cols-3 gap-3">
-            {categories.map((cat) => (
-              <button
-                key={cat.name}
-                onClick={() => handleCategorySelect(cat)}
-                className={`bg-gradient-to-br ${cat.gradient} aspect-square rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transform transition-all hover:scale-105 hover:shadow-lg relative`}
-              >
-                {/* {player.energy < 1 && (
-                <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
-                    <span className="text-xs text-yellow-400">Need 1⚡</span>
-                </div>
-                )} */}
-                <div className="text-3xl">{cat.icon}</div>
-                <div className="text-xs font-bold text-white text-center">{cat.name}</div>
-                {cat.questions > 0 && (
-                  <div className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">{cat.questions} Qs</div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Practice Mode - Always available (no energy cost) */}
-        <button
-          onClick={() => setShowPracticeConfig(true)}
-            className={`w-full rounded-2xl p-5 flex justify-between items-center transition-all ${
-                player.energy < 10 
-                ? 'bg-green-500/20 border-2 border-green-500 animate-pulse' 
-                : 'bg-white/5 border border-base-border hover:bg-white/10'
-            }`}
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl grid place-items-center text-2xl">
-              📚
-            </div>
-            <div className="text-left">
-              <div className="font-medium">Practice Mode</div>
-              <div className="text-xs text-base-muted">No timer • No energy cost • Learn at your pace</div>
-            </div>
-          </div>
-          <div className="text-xl">→</div>
-        </button>
-
+    {/* Practice Mode - Always available (no energy cost) */}
+    <PracticeModeButton 
+      onClick={() => setShowPracticeConfig(true)}
+      isPulsing={player.energy < 10}
+    />
         {/* Avatar Selection Modal */}
         {showAvatarModal && (
           <div 

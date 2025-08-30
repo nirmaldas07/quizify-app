@@ -2,7 +2,7 @@
 import React, { createContext, useContext } from 'react';
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Shared/Layout";
-import Home from "./components/Home/Home";
+import Home from "./components/Home";
 import Play from "./components/Play/Play";
 import Quiz from "./components/Quiz/Quiz.jsx";
 import PartySpin from "./components/Play/PartySpin";
