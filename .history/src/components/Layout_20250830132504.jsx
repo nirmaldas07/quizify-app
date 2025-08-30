@@ -96,24 +96,6 @@ useEffect(() => {
   const [modalOpen, setModalOpen] = useState(false);
   const [leaveConfirm, setLeaveConfirm] = useState({ open: false, go: null });
 
-  const [hideBottomNav, setHideBottomNav] = useState(false);
-
-useEffect(() => {
-  const checkHideNav = () => {
-    setHideBottomNav(document.body.classList.contains('hide-bottom-nav'));
-  };
-  
-  checkHideNav();
-  
-  const observer = new MutationObserver(checkHideNav);
-  observer.observe(document.body, { 
-    attributes: true, 
-    attributeFilter: ['class'] 
-  });
-  
-  return () => observer.disconnect();
-}, []);
-
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setModalOpen(document.body.classList.contains("modal-open"));
@@ -123,7 +105,7 @@ useEffect(() => {
   }, []);
 
   const HIDE_ROUTES = [/^\/quiz\//, /^\/practice\//, /^\/profile\//];
-  const hideNav = modalOpen || hideBottomNav || HIDE_ROUTES.some(r => r.test(pathname));
+  const hideNav = modalOpen || HIDE_ROUTES.some(r => r.test(pathname));
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -355,21 +337,20 @@ useEffect(() => {
         </div>
       )}
 
-        <main
+      <main
         className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4 overscroll-y-contain"
         style={{
-            height: hideNav || document.body.classList.contains('hide-bottom-nav')
+          height: hideNav
             ? "100dvh"
             : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
-            paddingTop: "calc(env(safe-area-inset-top) + 12px)",
-            paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
-            overflowY: "auto",
-            transform: pulling && !refreshing ? `translateY(${pullDist * 0.5}px)` : undefined,
-            transition: pulling || refreshing ? "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : undefined,
+          paddingTop: "calc(env(safe-area-inset-top) + 12px)",
+          overflowY: "auto",
+          transform: pulling && !refreshing ? `translateY(${pullDist * 0.5}px)` : undefined,
+          transition: pulling || refreshing ? "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : undefined,
         }}
-        >
+      >
         <Outlet />
-        </main>
+      </main>
 
       {/* Enhanced Leave Confirmation Modal */}
       {leaveConfirm.open && (

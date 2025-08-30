@@ -37,7 +37,6 @@ const SwipeQuiz = () => {
   const [audienceMap, setAudienceMap] = useState({});
   
   const containerRef = useRef(null);
-  const scrollTimeoutRef = useRef(null); // Add this line
   const [playCorrect] = useSound('/sounds/correct.mp3', { volume: 0.6 });
   const [playWrong] = useSound('/sounds/wrong.mp3', { volume: 0.6 });
   const [playCoin] = useSound('/sounds/coin.mp3', { volume: 0.75 });
@@ -81,12 +80,8 @@ const SwipeQuiz = () => {
     setShowDiscovery(true);
     
     return () => {
-    document.body.classList.remove('hide-bottom-nav');
-    resetQuizState(); // Also reset when unmounting
-    // Clear any pending scroll timeout
-    if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-    }
+        document.body.classList.remove('hide-bottom-nav');
+        resetQuizState(); // Also reset when unmounting
     };
     }, []);
 
@@ -228,17 +223,6 @@ useEffect(() => {
     }
     }, [showQuitModal, showNoLivesModal]);
 
-    // Cancel auto-scroll when modals open
-    useEffect(() => {
-    if (showQuitModal || showNoLivesModal) {
-        // Cancel any pending scroll
-        if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = null;
-        }
-    }
-    }, [showQuitModal, showNoLivesModal]);
-
   
   // Load questions
   const loadQuestions = async (category) => {
@@ -351,10 +335,9 @@ useEffect(() => {
     }
     
     if (lives > 1 || isCorrect) {
-    // Store the timeout ID so we can cancel it
-    scrollTimeoutRef.current = setTimeout(() => {
+      setTimeout(() => {
         scrollToNext();
-    }, 2500);
+      }, 2500); // Reduced by 1 second
     }
   };
   
@@ -381,18 +364,15 @@ useEffect(() => {
     setTimeout(() => container.remove(), 4000);
   };
   
-    const scrollToNext = () => {
-    // Don't scroll if any modal is open
-    if (showQuitModal || showNoLivesModal) return;
-    
+  const scrollToNext = () => {
     if (currentIndex < questions.length - 1) {
-        const nextIndex = currentIndex + 1;
-        const element = document.getElementById(`question-${nextIndex}`);
-        element?.scrollIntoView({ behavior: 'smooth' });
-        setCurrentIndex(nextIndex);
+      const nextIndex = currentIndex + 1;
+      const element = document.getElementById(`question-${nextIndex}`);
+      element?.scrollIntoView({ behavior: 'smooth' });
+      setCurrentIndex(nextIndex);
     }
-    };
-    
+  };
+  
   const handleFiftyFifty = (questionId) => {
     const questionIndex = questions.findIndex(q => q.id === questionId);
     

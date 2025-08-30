@@ -96,24 +96,6 @@ useEffect(() => {
   const [modalOpen, setModalOpen] = useState(false);
   const [leaveConfirm, setLeaveConfirm] = useState({ open: false, go: null });
 
-  const [hideBottomNav, setHideBottomNav] = useState(false);
-
-useEffect(() => {
-  const checkHideNav = () => {
-    setHideBottomNav(document.body.classList.contains('hide-bottom-nav'));
-  };
-  
-  checkHideNav();
-  
-  const observer = new MutationObserver(checkHideNav);
-  observer.observe(document.body, { 
-    attributes: true, 
-    attributeFilter: ['class'] 
-  });
-  
-  return () => observer.disconnect();
-}, []);
-
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setModalOpen(document.body.classList.contains("modal-open"));
@@ -123,7 +105,7 @@ useEffect(() => {
   }, []);
 
   const HIDE_ROUTES = [/^\/quiz\//, /^\/practice\//, /^\/profile\//];
-  const hideNav = modalOpen || hideBottomNav || HIDE_ROUTES.some(r => r.test(pathname));
+  const hideNav = modalOpen || HIDE_ROUTES.some(r => r.test(pathname));
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);

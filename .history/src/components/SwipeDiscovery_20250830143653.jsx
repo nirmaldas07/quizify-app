@@ -8,14 +8,14 @@ const SwipeDiscovery = ({ onSelect }) => {
   ];
   
   return (
-    <div className="fixed inset-0 bg-gray-900 overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-gray-900 overflow-hidden">
       {/* Header */}
-      <div className="text-center pt-16 pb-0">
+      <div className="text-center pt-8 pb-12">
         <h1 className="text-2xl font-bold text-white">Choose a swipe mode</h1>
       </div>
       
       {/* Categories Grid */}
-      <div className="flex-1 flex items-center justify-center px-4">
+      <div className="flex items-center justify-center px-4 h-[calc(100vh-120px)]">
         <div className="grid grid-cols-2 gap-4 w-full max-w-md h-[55vh]">
           {categories.map(cat => (
             <button

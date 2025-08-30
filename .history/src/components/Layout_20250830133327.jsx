@@ -123,7 +123,7 @@ useEffect(() => {
   }, []);
 
   const HIDE_ROUTES = [/^\/quiz\//, /^\/practice\//, /^\/profile\//];
-  const hideNav = modalOpen || hideBottomNav || HIDE_ROUTES.some(r => r.test(pathname));
+  const hideNav = modalOpen || HIDE_ROUTES.some(r => r.test(pathname));
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);

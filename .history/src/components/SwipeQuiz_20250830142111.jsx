@@ -81,12 +81,8 @@ const SwipeQuiz = () => {
     setShowDiscovery(true);
     
     return () => {
-    document.body.classList.remove('hide-bottom-nav');
-    resetQuizState(); // Also reset when unmounting
-    // Clear any pending scroll timeout
-    if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-    }
+        document.body.classList.remove('hide-bottom-nav');
+        resetQuizState(); // Also reset when unmounting
     };
     }, []);
 
@@ -228,17 +224,6 @@ useEffect(() => {
     }
     }, [showQuitModal, showNoLivesModal]);
 
-    // Cancel auto-scroll when modals open
-    useEffect(() => {
-    if (showQuitModal || showNoLivesModal) {
-        // Cancel any pending scroll
-        if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = null;
-        }
-    }
-    }, [showQuitModal, showNoLivesModal]);
-
   
   // Load questions
   const loadQuestions = async (category) => {
@@ -351,10 +336,9 @@ useEffect(() => {
     }
     
     if (lives > 1 || isCorrect) {
-    // Store the timeout ID so we can cancel it
-    scrollTimeoutRef.current = setTimeout(() => {
+      setTimeout(() => {
         scrollToNext();
-    }, 2500);
+      }, 2500); // Reduced by 1 second
     }
   };
   

@@ -37,69 +37,24 @@ const SwipeQuiz = () => {
   const [audienceMap, setAudienceMap] = useState({});
   
   const containerRef = useRef(null);
-  const scrollTimeoutRef = useRef(null); // Add this line
   const [playCorrect] = useSound('/sounds/correct.mp3', { volume: 0.6 });
   const [playWrong] = useSound('/sounds/wrong.mp3', { volume: 0.6 });
   const [playCoin] = useSound('/sounds/coin.mp3', { volume: 0.75 });
   
   // Random animal emoji for each question
   const animalEmojis = ['🐼', '🐱', '🐶', '🦊', '🐰', '🐨', '🐯', '🦁', '🐸', '🐵'];
-
-  // Reset all quiz state
-    const resetQuizState = () => {
-    setQuestions([]);
-    setCurrentIndex(0);
-    setAnswers({});
-    setStreak(0);
-    setLives(5);
-    setSessionCoins(0);
-    setLoading(true);
-    setFeedbackMessage(null);
-    setShowMotivationCard(false);
-    setMotivationMessage('');
-    setShowNoLivesModal(false);
-    setShowQuitModal(false);
-    setShowResults(false);
-    setIsInQuiz(false);
-    setShowHeartLoss(false);
-    setShowCoinGain(false);
-    setQuestionsAnsweredSinceFifty(0);
-    setQuestionsAnsweredSinceAudience(0);
-    setUsed5050At(-1);
-    setUsedAudienceAt(-1);
-    setElimMap({});
-    setAudienceMap({});
-    setSelectedCategory(null);
-    setSelectedCategoryName('');
-    setTargetNavigation(null);
-    };
-    
+  
   // Reset discovery view when component mounts
-    useEffect(() => {
-    // Reset everything when component mounts
-    resetQuizState();
+  useEffect(() => {
     setShowDiscovery(true);
+    setSelectedCategory(null);
+    // Hide bottom nav when in SwipeQuiz
+    document.body.classList.add('hide-bottom-nav');
     
     return () => {
-    document.body.classList.remove('hide-bottom-nav');
-    resetQuizState(); // Also reset when unmounting
-    // Clear any pending scroll timeout
-    if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-    }
+      document.body.classList.remove('hide-bottom-nav');
     };
-    }, []);
-
-// Hide/show nav based on whether we're in discovery or quiz
-useEffect(() => {
-  if (!showDiscovery && questions.length > 0) {
-    // In quiz - hide nav
-    document.body.classList.add('hide-bottom-nav');
-  } else {
-    // In discovery - show nav
-    document.body.classList.remove('hide-bottom-nav');
-  }
-}, [showDiscovery, questions.length]);
+  }, []);
   
   // Track when in quiz
   useEffect(() => {
@@ -133,112 +88,59 @@ useEffect(() => {
     return () => document.removeEventListener('click', handleNavClick, true);
   }, [isInQuiz, showResults]);
   
-// Better scroll control for one question per swipe
-useEffect(() => {
-  const container = containerRef.current;
-  if (!container) return;
-  
-  let isScrolling = false;
-  let touchStartY = 0;
-  let scrollTimeout = null;
-  
-  // Prevent default scroll
-  const preventScroll = (e) => {
-    if (!showDiscovery && questions.length > 0) {
-      e.preventDefault();
-    }
-  };
-  
-  const handleTouchStart = (e) => {
-    touchStartY = e.touches[0].clientY;
-    isScrolling = false;
-  };
-  
-  const handleTouchMove = (e) => {
-      if (!showDiscovery && questions.length > 0 && !showQuitModal && !showNoLivesModal) {
-      e.preventDefault(); // Prevent default scrolling
-    }
-  };
-  
-  const handleTouchEnd = (e) => {
-    if (isScrolling || showQuitModal || showNoLivesModal) return;
-    
-    const touchEndY = e.changedTouches[0].clientY;
-    const diff = touchStartY - touchEndY;
-    
-    if (Math.abs(diff) > 30) { // Lowered threshold for easier swiping
-      isScrolling = true;
-      
-      // Clear any existing timeout
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-      
-      if (diff > 0 && currentIndex < questions.length - 1) {
-        // Swipe up - next question (only one)
-        const nextIndex = currentIndex + 1;
-        setCurrentIndex(nextIndex);
-        container.scrollTo({ 
-          top: nextIndex * window.innerHeight, 
-          behavior: 'smooth' 
-        });
-      } else if (diff < 0 && currentIndex > 0) {
-        // Swipe down - previous question (only one)
-        const prevIndex = currentIndex - 1;
-        setCurrentIndex(prevIndex);
-        container.scrollTo({ 
-          top: prevIndex * window.innerHeight, 
-          behavior: 'smooth' 
-        });
-      }
-      
-      // Longer timeout to prevent multiple scrolls
-      scrollTimeout = setTimeout(() => {
-        isScrolling = false;
-      }, 800); // Increased from 500ms
-    }
-  };
-  
-  // Add passive: false to allow preventDefault
-  container.addEventListener('touchstart', handleTouchStart, { passive: false });
-  container.addEventListener('touchmove', handleTouchMove, { passive: false });
-  container.addEventListener('touchend', handleTouchEnd, { passive: false });
-  container.addEventListener('wheel', preventScroll, { passive: false });
-  
-  return () => {
-    container.removeEventListener('touchstart', handleTouchStart);
-    container.removeEventListener('touchmove', handleTouchMove);
-    container.removeEventListener('touchend', handleTouchEnd);
-    container.removeEventListener('wheel', preventScroll);
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-  };
-}, [currentIndex, questions.length, showDiscovery]);
-
-    // Disable scrolling when modal is open
-    useEffect(() => {
+  // Better scroll control for one question per swipe
+  useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
     
-    if (showQuitModal || showNoLivesModal) {
-        // Disable scrolling
-        container.style.overflow = 'hidden';
-        container.style.touchAction = 'none';
-    } else {
-        // Re-enable scrolling
-        container.style.overflow = 'auto';
-        container.style.touchAction = 'auto';
-    }
-    }, [showQuitModal, showNoLivesModal]);
-
-    // Cancel auto-scroll when modals open
-    useEffect(() => {
-    if (showQuitModal || showNoLivesModal) {
-        // Cancel any pending scroll
-        if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = null;
+    let isScrolling = false;
+    let touchStartY = 0;
+    
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    
+    const handleTouchEnd = (e) => {
+      if (isScrolling) return;
+      
+      const touchEndY = e.changedTouches[0].clientY;
+      const diff = touchStartY - touchEndY;
+      
+      if (Math.abs(diff) > 50) { // Minimum swipe distance
+        isScrolling = true;
+        
+        if (diff > 0 && currentIndex < questions.length - 1) {
+          // Swipe up - next question
+          const nextIndex = currentIndex + 1;
+          setCurrentIndex(nextIndex);
+          container.scrollTo({ 
+            top: nextIndex * window.innerHeight, 
+            behavior: 'smooth' 
+          });
+        } else if (diff < 0 && currentIndex > 0) {
+          // Swipe down - previous question
+          const prevIndex = currentIndex - 1;
+          setCurrentIndex(prevIndex);
+          container.scrollTo({ 
+            top: prevIndex * window.innerHeight, 
+            behavior: 'smooth' 
+          });
         }
-    }
-    }, [showQuitModal, showNoLivesModal]);
-
+        
+        setTimeout(() => {
+          isScrolling = false;
+        }, 500);
+      }
+    };
+    
+    container.addEventListener('touchstart', handleTouchStart);
+    container.addEventListener('touchend', handleTouchEnd);
+    
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [currentIndex, questions.length]);
   
   // Load questions
   const loadQuestions = async (category) => {
@@ -351,10 +253,9 @@ useEffect(() => {
     }
     
     if (lives > 1 || isCorrect) {
-    // Store the timeout ID so we can cancel it
-    scrollTimeoutRef.current = setTimeout(() => {
+      setTimeout(() => {
         scrollToNext();
-    }, 2500);
+      }, 2500); // Reduced by 1 second
     }
   };
   
@@ -381,18 +282,15 @@ useEffect(() => {
     setTimeout(() => container.remove(), 4000);
   };
   
-    const scrollToNext = () => {
-    // Don't scroll if any modal is open
-    if (showQuitModal || showNoLivesModal) return;
-    
+  const scrollToNext = () => {
     if (currentIndex < questions.length - 1) {
-        const nextIndex = currentIndex + 1;
-        const element = document.getElementById(`question-${nextIndex}`);
-        element?.scrollIntoView({ behavior: 'smooth' });
-        setCurrentIndex(nextIndex);
+      const nextIndex = currentIndex + 1;
+      const element = document.getElementById(`question-${nextIndex}`);
+      element?.scrollIntoView({ behavior: 'smooth' });
+      setCurrentIndex(nextIndex);
     }
-    };
-    
+  };
+  
   const handleFiftyFifty = (questionId) => {
     const questionIndex = questions.findIndex(q => q.id === questionId);
     
@@ -445,7 +343,6 @@ useEffect(() => {
   };
   
   const handleCategorySelect = (category, categoryName) => {
-    resetQuizState(); // Reset everything first
     setSelectedCategory(category);
     setSelectedCategoryName(categoryName);
     setShowDiscovery(false);
@@ -460,8 +357,6 @@ useEffect(() => {
   const handleQuitConfirm = () => {
     setShowResults(true);
     setShowQuitModal(false);
-    document.body.classList.remove('hide-bottom-nav'); // Add this
-
   };
   
   // Results Screen Component
@@ -473,24 +368,12 @@ useEffect(() => {
     
     // Auto-dismiss after 2 seconds
     useEffect(() => {
-    // Hide nav when showing results
-    document.body.classList.add('hide-bottom-nav');
-    
-    const timer = setTimeout(() => {
+      const timer = setTimeout(() => {
         addCoins(sessionCoins);
-        // Reset everything BEFORE changing views
-        resetQuizState();
-        setIsInQuiz(false); // Critical: reset this
-        setShowResults(false);
-        setShowDiscovery(true);
-        document.body.classList.remove('hide-bottom-nav');
-        // Don't navigate - just let the component re-render with discovery view
-    }, 2000);
-    
-    return () => {
-        clearTimeout(timer);
-        document.body.classList.remove('hide-bottom-nav');
-    };
+        navigate('/swipe');
+      }, 2000);
+      
+      return () => clearTimeout(timer);
     }, []);
     
     return (
@@ -548,7 +431,7 @@ useEffect(() => {
   return (
     <div className="h-screen bg-gray-900 relative">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 bg-gray-900/95 backdrop-blur z-50 border-b border-gray-800 pt-12">
+      <div className="fixed top-0 left-0 right-0 bg-gray-900/95 backdrop-blur z-50 border-b border-gray-800 pt-8">
         <div className="flex items-center justify-between px-4 py-3">
           <button 
             onClick={handleBackClick}
@@ -600,13 +483,8 @@ useEffect(() => {
       {/* Questions Container */}
       <div 
         ref={containerRef}
-        className="h-full overflow-y-hidden snap-y snap-mandatory pt-32"
-        style={{ 
-            scrollBehavior: 'smooth', 
-            overscrollBehavior: 'none',
-            WebkitOverflowScrolling: 'touch',
-            touchAction: 'none' // Prevent native touch scrolling
-            }}
+        className="h-full overflow-y-scroll snap-y snap-mandatory pt-32"
+        style={{ scrollBehavior: 'smooth', overscrollBehavior: 'none' }}
       >
         {questions.map((question, index) => (
           <QuestionSlide
@@ -633,13 +511,10 @@ useEffect(() => {
             <h3 className="text-xl font-bold mb-2 text-white">No Lives Left!</h3>
             <p className="text-gray-400 mb-6">Sorry, you have no lives left to continue swiping.</p>
             <button
-            onClick={() => {
-                setShowResults(true);
-                document.body.classList.remove('hide-bottom-nav'); // Add this
-            }}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-3 rounded-xl text-white font-medium"
+              onClick={() => setShowResults(true)}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-3 rounded-xl text-white font-medium"
             >
-            View Results
+              View Results
             </button>
           </div>
         </div>
@@ -757,8 +632,7 @@ const QuestionSlide = ({
   return (
     <div 
       id={`question-${index}`}
-        className="h-screen snap-start flex flex-col px-4 pb-4"
-        style={{ paddingTop: '150px' }} // Adjust this value as needed
+      className="h-screen snap-start flex flex-col px-4 pt-28 pb-4"
     >
       {/* Mascot */}
       <div className="flex justify-center py-2">
