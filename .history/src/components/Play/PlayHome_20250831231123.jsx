@@ -1,9 +1,9 @@
-//src/components/Play/PlayHome.jsx
+//src/components/play/PlayHome.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClassicMode from "./modes/classic/ClassicMode";
 import SurvivalMode from "./modes/survival/SurvivalMode.jsx";
-import TreasureHuntMode from "./modes/treasureHunt/TreasureHuntMode.jsx";
+
 
 const PRIMARY_CATS = [
   { name: "General Knowledge", questions: 50, icon: "🧠", color: "#7C3AED" },
@@ -22,6 +22,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
     <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden">
       <div className="h-full overflow-y-auto mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
         <header className="flex items-center mb-8">
+
           <h1 className="text-center text-xl font-bold w-full">Choose a quiz mode</h1>
         </header>
 
@@ -67,28 +68,19 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
 
           <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={() => onModeSelect('survival')}
-              className="aspect-square rounded-3xl bg-gradient-to-br from-yellow-400 to-orange-400 p-4 text-left hover:shadow-xl transition-all active:scale-[0.98] relative overflow-hidden"
+            onClick={() => onModeSelect('survival')}
+            className="aspect-square rounded-3xl bg-gradient-to-br from-yellow-400 to-orange-400 p-4 text-left hover:shadow-xl transition-all active:scale-[0.98]"
             >
-              <div className="text-2xl mb-2">💀</div>
-              <h4 className="text-lg font-black text-white">SURVIVAL</h4>
+            <div className="text-2xl mb-2">💀</div>
+            <h4 className="text-lg font-black text-white">SURVIVAL</h4>
             </button>
 
             <button
-              onClick={() => onModeSelect('treasureHunt')}
-              className="aspect-square rounded-3xl bg-gradient-to-br from-purple-400 to-green-500 p-4 text-left hover:shadow-xl transition-all active:scale-[0.98] relative overflow-hidden"
+              disabled
+              className="aspect-square rounded-3xl bg-gradient-to-br from-red-400 to-pink-500 p-4 text-left opacity-60"
             >
-              {/* Animated island background */}
-              <div className="absolute inset-0 opacity-20">
-                <div className="absolute top-2 right-2 text-4xl animate-pulse">🏝️</div>
-                <div className="absolute bottom-2 left-2 text-3xl animate-bounce" style={{ animationDelay: '0.5s' }}>⛏️</div>
-                <div className="absolute top-1/2 right-4 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>💎</div>
-              </div>
-              <div className="text-2xl mb-2 relative z-10">🏴‍☠️</div>
-              <h4 className="text-lg font-black text-white relative z-10">TREASURE HUNT</h4>
-              <div className="absolute bottom-2 right-2">
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full text-white font-bold">NEW!</span>
-              </div>
+              <div className="text-2xl mb-2">💰</div>
+              <h4 className="text-lg font-black text-white">TREASURE MINE</h4>
             </button>
 
             <button
@@ -117,15 +109,13 @@ export default function PlayHome() {
   const [selectedMode, setSelectedMode] = useState(null);
   const navigate = useNavigate();
 
-  const handleModeSelect = (mode) => {
-    if (mode === 'classic') {
-      setSelectedMode('classic');
-    } else if (mode === 'survival') {
-      setSelectedMode('survival');
-    } else if (mode === 'treasureHunt') {
-      setSelectedMode('treasureHunt');
-    }
-  };
+ const handleModeSelect = (mode) => {
+  if (mode === 'classic') {
+    setSelectedMode('classic');
+  } else if (mode === 'survival') {
+    setSelectedMode('survival');
+  }
+};
 
   const handleNavigateHome = () => {
     navigate('/');
@@ -135,18 +125,19 @@ export default function PlayHome() {
     setSelectedMode(null);
   };
 
-  // Render the selected mode
-  if (selectedMode === 'classic') {
+    // Render the selected mode
+    if (selectedMode === 'classic') {
     return <ClassicMode onBack={handleBackToModes} />;
-  }
+    }
 
-  if (selectedMode === 'survival') {
+    if (selectedMode === 'survival') {
     return <SurvivalMode onBack={handleBackToModes} />;
-  }
-
-  if (selectedMode === 'treasureHunt') {
-    return <TreasureHuntMode onBack={handleBackToModes} />;
-  }
+    }
+    
+  // Add future modes here:
+  // if (selectedMode === 'survival') {
+  //   return <SurvivalMode onBack={handleBackToModes} />;
+  // }
 
   // Default: show mode selection screen (this is what users see first)
   return (

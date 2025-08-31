@@ -76,7 +76,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
 
             <button
               onClick={() => onModeSelect('treasureHunt')}
-              className="aspect-square rounded-3xl bg-gradient-to-br from-purple-400 to-green-500 p-4 text-left hover:shadow-xl transition-all active:scale-[0.98] relative overflow-hidden"
+              className="aspect-square rounded-3xl bg-gradient-to-br from-blue-400 to-purple-500 p-4 text-left hover:shadow-xl transition-all active:scale-[0.98] relative overflow-hidden"
             >
               {/* Animated island background */}
               <div className="absolute inset-0 opacity-20">
