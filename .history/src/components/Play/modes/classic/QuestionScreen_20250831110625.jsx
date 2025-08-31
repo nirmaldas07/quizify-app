@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Confetti from "react-confetti";
 import { vibrate, playSound } from "./config.js";
 
+
 export default function QuestionScreen({ 
   question, 
   category, 
@@ -19,6 +20,7 @@ export default function QuestionScreen({
   onTimeUpBackToWheel,
   soundOn
 }) {
+  useHideBottomNav();
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [confirmQuit, setConfirmQuit] = useState(false);

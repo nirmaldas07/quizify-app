@@ -216,7 +216,7 @@ export default function QuestionScreen({
 
         {/* Stats Dashboard */}
         {/* Stats Dashboard */}
-        <div className={`glass-card rounded-3xl p-2 shadow-xl mb-2 mt-12 slide-in bg-gradient-to-r ${diff.accentGradient}`} style={{ animationDelay: '0.1s' }}>
+        <div className={`glass-card rounded-3xl p-4 shadow-xl mb-4 mt-89 slide-in bg-gradient-to-r ${diff.accentGradient}`} style={{ animationDelay: '0.1s' }}>
           <div className="grid grid-cols-3 gap-3">
             {/* Score */}
             <div className="text-center">
@@ -256,9 +256,9 @@ export default function QuestionScreen({
         </div>
 
         {/* Difficulty & Timer Section */}
-        <div className="flex justify-between items-center mb-1 slide-in" style={{ animationDelay: '0.2s' }}>
+        <div className="flex justify-between items-center mb-0 slide-in" style={{ animationDelay: '0.2s' }}>
           {/* Difficulty Badge */}
-          <div className={`px-4 py-3 rounded-full bg-gradient-to-r ${diff.color} text-white shadow-lg`}>
+          <div className={`px-4 py-2 rounded-full bg-gradient-to-r ${diff.color} text-white shadow-lg`}>
             <div className="flex items-center gap-2">
               <span className="text-2xl">{diff.emoji}</span>
               <div>
@@ -384,7 +384,7 @@ export default function QuestionScreen({
 
         {/* Checkpoint Badge */}
         {checkpoint > 0 && (
-          <div className="mt-4 flex justify-center slide-in" style={{ animationDelay: '0.6s' }}>
+          <div className="mt-6 flex justify-center slide-in" style={{ animationDelay: '0.6s' }}>
             <div className="glass-card rounded-full px-4 py-2 shadow-lg border border-white/10">
               <div className="flex items-center gap-2">
                 <span className="text-xl">🏁</span>

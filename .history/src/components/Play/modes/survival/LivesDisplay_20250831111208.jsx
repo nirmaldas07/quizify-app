@@ -80,7 +80,7 @@ export default function LivesDisplay({ lives, maxLives = 3 }) {
         }
       `}</style>
 
-      <div className="flex items-center gap-3 px-5 py-1.5 bg-gradient-to-r from-red-500/20 to-pink-500/20 rounded-full backdrop-blur-md border border-white/10 shadow-xl">
+      <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-red-500/20 to-pink-500/20 rounded-full backdrop-blur-md border border-white/10 shadow-xl">
         {/* Lives counter badge */}
         <div className="flex items-center gap-1.5">
           {[...Array(maxLives)].map((_, i) => (
@@ -137,7 +137,7 @@ export default function LivesDisplay({ lives, maxLives = 3 }) {
 
       {/* Critical health warning */}
       {lives === 1 && (
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
           <div className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded-full backdrop-blur-sm">
             <span className="text-xs font-medium text-red-400 animate-pulse">
               Last life! Be careful! ⚠️

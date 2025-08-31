@@ -137,7 +137,7 @@ export default function LivesDisplay({ lives, maxLives = 3 }) {
 
       {/* Critical health warning */}
       {lives === 1 && (
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+        <div className="absolute -bottom-9.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
           <div className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded-full backdrop-blur-sm">
             <span className="text-xs font-medium text-red-400 animate-pulse">
               Last life! Be careful! ⚠️

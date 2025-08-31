@@ -384,7 +384,7 @@ export default function QuestionScreen({
 
         {/* Checkpoint Badge */}
         {checkpoint > 0 && (
-          <div className="mt-4 flex justify-center slide-in" style={{ animationDelay: '0.6s' }}>
+          <div className="mt-8 flex justify-center slide-in" style={{ animationDelay: '0.6s' }}>
             <div className="glass-card rounded-full px-4 py-2 shadow-lg border border-white/10">
               <div className="flex items-center gap-2">
                 <span className="text-xl">🏁</span>
