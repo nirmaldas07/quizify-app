@@ -14,9 +14,8 @@ const getTodayCoins = () => {
   try {
     const stats = JSON.parse(localStorage.getItem('qp_stats') || '{"sessions":[]}');
     const today = new Date().setHours(0,0,0,0);
-    // Remove the mode filter to count ALL coins earned today
     const todaySessions = stats.sessions.filter(s => 
-      new Date(s.timestamp).setHours(0,0,0,0) === today
+      new Date(s.timestamp).setHours(0,0,0,0) === today && s.mode === "quiz"
     );
     return todaySessions.reduce((sum, s) => sum + (s.earnedCoins || 0), 0);
   } catch {
@@ -65,7 +64,7 @@ const userStats = {
             </div>
           <button 
             onClick={() => navigate("/profile/settings")}
-            className="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 grid place-items-center hover:bg-white/20 transition"
+            className="w-8 h-8 rounded-2xl bg-white/10 border border-white/20 grid place-items-center hover:bg-white/20 transition"
           >
             <span className="text-xl">⚙️</span>
           </button>

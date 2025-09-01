@@ -213,7 +213,7 @@ export default function Streaks() {
   };
 
     const handleBack = () => {
-        navigate(-1);
+        window.history.back();
     };
 
   return (

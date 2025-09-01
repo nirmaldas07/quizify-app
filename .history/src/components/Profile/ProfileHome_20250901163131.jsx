@@ -14,9 +14,8 @@ const getTodayCoins = () => {
   try {
     const stats = JSON.parse(localStorage.getItem('qp_stats') || '{"sessions":[]}');
     const today = new Date().setHours(0,0,0,0);
-    // Remove the mode filter to count ALL coins earned today
     const todaySessions = stats.sessions.filter(s => 
-      new Date(s.timestamp).setHours(0,0,0,0) === today
+      new Date(s.timestamp).setHours(0,0,0,0) === today && s.mode === "quiz"
     );
     return todaySessions.reduce((sum, s) => sum + (s.earnedCoins || 0), 0);
   } catch {
@@ -56,16 +55,16 @@ const userStats = {
   : 0;
 
   return (
-    <div className="min-h-full bg-[#0B0C10] text-white pt-10 px-3">
+    <div className="min-h-full bg-[#0B0C10] text-white pt-6 px-3">
     {/* Enhanced Header with User Info */}
         <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
             <div>
-                <h1 className="text-2xl font-bold px-3">{greeting}, {player?.name || "Player"} 👋</h1>
+                <h1 className="text-2xl font-bold">{greeting}, {player?.name || "Player"} 👋</h1>
             </div>
           <button 
             onClick={() => navigate("/profile/settings")}
-            className="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 grid place-items-center hover:bg-white/20 transition"
+            className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 grid place-items-center hover:bg-white/20 transition"
           >
             <span className="text-xl">⚙️</span>
           </button>

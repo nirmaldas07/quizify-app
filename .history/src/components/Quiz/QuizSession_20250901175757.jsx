@@ -523,7 +523,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         </div>
       )}
 
-    {/* Fixed Header Container */}
+{/* Fixed Header Container */}
       <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900 flex-shrink-0`}>
         {/* Top Status Bar */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">

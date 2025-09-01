@@ -256,6 +256,11 @@ if (isCorrect) {
       feedback = messages[Math.floor(Math.random() * messages.length)];
     }
     
+    setTimeout(() => {
+      setFeedbackMessage(feedback);
+      setTimeout(() => setFeedbackMessage(null), 3000);
+    }, 1000); // Add 1 second delay like correct answers
+    
     playSound('/sounds/wrong.mp3');
   }
 }
@@ -523,83 +528,80 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         </div>
       )}
 
-    {/* Fixed Header Container */}
-      <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900 flex-shrink-0`}>
-        {/* Top Status Bar */}
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
-          <button 
-            onClick={() => setShowQuit(true)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span className="font-medium">Back</span>
-          </button>
-          
-          <div className="flex-1"></div>
+      {/* Top Status Bar - Sticky with proper overflow hidden */}
+      <div className="sticky top-0 flex items-center justify-between px-4 py-2 bg-gray-900 flex-shrink-0 z-40 border-b border-gray-800 shadow-lg">
+        <button 
+          onClick={() => setShowQuit(true)}
+          className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="font-medium">Back</span>
+        </button>
+        
+        <div className="flex-1"></div>
 
-          <div className="flex items-center gap-2">
-            {/* Only show coins and streak in practice mode */}
-            {isPractice && (
-              <>
-                {/* Coins */}
-                <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                  <span className="text-yellow-400 text-sm">🪙</span>
-                  <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
-                </div>
-                
-                {/* Streak - Always visible in practice */}
-                <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                  <span className="text-orange-400 text-sm">🔥</span>
-                  <span className="text-orange-200 font-semibold text-sm">{streak}</span>
-                </div>
-              </>
-            )}
-            
-            {/* Timer */}
-            <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
-              currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
-              currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
-              'bg-green-600/20 text-green-400'
-            }`}>
-              {formatTime(currentTimer)}
-            </div>
+        <div className="flex items-center gap-2">
+          {/* Only show coins and streak in practice mode */}
+          {isPractice && (
+            <>
+              {/* Coins */}
+              <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-yellow-400 text-sm">🪙</span>
+                <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
+              </div>
+              
+              {/* Streak - Always visible in practice */}
+              <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-orange-400 text-sm">🔥</span>
+                <span className="text-orange-200 font-semibold text-sm">{streak}</span>
+              </div>
+            </>
+          )}
+          
+          {/* Timer */}
+          <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
+            currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
+            currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
+            'bg-green-600/20 text-green-400'
+          }`}>
+            {formatTime(currentTimer)}
           </div>
         </div>
+      </div>
 
-        {/* Progress Bar - Now inside the fixed container */}
-        <div className="px-4 pb-1 bg-gray-900">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
-            <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
-          </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-              style={{width: `${progress}%`}}
+      {/* Progress Bar */}
+      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900 relative z-30">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
+          <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
+        </div>
+        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
+            style={{width: `${progress}%`}}
+          />
+        </div>
+        
+        {/* Progress Dots */}
+        <div className="flex justify-center gap-1 mt-1">
+          {Array.from({length: total}).map((_, i) => (
+            <div
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                i === index ? 'bg-white scale-125' :
+                answers[i] !== null ? 'bg-green-500' :
+                skipped[i] ? 'bg-yellow-500' :
+                'bg-gray-600'
+              }`}
             />
-          </div>
-          
-          {/* Progress Dots */}
-          <div className="flex justify-center gap-1 mt-1">
-            {Array.from({length: total}).map((_, i) => (
-              <div
-                key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  i === index ? 'bg-white scale-125' :
-                  answers[i] !== null ? 'bg-green-500' :
-                  skipped[i] ? 'bg-yellow-500' :
-                  'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-          
-          {/* Category Name - After progress dots */}
-          <div className="text-center mt-4">
-            <span className="text-xs text-gray-500">{currentQuestion.category}</span>
-          </div>
+          ))}
+        </div>
+        
+        {/* Category Name - After progress dots */}
+        <div className="text-center mt-4">
+          <span className="text-xs text-gray-500">{currentQuestion.category}</span>
         </div>
       </div>
 
@@ -614,7 +616,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
             }}
         >
         {/* Question Card */}
-        <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 mt-24 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
+        <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-6 mb-8 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
           {/* Decorative elements */}
           <div className="absolute top-2 right-2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
           <div className="absolute bottom-2 left-2 w-12 h-12 bg-white/5 rounded-full blur-lg"></div>
@@ -732,89 +734,67 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         )}
       </div>
 
-{/* Bottom Controls - Modern Apple-inspired design */}
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        {/* Gradient background with blur */}
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/95 to-gray-900/80 backdrop-blur-xl"></div>
-        
-        <div className="relative p-4 pb-8">
-          {/* Lifelines */}
-          {!isPractice && (
-            <div className="flex justify-center gap-3 mb-4">
-              <button
-                onClick={handleFiftyFifty}
-                disabled={selected !== null}
-                className={`${used5050 ? 'bg-white/5 text-gray-500' : 'bg-gradient-to-r from-orange-500 to-orange-600'} 
-                  disabled:bg-white/5 disabled:text-gray-500
-                  px-4 py-2.5 rounded-2xl font-semibold transition-all transform active:scale-95
-                  shadow-lg flex items-center gap-2 text-sm`}
-              >
-                <span>⚡</span>
-                50:50
-              </button>
-              <button
-                onClick={handleAudience}
-                disabled={selected !== null}
-                className={`${usedAudience ? 'bg-white/5 text-gray-500' : 'bg-gradient-to-r from-purple-500 to-purple-600'} 
-                  disabled:bg-white/5 disabled:text-gray-500
-                  px-4 py-2.5 rounded-2xl font-semibold transition-all transform active:scale-95
-                  shadow-lg flex items-center gap-2 text-sm`}
-              >
-                <span>👥</span>
-                Ask Friends
-              </button>
-            </div>
-          )}
-
-          {/* Navigation Buttons - Glass morphism style */}
-          <div className="flex gap-2 mb-3">
+      {/* Bottom Controls - Always fixed with better spacing */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-800/90 backdrop-blur-sm p-4 pb-8 z-50">
+        {/* Lifelines */}
+        {!isPractice && (
+          <div className="flex justify-center gap-2 mb-4">
             <button
-              onClick={goPrev}
-              disabled={index === 0}
-              className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 
-                disabled:opacity-30 disabled:cursor-not-allowed
-                py-3.5 rounded-2xl font-semibold transition-all transform active:scale-95
-                hover:bg-white/15 text-white shadow-xl"
-            >
-              Previous
-            </button>
-            
-            <button
-              onClick={onSkip}
+              onClick={handleFiftyFifty}
               disabled={selected !== null}
-              className={`flex-1 py-3.5 rounded-2xl font-semibold transition-all transform active:scale-95 shadow-xl ${
-                selected !== null 
-                  ? 'bg-white/5 text-gray-500 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white hover:from-amber-600 hover:to-yellow-600'
-              }`}
+              className={`${used5050 ? 'bg-gray-700/50 text-gray-500/50' : 'bg-orange-600 hover:bg-orange-700'} disabled:bg-gray-800 px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1 text-sm`}
             >
-              Skip
+              <span>⚡</span>
+              50:50
             </button>
-            
             <button
-              onClick={goNext}
-              className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 
-                hover:from-blue-600 hover:to-indigo-600
-                py-3.5 rounded-2xl font-semibold transition-all transform active:scale-95
-                text-white shadow-xl"
+              onClick={handleAudience}
+              disabled={selected !== null}
+              className={`${usedAudience ? 'bg-gray-700/50 text-gray-500/50' : 'bg-purple-600 hover:bg-purple-700'} disabled:bg-gray-800 px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1 text-sm`}
             >
-              {index === total - 1 ? 'Finish' : 'Next'}
+              <span>👥</span>
+              Ask Friends
             </button>
           </div>
+        )}
 
-          {/* Submit Button - Prominent CTA */}
+        {/* Navigation */}
+        <div className="flex gap-2 mb-2">
           <button
-            onClick={() => setShowSubmit(true)}
-            className="w-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
-              hover:from-emerald-600 hover:via-green-600 hover:to-teal-600
-              py-4 rounded-2xl font-bold text-white transition-all transform active:scale-[0.98]
-              shadow-2xl shadow-green-500/25 relative overflow-hidden group"
+            onClick={goPrev}
+            disabled={index === 0}
+            className="flex-1 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 py-2 rounded-lg font-medium transition-colors text-sm"
           >
-            {/* Animated shine effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-            <span className="relative">Submit Quiz</span>
+            Previous
+          </button>
+          
+          <button
+            onClick={onSkip}
+            disabled={selected !== null}
+            className={`flex-1 py-2 rounded-lg font-medium transition-colors text-sm ${
+              selected !== null 
+                ? 'bg-gray-600/50 text-gray-400/50 cursor-not-allowed' 
+                : 'bg-yellow-600 hover:bg-yellow-700'
+            }`}
+          >
+            Skip
+          </button>
+          
+          <button
+            onClick={goNext}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg font-medium transition-colors text-sm"
+          >
+            {index === total - 1 ? 'Finish' : 'Next'}
           </button>
         </div>
+
+        {/* Submit Button */}
+        <button
+          onClick={() => setShowSubmit(true)}
+          className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 py-2.5 rounded-lg font-medium transition-colors text-sm"
+        >
+          Submit
+        </button>
       </div>
 
       {/* Quiz Summary Modal */}

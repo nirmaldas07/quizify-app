@@ -14,9 +14,8 @@ const getTodayCoins = () => {
   try {
     const stats = JSON.parse(localStorage.getItem('qp_stats') || '{"sessions":[]}');
     const today = new Date().setHours(0,0,0,0);
-    // Remove the mode filter to count ALL coins earned today
     const todaySessions = stats.sessions.filter(s => 
-      new Date(s.timestamp).setHours(0,0,0,0) === today
+      new Date(s.timestamp).setHours(0,0,0,0) === today && s.mode === "quiz"
     );
     return todaySessions.reduce((sum, s) => sum + (s.earnedCoins || 0), 0);
   } catch {

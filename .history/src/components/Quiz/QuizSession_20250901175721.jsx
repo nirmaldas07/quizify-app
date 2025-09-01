@@ -280,19 +280,13 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         
     // Auto-scroll to show explanation
         setTimeout(() => {
-            const container = document.querySelector('.flex-1.px-4.flex.flex-col');
+            const container = document.querySelector('.main-scroll-container');
             if (container) {
-                // First ensure scroll is enabled
-                container.style.overflow = 'auto';
-                
-                // Then scroll to bottom after a brief delay
-                setTimeout(() => {
-                    const scrollHeight = container.scrollHeight;
-                    const clientHeight = container.clientHeight;
-                    if (scrollHeight > clientHeight) {
-                        container.scrollTop = scrollHeight - clientHeight;
-                    }
-                }, 200);
+                const scrollHeight = container.scrollHeight;
+                const clientHeight = container.clientHeight;
+                if (scrollHeight > clientHeight) {
+                    container.scrollTop = scrollHeight - clientHeight;
+                }
             }
         }, 300);
     } 
@@ -474,6 +468,9 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
   const currentTimer = questionTimers[index] || 0;
   const correctCount = questions.reduce((sum, q, i) => sum + (answers[i] === q.answerIndex ? 1 : 0), 0);
 
+  // Determine if content should be scrollable
+  const isScrollable = isPractice && selected !== null;
+
   return (
     <div className="h-dvh bg-gray-900 text-white relative flex flex-col">
 
@@ -485,23 +482,6 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
           </div>
         </div>
       )}
-
-{/* Contextual Feedback Message - Practice Mode Only
-{isPractice && feedbackMessage && (
-  <div className="fixed top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none animate-fadeInOut max-w-2xl w-full px-4">
-    <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-700/50">
-
-
-
-      <div className="text-center">
-        <div className="text-4xl mb-3">{feedbackMessage.emoji}</div>
-        <div className="text-xl font-bold leading-relaxed tracking-wide">
-          {feedbackMessage.message}
-        </div>
-      </div>
-    </div>
-  </div>
-)} */}
 
       {/* Coin Flying Animation */}
       {coinAnimation && (
@@ -523,216 +503,214 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         </div>
       )}
 
-    {/* Fixed Header Container */}
-      <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900 flex-shrink-0`}>
-        {/* Top Status Bar */}
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
-          <button 
-            onClick={() => setShowQuit(true)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span className="font-medium">Back</span>
-          </button>
-          
-          <div className="flex-1"></div>
-
-          <div className="flex items-center gap-2">
-            {/* Only show coins and streak in practice mode */}
-            {isPractice && (
-              <>
-                {/* Coins */}
-                <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                  <span className="text-yellow-400 text-sm">🪙</span>
-                  <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
-                </div>
-                
-                {/* Streak - Always visible in practice */}
-                <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                  <span className="text-orange-400 text-sm">🔥</span>
-                  <span className="text-orange-200 font-semibold text-sm">{streak}</span>
-                </div>
-              </>
-            )}
+      {/* Main Scrollable Container - Wraps everything when scrollable */}
+      <div className={`main-scroll-container flex-1 flex flex-col ${
+        isScrollable ? 'overflow-y-auto' : 'overflow-hidden'
+      }`}>
+        
+        {/* Header Container - Not fixed when scrollable */}
+        <div className={`${!isScrollable ? 'sticky top-0' : ''} z-40 bg-gray-900 flex-shrink-0`}>
+          {/* Top Status Bar */}
+          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
+            <button 
+              onClick={() => setShowQuit(true)}
+              className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span className="font-medium">Back</span>
+            </button>
             
-            {/* Timer */}
-            <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
-              currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
-              currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
-              'bg-green-600/20 text-green-400'
-            }`}>
-              {formatTime(currentTimer)}
-            </div>
-          </div>
-        </div>
+            <div className="flex-1"></div>
 
-        {/* Progress Bar - Now inside the fixed container */}
-        <div className="px-4 pb-1 bg-gray-900">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
-            <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
-          </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-              style={{width: `${progress}%`}}
-            />
-          </div>
-          
-          {/* Progress Dots */}
-          <div className="flex justify-center gap-1 mt-1">
-            {Array.from({length: total}).map((_, i) => (
-              <div
-                key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  i === index ? 'bg-white scale-125' :
-                  answers[i] !== null ? 'bg-green-500' :
-                  skipped[i] ? 'bg-yellow-500' :
-                  'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-          
-          {/* Category Name - After progress dots */}
-          <div className="text-center mt-4">
-            <span className="text-xs text-gray-500">{currentQuestion.category}</span>
-          </div>
-        </div>
-      </div>
-
-        {/* Main Content - Conditionally scrollable with fixed bottom nav */}
-        <div 
-            className={`flex-1 px-4 flex flex-col pb-36 ${
-                isPractice && selected === null ? 'overflow-hidden' : 'overflow-y-auto'
-            }`}
-            style={{
-                maxHeight: isPractice && selected === null ? '100%' : 'auto',
-                position: isPractice && selected === null ? 'relative' : 'static'
-            }}
-        >
-        {/* Question Card */}
-        <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 mt-24 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
-          {/* Decorative elements */}
-          <div className="absolute top-2 right-2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
-          <div className="absolute bottom-2 left-2 w-12 h-12 bg-white/5 rounded-full blur-lg"></div>
-          
-          <div className="relative text-center">
-            <div className="inline-block bg-white/10 px-3 py-1 rounded-full text-xs font-medium text-blue-100 mb-3">
-              Question {index + 1}
-            </div>
-            <h2 className="text-xl font-bold leading-relaxed text-white tracking-wide">
-              {currentQuestion.prompt}
-            </h2>
-            {currentQuestion.difficulty && (
-              <div className="mt-3 inline-block">
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  currentQuestion.difficulty === 'easy' ? 'bg-green-500/20 text-green-300' :
-                  currentQuestion.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
-                  'bg-red-500/20 text-red-300'
-                }`}>
-                  {currentQuestion.difficulty.toUpperCase()}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Options Grid - Enhanced styling with no quiz mode feedback */}
-        <div className="grid grid-cols-1 gap-3 mb-2 flex-shrink-0">
-          {currentQuestion.options.map((option, optIndex) => {
-            const isSelected = selected === optIndex;
-            const isCorrect = optIndex === currentQuestion.answerIndex;
-            const showFeedback = isPractice && selected !== null && showExplanation;
-            const isEliminated = elimMap[index] && elimMap[index].includes(optIndex);
-            
-            let cardClass = "p-4 rounded-xl transition-all duration-300 border-2 min-h-[64px] flex items-center ";
-            
-            if (isEliminated) {
-              cardClass += "bg-gray-700/30 border-gray-600/30 text-gray-500/50 cursor-not-allowed";
-            } else {
-              cardClass += "cursor-pointer ";
+            <div className="flex items-center gap-2">
+              {/* Only show coins and streak in practice mode */}
+              {isPractice && (
+                <>
+                  {/* Coins */}
+                  <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                    <span className="text-yellow-400 text-sm">🪙</span>
+                    <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
+                  </div>
+                  
+                  {/* Streak - Always visible in practice */}
+                  <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                    <span className="text-orange-400 text-sm">🔥</span>
+                    <span className="text-orange-200 font-semibold text-sm">{streak}</span>
+                  </div>
+                </>
+              )}
               
-              if (showFeedback) {
-                if (isSelected && isCorrect) {
-                  cardClass += "bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/25";
-                } else if (isSelected && !isCorrect) {
-                  cardClass += "bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/25";
-                } else if (!isSelected && isCorrect) {
-                  cardClass += "bg-green-600/20 border-green-500 text-green-300 animate-pulse";
-                } else {
-                  cardClass += "bg-gray-700 border-gray-600 text-gray-400";
-                }
-              } else if (isSelected) {
-                cardClass += "bg-gray-600 border-gray-500 text-white";
-              } else {
-                cardClass += "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-750 hover:border-gray-600";
-              }
-            }
-
-            const optionLabels = ['🅰️', '🅱️', '🅲️', '🅳️'];
-            
-            return (
-              <button
-                key={optIndex}
-                onClick={(e) => onSelect(optIndex, e)}
-                disabled={isPractice && lockedMap[index]}
-                className={cardClass}
-              >
-                <div className="flex items-center gap-2 w-full">
-                  <div className="text-lg flex-shrink-0 mr-1">{optionLabels[optIndex]}</div>
-                  <div className="flex-1 text-left font-semibold text-base leading-relaxed">{option}</div>
-                  {/* Show audience percentage if active */}
-                  {audienceMap[index] && audienceMap[index][optIndex] > 0 && !isEliminated && (
-                    <div className="bg-purple-600/20 px-2 py-1 rounded-full text-xs text-purple-300">
-                      {audienceMap[index][optIndex]}%
-                    </div>
-                  )}
-                  {showFeedback && isSelected && isCorrect && !isEliminated && (
-                    <div className="text-lg animate-bounce">🎉</div>
-                  )}
-                  {showFeedback && isSelected && !isCorrect && !isEliminated && (
-                    <div className="text-lg">😔</div>
-                  )}
-                  {showFeedback && !isSelected && isCorrect && !isEliminated && (
-                    <div className="text-base animate-pulse">✨</div>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Explanation (Inline) - Only in practice mode */}
-        {isPractice && showExplanation && selected !== null && (
-          <div className="bg-gray-800 rounded-xl p-4 mb-2 mt-4 border border-gray-700 flex-shrink-0">
-            <div className="flex gap-3">
-              <div className="text-lg flex-shrink-0">
-                {selected === currentQuestion.answerIndex ? '🎊' : '💡'}
-              </div>
-              <div className="flex-1">
-                <h4 className={`font-semibold mb-3 text-sm ${
-                  selected === currentQuestion.answerIndex ? 'text-green-400' : 'text-blue-400'
-                }`}>
-                  {selected === currentQuestion.answerIndex ? 
-                    "Perfect! Well done!" : 
-                    "Good try! Here's why:"
-                  }
-                </h4>
-                {currentQuestion.explanation && (
-                  <p className="text-gray-300 text-sm leading-relaxed">
-                    {currentQuestion.explanation}
-                  </p>
-                )}
+              {/* Timer */}
+              <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
+                currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
+                currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
+                'bg-green-600/20 text-green-400'
+              }`}>
+                {formatTime(currentTimer)}
               </div>
             </div>
           </div>
-        )}
+
+          {/* Progress Bar */}
+          <div className="px-4 pb-1 bg-gray-900">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
+              <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
+            </div>
+            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
+                style={{width: `${progress}%`}}
+              />
+            </div>
+            
+            {/* Progress Dots */}
+            <div className="flex justify-center gap-1 mt-1">
+              {Array.from({length: total}).map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-1.5 h-1.5 rounded-full transition-all ${
+                    i === index ? 'bg-white scale-125' :
+                    answers[i] !== null ? 'bg-green-500' :
+                    skipped[i] ? 'bg-yellow-500' :
+                    'bg-gray-600'
+                  }`}
+                />
+              ))}
+            </div>
+            
+            {/* Category Name */}
+            <div className="text-center mt-4">
+              <span className="text-xs text-gray-500">{currentQuestion.category}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className={`flex-1 px-4 flex flex-col ${isScrollable ? 'pb-36' : 'pb-36'}`}>
+          {/* Question Card */}
+          <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 mt-24 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
+            {/* Decorative elements */}
+            <div className="absolute top-2 right-2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
+            <div className="absolute bottom-2 left-2 w-12 h-12 bg-white/5 rounded-full blur-lg"></div>
+            
+            <div className="relative text-center">
+              <div className="inline-block bg-white/10 px-3 py-1 rounded-full text-xs font-medium text-blue-100 mb-3">
+                Question {index + 1}
+              </div>
+              <h2 className="text-xl font-bold leading-relaxed text-white tracking-wide">
+                {currentQuestion.prompt}
+              </h2>
+              {currentQuestion.difficulty && (
+                <div className="mt-3 inline-block">
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                    currentQuestion.difficulty === 'easy' ? 'bg-green-500/20 text-green-300' :
+                    currentQuestion.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                    'bg-red-500/20 text-red-300'
+                  }`}>
+                    {currentQuestion.difficulty.toUpperCase()}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Options Grid */}
+          <div className="grid grid-cols-1 gap-3 mb-2 flex-shrink-0">
+            {currentQuestion.options.map((option, optIndex) => {
+              const isSelected = selected === optIndex;
+              const isCorrect = optIndex === currentQuestion.answerIndex;
+              const showFeedback = isPractice && selected !== null && showExplanation;
+              const isEliminated = elimMap[index] && elimMap[index].includes(optIndex);
+              
+              let cardClass = "p-4 rounded-xl transition-all duration-300 border-2 min-h-[64px] flex items-center ";
+              
+              if (isEliminated) {
+                cardClass += "bg-gray-700/30 border-gray-600/30 text-gray-500/50 cursor-not-allowed";
+              } else {
+                cardClass += "cursor-pointer ";
+                
+                if (showFeedback) {
+                  if (isSelected && isCorrect) {
+                    cardClass += "bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/25";
+                  } else if (isSelected && !isCorrect) {
+                    cardClass += "bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/25";
+                  } else if (!isSelected && isCorrect) {
+                    cardClass += "bg-green-600/20 border-green-500 text-green-300 animate-pulse";
+                  } else {
+                    cardClass += "bg-gray-700 border-gray-600 text-gray-400";
+                  }
+                } else if (isSelected) {
+                  cardClass += "bg-gray-600 border-gray-500 text-white";
+                } else {
+                  cardClass += "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-750 hover:border-gray-600";
+                }
+              }
+
+              const optionLabels = ['🅰️', '🅱️', '🅲️', '🅳️'];
+              
+              return (
+                <button
+                  key={optIndex}
+                  onClick={(e) => onSelect(optIndex, e)}
+                  disabled={isPractice && lockedMap[index]}
+                  className={cardClass}
+                >
+                  <div className="flex items-center gap-2 w-full">
+                    <div className="text-lg flex-shrink-0 mr-1">{optionLabels[optIndex]}</div>
+                    <div className="flex-1 text-left font-semibold text-base leading-relaxed">{option}</div>
+                    {/* Show audience percentage if active */}
+                    {audienceMap[index] && audienceMap[index][optIndex] > 0 && !isEliminated && (
+                      <div className="bg-purple-600/20 px-2 py-1 rounded-full text-xs text-purple-300">
+                        {audienceMap[index][optIndex]}%
+                      </div>
+                    )}
+                    {showFeedback && isSelected && isCorrect && !isEliminated && (
+                      <div className="text-lg animate-bounce">🎉</div>
+                    )}
+                    {showFeedback && isSelected && !isCorrect && !isEliminated && (
+                      <div className="text-lg">😔</div>
+                    )}
+                    {showFeedback && !isSelected && isCorrect && !isEliminated && (
+                      <div className="text-base animate-pulse">✨</div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Explanation - Only in practice mode */}
+          {isPractice && showExplanation && selected !== null && (
+            <div className="bg-gray-800 rounded-xl p-4 mb-2 mt-4 border border-gray-700 flex-shrink-0">
+              <div className="flex gap-3">
+                <div className="text-lg flex-shrink-0">
+                  {selected === currentQuestion.answerIndex ? '🎊' : '💡'}
+                </div>
+                <div className="flex-1">
+                  <h4 className={`font-semibold mb-3 text-sm ${
+                    selected === currentQuestion.answerIndex ? 'text-green-400' : 'text-blue-400'
+                  }`}>
+                    {selected === currentQuestion.answerIndex ? 
+                      "Perfect! Well done!" : 
+                      "Good try! Here's why:"
+                    }
+                  </h4>
+                  {currentQuestion.explanation && (
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      {currentQuestion.explanation}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-{/* Bottom Controls - Modern Apple-inspired design */}
+      {/* Bottom Controls - Always fixed at bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-50">
         {/* Gradient background with blur */}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/95 to-gray-900/80 backdrop-blur-xl"></div>
@@ -766,7 +744,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
             </div>
           )}
 
-          {/* Navigation Buttons - Glass morphism style */}
+          {/* Navigation Buttons */}
           <div className="flex gap-2 mb-3">
             <button
               onClick={goPrev}
@@ -802,7 +780,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
             </button>
           </div>
 
-          {/* Submit Button - Prominent CTA */}
+          {/* Submit Button */}
           <button
             onClick={() => setShowSubmit(true)}
             className="w-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
@@ -810,7 +788,6 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
               py-4 rounded-2xl font-bold text-white transition-all transform active:scale-[0.98]
               shadow-2xl shadow-green-500/25 relative overflow-hidden group"
           >
-            {/* Animated shine effect */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             <span className="relative">Submit Quiz</span>
           </button>
@@ -914,7 +891,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
                 onClick={() => {
                   setShowSubmit(false);
                   setTimeUpFor(null);
-                  setLastActivity(Date.now()); // Reset activity when closing submit modal
+                  setLastActivity(Date.now());
                 }}
                 className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium"
               >
@@ -924,7 +901,7 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('Submit button clicked'); // Debug log
+                  console.log('Submit button clicked');
                   handleSubmit();
                 }}
                 className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-xl font-medium"
@@ -966,48 +943,34 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         </div>
       )}
       
-        <style jsx>{`
+      <style jsx>{`
         @keyframes fadeInOut {
-            0% {
+          0% {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
-            }
-            15% {
+          }
+          15% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1.05);
-            }
-            20% {
+          }
+          20% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
-            }
-            80% {
+          }
+          80% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
-            }
-            100% {
+          }
+          100% {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.9);
-            }
+          }
         }
         
         .animate-fadeInOut {
-            animation: fadeInOut 3s ease-out forwards;
+          animation: fadeInOut 3s ease-out forwards;
         }
-        `}</style>
-
-        {/* Add this style block to enforce no-scroll */}
-        {isPractice && selected === null && (
-            <style jsx global>{`
-            body {
-                overflow: hidden !important;
-            }
-            .flex-1.px-4.flex.flex-col {
-                overflow: hidden !important;
-                position: fixed !important;
-                width: 100% !important;
-            }
-            `}</style>
-        )}
+      `}</style>
     </div>
   );
 };

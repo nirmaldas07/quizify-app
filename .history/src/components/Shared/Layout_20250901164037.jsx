@@ -197,12 +197,14 @@ export default function Layout() {
         
         // Start restoration attempts immediately
         attemptRestore(0);
-        // Remove hiding class after scroll is set
-        setTimeout(() => {
-          if (mainRef.current) {
-            mainRef.current.classList.remove('navigating');
-          }
-        }, 20);
+        
+      // Fade in with quick transition after scroll is set
+          setTimeout(() => {
+            if (mainRef.current) {
+              mainRef.current.style.transition = 'opacity 0.15s ease-out';
+              mainRef.current.classList.remove('navigating');
+            }
+          }, 10);
       } else {
         // No saved position, start at top
         window.scrollTo(0, 0);
@@ -408,16 +410,27 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
       <style>{`
-        .hide-bottom-nav nav[role="navigation"] {
-         display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
-        }
-      `}</style>
+          .hide-bottom-nav nav[role="navigation"] {
+          display: none !important;
+          }
+          main.navigating {
+            opacity: 0;
+            pointer-events: none;
+          }
+          main {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            transform: translateZ(0);
+            will-change: scroll-position;
+          }
+          
+          /* Android-specific smooth scrolling */
+          @media (hover: none) and (pointer: coarse) {
+            main {
+              scroll-behavior: smooth;
+            }
+          }
+        `}</style>
 
       <main
         ref={mainRef}

@@ -256,6 +256,11 @@ if (isCorrect) {
       feedback = messages[Math.floor(Math.random() * messages.length)];
     }
     
+    setTimeout(() => {
+      setFeedbackMessage(feedback);
+      setTimeout(() => setFeedbackMessage(null), 3000);
+    }, 1000); // Add 1 second delay like correct answers
+    
     playSound('/sounds/wrong.mp3');
   }
 }
@@ -523,8 +528,8 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         </div>
       )}
 
-    {/* Fixed Header Container */}
-      <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900 flex-shrink-0`}>
+{/* Fixed Header Section */}
+      <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900`}>
         {/* Top Status Bar */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
           <button 
@@ -568,38 +573,37 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
           </div>
         </div>
 
-        {/* Progress Bar - Now inside the fixed container */}
+        {/* Progress Bar - Now inside the fixed header */}
         <div className="px-4 pb-1 bg-gray-900">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
-            <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
-          </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-              style={{width: `${progress}%`}}
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
+          <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
+        </div>
+        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
+            style={{width: `${progress}%`}}
+          />
+        </div>
+        
+        {/* Progress Dots */}
+        <div className="flex justify-center gap-1 mt-1">
+          {Array.from({length: total}).map((_, i) => (
+            <div
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                i === index ? 'bg-white scale-125' :
+                answers[i] !== null ? 'bg-green-500' :
+                skipped[i] ? 'bg-yellow-500' :
+                'bg-gray-600'
+              }`}
             />
-          </div>
-          
-          {/* Progress Dots */}
-          <div className="flex justify-center gap-1 mt-1">
-            {Array.from({length: total}).map((_, i) => (
-              <div
-                key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  i === index ? 'bg-white scale-125' :
-                  answers[i] !== null ? 'bg-green-500' :
-                  skipped[i] ? 'bg-yellow-500' :
-                  'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-          
-          {/* Category Name - After progress dots */}
-          <div className="text-center mt-4">
-            <span className="text-xs text-gray-500">{currentQuestion.category}</span>
-          </div>
+          ))}
+        </div>
+        
+        {/* Category Name - After progress dots */}
+        <div className="text-center mt-4">
+          <span className="text-xs text-gray-500">{currentQuestion.category}</span>
         </div>
       </div>
 

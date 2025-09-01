@@ -126,11 +126,6 @@ export default function Layout() {
 
   // Restore scroll when navigating
   useEffect(() => {
-    // Hide content instantly before any rendering
-    if (mainRef.current) {
-      mainRef.current.classList.add('navigating');
-    }
-    
     // Define routes that should always start at top
     const alwaysTopRoutes = [
       '/profile/',
@@ -148,12 +143,6 @@ export default function Layout() {
       if (mainRef.current) {
         mainRef.current.scrollTop = 0;
       }
-      // Remove hiding class
-      setTimeout(() => {
-        if (mainRef.current) {
-          mainRef.current.classList.remove('navigating');
-        }
-      }, 20);
     } else {
       // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
       const savedPos = scrollPositions.current[pathname];
@@ -195,26 +184,14 @@ export default function Layout() {
           }
         };
         
-        // Start restoration attempts immediately
-        attemptRestore(0);
-        // Remove hiding class after scroll is set
-        setTimeout(() => {
-          if (mainRef.current) {
-            mainRef.current.classList.remove('navigating');
-          }
-        }, 20);
+        // Start restoration attempts after a small delay for DOM to be ready
+        setTimeout(() => attemptRestore(0), 100);
       } else {
         // No saved position, start at top
         window.scrollTo(0, 0);
         if (mainRef.current) {
           mainRef.current.scrollTop = 0;
         }
-        // Remove hiding class
-        setTimeout(() => {
-          if (mainRef.current) {
-            mainRef.current.classList.remove('navigating');
-          }
-        }, 20);
       }
     }
   }, [pathname]);
@@ -302,23 +279,14 @@ export default function Layout() {
         return;  // Don't navigate if already on this page
       }
       
-      // Not active tab - navigation will happen
-      
-      // First, manually save current scroll position RIGHT NOW
-      if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
-        const mainScroll = mainRef.current?.scrollTop || 0;
-        const windowScroll = window.scrollY || window.pageYOffset || 0;
-        const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
-        
-        console.log(`Manually saving scroll before navigation from ${pathname}: ${scrollPos}`);
-        scrollPositions.current[pathname] = scrollPos;
-      }
-      
-      // Check for double tap on inactive tab
+      // Not active tab - check for double tap on inactive tab
       const lastTap = lastTapRef.current[path] || 0;
       
       if (now - lastTap < 500) {  // Double tap on inactive tab
         console.log('Double tap on inactive tab - navigating and scrolling to top'); // Debug log
+        
+        // Save current scroll position before navigating
+        saveScroll();
         
         // Clear saved position for target path so it starts at top
         scrollPositions.current[path] = 0;
@@ -349,6 +317,9 @@ export default function Layout() {
       // Single tap on inactive tab - normal navigation
       lastTapRef.current[path] = now;
       
+      // Save scroll position before navigating
+      saveScroll();
+      
       // Bounce animation
       setBounce(true);
       setTimeout(() => setBounce(false), 600);
@@ -378,7 +349,7 @@ export default function Layout() {
       }
 
       go();
-    }, [active, path, pathname, navigate, scrollToTop, playSound, haptic]);
+    }, [active, path, navigate, saveScroll, scrollToTop, playSound, haptic]);
 
     return (
       <button
@@ -410,12 +381,6 @@ export default function Layout() {
       <style>{`
         .hide-bottom-nav nav[role="navigation"] {
          display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
         }
       `}</style>
 

@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useGame } from '../../App';
 import useSound from 'use-sound';
 import CoinFly from '../Shared/CoinFly';
-import { useNavigate } from 'react-router-dom';
 
 export default function Streaks() {
   const { player, addCoins, updateDailyStreak } = useGame();
@@ -11,7 +10,6 @@ export default function Streaks() {
   const bestStreak = player?.bestStreak || 0;
   const totalDays = player?.totalDays || 0;
   const playerCoins = player?.coins || 0;
-  const navigate = useNavigate();
 
 // Define today at the top
   const today = new Date();
@@ -213,7 +211,7 @@ export default function Streaks() {
   };
 
     const handleBack = () => {
-        navigate(-1);
+        window.history.back();
     };
 
   return (

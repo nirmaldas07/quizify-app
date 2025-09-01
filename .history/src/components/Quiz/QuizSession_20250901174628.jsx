@@ -523,83 +523,80 @@ setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
         </div>
       )}
 
-    {/* Fixed Header Container */}
-      <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900 flex-shrink-0`}>
-        {/* Top Status Bar */}
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
-          <button 
-            onClick={() => setShowQuit(true)}
-            className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span className="font-medium">Back</span>
-          </button>
-          
-          <div className="flex-1"></div>
+      {/* Top Status Bar - Sticky with proper overflow hidden */}
+      <div className="sticky top-0 flex items-center justify-between px-4 py-2 bg-gray-900 flex-shrink-0 z-40 border-b border-gray-800 shadow-lg">
+        <button 
+          onClick={() => setShowQuit(true)}
+          className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="font-medium">Back</span>
+        </button>
+        
+        <div className="flex-1"></div>
 
-          <div className="flex items-center gap-2">
-            {/* Only show coins and streak in practice mode */}
-            {isPractice && (
-              <>
-                {/* Coins */}
-                <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                  <span className="text-yellow-400 text-sm">🪙</span>
-                  <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
-                </div>
-                
-                {/* Streak - Always visible in practice */}
-                <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                  <span className="text-orange-400 text-sm">🔥</span>
-                  <span className="text-orange-200 font-semibold text-sm">{streak}</span>
-                </div>
-              </>
-            )}
-            
-            {/* Timer */}
-            <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
-              currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
-              currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
-              'bg-green-600/20 text-green-400'
-            }`}>
-              {formatTime(currentTimer)}
-            </div>
+        <div className="flex items-center gap-2">
+          {/* Only show coins and streak in practice mode */}
+          {isPractice && (
+            <>
+              {/* Coins */}
+              <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-yellow-400 text-sm">🪙</span>
+                <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
+              </div>
+              
+              {/* Streak - Always visible in practice */}
+              <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-orange-400 text-sm">🔥</span>
+                <span className="text-orange-200 font-semibold text-sm">{streak}</span>
+              </div>
+            </>
+          )}
+          
+          {/* Timer */}
+          <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
+            currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
+            currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
+            'bg-green-600/20 text-green-400'
+          }`}>
+            {formatTime(currentTimer)}
           </div>
         </div>
+      </div>
 
-        {/* Progress Bar - Now inside the fixed container */}
-        <div className="px-4 pb-1 bg-gray-900">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
-            <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
-          </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-              style={{width: `${progress}%`}}
+      {/* Progress Bar */}
+      <div className="px-4 pb-1 flex-shrink-0 bg-gray-900 relative z-30">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
+          <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
+        </div>
+        <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
+            style={{width: `${progress}%`}}
+          />
+        </div>
+        
+        {/* Progress Dots */}
+        <div className="flex justify-center gap-1 mt-1">
+          {Array.from({length: total}).map((_, i) => (
+            <div
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full transition-all ${
+                i === index ? 'bg-white scale-125' :
+                answers[i] !== null ? 'bg-green-500' :
+                skipped[i] ? 'bg-yellow-500' :
+                'bg-gray-600'
+              }`}
             />
-          </div>
-          
-          {/* Progress Dots */}
-          <div className="flex justify-center gap-1 mt-1">
-            {Array.from({length: total}).map((_, i) => (
-              <div
-                key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  i === index ? 'bg-white scale-125' :
-                  answers[i] !== null ? 'bg-green-500' :
-                  skipped[i] ? 'bg-yellow-500' :
-                  'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-          
-          {/* Category Name - After progress dots */}
-          <div className="text-center mt-4">
-            <span className="text-xs text-gray-500">{currentQuestion.category}</span>
-          </div>
+          ))}
+        </div>
+        
+        {/* Category Name - After progress dots */}
+        <div className="text-center mt-4">
+          <span className="text-xs text-gray-500">{currentQuestion.category}</span>
         </div>
       </div>
 
