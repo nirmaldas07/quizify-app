@@ -125,15 +125,9 @@ export default function Layout() {
   }, [pathname]);
 
   // Restore scroll when navigating
-    useEffect(() => {
-      // Hide content immediately to prevent flash
-      if (mainRef.current) {
-        mainRef.current.style.opacity = '0';
-        mainRef.current.style.transition = 'none';
-      }
-      
-      // Define routes that should always start at top
-      const alwaysTopRoutes = [
+  useEffect(() => {
+    // Define routes that should always start at top
+    const alwaysTopRoutes = [
       '/profile/',
       '/quiz/',
       '/practice/',
@@ -190,33 +184,17 @@ export default function Layout() {
           }
         };
         
-    // Start restoration attempts after a small delay for DOM to be ready
-            setTimeout(() => {
-              attemptRestore(0);
-              // Fade content back in after scroll is set
-              setTimeout(() => {
-                if (mainRef.current) {
-                  mainRef.current.style.transition = 'opacity 0.2s ease-in';
-                  mainRef.current.style.opacity = '1';
-                }
-              }, 50);
-            }, 10);
-          } else {
-            // No saved position, start at top
-            window.scrollTo(0, 0);
-            if (mainRef.current) {
-              mainRef.current.scrollTop = 0;
-            }
-            // Fade in even when no scroll restoration needed
-            setTimeout(() => {
-              if (mainRef.current) {
-                mainRef.current.style.transition = 'opacity 0.2s ease-in';
-                mainRef.current.style.opacity = '1';
-              }
-            }, 50);
-          }
+        // Start restoration attempts after a small delay for DOM to be ready
+        setTimeout(() => attemptRestore(0), 100);
+      } else {
+        // No saved position, start at top
+        window.scrollTo(0, 0);
+        if (mainRef.current) {
+          mainRef.current.scrollTop = 0;
         }
-      }, [pathname]);
+      }
+    }
+  }, [pathname]);
 
   // Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);

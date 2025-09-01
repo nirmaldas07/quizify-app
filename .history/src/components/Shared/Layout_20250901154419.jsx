@@ -1,5 +1,5 @@
 // src/components/Layout.jsx
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
 function WheelIcon({ size = 22, spinning = false }) {
@@ -27,9 +27,8 @@ export default function Layout() {
   const { pathname } = useLocation();
 
   const scrollPositions = useRef({});
-  const lastTapRef = useRef({});
+  const lastTapRef = useRef(0);
   const [navAnimating, setNavAnimating] = useState(false);
-  const mainRef = useRef(null); // Add ref for main element
 
   // Preload sounds
   const soundsRef = useRef({});
@@ -66,157 +65,35 @@ export default function Layout() {
     }
   };
 
-  // Save scroll position helper - checks which element is actually scrolling
-  const saveScroll = useCallback(() => {
-    // Only save scroll for main navigation pages
-    if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
-      // Check if main element is the scroll container
-      const mainScroll = mainRef.current?.scrollTop || 0;
-      // Also check window scroll as fallback
-      const windowScroll = window.scrollY || window.pageYOffset || 0;
-      
-      // Use whichever has actual scroll (usually only one will be > 0)
-      const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
-      
-      console.log(`Saving scroll for ${pathname}: main=${mainScroll}, window=${windowScroll}, saved=${scrollPos}`); // Debug log
-      scrollPositions.current[pathname] = scrollPos;
-    }
-  }, [pathname]);
-
-  // Continuously save scroll position during scrolling
-  useEffect(() => {
-    let rafId = null;
-    
-    const handleScroll = () => {
-      // Cancel any pending save
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
-      
-      // Schedule save for next animation frame to debounce
-      rafId = requestAnimationFrame(() => {
-        if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
-          const mainScroll = mainRef.current?.scrollTop || 0;
-          const windowScroll = window.scrollY || window.pageYOffset || 0;
-          const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
-          
-          scrollPositions.current[pathname] = scrollPos;
-          console.log(`Scroll position updated for ${pathname}: ${scrollPos}`); // Debug log
-        }
-      });
-    };
-
-    // Listen to both window and main element scroll
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    const mainElement = mainRef.current;
-    if (mainElement) {
-      mainElement.addEventListener('scroll', handleScroll, { passive: true });
-    }
-
-    return () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
-      window.removeEventListener('scroll', handleScroll);
-      if (mainElement) {
-        mainElement.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [pathname]);
-
   // Restore scroll when navigating
-    useEffect(() => {
-      // Hide content immediately to prevent flash
-      if (mainRef.current) {
-        mainRef.current.style.opacity = '0';
-        mainRef.current.style.transition = 'none';
-      }
-      
-      // Define routes that should always start at top
-      const alwaysTopRoutes = [
-      '/profile/',
-      '/quiz/',
-      '/practice/',
-      '/play/classic',
-      '/settings',
-      '/about',
-    ];
-    
-    const shouldStartAtTop = alwaysTopRoutes.some(route => pathname.startsWith(route));
-    
-    if (shouldStartAtTop) {
+  useEffect(() => {
+    // Always start at top for these routes
+    if (pathname.startsWith('/profile/') || pathname.startsWith('/quiz/') || pathname.startsWith('/practice/')) {
       window.scrollTo(0, 0);
-      if (mainRef.current) {
-        mainRef.current.scrollTop = 0;
+      const mainElement = document.querySelector('main');
+      if (mainElement) {
+        mainElement.scrollTop = 0;
       }
     } else {
-      // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
-      const savedPos = scrollPositions.current[pathname];
-      console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
-      
-      if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
-        // Use multiple attempts to ensure scroll is restored
-        const attemptRestore = (attempts = 0) => {
-          if (attempts >= 5) return; // Max 5 attempts
-          
-          // Try to restore scroll on main element first (most likely)
-          if (mainRef.current) {
-            mainRef.current.scrollTop = savedPos;
-            
-            // Check if it worked
-            setTimeout(() => {
-              const currentScroll = mainRef.current?.scrollTop || 0;
-              if (Math.abs(currentScroll - savedPos) > 10) {
-                // If not close enough, try window scroll
-                window.scrollTo(0, savedPos);
-                
-                // Check window scroll
-                setTimeout(() => {
-                  const windowScroll = window.scrollY || window.pageYOffset || 0;
-                  console.log(`Restore attempt ${attempts + 1}: main=${currentScroll}, window=${windowScroll}, target=${savedPos}`);
-                  
-                  if (Math.abs(windowScroll - savedPos) > 10 && Math.abs(currentScroll - savedPos) > 10) {
-                    // Neither worked, try again
-                    attemptRestore(attempts + 1);
-                  }
-                }, 20);
-              } else {
-                console.log(`Successfully restored scroll to ${currentScroll}`);
-              }
-            }, 20);
-          } else {
-            // No main ref, try window
-            window.scrollTo(0, savedPos);
-          }
-        };
-        
-    // Start restoration attempts after a small delay for DOM to be ready
-            setTimeout(() => {
-              attemptRestore(0);
-              // Fade content back in after scroll is set
-              setTimeout(() => {
-                if (mainRef.current) {
-                  mainRef.current.style.transition = 'opacity 0.2s ease-in';
-                  mainRef.current.style.opacity = '1';
-                }
-              }, 50);
-            }, 10);
-          } else {
-            // No saved position, start at top
-            window.scrollTo(0, 0);
-            if (mainRef.current) {
-              mainRef.current.scrollTop = 0;
-            }
-            // Fade in even when no scroll restoration needed
-            setTimeout(() => {
-              if (mainRef.current) {
-                mainRef.current.style.transition = 'opacity 0.2s ease-in';
-                mainRef.current.style.opacity = '1';
-              }
-            }, 50);
-          }
-        }
-      }, [pathname]);
+      // For bottom nav pages, restore saved position
+      const pos = scrollPositions.current[pathname];
+      if (pos !== undefined && pos !== null) {
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+          window.scrollTo(0, pos);
+        }, 10);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+  }, [pathname]);
+  
+  const saveScroll = () => {
+    // Only save scroll for main navigation pages
+    if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
+      scrollPositions.current[pathname] = window.scrollY || window.pageYOffset || 0;
+    }
+  };
 
   // Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);
@@ -224,21 +101,21 @@ export default function Layout() {
 
   const [hideBottomNav, setHideBottomNav] = useState(false);
 
-  useEffect(() => {
-    const checkHideNav = () => {
-      setHideBottomNav(document.body.classList.contains('hide-bottom-nav'));
-    };
-    
-    checkHideNav();
-    
-    const observer = new MutationObserver(checkHideNav);
-    observer.observe(document.body, { 
-      attributes: true, 
-      attributeFilter: ['class'] 
-    });
-    
-    return () => observer.disconnect();
-  }, []);
+useEffect(() => {
+  const checkHideNav = () => {
+    setHideBottomNav(document.body.classList.contains('hide-bottom-nav'));
+  };
+  
+  checkHideNav();
+  
+  const observer = new MutationObserver(checkHideNav);
+  observer.observe(document.body, { 
+    attributes: true, 
+    attributeFilter: ['class'] 
+  });
+  
+  return () => observer.disconnect();
+}, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -248,98 +125,22 @@ export default function Layout() {
     return () => observer.disconnect();
   }, []);
 
-  const HIDE_ROUTES = [
-    /^\/quiz\//,
-    /^\/practice\//,
-    /^\/profile\//,
-    /^\/play\/classic/,
-  ];
+const HIDE_ROUTES = [
+  /^\/quiz\//,
+  /^\/practice\//,
+  /^\/profile\//,
+  /^\/play\/classic/,  // This will hide nav for all classic mode screens
+];
   const hideNav = modalOpen || hideBottomNav || HIDE_ROUTES.some(r => r.test(pathname));
 
   const isActive = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
-  // Scroll to top helper function
-  const scrollToTop = useCallback(() => {
-    console.log('Scrolling to top'); // Debug log
-    
-    // Try all possible scroll methods
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    
-    // Also try scrolling the main element
-    if (mainRef.current) {
-      mainRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    
-    // Fallback for older browsers
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
-
   const NavItem = ({ path, icon, label, emoji }) => {
     const active = isActive(path);
     const [bounce, setBounce] = useState(false);
 
-    const handleClick = useCallback(() => {
-      const now = Date.now();
-      
-      // Check if this is the active tab
-      if (active) {
-        const lastTap = lastTapRef.current[path] || 0;
-        console.log(`Active tab clicked. Time since last tap: ${now - lastTap}ms`); // Debug log
-        
-        if (now - lastTap < 500) {  // Double tap detected
-          console.log('Double tap detected!'); // Debug log
-          scrollToTop();
-          playSound('tap');
-          haptic('double');
-          lastTapRef.current[path] = 0;  // Reset after double tap
-        } else {
-          // Single tap on active tab - record the time
-          lastTapRef.current[path] = now;
-        }
-        return;  // Don't navigate if already on this page
-      }
-      
-      // Not active tab - check for double tap on inactive tab
-      const lastTap = lastTapRef.current[path] || 0;
-      
-      if (now - lastTap < 500) {  // Double tap on inactive tab
-        console.log('Double tap on inactive tab - navigating and scrolling to top'); // Debug log
-        
-        // Save current scroll position before navigating
-        saveScroll();
-        
-        // Clear saved position for target path so it starts at top
-        scrollPositions.current[path] = 0;
-        
-        // Navigate
-        if (path === "/play") {
-          setNavAnimating(true);
-          playSound('whoosh');
-          haptic('double');
-          setTimeout(() => {
-            navigate(`/play?view=modes&reset=${Date.now()}`);
-            setNavAnimating(false);
-            // Scroll to top after navigation
-            setTimeout(scrollToTop, 100);
-          }, 200);
-        } else {
-          playSound('tap');
-          haptic('double');
-          navigate(path);
-          // Scroll to top after navigation
-          setTimeout(scrollToTop, 100);
-        }
-        
-        lastTapRef.current[path] = 0;  // Reset after double tap
-        return;
-      }
-      
-      // Single tap on inactive tab - normal navigation
-      lastTapRef.current[path] = now;
-      
-      // Save scroll position before navigating
+    const handleClick = () => {
       saveScroll();
       
       // Bounce animation
@@ -358,20 +159,30 @@ export default function Layout() {
           return;
         }
 
-        playSound('tap');
-        haptic('light');
-        navigate(path);
+        if (active) {
+          const now = Date.now();
+          if (now - lastTapRef.current < 500) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            playSound('tap');
+            haptic('double');
+          }
+          lastTapRef.current = now;
+        } else {
+          playSound('tap');
+          haptic('light');
+          navigate(path);
+        }
       };
 
       // Check if in quiz
       const inQuestion = localStorage.getItem("qp_in_question") === "true";
-      if (inQuestion) {
+      if (inQuestion && !active) {
         setLeaveConfirm({ open: true, go });
         return;
       }
 
       go();
-    }, [active, path, navigate, saveScroll, scrollToTop, playSound, haptic]);
+    };
 
     return (
       <button
@@ -407,7 +218,6 @@ export default function Layout() {
       `}</style>
 
       <main
-        ref={mainRef}
         className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4 overscroll-y-contain"
         style={{
             height: hideNav || document.body.classList.contains('hide-bottom-nav')

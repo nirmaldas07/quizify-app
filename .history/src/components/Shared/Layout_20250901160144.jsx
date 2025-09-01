@@ -66,44 +66,39 @@ export default function Layout() {
     }
   };
 
-  // Save scroll position helper - checks which element is actually scrolling
+  // Save scroll position helper
   const saveScroll = useCallback(() => {
     // Only save scroll for main navigation pages
     if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
-      // Check if main element is the scroll container
-      const mainScroll = mainRef.current?.scrollTop || 0;
-      // Also check window scroll as fallback
+      // Check both window scroll and main element scroll
       const windowScroll = window.scrollY || window.pageYOffset || 0;
+      const mainScroll = mainRef.current?.scrollTop || 0;
       
-      // Use whichever has actual scroll (usually only one will be > 0)
-      const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
+      // Save the greater of the two (one will usually be 0)
+      const scrollPos = Math.max(windowScroll, mainScroll);
       
-      console.log(`Saving scroll for ${pathname}: main=${mainScroll}, window=${windowScroll}, saved=${scrollPos}`); // Debug log
+      console.log(`Saving scroll for ${pathname}:`, scrollPos); // Debug log
       scrollPositions.current[pathname] = scrollPos;
     }
   }, [pathname]);
 
-  // Continuously save scroll position during scrolling
+  // Save scroll position before unmounting or path change
   useEffect(() => {
-    let rafId = null;
-    
+    // Save scroll position when pathname is about to change
+    return () => {
+      saveScroll();
+    };
+  }, [pathname, saveScroll]);
+
+  // Also save scroll on scroll events
+  useEffect(() => {
     const handleScroll = () => {
-      // Cancel any pending save
-      if (rafId) {
-        cancelAnimationFrame(rafId);
+      if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
+        const windowScroll = window.scrollY || window.pageYOffset || 0;
+        const mainScroll = mainRef.current?.scrollTop || 0;
+        const scrollPos = Math.max(windowScroll, mainScroll);
+        scrollPositions.current[pathname] = scrollPos;
       }
-      
-      // Schedule save for next animation frame to debounce
-      rafId = requestAnimationFrame(() => {
-        if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
-          const mainScroll = mainRef.current?.scrollTop || 0;
-          const windowScroll = window.scrollY || window.pageYOffset || 0;
-          const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
-          
-          scrollPositions.current[pathname] = scrollPos;
-          console.log(`Scroll position updated for ${pathname}: ${scrollPos}`); // Debug log
-        }
-      });
     };
 
     // Listen to both window and main element scroll
@@ -114,9 +109,6 @@ export default function Layout() {
     }
 
     return () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
       window.removeEventListener('scroll', handleScroll);
       if (mainElement) {
         mainElement.removeEventListener('scroll', handleScroll);
@@ -125,15 +117,9 @@ export default function Layout() {
   }, [pathname]);
 
   // Restore scroll when navigating
-    useEffect(() => {
-      // Hide content immediately to prevent flash
-      if (mainRef.current) {
-        mainRef.current.style.opacity = '0';
-        mainRef.current.style.transition = 'none';
-      }
-      
-      // Define routes that should always start at top
-      const alwaysTopRoutes = [
+  useEffect(() => {
+    // Define routes that should always start at top
+    const alwaysTopRoutes = [
       '/profile/',
       '/quiz/',
       '/practice/',
@@ -152,71 +138,24 @@ export default function Layout() {
     } else {
       // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
       const savedPos = scrollPositions.current[pathname];
-      console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
+      console.log(`Restoring scroll for ${pathname}:`, savedPos); // Debug log
       
       if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
-        // Use multiple attempts to ensure scroll is restored
-        const attemptRestore = (attempts = 0) => {
-          if (attempts >= 5) return; // Max 5 attempts
-          
-          // Try to restore scroll on main element first (most likely)
+        // Try both window scroll and main element scroll with a delay
+        setTimeout(() => {
+          window.scrollTo(0, savedPos);
           if (mainRef.current) {
             mainRef.current.scrollTop = savedPos;
-            
-            // Check if it worked
-            setTimeout(() => {
-              const currentScroll = mainRef.current?.scrollTop || 0;
-              if (Math.abs(currentScroll - savedPos) > 10) {
-                // If not close enough, try window scroll
-                window.scrollTo(0, savedPos);
-                
-                // Check window scroll
-                setTimeout(() => {
-                  const windowScroll = window.scrollY || window.pageYOffset || 0;
-                  console.log(`Restore attempt ${attempts + 1}: main=${currentScroll}, window=${windowScroll}, target=${savedPos}`);
-                  
-                  if (Math.abs(windowScroll - savedPos) > 10 && Math.abs(currentScroll - savedPos) > 10) {
-                    // Neither worked, try again
-                    attemptRestore(attempts + 1);
-                  }
-                }, 20);
-              } else {
-                console.log(`Successfully restored scroll to ${currentScroll}`);
-              }
-            }, 20);
-          } else {
-            // No main ref, try window
-            window.scrollTo(0, savedPos);
           }
-        };
-        
-    // Start restoration attempts after a small delay for DOM to be ready
-            setTimeout(() => {
-              attemptRestore(0);
-              // Fade content back in after scroll is set
-              setTimeout(() => {
-                if (mainRef.current) {
-                  mainRef.current.style.transition = 'opacity 0.2s ease-in';
-                  mainRef.current.style.opacity = '1';
-                }
-              }, 50);
-            }, 10);
-          } else {
-            // No saved position, start at top
-            window.scrollTo(0, 0);
-            if (mainRef.current) {
-              mainRef.current.scrollTop = 0;
-            }
-            // Fade in even when no scroll restoration needed
-            setTimeout(() => {
-              if (mainRef.current) {
-                mainRef.current.style.transition = 'opacity 0.2s ease-in';
-                mainRef.current.style.opacity = '1';
-              }
-            }, 50);
-          }
+        }, 50); // Slightly longer delay for DOM to be ready
+      } else {
+        window.scrollTo(0, 0);
+        if (mainRef.current) {
+          mainRef.current.scrollTop = 0;
         }
-      }, [pathname]);
+      }
+    }
+  }, [pathname]);
 
   // Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);
