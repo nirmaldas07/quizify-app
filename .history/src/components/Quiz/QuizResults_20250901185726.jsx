@@ -116,29 +116,23 @@ useEffect(() => {
   }
 }, [player.coins, coinFly, hasAddedCoins]);
 
-// Add coins ONLY if this is the first time viewing results (not from review)
+// Add coins and trigger animation ONLY on first mount after quiz completion
 useEffect(() => {
-  // Check if results object has a flag indicating coins were already processed
-  if (results.coinsProcessed) {
-    return; // Skip if coins were already processed
-  }
+  // Create a unique session key for this quiz result
+  const timestamp = results.elapsedMs || Date.now();
+  const sessionKey = `coins_added_${results.category}_${results.correct}_${timestamp}`;
   
-  if (earnedCoins > 0 && coinPillRef.current) {
+  // Check if coins were already added for this specific quiz session
+  const coinsAlreadyAdded = sessionStorage.getItem(sessionKey);
+  
+  if (earnedCoins > 0 && !coinsAlreadyAdded && coinPillRef.current) {
+    // Mark as added IMMEDIATELY to prevent any duplicate additions
+    sessionStorage.setItem(sessionKey, 'true');
+    
     // Small delay for visual effect
-        setTimeout(() => {
-        const rect = coinPillRef.current.getBoundingClientRect();
-        
-        // Play sound with error handling
-        if (playCoin) {
-            try {
-            playCoin();
-            } catch (error) {
-            console.error('Error playing coin sound:', error);
-            }
-        } else {
-            console.warn('Coin sound not loaded');
-        }
-        
+    setTimeout(() => {
+      const rect = coinPillRef.current.getBoundingClientRect();
+      playCoin?.();
       setCoinFly({ 
         startRect: { 
           left: window.innerWidth / 2 - 50, 
@@ -150,12 +144,26 @@ useEffect(() => {
         amount: earnedCoins 
       });
       setHasAddedCoins(true);
-      
-      // Mark results as processed
-      results.coinsProcessed = true;
     }, 500);
+    
+    // Clean up old session entries (older than 10 minutes)
+    const now = Date.now();
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith('coins_added_')) {
+        try {
+          const parts = key.split('_');
+          const storedTime = parseInt(parts[parts.length - 1]);
+          if (!isNaN(storedTime) && now - storedTime > 600000) { // 10 minutes
+            sessionStorage.removeItem(key);
+          }
+        } catch (e) {
+          // If parsing fails, remove the key
+          sessionStorage.removeItem(key);
+        }
+      }
+    });
   }
-}, []); // Empty array - only run once on mount
+}, []); // Empty dependency array - only run once on mount
 
 
     // Animate score on mount

@@ -116,29 +116,20 @@ useEffect(() => {
   }
 }, [player.coins, coinFly, hasAddedCoins]);
 
-// Add coins ONLY if this is the first time viewing results (not from review)
+// Add coins and trigger animation ONLY when first arriving at results (not from review)
 useEffect(() => {
-  // Check if results object has a flag indicating coins were already processed
-  if (results.coinsProcessed) {
-    return; // Skip if coins were already processed
-  }
+  // Check if coins were already added (stored in sessionStorage to persist during navigation)
+  const sessionKey = `coins_added_${results.category}_${Date.now()}`;
+  const coinsAlreadyAdded = sessionStorage.getItem(sessionKey);
   
-  if (earnedCoins > 0 && coinPillRef.current) {
+  if (earnedCoins > 0 && !coinsAlreadyAdded && coinPillRef.current) {
+    // Mark as added immediately to prevent duplicates
+    sessionStorage.setItem(sessionKey, 'true');
+    
     // Small delay for visual effect
-        setTimeout(() => {
-        const rect = coinPillRef.current.getBoundingClientRect();
-        
-        // Play sound with error handling
-        if (playCoin) {
-            try {
-            playCoin();
-            } catch (error) {
-            console.error('Error playing coin sound:', error);
-            }
-        } else {
-            console.warn('Coin sound not loaded');
-        }
-        
+    setTimeout(() => {
+      const rect = coinPillRef.current.getBoundingClientRect();
+      playCoin?.();
       setCoinFly({ 
         startRect: { 
           left: window.innerWidth / 2 - 50, 
@@ -151,11 +142,19 @@ useEffect(() => {
       });
       setHasAddedCoins(true);
       
-      // Mark results as processed
-      results.coinsProcessed = true;
+      // Clear old session entries (older than 5 minutes)
+      const now = Date.now();
+      Object.keys(sessionStorage).forEach(key => {
+        if (key.startsWith('coins_added_')) {
+          const timestamp = parseInt(key.split('_').pop());
+          if (now - timestamp > 300000) { // 5 minutes
+            sessionStorage.removeItem(key);
+          }
+        }
+      });
     }, 500);
   }
-}, []); // Empty array - only run once on mount
+}, []); // Empty dependency array - only run once on mount
 
 
     // Animate score on mount

@@ -125,20 +125,9 @@ useEffect(() => {
   
   if (earnedCoins > 0 && coinPillRef.current) {
     // Small delay for visual effect
-        setTimeout(() => {
-        const rect = coinPillRef.current.getBoundingClientRect();
-        
-        // Play sound with error handling
-        if (playCoin) {
-            try {
-            playCoin();
-            } catch (error) {
-            console.error('Error playing coin sound:', error);
-            }
-        } else {
-            console.warn('Coin sound not loaded');
-        }
-        
+    setTimeout(() => {
+      const rect = coinPillRef.current.getBoundingClientRect();
+      playCoin?.();
       setCoinFly({ 
         startRect: { 
           left: window.innerWidth / 2 - 50, 
