@@ -143,7 +143,7 @@ useEffect(() => {
     // Animate score on mount
     useEffect(() => {
     // Scroll to top when component mounts
-    document.documentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.scrollTo(0, 0);
     
     if (isPerfect || isGreat) {
         setShowCelebration(true);

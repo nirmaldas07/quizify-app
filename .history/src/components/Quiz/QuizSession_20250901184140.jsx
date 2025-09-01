@@ -717,7 +717,7 @@ const QuizSession = ({
         </div>
       </div>
     </div>
-    
+
       {/* Bottom Controls - Always fixed at bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-50">
         {/* Gradient background with blur */}

@@ -140,16 +140,13 @@ useEffect(() => {
 }, [earnedCoins, isPractice, hasAddedCoins, playCoin]);
 
 
-    // Animate score on mount
-    useEffect(() => {
-    // Scroll to top when component mounts
-    document.documentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
+  // Animate score on mount
+  useEffect(() => {
     if (isPerfect || isGreat) {
-        setShowCelebration(true);
-        setTimeout(() => setShowCelebration(false), 3000);
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 3000);
     }
-        
+    
     // Animate score counting
     let current = 0;
     const increment = correct / 20;

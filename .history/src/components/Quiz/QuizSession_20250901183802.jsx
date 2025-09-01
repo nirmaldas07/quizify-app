@@ -589,16 +589,10 @@ const QuizSession = ({
           </div>
         </div>
 
-{/* Main Content - Adjusted for proper fixed behavior */}
-  <div className={`px-4 flex flex-col ${
-    isPractice && selected !== null ? 'pb-36' : 'flex-1 justify-between pb-[180px]'
-  }`}>
-    
-    {/* Content wrapper to ensure proper spacing in fixed mode */}
-    <div className="flex-1 flex flex-col justify-center max-h-full">
-      {/* Question Card */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-6 mb-6 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
-
+        {/* Main Content - NO separate scrolling, handled by parent container */}
+        <div className="px-4 flex flex-col pb-36">
+          {/* Question Card */}
+          <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 mt-6 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
             {/* Decorative elements */}
             <div className="absolute top-2 right-2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
             <div className="absolute bottom-2 left-2 w-12 h-12 bg-white/5 rounded-full blur-lg"></div>
@@ -716,8 +710,7 @@ const QuizSession = ({
           )}
         </div>
       </div>
-    </div>
-    
+
       {/* Bottom Controls - Always fixed at bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-50">
         {/* Gradient background with blur */}

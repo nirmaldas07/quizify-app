@@ -30,9 +30,9 @@ const QuizSession = ({
   const [practiceSoundsOn, setPracticeSoundsOn] = useState(true);
 
   // Gamification feedback for practice mode
-  const [answerPattern, setAnswerPattern] = useState([]); // Track last 2-3 answers
-  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
-  const [consecutiveWrong, setConsecutiveWrong] = useState(0);
+    const [answerPattern, setAnswerPattern] = useState([]); // Track last 2-3 answers
+    const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
+    const [consecutiveWrong, setConsecutiveWrong] = useState(0);
   
   // UI states
   const [showSubmit, setShowSubmit] = useState(false);
@@ -200,68 +200,68 @@ const QuizSession = ({
       clearInterval(timerRef.current);
     }
 
-    // Check if correct and award points
-    const isCorrect = nextAnswers[index] === currentQuestion.answerIndex;
+ // Check if correct and award points
+const isCorrect = nextAnswers[index] === currentQuestion.answerIndex;
 
-    if (isCorrect) {
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      setConsecutiveCorrect(prev => prev + 1);
-      setConsecutiveWrong(0);
-      
-      if (isPractice) {
-        setEarnedStars(prev => prev + 1);
-        const coinsEarned = 10;
-        setEarnedCoins(prev => prev + coinsEarned);
+if (isCorrect) {
+  const newStreak = streak + 1;
+  setStreak(newStreak);
+  setConsecutiveCorrect(prev => prev + 1);
+  setConsecutiveWrong(0);
+  
+  if (isPractice) {
+    setEarnedStars(prev => prev + 1);
+    const coinsEarned = 10;
+    setEarnedCoins(prev => prev + coinsEarned);
 
-        playSound('/sounds/correct.mp3');
-        setTimeout(() => playSound('/sounds/coin.mp3'), 500);
-        
-        setCoinAnimation(true);
-        setTimeout(() => setCoinAnimation(false), 2000);
-        
-        setShowReward({ type: 'correct', stars: 1, coins: 10 });
-        setTimeout(() => setShowReward(null), 2000);
-      }
-    } else if (nextAnswers[index] !== null) {
-      setStreak(0);
-      setConsecutiveCorrect(0);
-      setConsecutiveWrong(prev => prev + 1);
-      
-      if (isPractice) {
-        let feedback = null;
-        
-        // First answer wrong
-        if (index === 0 && answerPattern.length === 0) {
-          feedback = { emoji: "💡", message: "No worries! Let's learn together!" };
-        }
-        // After correct streak broken
-        else if (consecutiveCorrect >= 3) {
-          feedback = { emoji: "💫", message: "Good run! Keep trying!" };
-        }
-        // Multiple wrong
-        else if (consecutiveWrong === 2) {
-          feedback = { emoji: "🤗", message: "It's okay! Take your time!" };
-        }
-        else if (consecutiveWrong >= 3) {
-          feedback = { emoji: "💪", message: "Don't give up! You've got this!" };
-        }
-        // Generic wrong
-        else {
-          const messages = [
-            { emoji: "🤔", message: "Almost there!" },
-            { emoji: "💭", message: "Good try!" },
-            { emoji: "🎯", message: "Next one!" }
-          ];
-          feedback = messages[Math.floor(Math.random() * messages.length)];
-        }
-        
-        playSound('/sounds/wrong.mp3');
-      }
+    playSound('/sounds/correct.mp3');
+    setTimeout(() => playSound('/sounds/coin.mp3'), 500);
+    
+    setCoinAnimation(true);
+    setTimeout(() => setCoinAnimation(false), 2000);
+    
+    setShowReward({ type: 'correct', stars: 1, coins: 10 });
+    setTimeout(() => setShowReward(null), 2000);
+  }
+} else if (nextAnswers[index] !== null) {
+  setStreak(0);
+  setConsecutiveCorrect(0);
+  setConsecutiveWrong(prev => prev + 1);
+  
+  if (isPractice) {
+    let feedback = null;
+    
+    // First answer wrong
+    if (index === 0 && answerPattern.length === 0) {
+      feedback = { emoji: "💡", message: "No worries! Let's learn together!" };
     }
+    // After correct streak broken
+    else if (consecutiveCorrect >= 3) {
+      feedback = { emoji: "💫", message: "Good run! Keep trying!" };
+    }
+    // Multiple wrong
+    else if (consecutiveWrong === 2) {
+      feedback = { emoji: "🤗", message: "It's okay! Take your time!" };
+    }
+    else if (consecutiveWrong >= 3) {
+      feedback = { emoji: "💪", message: "Don't give up! You've got this!" };
+    }
+    // Generic wrong
+    else {
+      const messages = [
+        { emoji: "🤔", message: "Almost there!" },
+        { emoji: "💭", message: "Good try!" },
+        { emoji: "🎯", message: "Next one!" }
+      ];
+      feedback = messages[Math.floor(Math.random() * messages.length)];
+    }
+    
+    playSound('/sounds/wrong.mp3');
+  }
+}
 
-    // Update answer pattern (keep last 3)
-    setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
+// Update answer pattern (keep last 3)
+setAnswerPattern(prev => [...prev.slice(-2), isCorrect]);
 
     // Reset skipped status if answered
     if (nextAnswers[index] !== null && skipped[index]) {
@@ -269,30 +269,32 @@ const QuizSession = ({
       nextSkipped[index] = false;
       setSkipped(nextSkipped);
     }
-
-    // Show explanation in practice mode
+// Show explanation in practice mode
     if (isPractice && nextAnswers[index] !== null) {
-      setShowExplanation(true);
-      setLockedMap(prev => {
-        const copy = [...prev];
-        copy[index] = true;
-        return copy;
-      });
-      
-      // Auto-scroll to show explanation
-      setTimeout(() => {
-        const container = document.querySelector('.main-scrollable-container');
-        if (container) {
-          const scrollHeight = container.scrollHeight;
-          const clientHeight = container.clientHeight;
-          if (scrollHeight > clientHeight) {
-            container.scrollTo({
-              top: scrollHeight - clientHeight,
-              behavior: 'smooth'
-            });
-          }
-        }
-      }, 300);
+        setShowExplanation(true);
+        setLockedMap(prev => {
+            const copy = [...prev];
+            copy[index] = true;
+            return copy;
+        });
+        
+    // Auto-scroll to show explanation
+        setTimeout(() => {
+            const container = document.querySelector('.flex-1.px-4.flex.flex-col');
+            if (container) {
+                // First ensure scroll is enabled
+                container.style.overflow = 'auto';
+                
+                // Then scroll to bottom after a brief delay
+                setTimeout(() => {
+                    const scrollHeight = container.scrollHeight;
+                    const clientHeight = container.clientHeight;
+                    if (scrollHeight > clientHeight) {
+                        container.scrollTop = scrollHeight - clientHeight;
+                    }
+                }, 200);
+            }
+        }, 300);
     } 
 
     // Auto-advance in quiz mode after 5 seconds
@@ -307,7 +309,7 @@ const QuizSession = ({
         }
       }, 5000); // Wait 5 seconds before auto-advance
     }
-  }, [currentQuestion, isPractice, lockedMap, index, answers, skipped, total, streak, elimMap, answerPattern, consecutiveCorrect]);
+  }, [currentQuestion, isPractice, lockedMap, index, answers, skipped, total, streak, elimMap]);
 
   // Navigation functions
   const goPrev = () => {
@@ -381,22 +383,22 @@ const QuizSession = ({
         setTimeout(() => setCoinAnimation(false), 3000);
       }, 1000);
     } else {
-      // For practice mode, go directly to completion
-      if (onComplete) {
-        onComplete({
-          questions,
-          answers,
-          skipped,
-          correct,
-          total,
-          mode,
-          category,
-          difficulty,
-          earnedStars,
-          earnedCoins: earnedCoins,
-          finalStreak: streak
-        });
-      }
+    // For practice mode, go directly to completion
+    if (onComplete) {
+    onComplete({
+        questions,
+        answers,
+        skipped,
+        correct,
+        total,
+        mode,
+        category,
+        difficulty,
+        earnedStars,
+        earnedCoins: earnedCoins, // Make sure this is passed
+        finalStreak: streak
+    });
+    }
     }
   };
 
@@ -484,6 +486,23 @@ const QuizSession = ({
         </div>
       )}
 
+{/* Contextual Feedback Message - Practice Mode Only
+{isPractice && feedbackMessage && (
+  <div className="fixed top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none animate-fadeInOut max-w-2xl w-full px-4">
+    <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-sm border border-gray-700/50">
+
+
+
+      <div className="text-center">
+        <div className="text-4xl mb-3">{feedbackMessage.emoji}</div>
+        <div className="text-xl font-bold leading-relaxed tracking-wide">
+          {feedbackMessage.message}
+        </div>
+      </div>
+    </div>
+  </div>
+)} */}
+
       {/* Coin Flying Animation */}
       {coinAnimation && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
@@ -504,221 +523,216 @@ const QuizSession = ({
         </div>
       )}
 
-      {/* Main scrollable container that wraps both header and content */}
-    <div className={`main-scrollable-container flex-1 flex flex-col ${
-    isPractice && selected !== null ? 'overflow-y-auto' : 'overflow-hidden'
-    }`}>
-        
-        {/* Header Container - NO sticky positioning */}
-        <div className="bg-gray-900 flex-shrink-0">
-          {/* Top Status Bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
-            <button 
-              onClick={() => setShowQuit(true)}
-              className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              <span className="font-medium">Back</span>
-            </button>
-            
-            <div className="flex-1"></div>
+    {/* Fixed Header Container */}
+      <div className={`${isPractice && selected === null ? 'sticky' : ''} top-0 z-40 bg-gray-900 flex-shrink-0`}>
+        {/* Top Status Bar */}
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800 shadow-lg">
+          <button 
+            onClick={() => setShowQuit(true)}
+            className="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-full flex items-center gap-2 transition-colors text-sm"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="font-medium">Back</span>
+          </button>
+          
+          <div className="flex-1"></div>
 
-            <div className="flex items-center gap-2">
-              {/* Only show coins and streak in practice mode */}
-              {isPractice && (
-                <>
-                  {/* Coins */}
-                  <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                    <span className="text-yellow-400 text-sm">🪙</span>
-                    <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
-                  </div>
-                  
-                  {/* Streak - Always visible in practice */}
-                  <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
-                    <span className="text-orange-400 text-sm">🔥</span>
-                    <span className="text-orange-200 font-semibold text-sm">{streak}</span>
-                  </div>
-                </>
-              )}
-              
-              {/* Timer */}
-              <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
-                currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
-                currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
-                'bg-green-600/20 text-green-400'
-              }`}>
-                {formatTime(currentTimer)}
-              </div>
-            </div>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="px-4 pb-1 bg-gray-900">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
-              <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
-            </div>
-            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-                style={{width: `${progress}%`}}
-              />
-            </div>
+          <div className="flex items-center gap-2">
+            {/* Only show coins and streak in practice mode */}
+            {isPractice && (
+              <>
+                {/* Coins */}
+                <div className="bg-yellow-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                  <span className="text-yellow-400 text-sm">🪙</span>
+                  <span className="text-yellow-200 font-semibold text-sm">{earnedCoins}</span>
+                </div>
+                
+                {/* Streak - Always visible in practice */}
+                <div className="bg-orange-600/20 px-2 py-1 rounded-full flex items-center gap-1">
+                  <span className="text-orange-400 text-sm">🔥</span>
+                  <span className="text-orange-200 font-semibold text-sm">{streak}</span>
+                </div>
+              </>
+            )}
             
-            {/* Progress Dots */}
-            <div className="flex justify-center gap-1 mt-1">
-              {Array.from({length: total}).map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-1.5 h-1.5 rounded-full transition-all ${
-                    i === index ? 'bg-white scale-125' :
-                    answers[i] !== null ? 'bg-green-500' :
-                    skipped[i] ? 'bg-yellow-500' :
-                    'bg-gray-600'
-                  }`}
-                />
-              ))}
-            </div>
-            
-            {/* Category Name */}
-            <div className="text-center mt-4">
-              <span className="text-xs text-gray-500">{currentQuestion.category}</span>
+            {/* Timer */}
+            <div className={`px-2 py-1 rounded-full font-mono font-semibold text-sm ${
+              currentTimer <= 10 ? 'bg-red-600/20 text-red-400 animate-pulse' :
+              currentTimer <= 30 ? 'bg-yellow-600/20 text-yellow-400' :
+              'bg-green-600/20 text-green-400'
+            }`}>
+              {formatTime(currentTimer)}
             </div>
           </div>
         </div>
 
-{/* Main Content - Adjusted for proper fixed behavior */}
-  <div className={`px-4 flex flex-col ${
-    isPractice && selected !== null ? 'pb-36' : 'flex-1 justify-between pb-[180px]'
-  }`}>
-    
-    {/* Content wrapper to ensure proper spacing in fixed mode */}
-    <div className="flex-1 flex flex-col justify-center max-h-full">
-      {/* Question Card */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-6 mb-6 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
-
-            {/* Decorative elements */}
-            <div className="absolute top-2 right-2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
-            <div className="absolute bottom-2 left-2 w-12 h-12 bg-white/5 rounded-full blur-lg"></div>
-            
-            <div className="relative text-center">
-              <div className="inline-block bg-white/10 px-3 py-1 rounded-full text-xs font-medium text-blue-100 mb-3">
-                Question {index + 1}
-              </div>
-              <h2 className="text-xl font-bold leading-relaxed text-white tracking-wide">
-                {currentQuestion.prompt}
-              </h2>
-              {currentQuestion.difficulty && (
-                <div className="mt-3 inline-block">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    currentQuestion.difficulty === 'easy' ? 'bg-green-500/20 text-green-300' :
-                    currentQuestion.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
-                    'bg-red-500/20 text-red-300'
-                  }`}>
-                    {currentQuestion.difficulty.toUpperCase()}
-                  </span>
-                </div>
-              )}
-            </div>
+        {/* Progress Bar - Now inside the fixed container */}
+        <div className="px-4 pb-1 bg-gray-900">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs text-gray-400">Question {index + 1} of {total}</span>
+            <span className="text-xs text-gray-400">{Math.round(progress)}% Complete</span>
           </div>
-
-          {/* Options Grid */}
-          <div className="grid grid-cols-1 gap-3 mb-2 flex-shrink-0">
-            {currentQuestion.options.map((option, optIndex) => {
-              const isSelected = selected === optIndex;
-              const isCorrect = optIndex === currentQuestion.answerIndex;
-              const showFeedback = isPractice && selected !== null && showExplanation;
-              const isEliminated = elimMap[index] && elimMap[index].includes(optIndex);
-              
-              let cardClass = "p-4 rounded-xl transition-all duration-300 border-2 min-h-[64px] flex items-center ";
-              
-              if (isEliminated) {
-                cardClass += "bg-gray-700/30 border-gray-600/30 text-gray-500/50 cursor-not-allowed";
-              } else {
-                cardClass += "cursor-pointer ";
-                
-                if (showFeedback) {
-                  if (isSelected && isCorrect) {
-                    cardClass += "bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/25";
-                  } else if (isSelected && !isCorrect) {
-                    cardClass += "bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/25";
-                  } else if (!isSelected && isCorrect) {
-                    cardClass += "bg-green-600/20 border-green-500 text-green-300 animate-pulse";
-                  } else {
-                    cardClass += "bg-gray-700 border-gray-600 text-gray-400";
-                  }
-                } else if (isSelected) {
-                  cardClass += "bg-gray-600 border-gray-500 text-white";
-                } else {
-                  cardClass += "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-750 hover:border-gray-600";
-                }
-              }
-
-              const optionLabels = ['🅰️', '🅱️', '🅲️', '🅳️'];
-              
-              return (
-                <button
-                  key={optIndex}
-                  onClick={(e) => onSelect(optIndex, e)}
-                  disabled={isPractice && lockedMap[index]}
-                  className={cardClass}
-                >
-                  <div className="flex items-center gap-2 w-full">
-                    <div className="text-lg flex-shrink-0 mr-1">{optionLabels[optIndex]}</div>
-                    <div className="flex-1 text-left font-semibold text-base leading-relaxed">{option}</div>
-                    {/* Show audience percentage if active */}
-                    {audienceMap[index] && audienceMap[index][optIndex] > 0 && !isEliminated && (
-                      <div className="bg-purple-600/20 px-2 py-1 rounded-full text-xs text-purple-300">
-                        {audienceMap[index][optIndex]}%
-                      </div>
-                    )}
-                    {showFeedback && isSelected && isCorrect && !isEliminated && (
-                      <div className="text-lg animate-bounce">🎉</div>
-                    )}
-                    {showFeedback && isSelected && !isCorrect && !isEliminated && (
-                      <div className="text-lg">😔</div>
-                    )}
-                    {showFeedback && !isSelected && isCorrect && !isEliminated && (
-                      <div className="text-base animate-pulse">✨</div>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
+              style={{width: `${progress}%`}}
+            />
           </div>
-
-          {/* Explanation - Only in practice mode */}
-          {isPractice && showExplanation && selected !== null && (
-            <div className="bg-gray-800 rounded-xl p-4 mb-2 mt-4 border border-gray-700 flex-shrink-0">
-              <div className="flex gap-3">
-                <div className="text-lg flex-shrink-0">
-                  {selected === currentQuestion.answerIndex ? '🎊' : '💡'}
-                </div>
-                <div className="flex-1">
-                  <h4 className={`font-semibold mb-3 text-sm ${
-                    selected === currentQuestion.answerIndex ? 'text-green-400' : 'text-blue-400'
-                  }`}>
-                    {selected === currentQuestion.answerIndex ? 
-                      "Perfect! Well done!" : 
-                      "Good try! Here's why:"
-                    }
-                  </h4>
-                  {currentQuestion.explanation && (
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      {currentQuestion.explanation}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+          
+          {/* Progress Dots */}
+          <div className="flex justify-center gap-1 mt-1">
+            {Array.from({length: total}).map((_, i) => (
+              <div
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                  i === index ? 'bg-white scale-125' :
+                  answers[i] !== null ? 'bg-green-500' :
+                  skipped[i] ? 'bg-yellow-500' :
+                  'bg-gray-600'
+                }`}
+              />
+            ))}
+          </div>
+          
+          {/* Category Name - After progress dots */}
+          <div className="text-center mt-4">
+            <span className="text-xs text-gray-500">{currentQuestion.category}</span>
+          </div>
         </div>
       </div>
-    </div>
-    
-      {/* Bottom Controls - Always fixed at bottom */}
+
+        {/* Main Content - Conditionally scrollable with fixed bottom nav */}
+        <div 
+            className={`flex-1 px-4 flex flex-col pb-36 ${
+                isPractice && selected === null ? 'overflow-hidden' : 'overflow-y-auto'
+            }`}
+            style={{
+                maxHeight: isPractice && selected === null ? '100%' : 'auto',
+                position: isPractice && selected === null ? 'relative' : 'static'
+            }}
+        >
+        {/* Question Card */}
+        <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 mt-20 flex-shrink-0 shadow-2xl shadow-blue-600/20 border border-blue-400/20">
+          {/* Decorative elements */}
+          <div className="absolute top-2 right-2 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-2 left-2 w-12 h-12 bg-white/5 rounded-full blur-lg"></div>
+          
+          <div className="relative text-center">
+            <div className="inline-block bg-white/10 px-3 py-1 rounded-full text-xs font-medium text-blue-100 mb-3">
+              Question {index + 1}
+            </div>
+            <h2 className="text-xl font-bold leading-relaxed text-white tracking-wide">
+              {currentQuestion.prompt}
+            </h2>
+            {currentQuestion.difficulty && (
+              <div className="mt-3 inline-block">
+                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                  currentQuestion.difficulty === 'easy' ? 'bg-green-500/20 text-green-300' :
+                  currentQuestion.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                  'bg-red-500/20 text-red-300'
+                }`}>
+                  {currentQuestion.difficulty.toUpperCase()}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Options Grid - Enhanced styling with no quiz mode feedback */}
+        <div className="grid grid-cols-1 gap-3 mb-2 flex-shrink-0">
+          {currentQuestion.options.map((option, optIndex) => {
+            const isSelected = selected === optIndex;
+            const isCorrect = optIndex === currentQuestion.answerIndex;
+            const showFeedback = isPractice && selected !== null && showExplanation;
+            const isEliminated = elimMap[index] && elimMap[index].includes(optIndex);
+            
+            let cardClass = "p-4 rounded-xl transition-all duration-300 border-2 min-h-[64px] flex items-center ";
+            
+            if (isEliminated) {
+              cardClass += "bg-gray-700/30 border-gray-600/30 text-gray-500/50 cursor-not-allowed";
+            } else {
+              cardClass += "cursor-pointer ";
+              
+              if (showFeedback) {
+                if (isSelected && isCorrect) {
+                  cardClass += "bg-green-600 border-green-500 text-white shadow-lg shadow-green-600/25";
+                } else if (isSelected && !isCorrect) {
+                  cardClass += "bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/25";
+                } else if (!isSelected && isCorrect) {
+                  cardClass += "bg-green-600/20 border-green-500 text-green-300 animate-pulse";
+                } else {
+                  cardClass += "bg-gray-700 border-gray-600 text-gray-400";
+                }
+              } else if (isSelected) {
+                cardClass += "bg-gray-600 border-gray-500 text-white";
+              } else {
+                cardClass += "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-750 hover:border-gray-600";
+              }
+            }
+
+            const optionLabels = ['🅰️', '🅱️', '🅲️', '🅳️'];
+            
+            return (
+              <button
+                key={optIndex}
+                onClick={(e) => onSelect(optIndex, e)}
+                disabled={isPractice && lockedMap[index]}
+                className={cardClass}
+              >
+                <div className="flex items-center gap-2 w-full">
+                  <div className="text-lg flex-shrink-0 mr-1">{optionLabels[optIndex]}</div>
+                  <div className="flex-1 text-left font-semibold text-base leading-relaxed">{option}</div>
+                  {/* Show audience percentage if active */}
+                  {audienceMap[index] && audienceMap[index][optIndex] > 0 && !isEliminated && (
+                    <div className="bg-purple-600/20 px-2 py-1 rounded-full text-xs text-purple-300">
+                      {audienceMap[index][optIndex]}%
+                    </div>
+                  )}
+                  {showFeedback && isSelected && isCorrect && !isEliminated && (
+                    <div className="text-lg animate-bounce">🎉</div>
+                  )}
+                  {showFeedback && isSelected && !isCorrect && !isEliminated && (
+                    <div className="text-lg">😔</div>
+                  )}
+                  {showFeedback && !isSelected && isCorrect && !isEliminated && (
+                    <div className="text-base animate-pulse">✨</div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Explanation (Inline) - Only in practice mode */}
+        {isPractice && showExplanation && selected !== null && (
+          <div className="bg-gray-800 rounded-xl p-4 mb-2 mt-4 border border-gray-700 flex-shrink-0">
+            <div className="flex gap-3">
+              <div className="text-lg flex-shrink-0">
+                {selected === currentQuestion.answerIndex ? '🎊' : '💡'}
+              </div>
+              <div className="flex-1">
+                <h4 className={`font-semibold mb-3 text-sm ${
+                  selected === currentQuestion.answerIndex ? 'text-green-400' : 'text-blue-400'
+                }`}>
+                  {selected === currentQuestion.answerIndex ? 
+                    "Perfect! Well done!" : 
+                    "Good try! Here's why:"
+                  }
+                </h4>
+                {currentQuestion.explanation && (
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {currentQuestion.explanation}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+{/* Bottom Controls - Modern Apple-inspired design */}
       <div className="fixed bottom-0 left-0 right-0 z-50">
         {/* Gradient background with blur */}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/95 to-gray-900/80 backdrop-blur-xl"></div>
@@ -752,7 +766,7 @@ const QuizSession = ({
             </div>
           )}
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - Glass morphism style */}
           <div className="flex gap-2 mb-3">
             <button
               onClick={goPrev}
@@ -788,7 +802,7 @@ const QuizSession = ({
             </button>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button - Prominent CTA */}
           <button
             onClick={() => setShowSubmit(true)}
             className="w-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500
@@ -796,6 +810,7 @@ const QuizSession = ({
               py-4 rounded-2xl font-bold text-white transition-all transform active:scale-[0.98]
               shadow-2xl shadow-green-500/25 relative overflow-hidden group"
           >
+            {/* Animated shine effect */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             <span className="relative">Submit Quiz</span>
           </button>
@@ -899,7 +914,7 @@ const QuizSession = ({
                 onClick={() => {
                   setShowSubmit(false);
                   setTimeUpFor(null);
-                  setLastActivity(Date.now());
+                  setLastActivity(Date.now()); // Reset activity when closing submit modal
                 }}
                 className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium"
               >
@@ -909,7 +924,7 @@ const QuizSession = ({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('Submit button clicked');
+                  console.log('Submit button clicked'); // Debug log
                   handleSubmit();
                 }}
                 className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-xl font-medium"
@@ -951,34 +966,48 @@ const QuizSession = ({
         </div>
       )}
       
-      <style jsx>{`
+        <style jsx>{`
         @keyframes fadeInOut {
-          0% {
+            0% {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
-          }
-          15% {
+            }
+            15% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1.05);
-          }
-          20% {
+            }
+            20% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
-          }
-          80% {
+            }
+            80% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
-          }
-          100% {
+            }
+            100% {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.9);
-          }
+            }
         }
         
         .animate-fadeInOut {
-          animation: fadeInOut 3s ease-out forwards;
+            animation: fadeInOut 3s ease-out forwards;
         }
-      `}</style>
+        `}</style>
+
+        {/* Add this style block to enforce no-scroll */}
+        {isPractice && selected === null && (
+            <style jsx global>{`
+            body {
+                overflow: hidden !important;
+            }
+            .flex-1.px-4.flex.flex-col {
+                overflow: hidden !important;
+                position: fixed !important;
+                width: 100% !important;
+            }
+            `}</style>
+        )}
     </div>
   );
 };
