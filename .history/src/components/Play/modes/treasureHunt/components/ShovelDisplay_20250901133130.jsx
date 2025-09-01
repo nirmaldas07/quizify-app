@@ -190,7 +190,7 @@ export default function ShovelDisplay({ shovelsRemaining, showBreak = false }) {
             </span>
           )}
           {shovelsRemaining === 1 && (
-            <span className="text-red-500 text-sm font-bold ml-2">
+            <span className="text-black-400 text-sm font-bold ml-2">
               Last chance!
             </span>
           )}
