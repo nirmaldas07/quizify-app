@@ -7,7 +7,7 @@ import Play from "./components/Play/PlayHome";
 import Quiz from "./components/Quiz/Quiz.jsx";
 import PartySpin from "./components/Play/PartySpin";
 import SwipeQuiz from './components/Swipe/SwipeQuiz.jsx';
-import QuizPlay from './components/Quiz/QuizPlay';
+
 // Profile imports
 import ProfileHome from "./components/Profile/ProfileHome";
 import ProfileLeaderboard from "./components/Profile/Leaderboard";

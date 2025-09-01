@@ -85,27 +85,22 @@ const QuizResults = ({
   const [showCoinsInfo, setShowCoinsInfo] = useState(false);
   const [coinsAdded, setCoinsAdded] = useState(false);
   const handleBack = () => {
-  console.log('QuizResults handleBack:', {
-    fromQuest: results.fromQuest,
-    returnPath: results.returnPath
-    });
-
     // Check if we came from a quest
     if (results.fromQuest) {
-        // Navigate back to quests with completion data
-        onNavigate('/quests', {
+      // Navigate back to quests with completion data
+      onNavigate('/quests', {
         state: {
-            questCompleted: true,
-            questType: 'dailyQuizzes',
-            increment: 1
+          questCompleted: true,
+          questType: 'dailyQuizzes',
+          increment: 1
         }
-        });
+      });
     } else {
-        // Use the return path or default to home
-        const returnPath = results.returnPath || '/';
-        onNavigate(returnPath);
+      // Use the return path or default to home
+      const returnPath = results.returnPath || '/';
+      onNavigate(returnPath);
     }
-    };
+  };
   const { correct, total, category, categorySlug, difficulty: resultDifficulty, mode, elapsedMs } = results;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
   const isPerfect = accuracy === 100;

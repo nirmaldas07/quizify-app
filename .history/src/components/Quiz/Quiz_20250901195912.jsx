@@ -518,13 +518,6 @@ if (!isPractice && results.correct > 0) {
 // Update daily streak (for both quiz and practice modes)
 updateDailyStreak();
 // Update results
-
-// Add debug logging
-console.log('Setting review snapshot with:', {
-  returnPath: returnPath || '/',
-  fromQuest: fromQuest || false
-});
-
 setReviewSnapshot({
   ...results,
   category: fromSlug(category),
@@ -536,22 +529,22 @@ setReviewSnapshot({
   hasTimer: !isPractice,
   earnedXP: isPractice ? 0 : results.correct * 10,
   earnedCoins: isPractice ? (results.earnedCoins || 0) : results.correct * 5,
-  returnPath: returnPath || '/',    // Use the variable from line 168
-  fromQuest: fromQuest || false      // Use the variable from line 169
+  returnPath: routerState.returnPath || '/',    // Add this
+  fromQuest: routerState.fromQuest || false      // Add this
 });
     setView("results");
-  }, [category, mode, timerConfig, elapsedMs, isPractice, returnPath, fromQuest]);
+  }, [category, mode, timerConfig, elapsedMs, isPractice, routerState.returnPath, routerState.fromQuest]);
 
-  const handleQuit = useCallback(() => {
-    // Use the returnPath that was extracted at component level
-    if (returnPath) {
-      navigate(returnPath, { replace: true });
-    } else if (fromHistory) {
-      navigate("/profile/history", { replace: true, state: null });
-    } else {
-      navigate("/");
-    }
-  }, [fromHistory, navigate, returnPath]);  // Use returnPath from component level
+ const handleQuit = useCallback(() => {
+  // Use the returnPath that was extracted at component level
+  if (returnPath) {
+    navigate(returnPath, { replace: true });
+  } else if (fromHistory) {
+    navigate("/profile/history", { replace: true, state: null });
+  } else {
+    navigate("/");
+  }
+}, [fromHistory, navigate, returnPath]);  // Use returnPath from component level
 
   const handleRetake = useCallback(() => {
     console.log("Retake requested - Mode:", mode, "isPractice:", isPractice);

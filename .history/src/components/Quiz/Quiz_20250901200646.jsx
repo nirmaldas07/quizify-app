@@ -540,7 +540,7 @@ setReviewSnapshot({
   fromQuest: fromQuest || false      // Use the variable from line 169
 });
     setView("results");
-  }, [category, mode, timerConfig, elapsedMs, isPractice, returnPath, fromQuest]);
+  }, [category, mode, timerConfig, elapsedMs, isPractice, routerState.returnPath, routerState.fromQuest]);
 
   const handleQuit = useCallback(() => {
     // Use the returnPath that was extracted at component level

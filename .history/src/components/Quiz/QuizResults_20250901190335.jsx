@@ -61,20 +61,19 @@ const QuizResults = ({
     category: "general-knowledge",
     mode: "quiz",
     elapsedMs: 125000,
-    questions: [],
-    returnPath: null,    // Add this
-    fromQuest: false     // Add this
+    questions: []
   },
   onRetake = () => {},
   onReview = () => {},
-  onNavigate = (path, state) => {},
+  onNavigate = (path, state) => {}, // Navigation handler passed as prop
   isRetake = false,
   isPractice = false,
-  player = { level: 1, coins: 0, combo: 0, energy: 5 },
-  categories: categoriesProp = [],
-  addCoins = () => {}
-}) => {
+  player = { level: 1, coins: 0, combo: 0, energy: 5 }, // Player data passed as prop
+  categories: categoriesProp = [], // Add this line
+  addCoins = () => {} // Add this prop to handle coin addition
 
+
+}) => {
   const [displayCoins, setDisplayCoins] = useState(player.coins);
   const coinPillRef = useRef(null);
   const [coinFly, setCoinFly] = useState(null);
@@ -84,28 +83,6 @@ const QuizResults = ({
   const [currentScore, setCurrentScore] = useState(0);
   const [showCoinsInfo, setShowCoinsInfo] = useState(false);
   const [coinsAdded, setCoinsAdded] = useState(false);
-  const handleBack = () => {
-  console.log('QuizResults handleBack:', {
-    fromQuest: results.fromQuest,
-    returnPath: results.returnPath
-    });
-
-    // Check if we came from a quest
-    if (results.fromQuest) {
-        // Navigate back to quests with completion data
-        onNavigate('/quests', {
-        state: {
-            questCompleted: true,
-            questType: 'dailyQuizzes',
-            increment: 1
-        }
-        });
-    } else {
-        // Use the return path or default to home
-        const returnPath = results.returnPath || '/';
-        onNavigate(returnPath);
-    }
-    };
   const { correct, total, category, categorySlug, difficulty: resultDifficulty, mode, elapsedMs } = results;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
   const isPerfect = accuracy === 100;
@@ -477,17 +454,12 @@ useEffect(() => {
       )}
       
       {/* Header */}
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <button 
-          onClick={handleBack}
-          className="p-2 rounded-xl bg-white/10 backdrop-blur hover:bg-white/20 transition-all flex items-center gap-2"
+          onClick={() => onNavigate("/")}
+          className="p-2 rounded-xl bg-white/10 backdrop-blur hover:bg-white/20 transition-all"
         >
-          {/* Back arrow icon */}
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          <span className="text-sm font-medium">Back</span>
+          <Home />
         </button>
         
         <div className="flex gap-2">

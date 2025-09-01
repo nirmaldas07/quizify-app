@@ -536,11 +536,11 @@ setReviewSnapshot({
   hasTimer: !isPractice,
   earnedXP: isPractice ? 0 : results.correct * 10,
   earnedCoins: isPractice ? (results.earnedCoins || 0) : results.correct * 5,
-  returnPath: returnPath || '/',    // Use the variable from line 168
-  fromQuest: fromQuest || false      // Use the variable from line 169
+  returnPath: routerState.returnPath || '/',    // Add this
+  fromQuest: routerState.fromQuest || false      // Add this
 });
     setView("results");
-  }, [category, mode, timerConfig, elapsedMs, isPractice, returnPath, fromQuest]);
+  }, [category, mode, timerConfig, elapsedMs, isPractice, routerState.returnPath, routerState.fromQuest]);
 
   const handleQuit = useCallback(() => {
     // Use the returnPath that was extracted at component level
