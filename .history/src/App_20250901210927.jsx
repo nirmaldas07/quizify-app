@@ -49,37 +49,33 @@ function GameProvider({ children }) {
 export default function App() {
   return (
     <GameProvider>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/play" element={<Play />} />
-            <Route path="/play/party" element={<PartySpin />} />
-            
-            {/* Add this line for direct /quests access */}
-            <Route path="/quests" element={<ProfileQuests />} />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/play" element={<Play />} />
+          <Route path="/play/party" element={<PartySpin />} />
 
-            {/* Profile routes */}
-            <Route path="/profile" element={<ProfileHome />} />
-            <Route path="/profile/leaderboard" element={<ProfileLeaderboard />} />
-            <Route path="/profile/history" element={<ProfileHistory />} />
-            <Route path="/profile/rewards" element={<ProfileRewards />} />
-            <Route path="/profile/badges" element={<ProfileBadges />} />
-            <Route path="/profile/achievements" element={<ProfileAchievements />} />
-            <Route path="/profile/streaks" element={<ProfileStreaks />} />
-            <Route path="/profile/quests" element={<ProfileQuests />} />
-            <Route path="/profile/settings" element={<ProfileSettings />} />
-            
-            <Route path="/swipe" element={<SwipeQuiz />} />
-            <Route path="/leaders" element={<Navigate to="/profile/leaderboard" replace />} />
-            
-            {/* Quiz routes */}
-            <Route path="/quiz/:category" element={<Quiz />} />
-            <Route path="/quiz/play" element={<QuizPlay />} />
-            
-            {/* Fallback */}
-            <Route path="*" element={<Home />} />
-          </Route>
-        </Routes>
+          {/* Profile routes */}
+          <Route path="/profile" element={<ProfileHome />} />
+          <Route path="/profile/leaderboard" element={<ProfileLeaderboard />} />
+          <Route path="/profile/history" element={<ProfileHistory />} />
+          <Route path="/profile/rewards" element={<ProfileRewards />} />
+          <Route path="/profile/badges" element={<ProfileBadges />} />
+          <Route path="/profile/achievements" element={<ProfileAchievements />} />
+          <Route path="/profile/streaks" element={<ProfileStreaks />} />
+          <Route path="/profile/quests" element={<ProfileQuests />} />
+          <Route path="/profile/settings" element={<ProfileSettings />} />
+          <Route path="/swipe" element={<SwipeQuiz />} />
+          {/* Old leaders path → redirect */}
+          <Route path="/leaders" element={<Navigate to="/profile/leaderboard" replace />} />
+          <Route path="/quests" element={<Quests />} />
+          {/* Quiz flow - Update this path when you move Quiz.jsx to Quiz folder */}
+          <Route path="/quiz/:category" element={<Quiz />} />
+          <Route path="/quiz/play" element={<QuizPlay />} />
+          {/* Fallback */}
+          <Route path="*" element={<Home />} />
+        </Route>
+      </Routes>
     </GameProvider>
   );
 }
