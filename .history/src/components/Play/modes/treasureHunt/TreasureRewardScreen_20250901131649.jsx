@@ -48,8 +48,7 @@ export default function TreasureRewardScreen({
   }, [session.coinsEarned, earnedTreasure]);
 
   return (
-    <div className={`fixed inset-0 bg-gradient-to-br ${island.theme.background} overflow-hidden flex flex-col`}>
-
+    <div className={`h-screen bg-gradient-to-br ${island.theme.background} relative overflow-hidden flex flex-col`}>
       <style jsx>{`
         @keyframes slideUp {
           from { transform: translateY(100px); opacity: 0; }
@@ -141,8 +140,7 @@ export default function TreasureRewardScreen({
         ))}
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-4">
-
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-16">
         {/* Title */}
         <div className="mb-3 text-center slide-up">
           <h1 className="text-2xl font-black text-white mb-2">
@@ -154,7 +152,7 @@ export default function TreasureRewardScreen({
         </div>
 
         {/* Results Card */}
-        <div className="glass-card rounded-2xl p-3 max-w-md w-full mb-2 slide-up" style={{ animationDelay: '0.2s', background: 'rgba(46, 46, 32, 0.25)' }}>
+        <div className="glass-card rounded-2xl p-3 max-w-md w-full mb-2 slide-up" style={{ animationDelay: '0.2s' }}>
           {/* Score */}
           <div className="text-center mb-2">
             <div className="text-3xl font-black text-white mb-1">
