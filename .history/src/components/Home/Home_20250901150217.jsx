@@ -309,37 +309,44 @@ export default function Home() {
             }}
           />
         )}
-
-        {/* Enhanced Header with Avatar & Game Stats */}
-        <div className="mb-8">
-          <div className="flex justify-between items-start mb-4">
-            <div 
-              className="cursor-pointer hover:scale-105 transition-transform"
-              onClick={() => setShowAvatarModal(true)}
-            >
-              <AvatarDisplay player={player} size="small" showLevel={true} showName={true} />
-            </div>
-            
-          <div className="flex gap-2">
-            <button
-              ref={coinPillRef}
-              onClick={() => setShowCoinsInfo(true)}
-              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 flex items-center gap-2 hover:from-yellow-500/20 hover:to-orange-500/20 transition"
-            >
-              <span className="text-lg">🪙</span>
-              <span className="font-bold">{player.coins}</span>
-            </button>
-          </div>
-          </div>
-          
-          {/* XP Progress Bar */}
-          <XPBar 
-            current={levelProgress.current} 
-            required={levelProgress.required} 
-            level={player.level}
-            animate={true}
-          />
-        </div>
+{/* Enhanced Header with Avatar & Game Stats */}
+<div className="mb-8">
+  {/* Personalized Greeting */}
+  <div className="mb-3 text-lg font-medium text-gray-300">
+    Hey {player.name}, Good {(() => {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'morning';
+      if (hour < 17) return 'afternoon';
+      return 'evening';
+    })()}! 👋
+  </div>
+  
+  {/* XP Progress Bar - Moved to top */}
+  <XPBar 
+    current={levelProgress.current} 
+    required={levelProgress.required} 
+    level={player.level}
+    animate={true}
+  />
+  
+  <div className="flex justify-between items-start mt-4">
+    <div 
+      className="cursor-pointer hover:scale-105 transition-transform"
+      onClick={() => setShowAvatarModal(true)}
+    >
+      <AvatarDisplay player={player} size="small" showLevel={true} showName={true} />
+    </div>
+    
+    <button
+      ref={coinPillRef}
+      onClick={() => setShowCoinsInfo(true)}
+      className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 flex items-center gap-2 hover:from-yellow-500/20 hover:to-orange-500/20 transition"
+    >
+      <span className="text-lg">🪙</span>
+      <span className="font-bold">{player.coins}</span>
+    </button>
+  </div>
+</div>
 
 
   {/* Hero Card - Spin & Win */}

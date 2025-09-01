@@ -317,7 +317,7 @@ export default function Home() {
               className="cursor-pointer hover:scale-105 transition-transform"
               onClick={() => setShowAvatarModal(true)}
             >
-              <AvatarDisplay player={player} size="small" showLevel={true} showName={true} />
+              <AvatarDisplay player={player} size="normal" showLevel={true} showName={true} />
             </div>
             
           <div className="flex gap-2">
