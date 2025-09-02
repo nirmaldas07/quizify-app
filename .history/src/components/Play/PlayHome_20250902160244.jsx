@@ -145,6 +145,12 @@ export default function PlayHome() {
     setSelectedMode(null);
   };
 
+// Push history state when selecting a mode
+  useEffect(() => {
+    if (selectedMode) {
+      window.history.pushState({ mode: selectedMode }, '', window.location.pathname);
+    }
+  }, [selectedMode]);
 
 //   // Handle browser back button
 //   useEffect(() => {

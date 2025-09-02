@@ -18,6 +18,7 @@ export default function QuestionScreen({
   soundOn,
   setSoundOn
 }) {
+  const [confirmQuit, setConfirmQuit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
   const [pulseScore, setPulseScore] = useState(false);

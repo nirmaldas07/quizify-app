@@ -145,18 +145,24 @@ export default function PlayHome() {
     setSelectedMode(null);
   };
 
+// Push history state when selecting a mode
+  useEffect(() => {
+    if (selectedMode) {
+      window.history.pushState({ mode: selectedMode }, '', window.location.pathname);
+    }
+  }, [selectedMode]);
 
-//   // Handle browser back button
-//   useEffect(() => {
-//     const handlePopState = (e) => {
-//       if (selectedMode) {
-//         setSelectedMode(null);
-//       }
-//     };
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (selectedMode) {
+        setSelectedMode(null);
+      }
+    };
 
-//     window.addEventListener('popstate', handlePopState);
-//     return () => window.removeEventListener('popstate', handlePopState);
-//   }, [selectedMode]);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedMode]);
 
   // Render the selected mode
   if (selectedMode === 'classic') {

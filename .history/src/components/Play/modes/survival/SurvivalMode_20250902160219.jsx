@@ -364,33 +364,29 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
     // Exit Confirmation Modal
     if (showExitConfirm) {
     return (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-6">
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl slide-in border border-white/10">
-            <div className="text-center mb-6">
-            <div className="text-5xl mb-3">🚪</div>
-            <h3 className="text-xl font-bold text-white mb-2">Leave the game?</h3>
-            <p className="text-white/70">Your progress saves at checkpoints!</p>
-            </div>
-            
+        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
+        <div className="bg-gray-800 rounded-3xl p-6 max-w-sm w-full text-center border border-gray-700">
+            <div className="text-4xl mb-4">💀</div>
+            <h3 className="text-xl font-bold mb-2 text-white">Leave Survival Mode?</h3>
+            <p className="text-gray-400 mb-6">Your progress will be saved at checkpoint</p>
             <div className="flex gap-3">
-            <button 
-                onClick={() => setShowExitConfirm(false)} 
-                className="flex-1 py-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+            <button
+                onClick={() => setShowExitConfirm(false)}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-medium text-white"
             >
-                Keep Playing
+                Stay
             </button>
-            <button 
-                onClick={confirmExit} 
-                className="flex-1 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+            <button
+                onClick={confirmExit}
+                className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium text-white"
             >
-                Exit
+                Leave
             </button>
             </div>
         </div>
         </div>
     );
     }
-
 
   if (gameState === 'gameOver') {
     return (

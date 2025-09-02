@@ -5,7 +5,6 @@ import ClassicMode from "./modes/classic/ClassicMode";
 import SurvivalMode from "./modes/survival/SurvivalMode.jsx";
 import TreasureHuntMode from "./modes/treasureHunt/TreasureHuntMode.jsx";
 
-
 const PRIMARY_CATS = [
   { name: "General Knowledge", questions: 50, icon: "🧠", color: "#7C3AED" },
   { name: "Artificial Intelligence", questions: 28, icon: "🤖", color: "#10B981" },
@@ -145,18 +144,24 @@ export default function PlayHome() {
     setSelectedMode(null);
   };
 
+// Push history state when selecting a mode
+  useEffect(() => {
+    if (selectedMode) {
+      window.history.pushState({ mode: selectedMode }, '', window.location.pathname);
+    }
+  }, [selectedMode]);
 
-//   // Handle browser back button
-//   useEffect(() => {
-//     const handlePopState = (e) => {
-//       if (selectedMode) {
-//         setSelectedMode(null);
-//       }
-//     };
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (selectedMode) {
+        setSelectedMode(null);
+      }
+    };
 
-//     window.addEventListener('popstate', handlePopState);
-//     return () => window.removeEventListener('popstate', handlePopState);
-//   }, [selectedMode]);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedMode]);
 
   // Render the selected mode
   if (selectedMode === 'classic') {

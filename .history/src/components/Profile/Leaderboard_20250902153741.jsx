@@ -103,7 +103,8 @@ console.log("Debug - Friends data:", dynamicLeaderboardData.friends[0]);
     <div className="min-h-screen bg-black text-white pt-12">
       {/* Enhanced Header - More Compact */}
       <div className="flex items-center justify-between mb-5">
-        <button onClick={() => navigate(-1)} className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-sm hover:bg-white/10 transition">
+        <button onClick={() => navigate('/profile', { replace: true })} className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-sm hover:bg-white/10 transition">
+
           ← Back
         </button>
         <div className="text-center">
