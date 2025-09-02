@@ -451,21 +451,21 @@ export default function TreasureHuntMode({ onBack }) {
     };
   }, []);
 
-    // Handle Android back button
-    useEffect(() => {
-        // Only handle back button when on map screen
-        if (gameScreen === 'map') {
-        const handlePopState = (e) => {
-            // Only show confirm if not already showing and we're still on map
-            if (!showExitConfirm && gameScreen === 'map') {
-            setShowExitConfirm(true);
-            }
-        };
-
-        window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
+// Handle Android back button
+  useEffect(() => {
+    // Only handle back button when on map screen
+    if (gameScreen === 'map') {
+      const handlePopState = (e) => {
+        // Only show confirm if not already showing and we're still on map
+        if (!showExitConfirm && gameScreen === 'map') {
+          setShowExitConfirm(true);
         }
-    }, [showExitConfirm, gameScreen]);
+      };
+
+      window.addEventListener('popstate', handlePopState);
+      return () => window.removeEventListener('popstate', handlePopState);
+    }
+  }, [showExitConfirm, gameScreen]);
 
   // Render different screens based on game state
   let currentScreen = null;
