@@ -22,7 +22,7 @@ import CoinsInfoModal from './CoinsInfoModal';
 import QuizConfigModal from './QuizConfigModal';
 import PracticeConfigModal from './PracticeConfigModal';
 import WelcomeBack from './WelcomeBack';
-import { useBackButton } from '../../hooks/useBackButton.jsx';
+import { useBackButton } from '../../hooks/useBackButton';
 
 
 /* Helpers */
@@ -237,9 +237,6 @@ export default function Home() {
 
   return (
     <>
-    {/* Exit Confirmation Dialog */}
-    <ExitDialog />
-
     {showWelcome && (
       <WelcomeBack 
         player={player} 

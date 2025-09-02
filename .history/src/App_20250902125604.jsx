@@ -25,10 +25,14 @@ import ProfileSettings from "./components/Profile/Settings";
 // Game System imports
 import { useGameState } from './hooks/useGameState';
 
-// Back button handling is now managed by useBackButton hook
-// This prevents the initial app close when first loaded
+// Prevent app from closing on back button at root
 if (window.location.pathname === '/') {
   window.history.pushState(null, '', '/');
+  window.addEventListener('popstate', function(e) {
+    if (window.location.pathname === '/') {
+      window.history.pushState(null, '', '/');
+    }
+  });
 }
 
 // Create Game Context
