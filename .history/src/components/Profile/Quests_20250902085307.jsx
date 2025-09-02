@@ -1,9 +1,8 @@
 // src/components/Profile/Quests.jsx
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useGame } from '../../App';
-import CoinFly from "../Shared/CoinFly";
 
 // Helper function to get today's date key for localStorage
 const getTodayKey = () => {
@@ -111,9 +110,6 @@ export default function Quests() {
   const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [showRewardAnimation, setShowRewardAnimation] = useState(null);
   const [dailyProgress, setDailyProgress] = useState(0);
-  const coinPillRef = useRef(null);
-  const [coinFly, setCoinFly] = useState(null);
-
 
   // Check for quest completion when returning from a game
   useEffect(() => {
@@ -143,11 +139,6 @@ export default function Quests() {
     setDailyProgress(Math.round((completed / items.length) * 100));
   }, [items]);
 
-    // Sync totalCoins with player coins
-    useEffect(() => {
-    setTotalCoins(player?.coins || 0);
-    }, [player?.coins]);
-
   // Handle navigation to quest activities
   const handleDoIt = (quest) => {
     if (navigator.vibrate) navigator.vibrate([20]);
@@ -171,43 +162,24 @@ export default function Quests() {
     navigate('/');
     };
 
-    const claim = (quest) => {
+  const claim = (quest) => {
     if (navigator.vibrate) navigator.vibrate([20, 10, 20]);
     
-    // Play coin sound
-    try {
-        const audio = new Audio('/sounds/coin.mp3');
-        audio.volume = 0.75;
-        audio.play();
-    } catch (error) {
-        console.log('Sound not available');
-    }
-    
     setShowRewardAnimation(quest.id);
-    
-    // Start coin flying animation
-    setCoinFly({
-        startRect: {
-        left: window.innerWidth / 2 - 50,
-        top: window.innerHeight / 2,
-        width: 100,
-        height: 100
-        },
-        count: Math.min(quest.reward / 10, 10),
-        amount: quest.reward
-    });
-    
     setTimeout(() => {
-        setItems(prev => prev.map(q => {
+      setItems(prev => prev.map(q => {
         if (q.id === quest.id) {
-            updateQuestProgress(q.questType + 'Claimed', true);
-            return { ...q, claimed: true };
+          // Update localStorage for claimed status
+          updateQuestProgress(q.questType + 'Claimed', true);
+          return { ...q, claimed: true };
         }
         return q;
-        }));
-        setShowRewardAnimation(null);
+      }));
+      setTotalCoins(prev => prev + quest.reward);
+      addCoins(quest.reward);
+      setShowRewardAnimation(null);
     }, 600);
-    };
+  };
 
   const getDifficultyColor = (difficulty) => {
     switch(difficulty) {
@@ -231,22 +203,9 @@ export default function Quests() {
     return `${hours}h ${minutes}m`;
   };
 
-    return (
+  return (
     <div className="quests-screen">
-        {/* Coin Animation */}
-        {coinFly && (
-        <CoinFly
-            startRect={coinFly.startRect}
-            targetRef={coinPillRef}
-            count={coinFly.count}
-            onDone={() => {
-            setTotalCoins(prev => prev + coinFly.amount);
-            addCoins(coinFly.amount);
-            setCoinFly(null);
-            }}
-        />
-        )}
-        <style jsx>{`
+      <style jsx>{`
         * {
           margin: 0;
           padding: 0;
@@ -725,8 +684,8 @@ export default function Quests() {
           ← Back
         </button>
 
-        <div className="coins-display" ref={coinPillRef}>
-        🪙 {totalCoins}
+        <div className="coins-display">
+          🪙 {totalCoins}
         </div>
         
         <div className="title-section">

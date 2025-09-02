@@ -1,9 +1,8 @@
 // src/components/Profile/Quests.jsx
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useGame } from '../../App';
-import CoinFly from "../Shared/CoinFly";
 
 // Helper function to get today's date key for localStorage
 const getTodayKey = () => {
@@ -111,9 +110,6 @@ export default function Quests() {
   const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [showRewardAnimation, setShowRewardAnimation] = useState(null);
   const [dailyProgress, setDailyProgress] = useState(0);
-  const coinPillRef = useRef(null);
-  const [coinFly, setCoinFly] = useState(null);
-
 
   // Check for quest completion when returning from a game
   useEffect(() => {
@@ -142,11 +138,6 @@ export default function Quests() {
     const completed = items.filter(q => q.progress >= q.target).length;
     setDailyProgress(Math.round((completed / items.length) * 100));
   }, [items]);
-
-    // Sync totalCoins with player coins
-    useEffect(() => {
-    setTotalCoins(player?.coins || 0);
-    }, [player?.coins]);
 
   // Handle navigation to quest activities
   const handleDoIt = (quest) => {
@@ -185,17 +176,8 @@ export default function Quests() {
     
     setShowRewardAnimation(quest.id);
     
-    // Start coin flying animation
-    setCoinFly({
-        startRect: {
-        left: window.innerWidth / 2 - 50,
-        top: window.innerHeight / 2,
-        width: 100,
-        height: 100
-        },
-        count: Math.min(quest.reward / 10, 10),
-        amount: quest.reward
-    });
+    // Update immediately for visual feedback
+    setTotalCoins(prev => prev + quest.reward);
     
     setTimeout(() => {
         setItems(prev => prev.map(q => {
@@ -205,6 +187,7 @@ export default function Quests() {
         }
         return q;
         }));
+        addCoins(quest.reward); // This updates the actual game state
         setShowRewardAnimation(null);
     }, 600);
     };
@@ -231,22 +214,9 @@ export default function Quests() {
     return `${hours}h ${minutes}m`;
   };
 
-    return (
+  return (
     <div className="quests-screen">
-        {/* Coin Animation */}
-        {coinFly && (
-        <CoinFly
-            startRect={coinFly.startRect}
-            targetRef={coinPillRef}
-            count={coinFly.count}
-            onDone={() => {
-            setTotalCoins(prev => prev + coinFly.amount);
-            addCoins(coinFly.amount);
-            setCoinFly(null);
-            }}
-        />
-        )}
-        <style jsx>{`
+      <style jsx>{`
         * {
           margin: 0;
           padding: 0;
@@ -725,8 +695,8 @@ export default function Quests() {
           ← Back
         </button>
 
-        <div className="coins-display" ref={coinPillRef}>
-        🪙 {totalCoins}
+        <div className="coins-display">
+          🪙 {totalCoins}
         </div>
         
         <div className="title-section">
