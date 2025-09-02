@@ -464,11 +464,9 @@ export default function TreasureHuntMode({ onBack }) {
   }, []);
 
   // Render different screens based on game state
-  let currentScreen = null;
-  
   switch (gameScreen) {
     case 'map':
-      currentScreen = (
+      return (
         <IslandMapScreen
           islands={ISLANDS}
           islandProgress={islandProgress}
@@ -479,10 +477,9 @@ export default function TreasureHuntMode({ onBack }) {
           totalStats={totalStats}
         />
       );
-      break;
     
     case 'island-detail':
-      currentScreen = (
+      return (
         <IslandDetailModal
           island={getIslandById(selectedIsland)}
           progress={islandProgress[selectedIsland]}
@@ -491,10 +488,9 @@ export default function TreasureHuntMode({ onBack }) {
           soundOn={soundOn}
         />
       );
-      break;
     
     case 'playing':
-      currentScreen = (
+      return (
         <TreasureQuestionScreen
           island={getIslandById(currentSession.islandId)}
           question={currentSession.questions[currentSession.currentQuestionIndex]}
@@ -510,10 +506,9 @@ export default function TreasureHuntMode({ onBack }) {
           setSoundOn={setSoundOn}
         />
       );
-      break;
     
     case 'reward':
-      currentScreen = (
+      return (
         <TreasureRewardScreen
           island={getIslandById(currentSession.islandId)}
           session={currentSession}
@@ -523,23 +518,21 @@ export default function TreasureHuntMode({ onBack }) {
           soundOn={soundOn}
         />
       );
-      break;
     
     case 'final-treasure':
-      currentScreen = (
+      return (
         <FinalTreasureScreen
           totalStats={totalStats}
           onContinue={handleFinalTreasure}
           soundOn={soundOn}
         />
       );
-      break;
     
     default:
-      currentScreen = null;
+      return null;
   }
   
-  // Return the screen with modal overlay
+  // Render the current screen with modal overlay
   return (
     <>
       {currentScreen}
