@@ -5,31 +5,10 @@ export default function WelcomeBack({ player, onContinue }) {
   const [animateOut, setAnimateOut] = useState(false);
   const [mascotBounce, setMascotBounce] = useState(false);
   const [motivationalText, setMotivationalText] = useState('');
-  const [randomMascot, setRandomMascot] = useState('');
-  
-  // Get username - "Player" is showing because there's no name set
-  const getUserName = () => {
-    // Check player object first, then localStorage, then generate one
-    if (player?.name) return player.name;
-    
-    let savedName = localStorage.getItem('userName');
-    if (!savedName) {
-      // Generate a fun default name or prompt for real name
-      savedName = 'Champion'; // Default fallback
-      localStorage.setItem('userName', savedName);
-    }
-    return savedName;
-  };
-  
-  const userName = getUserName();
   
   useEffect(() => {
     // Hide bottom nav
     document.body.classList.add('hide-bottom-nav');
-    
-    // Pick random mascot on mount
-    const mascots = ['🦉', '🐧', '🦝', '🦜', '🦕', '🐙', '🦊', '🐸', '🦁', '🐨'];
-    setRandomMascot(mascots[Math.floor(Math.random() * mascots.length)]);
     
     // Trigger mascot animation
     const bounceTimer = setInterval(() => {
@@ -94,35 +73,27 @@ export default function WelcomeBack({ player, onContinue }) {
     return "Good evening";
   };
 
+  const mascots = ['🦉', '🐧', '🦝', '🦜', '🦕', '🐙'];
+  const mascot = mascots[player?.level % mascots.length] || mascots[0];
+
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-500
-      ${animateOut ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+      ${animateOut ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+      style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #fda085 75%, #ffd89b 100%)'
+      }}>
       
-      {/* Gradient background with darker bottom-right corner */}
-      <div className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #fda085 75%, #f5a375 90%, #e08060 100%)'
-        }}
-      />
-      
-      {/* Animated background elements */}
+      {/* Animated background - Stars and clouds */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Twinkling stars in fixed positions */}
-        {[
-          { top: '10%', left: '15%', size: '24px', delay: '0s' },
-          { top: '20%', left: '75%', size: '20px', delay: '0.5s' },
-          { top: '15%', left: '45%', size: '28px', delay: '1s' },
-          { top: '30%', left: '85%', size: '22px', delay: '1.5s' },
-          { top: '8%', left: '60%', size: '26px', delay: '2s' },
-        ].map((star, i) => (
+        {/* Falling stars animation */}
+        {[...Array(15)].map((_, i) => (
           <div
-            key={`star-${i}`}
-            className="absolute animate-twinkle"
+            key={`falling-star-${i}`}
+            className="falling-star"
             style={{
-              top: star.top,
-              left: star.left,
-              fontSize: star.size,
-              animationDelay: star.delay
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${3 + Math.random() * 2}s`
             }}
           >
             ⭐
@@ -137,27 +108,27 @@ export default function WelcomeBack({ player, onContinue }) {
       </div>
 
       <div className="relative z-10 text-center px-6 w-full max-w-sm mx-auto">
-        {/* Random mascot character */}
+        {/* Mascot character */}
         <div className={`text-8xl mb-4 transition-transform duration-500 ${
           mascotBounce ? 'scale-110 rotate-6' : 'scale-100 rotate-0'
         }`}>
-          {randomMascot}
+          {mascot}
         </div>
 
-        {/* Greeting with username (Gemini style) */}
+        {/* Speech bubble greeting with gradient background */}
         <div className="relative rounded-3xl px-6 py-4 mb-6 shadow-xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100"></div>
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-br from-purple-100 to-pink-100 rotate-45"></div>
           <div className="relative">
-            <h1 className="text-3xl font-bold text-purple-800">
-              Hello, {userName}! 👋
+            <h1 className="text-2xl font-bold text-purple-800">
+              {getGreeting()}! 👋
             </h1>
-            <p className="text-sm text-purple-600 mt-1">{getGreeting()}</p>
+            <p className="text-purple-600 mt-1">Welcome back, Superstar!</p>
           </div>
         </div>
 
-        {/* Stats display */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
+        {/* Fun stats display with colored backgrounds */}
+        <div className="grid grid-cols-2 gap-3 mb-8">
           <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-200 via-yellow-100 to-orange-100"></div>
             <div className="relative">
@@ -176,18 +147,13 @@ export default function WelcomeBack({ player, onContinue }) {
           </div>
         </div>
 
-        {/* Spacer */}
-        <div className="h-4"></div>
+        {/* Spacer to push button down */}
+        <div className="h-8"></div>
 
-        {/* Animated motivational message (moved up) */}
-        <div className="text-white/90 font-medium animate-fade-slide mb-6">
-          {motivationalText}
-        </div>
-
-        {/* Play button (moved to bottom) */}
+        {/* Big fun play button */}
         <button
           onClick={handleContinue}
-          className="group relative w-full"
+          className="group relative w-full mb-6"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative bg-gradient-to-r from-green-400 to-blue-500 text-white py-5 px-8 rounded-full font-bold text-xl shadow-2xl 
@@ -196,17 +162,22 @@ export default function WelcomeBack({ player, onContinue }) {
             <span className="text-2xl animate-bounce">🚀</span>
           </div>
         </button>
+
+        {/* Animated motivational message */}
+        <div className="text-white/90 font-medium animate-fade-slide">
+          {motivationalText}
+        </div>
       </div>
 
       <style jsx>{`
-        @keyframes twinkle {
-          0%, 100% { 
-            opacity: 0.3; 
-            transform: scale(1);
+        @keyframes falling {
+          0% {
+            transform: translateY(-100px) rotate(0deg);
+            opacity: 1;
           }
-          50% { 
-            opacity: 1; 
-            transform: scale(1.2);
+          100% {
+            transform: translateY(calc(100vh + 100px)) rotate(360deg);
+            opacity: 0.3;
           }
         }
         
@@ -220,9 +191,12 @@ export default function WelcomeBack({ player, onContinue }) {
           50% { opacity: 1; transform: translateY(-3px); }
         }
         
-        .animate-twinkle {
-          color: rgba(255, 255, 255, 0.9);
-          animation: twinkle 3s ease-in-out infinite;
+        .falling-star {
+          position: absolute;
+          font-size: 24px;
+          color: rgba(255, 255, 255, 0.8);
+          animation: falling linear infinite;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
         
         .cloud {
