@@ -1,7 +1,6 @@
 // src/components/Quiz/QuizSession.jsx
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom"; 
 
 const QuizSession = ({ 
   session, 
@@ -12,7 +11,6 @@ const QuizSession = ({
   onComplete,
   onQuit 
 }) => {
-  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [skipped, setSkipped] = useState([]);
@@ -186,25 +184,10 @@ const QuizSession = ({
   };
     // ADD THIS HELPER FUNCTION HERE
     const getTodayKey = () => {
-    const today = new Date();
-    // Don't pad with zeros - keep it consistent
-    return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        const today = new Date();
+        return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     };
 
-    const handleQuitWithProgress = () => {
-    // If from quest and practice mode, navigate back with progress
-    if (isPractice && window.location.search.includes('from=quest')) {
-      navigate('/profile/quests', {
-        state: {
-          questCompleted: true,
-          questType: 'practiceQuestions',
-          // Don't increment here as we already tracked each question
-        }
-      });
-    } else {
-      onQuit();
-    }
-  };
 
   // Handle answer selection with rewards
   const onSelect = useCallback((optIdx, evt) => {
@@ -219,37 +202,21 @@ const QuizSession = ({
     // Reset activity timer
     setLastActivity(Date.now());
     
+    // ADD THIS TRACKING CODE HERE
     // Track question attempt for practice mode
     if (isPractice && !hasTrackedQuestions.includes(index) && nextAnswers[index] !== null) {
-    const newAttempted = hasTrackedQuestions.length + 1;
-    setQuestionsAttempted(newAttempted);
-    setHasTrackedQuestions(prev => [...prev, index]);
-    
-    // Update quest progress immediately for each question
-    if (window.location.search.includes('from=quest')) {
-        // Read current progress
-        let progress = {};
-        try {
-        const stored = localStorage.getItem('questProgress');
-        if (stored) progress = JSON.parse(stored);
-        } catch (e) {
-        console.error('Error reading progress:', e);
-        }
-        
-        // Update practice questions count
-        const currentCount = progress.practiceQuestions || 0;
-        progress.practiceQuestions = Math.max(currentCount, newAttempted);
-        progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-        
-        // Save to localStorage
+      setQuestionsAttempted(prev => prev + 1);
+      setHasTrackedQuestions(prev => [...prev, index]);
+      
+      // Update quest progress immediately for each question
+      if (window.location.search.includes('from=quest')) {
+        const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
+        const currentProgress = progress.practiceQuestions || 0;
+        progress.practiceQuestions = Math.min(currentProgress + 1, 15);
+        progress.date = getTodayKey();
         localStorage.setItem('questProgress', JSON.stringify(progress));
-        console.log('Saved practice progress:', progress.practiceQuestions);
-        
-        // Dispatch custom event
-        window.dispatchEvent(new CustomEvent('questProgressUpdate', { 
-        detail: { practiceQuestions: progress.practiceQuestions } 
-        }));
-    }
+        console.log('Practice question tracked:', currentProgress + 1);
+      }
     }
 
     // Stop timer immediately when answer is selected
@@ -426,16 +393,6 @@ const QuizSession = ({
       0
     );
     
-    // Save final progress for practice mode from quest
-    if (isPractice && window.location.search.includes('from=quest')) {
-        const answeredCount = answers.filter(a => a !== null).length;
-        const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
-        progress.practiceQuestions = Math.min(answeredCount, 15);
-        progress.date = getTodayKey();
-        localStorage.setItem('questProgress', JSON.stringify(progress));
-        console.log('Final practice progress saved:', progress.practiceQuestions);
-    }
-
     // Calculate final coins for quiz mode
     if (!isPractice) {
       const quizCoins = correct * 10; // 10 coins per correct answer
@@ -928,11 +885,18 @@ const QuizSession = ({
                 Stay
               </button>
                 <button
-                onClick={handleQuitWithProgress}
+                onClick={() => {
+                  // If from quest and practice mode, return to quest
+                  if (isPractice && window.location.search.includes('from=quest')) {
+                    window.location.href = '/profile/quests';
+                  } else {
+                    onQuit();
+                  }
+                }}
                 className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-medium"
-                >
+              >
                 Leave
-                </button>
+              </button>
             </div>
           </div>
         </div>

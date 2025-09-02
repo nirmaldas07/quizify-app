@@ -15,7 +15,7 @@ const DIFFICULTY_TIERS = {
   LEGENDARY: { min: 100, max: Infinity, timer: 10, points: 100 }
 };
 
-export default function SurvivalMode({ onBack, isFromQuest }) {
+export default function SurvivalMode({ onBack }) {
   const { 
     coins, 
     xp, 
@@ -191,38 +191,39 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
       }
     }, 1500);
   };
-    
-    const handleCorrectAnswer = () => {
+
+  const handleCorrectAnswer = () => {
     const points = DIFFICULTY_TIERS[currentDifficulty].points;
     setTotalScore(prev => prev + points);
     setCorrectStreak(prev => {
-        const newStreak = prev + 1;
-        
-        // Update quest progress for "Win 5 in a row"
-        if (isFromQuest) {
-        const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
-        progress.winStreak = Math.max(progress.winStreak || 0, newStreak);
-        progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-        localStorage.setItem('questProgress', JSON.stringify(progress));
-        
-        if (newStreak >= 5) {
-            console.log('Win streak quest completed!');
-        }
-        }
-        
-        // Restore life every 5 correct answers in a row
-        if (newStreak % 5 === 0 && lives < 3) {
+      const newStreak = prev + 1;
+
+      // Update quest progress for "Win 5 in a row"
+    if (window.location.search.includes('from=quest')) {
+      const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
+      progress.winStreak = Math.max(progress.winStreak || 0, newStreak);
+      progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+      localStorage.setItem('questProgress', JSON.stringify(progress));
+      
+      // If streak reaches 5, mark quest as complete
+      if (newStreak >= 5) {
+        console.log('Win streak quest completed!');
+      }
+    }
+      
+      // Restore life every 5 correct answers in a row
+      if (newStreak % 5 === 0 && lives < 3) {
         setLives(prev => Math.min(prev + 1, 3));
         if (soundOn) playSound("/sounds/lifeup.mp3", 0.8);
-        }
-        
-        return newStreak;
+      }
+      
+      return newStreak;
     });
 
     addCoins(Math.floor(points / 10));
     addXp(1);
     if (soundOn) playSound("/sounds/correct.mp3", 0.7);
-    };
+  };
 
   const handleWrongAnswer = () => {
     setCorrectStreak(0);
@@ -305,21 +306,6 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
     loadNextQuestion();
   };
 
-  const handleBackPress = () => {
-  // Save progress if from quest
-  if (isFromQuest) {
-    const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
-    progress.winStreak = Math.max(progress.winStreak || 0, correctStreak);
-    progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-    localStorage.setItem('questProgress', JSON.stringify(progress));
-    
-    // Navigate directly to quests
-    window.location.href = '/profile/quests';
-  } else {
-    onBack();
-  }
-};
-
   const playSound = (path, volume = 0.5) => {
     try {
       const audio = new Audio(path);
@@ -344,15 +330,15 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
 
   if (gameState === 'gameOver') {
     return (
-    <GameOverScreen
-    score={totalScore}
-    questionsAnswered={questionCount}
-    highScore={parseInt(localStorage.getItem('survival_highscore') || '0')}
-    checkpoint={checkpoint}
-    onRestart={handleRestart}
-    onContinue={checkpoint > 0 ? handleContinueFromCheckpoint : null}
-    onBack={handleBackPress}
-    />
+      <GameOverScreen
+        score={totalScore}
+        questionsAnswered={questionCount}
+        highScore={parseInt(localStorage.getItem('survival_highscore') || '0')}
+        checkpoint={checkpoint}
+        onRestart={handleRestart}
+        onContinue={checkpoint > 0 ? handleContinueFromCheckpoint : null}
+        onBack={onBack}
+      />
     );
   }
 
@@ -366,20 +352,20 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
 
   return (
     <QuestionScreen
-    question={currentQuestion}
-    onAnswer={handleAnswer}
-    lives={lives}
-    questionCount={questionCount}
-    correctStreak={correctStreak}
-    totalScore={totalScore}
-    currentDifficulty={currentDifficulty}
-    timeLeft={timeLeft}
-    showFeedback={showFeedback}
-    lastAnswerCorrect={lastAnswerCorrect}
-    checkpoint={checkpoint}
-    onBack={handleBackPress}
-    soundOn={soundOn}
-    setSoundOn={setSoundOn}
+      question={currentQuestion}
+      onAnswer={handleAnswer}
+      lives={lives}
+      questionCount={questionCount}
+      correctStreak={correctStreak}
+      totalScore={totalScore}
+      currentDifficulty={currentDifficulty}
+      timeLeft={timeLeft}
+      showFeedback={showFeedback}
+      lastAnswerCorrect={lastAnswerCorrect}
+      checkpoint={checkpoint}
+      onBack={onBack}
+      soundOn={soundOn}
+      setSoundOn={setSoundOn}
     />
   );
 }

@@ -116,15 +116,6 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
 export default function PlayHome() {
   const [selectedMode, setSelectedMode] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  useEffect(() => {
-    // Check if we should auto-start survival mode from quest
-    const params = new URLSearchParams(location.search);
-    if (params.get('mode') === 'survival' && params.get('from') === 'quest') {
-      setSelectedMode('survival');
-    }
-  }, [location]);
 
   const handleModeSelect = (mode) => {
     if (mode === 'classic') {
@@ -149,15 +140,9 @@ export default function PlayHome() {
     return <ClassicMode onBack={handleBackToModes} />;
   }
 
- if (selectedMode === 'survival') {
-  const params = new URLSearchParams(location.search);
-  const isFromQuest = params.get('from') === 'quest';
-  
-  return <SurvivalMode 
-    onBack={handleBackToModes} 
-    isFromQuest={isFromQuest}
-  />;
-}
+  if (selectedMode === 'survival') {
+    return <SurvivalMode onBack={handleBackToModes} />;
+  }
 
   if (selectedMode === 'treasureHunt') {
     return <TreasureHuntMode onBack={handleBackToModes} />;

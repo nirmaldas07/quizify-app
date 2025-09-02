@@ -86,8 +86,8 @@ export default function Quests() {
       color: "#A8E6CF", 
       difficulty: "Hard",
       questType: "winStreak",
-      route: "/play",
-      routeParams: "?mode=survival&from=quest"
+      route: "/play/survival/start",
+      routeParams: "?from=quest"
     },
     { 
       id: 5, 

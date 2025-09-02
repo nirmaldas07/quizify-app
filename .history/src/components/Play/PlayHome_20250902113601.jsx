@@ -149,15 +149,9 @@ export default function PlayHome() {
     return <ClassicMode onBack={handleBackToModes} />;
   }
 
- if (selectedMode === 'survival') {
-  const params = new URLSearchParams(location.search);
-  const isFromQuest = params.get('from') === 'quest';
-  
-  return <SurvivalMode 
-    onBack={handleBackToModes} 
-    isFromQuest={isFromQuest}
-  />;
-}
+  if (selectedMode === 'survival') {
+    return <SurvivalMode onBack={handleBackToModes} />;
+  }
 
   if (selectedMode === 'treasureHunt') {
     return <TreasureHuntMode onBack={handleBackToModes} />;

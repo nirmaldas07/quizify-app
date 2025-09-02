@@ -219,36 +219,31 @@ const QuizSession = ({
     // Reset activity timer
     setLastActivity(Date.now());
     
+    // ADD THIS TRACKING CODE HERE
     // Track question attempt for practice mode
     if (isPractice && !hasTrackedQuestions.includes(index) && nextAnswers[index] !== null) {
-    const newAttempted = hasTrackedQuestions.length + 1;
+    const newAttempted = questionsAttempted + 1;
     setQuestionsAttempted(newAttempted);
     setHasTrackedQuestions(prev => [...prev, index]);
     
     // Update quest progress immediately for each question
     if (window.location.search.includes('from=quest')) {
-        // Read current progress
-        let progress = {};
-        try {
-        const stored = localStorage.getItem('questProgress');
-        if (stored) progress = JSON.parse(stored);
-        } catch (e) {
-        console.error('Error reading progress:', e);
-        }
-        
-        // Update practice questions count
-        const currentCount = progress.practiceQuestions || 0;
-        progress.practiceQuestions = Math.max(currentCount, newAttempted);
-        progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-        
-        // Save to localStorage
+        const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
+        const currentProgress = progress.practiceQuestions || 0;
+        const totalAnswered = Math.max(currentProgress, newAttempted);
+        progress.practiceQuestions = Math.min(totalAnswered, 15);
+        progress.date = getTodayKey();
         localStorage.setItem('questProgress', JSON.stringify(progress));
-        console.log('Saved practice progress:', progress.practiceQuestions);
+        console.log('Practice question tracked:', progress.practiceQuestions, '/', 15);
         
-        // Dispatch custom event
-        window.dispatchEvent(new CustomEvent('questProgressUpdate', { 
-        detail: { practiceQuestions: progress.practiceQuestions } 
-        }));
+    // Debug logging
+    console.log('=== PRACTICE PROGRESS UPDATE ===');
+    console.log('New attempted count:', newAttempted);
+    console.log('Saved to localStorage:', progress.practiceQuestions);
+    console.log('Full progress object:', progress);
+
+        // Force a storage event to update other components
+        window.dispatchEvent(new Event('storage'));
     }
     }
 

@@ -86,8 +86,8 @@ export default function Quests() {
       color: "#A8E6CF", 
       difficulty: "Hard",
       questType: "winStreak",
-      route: "/play",
-      routeParams: "?mode=survival&from=quest"
+      route: "/play/survival/start",
+      routeParams: "?from=quest"
     },
     { 
       id: 5, 
@@ -137,47 +137,36 @@ export default function Quests() {
     };
     }, []);
 
-    // Listen for quest progress updates
-    useEffect(() => {
-    const handleProgressUpdate = (event) => {
-        console.log('Quest progress update received:', event.detail);
-        setItems(prev => prev.map(quest => {
-        if (quest.questType === 'practiceQuestions' && event.detail.practiceQuestions) {
-            return { ...quest, progress: event.detail.practiceQuestions };
-        }
-        return quest;
-        }));
-    };
+// Poll for localStorage changes more frequently for practice progress
+useEffect(() => {
+  const checkProgress = () => {
+    // Get directly from localStorage, not using getQuestProgress
+    const stored = localStorage.getItem('questProgress');
+    if (!stored) return;
     
-    // Listen for custom event
-    window.addEventListener('questProgressUpdate', handleProgressUpdate);
+    const progress = JSON.parse(stored);
+    console.log('Checking progress:', progress);
     
-    // Also poll localStorage as backup
-    const interval = setInterval(() => {
-        try {
-        const stored = localStorage.getItem('questProgress');
-        if (stored) {
-            const progress = JSON.parse(stored);
-            setItems(prev => prev.map(quest => {
-            if (quest.questType === 'practiceQuestions' && progress.practiceQuestions) {
-                if (quest.progress !== progress.practiceQuestions) {
-                return { ...quest, progress: progress.practiceQuestions };
-                }
-            }
-            return quest;
-            }));
+    setItems(prev => prev.map(quest => {
+      if (quest.questType === 'practiceQuestions' && progress.practiceQuestions !== undefined) {
+        const newProgress = progress.practiceQuestions || 0;
+        if (quest.progress !== newProgress) {
+          console.log('Updating practice progress to:', newProgress);
+          return { ...quest, progress: newProgress };
         }
-        } catch (e) {
-        console.error('Error checking progress:', e);
-        }
-    }, 1000);
-    
-    return () => {
-        window.removeEventListener('questProgressUpdate', handleProgressUpdate);
-        clearInterval(interval);
-    };
-    }, []);
-
+      }
+      return quest;
+    }));
+  };
+  
+  // Check immediately on mount
+  checkProgress();
+  
+  // Set up interval to check every second
+  const interval = setInterval(checkProgress, 500); // Check every 500ms for faster updates
+  
+  return () => clearInterval(interval);
+}, []);
         
   // Check for quest completion when returning from a game
   useEffect(() => {

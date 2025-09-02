@@ -366,20 +366,20 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
 
   return (
     <QuestionScreen
-    question={currentQuestion}
-    onAnswer={handleAnswer}
-    lives={lives}
-    questionCount={questionCount}
-    correctStreak={correctStreak}
-    totalScore={totalScore}
-    currentDifficulty={currentDifficulty}
-    timeLeft={timeLeft}
-    showFeedback={showFeedback}
-    lastAnswerCorrect={lastAnswerCorrect}
-    checkpoint={checkpoint}
-    onBack={handleBackPress}
-    soundOn={soundOn}
-    setSoundOn={setSoundOn}
+      question={currentQuestion}
+      onAnswer={handleAnswer}
+      lives={lives}
+      questionCount={questionCount}
+      correctStreak={correctStreak}
+      totalScore={totalScore}
+      currentDifficulty={currentDifficulty}
+      timeLeft={timeLeft}
+      showFeedback={showFeedback}
+      lastAnswerCorrect={lastAnswerCorrect}
+      checkpoint={checkpoint}
+      onBack={onBack}
+      soundOn={soundOn}
+      setSoundOn={setSoundOn}
     />
   );
 }

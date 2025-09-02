@@ -305,21 +305,6 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
     loadNextQuestion();
   };
 
-  const handleBackPress = () => {
-  // Save progress if from quest
-  if (isFromQuest) {
-    const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
-    progress.winStreak = Math.max(progress.winStreak || 0, correctStreak);
-    progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-    localStorage.setItem('questProgress', JSON.stringify(progress));
-    
-    // Navigate directly to quests
-    window.location.href = '/profile/quests';
-  } else {
-    onBack();
-  }
-};
-
   const playSound = (path, volume = 0.5) => {
     try {
       const audio = new Audio(path);
@@ -344,15 +329,15 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
 
   if (gameState === 'gameOver') {
     return (
-    <GameOverScreen
-    score={totalScore}
-    questionsAnswered={questionCount}
-    highScore={parseInt(localStorage.getItem('survival_highscore') || '0')}
-    checkpoint={checkpoint}
-    onRestart={handleRestart}
-    onContinue={checkpoint > 0 ? handleContinueFromCheckpoint : null}
-    onBack={handleBackPress}
-    />
+      <GameOverScreen
+        score={totalScore}
+        questionsAnswered={questionCount}
+        highScore={parseInt(localStorage.getItem('survival_highscore') || '0')}
+        checkpoint={checkpoint}
+        onRestart={handleRestart}
+        onContinue={checkpoint > 0 ? handleContinueFromCheckpoint : null}
+        onBack={onBack}
+      />
     );
   }
 
@@ -366,20 +351,20 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
 
   return (
     <QuestionScreen
-    question={currentQuestion}
-    onAnswer={handleAnswer}
-    lives={lives}
-    questionCount={questionCount}
-    correctStreak={correctStreak}
-    totalScore={totalScore}
-    currentDifficulty={currentDifficulty}
-    timeLeft={timeLeft}
-    showFeedback={showFeedback}
-    lastAnswerCorrect={lastAnswerCorrect}
-    checkpoint={checkpoint}
-    onBack={handleBackPress}
-    soundOn={soundOn}
-    setSoundOn={setSoundOn}
+      question={currentQuestion}
+      onAnswer={handleAnswer}
+      lives={lives}
+      questionCount={questionCount}
+      correctStreak={correctStreak}
+      totalScore={totalScore}
+      currentDifficulty={currentDifficulty}
+      timeLeft={timeLeft}
+      showFeedback={showFeedback}
+      lastAnswerCorrect={lastAnswerCorrect}
+      checkpoint={checkpoint}
+      onBack={onBack}
+      soundOn={soundOn}
+      setSoundOn={setSoundOn}
     />
   );
 }

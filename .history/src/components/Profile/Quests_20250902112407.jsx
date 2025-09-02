@@ -86,8 +86,8 @@ export default function Quests() {
       color: "#A8E6CF", 
       difficulty: "Hard",
       questType: "winStreak",
-      route: "/play",
-      routeParams: "?mode=survival&from=quest"
+      route: "/play/survival/start",
+      routeParams: "?from=quest"
     },
     { 
       id: 5, 
@@ -137,46 +137,46 @@ export default function Quests() {
     };
     }, []);
 
-    // Listen for quest progress updates
-    useEffect(() => {
-    const handleProgressUpdate = (event) => {
-        console.log('Quest progress update received:', event.detail);
+// Listen for quest progress updates
+useEffect(() => {
+  const handleProgressUpdate = (event) => {
+    console.log('Quest progress update received:', event.detail);
+    setItems(prev => prev.map(quest => {
+      if (quest.questType === 'practiceQuestions' && event.detail.practiceQuestions) {
+        return { ...quest, progress: event.detail.practiceQuestions };
+      }
+      return quest;
+    }));
+  };
+  
+  // Listen for custom event
+  window.addEventListener('questProgressUpdate', handleProgressUpdate);
+  
+  // Also poll localStorage as backup
+  const interval = setInterval(() => {
+    try {
+      const stored = localStorage.getItem('questProgress');
+      if (stored) {
+        const progress = JSON.parse(stored);
         setItems(prev => prev.map(quest => {
-        if (quest.questType === 'practiceQuestions' && event.detail.practiceQuestions) {
-            return { ...quest, progress: event.detail.practiceQuestions };
-        }
-        return quest;
-        }));
-    };
-    
-    // Listen for custom event
-    window.addEventListener('questProgressUpdate', handleProgressUpdate);
-    
-    // Also poll localStorage as backup
-    const interval = setInterval(() => {
-        try {
-        const stored = localStorage.getItem('questProgress');
-        if (stored) {
-            const progress = JSON.parse(stored);
-            setItems(prev => prev.map(quest => {
-            if (quest.questType === 'practiceQuestions' && progress.practiceQuestions) {
-                if (quest.progress !== progress.practiceQuestions) {
-                return { ...quest, progress: progress.practiceQuestions };
-                }
+          if (quest.questType === 'practiceQuestions' && progress.practiceQuestions) {
+            if (quest.progress !== progress.practiceQuestions) {
+              return { ...quest, progress: progress.practiceQuestions };
             }
-            return quest;
-            }));
-        }
-        } catch (e) {
-        console.error('Error checking progress:', e);
-        }
-    }, 1000);
-    
-    return () => {
-        window.removeEventListener('questProgressUpdate', handleProgressUpdate);
-        clearInterval(interval);
-    };
-    }, []);
+          }
+          return quest;
+        }));
+      }
+    } catch (e) {
+      console.error('Error checking progress:', e);
+    }
+  }, 1000);
+  
+  return () => {
+    window.removeEventListener('questProgressUpdate', handleProgressUpdate);
+    clearInterval(interval);
+  };
+}, []);
 
         
   // Check for quest completion when returning from a game
