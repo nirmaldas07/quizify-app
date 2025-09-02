@@ -241,6 +241,8 @@ export default function Home() {
     )}
     
     <div className="min-h-screen bg-base-bg text-base-text">
+
+    <div className="min-h-screen bg-base-bg text-base-text">
       <div className="fixed inset-0 -z-10 pointer-events-none"  
         style={{ background: 'linear-gradient(to bottom, #0B0F1A, #111827)' }}
         />     
@@ -442,6 +444,7 @@ export default function Home() {
       }}
     />
       </div>
+    </div>
     </div>
   </>
   );
