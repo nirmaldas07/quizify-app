@@ -11,12 +11,8 @@ export default function IslandDetailModal({
   soundOn 
 }) {
   const [isAnimating, setIsAnimating] = useState(false);
-  
-  useEffect(() => {
-    setIsAnimating(true);
-  }, []);
 
-  // Handle Android back button for modal
+// Handle Android back button for modal
   useEffect(() => {
     const handlePopState = (e) => {
       onClose();
@@ -28,7 +24,10 @@ export default function IslandDetailModal({
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, [onClose]);
-  
+
+  useEffect(() => {
+    setIsAnimating(true);
+  }, []);
 
   const hasPlayed = progress?.attempts > 0;
   const hasTreasure = progress?.treasurePiece;
