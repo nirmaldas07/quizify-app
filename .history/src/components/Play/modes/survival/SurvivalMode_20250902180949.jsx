@@ -49,10 +49,6 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
   useEffect(() => {
     loadQuestions();
     loadCheckpoint();
-    
-    // Push a history state when entering survival mode
-    window.history.pushState({ mode: 'survival' }, '', window.location.href);
-    
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
@@ -96,23 +92,6 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
       if (soundOn) playSound("/sounds/checkpoint.mp3", 0.7);
     }
   }, [questionCount, soundOn]);
-
-  // Handle Android back button
-  useEffect(() => {
-    const handlePopState = (e) => {
-      e.preventDefault();
-      // Show exit confirmation when back button is pressed
-      setShowExitConfirm(true);
-      // Push state again to prevent immediate navigation
-      window.history.pushState({ mode: 'survival' }, '', window.location.href);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, []);
 
   const getDifficultyTier = (count) => {
     if (count >= 100) return 'LEGENDARY';
@@ -215,37 +194,37 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
     }, 1500);
   };
     
-  const handleCorrectAnswer = () => {
+    const handleCorrectAnswer = () => {
     const points = DIFFICULTY_TIERS[currentDifficulty].points;
     setTotalScore(prev => prev + points);
     setCorrectStreak(prev => {
-      const newStreak = prev + 1;
-      
-      // Update quest progress for "Win 5 in a row"
-      if (isFromQuest) {
+        const newStreak = prev + 1;
+        
+        // Update quest progress for "Win 5 in a row"
+        if (isFromQuest) {
         const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
         progress.winStreak = Math.max(progress.winStreak || 0, newStreak);
         progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
         localStorage.setItem('questProgress', JSON.stringify(progress));
         
         if (newStreak >= 5) {
-          console.log('Win streak quest completed!');
+            console.log('Win streak quest completed!');
         }
-      }
-      
-      // Restore life every 5 correct answers in a row
-      if (newStreak % 5 === 0 && lives < 3) {
+        }
+        
+        // Restore life every 5 correct answers in a row
+        if (newStreak % 5 === 0 && lives < 3) {
         setLives(prev => Math.min(prev + 1, 3));
         if (soundOn) playSound("/sounds/lifeup.mp3", 0.8);
-      }
-      
-      return newStreak;
+        }
+        
+        return newStreak;
     });
 
     addCoins(Math.floor(points / 10));
     addXp(1);
     if (soundOn) playSound("/sounds/correct.mp3", 0.7);
-  };
+    };
 
   const handleWrongAnswer = () => {
     setCorrectStreak(0);
@@ -328,26 +307,24 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
     loadNextQuestion();
   };
 
-  const handleBackPress = () => {
+    const handleBackPress = () => {
     setShowExitConfirm(true);
-  };
+    };
 
-  const confirmExit = () => {
+    const confirmExit = () => {
     // Save progress if from quest
     if (isFromQuest) {
-      const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
-      progress.winStreak = Math.max(progress.winStreak || 0, correctStreak);
-      progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-      localStorage.setItem('questProgress', JSON.stringify(progress));
-      
-      // Navigate directly to quests
-      window.location.href = '/profile/quests';
+        const progress = JSON.parse(localStorage.getItem('questProgress') || '{}');
+        progress.winStreak = Math.max(progress.winStreak || 0, correctStreak);
+        progress.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+        localStorage.setItem('questProgress', JSON.stringify(progress));
+        
+        // Navigate directly to quests
+        window.location.href = '/profile/quests';
     } else {
-      // Go back to PlayHome
-      window.history.go(-1);
-      onBack();
+        onBack();
     }
-  };
+    };
 
   const playSound = (path, volume = 0.5) => {
     try {
@@ -370,6 +347,16 @@ export default function SurvivalMode({ onBack, isFromQuest }) {
       document.body.classList.remove('hide-bottom-nav');
     };
   }, []);
+
+    // Handle Android back button
+        useEffect(() => {
+            const handlePopState = (e) => {
+                setShowExitConfirm(true);
+            };
+
+            window.addEventListener('popstate', handlePopState);
+            return () => window.removeEventListener('popstate', handlePopState);
+        }, []);
 
   if (gameState === 'gameOver') {
     return (
