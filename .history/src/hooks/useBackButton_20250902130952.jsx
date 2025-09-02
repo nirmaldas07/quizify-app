@@ -1,104 +1,80 @@
-// src/hooks/useBackButton.jsx
-import { useEffect, useState, useCallback } from 'react';
+// src/hooks/useBackButton.js
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export function useBackButton() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showExitDialog, setShowExitDialog] = useState(false);
+  const [backPressCount, setBackPressCount] = useState(0);
   const [lastBackPress, setLastBackPress] = useState(0);
 
   useEffect(() => {
-    // Push initial state when at root
-    if (location.pathname === '/') {
-      // Clear any existing history states
-      window.history.replaceState({ path: '/', preventBack: true }, '', '/');
-      // Push an extra state to intercept back button
-      window.history.pushState({ path: '/', preventBack: true }, '', '/');
-    }
-
-    // Handle popstate event (browser back/forward buttons including Android back)
-    const handlePopState = (e) => {
-      // Check if we're at the root path
-      if (location.pathname === '/' || e.state?.preventBack) {
-        const currentTime = new Date().getTime();
-        const timeDiff = currentTime - lastBackPress;
-        
-        if (timeDiff < 2000 && lastBackPress > 0) {
-          // Double back press detected - show exit dialog
-          e.preventDefault();
-          setShowExitDialog(true);
-          // Push state again to prevent going back
-          window.history.pushState({ path: '/', preventBack: true }, '', '/');
-        } else {
-          // First back press - show toast
-          e.preventDefault();
-          showExitToast();
-          setLastBackPress(currentTime);
-          // Push state again to prevent going back
-          window.history.pushState({ path: '/', preventBack: true }, '', '/');
-        }
-      }
-    };
-
-    // Add event listener for popstate
-    window.addEventListener('popstate', handlePopState);
-
-    // Android-specific: Handle visibility change as a backup
-    const handleVisibilityChange = () => {
-      if (document.hidden && location.pathname === '/') {
-        // App is being hidden, possibly by back button
-        // Push state to ensure we stay in the app when returning
-        window.history.pushState({ path: '/', preventBack: true }, '', '/');
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    // For apps wrapped in Capacitor/Cordova
+    // Function to handle the back button
     const handleBackButton = (e) => {
+      // Check if we're at the root path
       if (location.pathname === '/') {
         e.preventDefault();
-        e.stopPropagation();
         
+        // Implement double-tap to exit pattern
         const currentTime = new Date().getTime();
         const timeDiff = currentTime - lastBackPress;
         
-        if (timeDiff < 2000 && lastBackPress > 0) {
+        if (timeDiff < 2000) {
+          // If back pressed twice within 2 seconds, show exit dialog
           setShowExitDialog(true);
         } else {
+          // First back press - show toast-like message
           showExitToast();
           setLastBackPress(currentTime);
         }
         
-        return false;
+        // Push a new state to prevent app from closing
+        window.history.pushState(null, '', '/');
+        return;
+      }
+      
+      // For other routes, let React Router handle navigation
+    };
+
+    // Handle popstate event (browser back/forward buttons)
+    const handlePopState = (e) => {
+      if (location.pathname === '/') {
+        const currentTime = new Date().getTime();
+        const timeDiff = currentTime - lastBackPress;
+        
+        if (timeDiff < 2000 && lastBackPress > 0) {
+          // Double back press detected
+          e.preventDefault();
+          setShowExitDialog(true);
+        } else {
+          // First back press
+          showExitToast();
+          setLastBackPress(currentTime);
+        }
+        
+        // Push state again to prevent exit
+        window.history.pushState(null, '', '/');
       }
     };
 
-    // Try to register Cordova/Capacitor back button handler
+    // Add event listeners
+    window.addEventListener('popstate', handlePopState);
+    
+    // For Android hardware back button specifically
     document.addEventListener('backbutton', handleBackButton, false);
+
+    // Push initial state if we're at root
+    if (location.pathname === '/') {
+      window.history.pushState(null, '', '/');
+    }
 
     // Cleanup
     return () => {
       window.removeEventListener('popstate', handlePopState);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
       document.removeEventListener('backbutton', handleBackButton);
     };
-  }, [location.pathname, lastBackPress]);
-
-  // Ensure history state is maintained
-  useEffect(() => {
-    const maintainHistory = () => {
-      if (location.pathname === '/' && !window.history.state?.preventBack) {
-        window.history.pushState({ path: '/', preventBack: true }, '', '/');
-      }
-    };
-
-    // Check periodically to maintain the state
-    const interval = setInterval(maintainHistory, 1000);
-
-    return () => clearInterval(interval);
-  }, [location.pathname]);
+  }, [location.pathname, navigate, lastBackPress]);
 
   // Show toast message for first back press
   const showExitToast = () => {
@@ -127,7 +103,6 @@ export function useBackButton() {
       font-size: 14px;
       z-index: 10000;
       animation: slideUp 0.3s ease-out;
-      pointer-events: none;
     `;
 
     // Add animation
@@ -143,33 +118,16 @@ export function useBackButton() {
           opacity: 1;
         }
       }
-      @keyframes slideDown {
-        from {
-          transform: translateX(-50%) translateY(0);
-          opacity: 1;
-        }
-        to {
-          transform: translateX(-50%) translateY(100%);
-          opacity: 0;
-        }
-      }
     `;
-    
-    // Only add style if it doesn't exist
-    if (!document.getElementById('exit-toast-styles')) {
-      style.id = 'exit-toast-styles';
-      document.head.appendChild(style);
-    }
-    
+    document.head.appendChild(style);
     document.body.appendChild(toast);
 
     // Remove toast after 2 seconds
     setTimeout(() => {
-      const toastEl = document.getElementById('exit-toast');
-      if (toastEl) {
-        toastEl.style.animation = 'slideDown 0.3s ease-out';
-        toastEl.style.animationFillMode = 'forwards';
-        setTimeout(() => toastEl.remove(), 300);
+      if (document.getElementById('exit-toast')) {
+        toast.style.animation = 'slideDown 0.3s ease-out';
+        toast.style.animationFillMode = 'forwards';
+        setTimeout(() => toast.remove(), 300);
       }
     }, 2000);
   };
@@ -180,33 +138,15 @@ export function useBackButton() {
 
     const handleExit = () => {
       // Try different methods to close the app
-      try {
-        // Method 1: Capacitor/Cordova
-        if (window.navigator?.app?.exitApp) {
-          window.navigator.app.exitApp();
-          return;
-        }
-        
-        // Method 2: For Samsung Internet and some Android browsers
-        if (window.navigator?.app?.backHistory) {
-          window.navigator.app.backHistory();
-          return;
-        }
-
-        // Method 3: Try to go back beyond app history
-        const backCount = window.history.length;
-        window.history.go(-backCount);
-        
-        // Method 4: Standard close (rarely works on mobile)
+      if (window.navigator.app && window.navigator.app.exitApp) {
+        // Cordova/Capacitor method
+        window.navigator.app.exitApp();
+      } else if (window.close) {
+        // Standard browser close (may not work in all cases)
         window.close();
-        
-        // Method 5: If all else fails, clear history and go to blank
-        setTimeout(() => {
-          window.location.href = 'about:blank';
-        }, 100);
-      } catch (e) {
-        console.log('Exit failed:', e);
-        // Fallback
+      } else {
+        // Fallback: Remove all history and go to blank page
+        // This won't actually close the app but will indicate intention to exit
         window.location.href = 'about:blank';
       }
     };
@@ -214,7 +154,7 @@ export function useBackButton() {
     const handleCancel = () => {
       setShowExitDialog(false);
       // Push state again to maintain prevention
-      window.history.pushState({ path: '/', preventBack: true }, '', '/');
+      window.history.pushState(null, '', '/');
     };
 
     return (
@@ -329,19 +269,31 @@ export function useBackButton() {
               opacity: 1;
             }
           }
+          
+          @keyframes slideDown {
+            from {
+              transform: translateX(-50%) translateY(0);
+              opacity: 1;
+            }
+            to {
+              transform: translateX(-50%) translateY(100%);
+              opacity: 0;
+            }
+          }
         `}</style>
       </div>
     );
   };
 
-  // Manual back function
-  const goBack = useCallback(() => {
+  // Return a manual back function and the dialog component
+  const goBack = () => {
     if (location.pathname === '/') {
+      // Show exit dialog instead of going back
       setShowExitDialog(true);
       return;
     }
     navigate(-1);
-  }, [location.pathname, navigate]);
+  };
 
   return { goBack, ExitDialog };
 }

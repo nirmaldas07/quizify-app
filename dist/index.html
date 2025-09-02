@@ -2,14 +2,73 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1e3c72">
+    <meta name="background-color" content="#0B0F1A">
+    
+    <!-- App Name -->
+    <meta name="application-name" content="Quizify">
+    <meta name="apple-mobile-web-app-title" content="Quizify">
+    
+    <!-- Prevent browser back gesture on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <!-- Icons -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎯</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎯</text></svg>">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
     <title>Quizify</title>
-    <script type="module" crossorigin src="/assets/index-80ea9858.js"></script>
+    
+    <!-- Prevent zoom on input focus -->
+    <style>
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+      
+      /* Prevent overscroll bounce on iOS */
+      body {
+        overscroll-behavior: contain;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      #root {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-16d57de1.js"></script>
     <link rel="stylesheet" href="/assets/index-69ba7f87.css">
   </head>
   <body>
     <div id="root"></div>
     
+    
+    <!-- Initialize back button handling early -->
+    <script>
+      // Push initial history state to intercept back button
+      if (window.location.pathname === '/') {
+        window.history.replaceState({ initial: true }, '', '/');
+        window.history.pushState({ preventBack: true }, '', '/');
+      }
+      
+      // Prevent default back behavior on Android
+      window.addEventListener('load', function() {
+        // Double-push state to ensure we can intercept back button
+        window.history.pushState({ preventBack: true }, '', window.location.href);
+      });
+    </script>
   </body>
 </html>
