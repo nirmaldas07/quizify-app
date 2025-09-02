@@ -82,18 +82,6 @@ export default function ClassicMode({ onBack }) {
     return () => cleanup();
   }, []);
 
-  // Handle Android back button - direct navigation without warning
-  useEffect(() => {
-    const handlePopState = (e) => {
-      e.preventDefault();
-      // Direct navigation back to PlayHome
-      onBack();
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [onBack]);
-
   // Timer logic
   useEffect(() => {
     if (gameState === 'question' && timeLeft > 0 && !timerPaused) {
@@ -244,7 +232,8 @@ export default function ClassicMode({ onBack }) {
   };
 
   const confirmExit = () => {
-    // Just call onBack to return to PlayHome
+    // Go back to PlayHome using browser history
+    window.history.go(-1);
     onBack();
     resetRun();
   };

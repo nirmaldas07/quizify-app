@@ -39,23 +39,22 @@ export default function WelcomeBack({ player, onContinue }) {
   
   const userName = getUserName();
   
-  useEffect(() => {
-    // Check if already shown in this session FIRST
+    useEffect(() => {
+    // Hide bottom nav
+    document.body.classList.add('hide-bottom-nav');
+    
+    // Check if already shown in this session
     const shownInSession = sessionStorage.getItem('welcomeShown');
     
     if (shownInSession === 'true') {
-      // Already shown in this session, skip
-      setShow(false);
-      onContinue();
-      // Don't hide nav if we're not showing the welcome screen
-      return;
+        // Already shown in this session, skip
+        setShow(false);
+        onContinue();
+        return;
     }
     
     // Mark as shown for this session
     sessionStorage.setItem('welcomeShown', 'true');
-    
-    // Only hide bottom nav if we're actually showing the welcome screen
-    document.body.classList.add('hide-bottom-nav');
     
     // Play welcome sound and vibration when component mounts
     playWelcomeSound();
@@ -67,56 +66,56 @@ export default function WelcomeBack({ player, onContinue }) {
     
     // Trigger mascot animation
     const bounceTimer = setInterval(() => {
-      setMascotBounce(prev => !prev);
+        setMascotBounce(prev => !prev);
     }, 2000);
     
     // Rotate motivational messages
     const messages = [
-      "🎯 New challenges await!",
-      "🏆 Ready to be a champion?",
-      "🌟 Your brain adventure starts now!",
-      "🎨 Time for fun learning!",
-      "🎪 The quiz circus is open!",
-      "🚀 Blast off to knowledge!",
-      "🎭 Let's play and learn!",
-      "🌈 Rainbow of questions ahead!"
+        "🎯 New challenges await!",
+        "🏆 Ready to be a champion?",
+        "🌟 Your brain adventure starts now!",
+        "🎨 Time for fun learning!",
+        "🎪 The quiz circus is open!",
+        "🚀 Blast off to knowledge!",
+        "🎭 Let's play and learn!",
+        "🌈 Rainbow of questions ahead!"
     ];
     
     setMotivationalText(messages[Math.floor(Math.random() * messages.length)]);
     
     const messageTimer = setInterval(() => {
-      setMotivationalText(messages[Math.floor(Math.random() * messages.length)]);
+        setMotivationalText(messages[Math.floor(Math.random() * messages.length)]);
     }, 3000);
     
     return () => {
-      document.body.classList.remove('hide-bottom-nav');
-      clearInterval(bounceTimer);
-      clearInterval(messageTimer);
+        document.body.classList.remove('hide-bottom-nav');
+        clearInterval(bounceTimer);
+        clearInterval(messageTimer);
     };
-  }, [onContinue]);
+    }, [onContinue]);
 
-  const handleContinue = () => {
-    // Play click sound and vibrate
-    try {
-      const audio = new Audio('/sounds/tap.mp3');
-      audio.volume = 0.5;
-      audio.play();
-    } catch (error) {
-      console.log('Click sound not available');
-    }
-    
-    // Short vibration for button press
-    if (navigator.vibrate) {
-      navigator.vibrate(20);
-    }
-    
-    setAnimateOut(true);
-    setTimeout(() => {
-      document.body.classList.remove('hide-bottom-nav');
-      setShow(false);
-      onContinue();
-    }, 400);
-  };
+const handleContinue = () => {
+  // Play click sound and vibrate
+  try {
+    const audio = new Audio('/sounds/tap.mp3');
+    audio.volume = 0.5;
+    audio.play();
+  } catch (error) {
+    console.log('Click sound not available');
+  }
+  
+  // Short vibration for button press
+  if (navigator.vibrate) {
+    navigator.vibrate(20);
+  }
+  
+  setAnimateOut(true);
+  setTimeout(() => {
+    document.body.classList.remove('hide-bottom-nav');
+    setShow(false);
+    onContinue();
+  }, 400);
+};
 
   if (!show) return null;
 

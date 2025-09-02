@@ -44,6 +44,7 @@ export default function ClassicMode({ onBack }) {
   const [audienceData, setAudienceData] = useState(null);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [timeUp, setTimeUp] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
 
   const [angle, setAngle] = useState(0);
   const [transition, setTransition] = useState("none");
@@ -76,23 +77,28 @@ export default function ClassicMode({ onBack }) {
     loadQuestions();
     setupAudio();
     
-    // Push a history state when entering classic mode for proper navigation
+    // Push a history state when entering classic mode
     window.history.pushState({ mode: 'classic' }, '', window.location.href);
     
     return () => cleanup();
   }, []);
 
-  // Handle Android back button - direct navigation without warning
+  // Handle Android back button
   useEffect(() => {
     const handlePopState = (e) => {
       e.preventDefault();
-      // Direct navigation back to PlayHome
-      onBack();
+      
+      // Show exit confirmation when back button is pressed
+      if (!showExitConfirm) {
+        setShowExitConfirm(true);
+        // Push state again to prevent immediate navigation
+        window.history.pushState({ mode: 'classic' }, '', window.location.href);
+      }
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [onBack]);
+  }, [showExitConfirm]);
 
   // Timer logic
   useEffect(() => {
@@ -244,9 +250,14 @@ export default function ClassicMode({ onBack }) {
   };
 
   const confirmExit = () => {
-    // Just call onBack to return to PlayHome
+    // Go back to PlayHome using browser history
+    window.history.go(-1);
     onBack();
     resetRun();
+  };
+
+  const handleBackPress = () => {
+    setShowExitConfirm(true);
   };
 
   const startSpinSound = () => {
@@ -448,29 +459,59 @@ export default function ClassicMode({ onBack }) {
   switch (gameState) {
     case 'wheel':
       return (
-        <WheelScreen 
-          run={run}
-          coins={coins}
-          xp={xp}
-          level={level}
-          ownedCharacters={ownedCharacters}
-          onSpin={spin}
-          onBack={onBack}
-          spinning={spinning}
-          angle={angle}
-          transition={transition}
-          result={result}
-          showCallout={showCallout}
-          glowColor={glowColor}
-          soundOn={soundOn}
-          setSoundOn={setSoundOn}
-          showSparkle={showSparkle}
-          pulseIdx={pulseIdx}
-          coinBurstTick={coinBurstTick}
-          pendingProgressIdx={pendingProgressIdx}
-          lastAnswerWasCorrect={lastAnswerWasCorrect}
-          nextProgressIdx={nextProgressIdx}
-        />
+        <>
+          <WheelScreen 
+            run={run}
+            coins={coins}
+            xp={xp}
+            level={level}
+            ownedCharacters={ownedCharacters}
+            onSpin={spin}
+            onBack={handleBackPress}
+            spinning={spinning}
+            angle={angle}
+            transition={transition}
+            result={result}
+            showCallout={showCallout}
+            glowColor={glowColor}
+            soundOn={soundOn}
+            setSoundOn={setSoundOn}
+            showSparkle={showSparkle}
+            pulseIdx={pulseIdx}
+            coinBurstTick={coinBurstTick}
+            pendingProgressIdx={pendingProgressIdx}
+            lastAnswerWasCorrect={lastAnswerWasCorrect}
+            nextProgressIdx={nextProgressIdx}
+          />
+          
+          {/* Exit Confirmation Modal */}
+          {showExitConfirm && (
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-6">
+              <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-white/10">
+                <div className="text-center mb-6">
+                  <div className="text-5xl mb-3">🎮</div>
+                  <h3 className="text-xl font-bold text-white mb-2">Leave Classic Mode?</h3>
+                  <p className="text-white/70">Your progress will be lost!</p>
+                </div>
+                
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setShowExitConfirm(false)} 
+                    className="flex-1 py-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+                  >
+                    Keep Playing
+                  </button>
+                  <button 
+                    onClick={confirmExit} 
+                    className="flex-1 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+                  >
+                    Exit
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       );
       
     case 'interstitial':
@@ -556,7 +597,7 @@ export default function ClassicMode({ onBack }) {
           onUseLifeline={() => {}}
           eliminatedOptions={[]}
           audienceData={null}
-          onBack={onBack}
+          onBack={handleBackPress}
           soundOn={soundOn}
         />
       );

@@ -40,21 +40,7 @@ export default function WelcomeBack({ player, onContinue }) {
   const userName = getUserName();
   
   useEffect(() => {
-    // Check if already shown in this session FIRST
-    const shownInSession = sessionStorage.getItem('welcomeShown');
-    
-    if (shownInSession === 'true') {
-      // Already shown in this session, skip
-      setShow(false);
-      onContinue();
-      // Don't hide nav if we're not showing the welcome screen
-      return;
-    }
-    
-    // Mark as shown for this session
-    sessionStorage.setItem('welcomeShown', 'true');
-    
-    // Only hide bottom nav if we're actually showing the welcome screen
+    // Hide bottom nav
     document.body.classList.add('hide-bottom-nav');
     
     // Play welcome sound and vibration when component mounts
@@ -88,6 +74,21 @@ export default function WelcomeBack({ player, onContinue }) {
       setMotivationalText(messages[Math.floor(Math.random() * messages.length)]);
     }, 3000);
     
+    // TESTING MODE
+    const ALWAYS_SHOW_FOR_TESTING = true;
+    
+    if (!ALWAYS_SHOW_FOR_TESTING) {
+      const lastSeen = localStorage.getItem('lastSeenDate');
+      const today = new Date().toDateString();
+      
+      if (lastSeen === today) {
+        setShow(false);
+        onContinue();
+      } else {
+        localStorage.setItem('lastSeenDate', today);
+      }
+    }
+    
     return () => {
       document.body.classList.remove('hide-bottom-nav');
       clearInterval(bounceTimer);
@@ -95,28 +96,28 @@ export default function WelcomeBack({ player, onContinue }) {
     };
   }, [onContinue]);
 
-  const handleContinue = () => {
-    // Play click sound and vibrate
-    try {
-      const audio = new Audio('/sounds/tap.mp3');
-      audio.volume = 0.5;
-      audio.play();
-    } catch (error) {
-      console.log('Click sound not available');
-    }
-    
-    // Short vibration for button press
-    if (navigator.vibrate) {
-      navigator.vibrate(20);
-    }
-    
-    setAnimateOut(true);
-    setTimeout(() => {
-      document.body.classList.remove('hide-bottom-nav');
-      setShow(false);
-      onContinue();
-    }, 400);
-  };
+const handleContinue = () => {
+  // Play click sound and vibrate
+  try {
+    const audio = new Audio('/sounds/tap.mp3');
+    audio.volume = 0.5;
+    audio.play();
+  } catch (error) {
+    console.log('Click sound not available');
+  }
+  
+  // Short vibration for button press
+  if (navigator.vibrate) {
+    navigator.vibrate(20);
+  }
+  
+  setAnimateOut(true);
+  setTimeout(() => {
+    document.body.classList.remove('hide-bottom-nav');
+    setShow(false);
+    onContinue();
+  }, 400);
+};
 
   if (!show) return null;
 
