@@ -99,7 +99,7 @@ export default function WelcomeBack({ player, onContinue }) {
 const handleContinue = () => {
   // Play click sound and vibrate
   try {
-    const audio = new Audio('/sounds/tap.mp3');
+    const audio = new Audio('/sounds/click.mp3');
     audio.volume = 0.5;
     audio.play();
   } catch (error) {

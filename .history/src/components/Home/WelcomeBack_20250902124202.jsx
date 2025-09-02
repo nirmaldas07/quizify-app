@@ -96,28 +96,14 @@ export default function WelcomeBack({ player, onContinue }) {
     };
   }, [onContinue]);
 
-const handleContinue = () => {
-  // Play click sound and vibrate
-  try {
-    const audio = new Audio('/sounds/tap.mp3');
-    audio.volume = 0.5;
-    audio.play();
-  } catch (error) {
-    console.log('Click sound not available');
-  }
-  
-  // Short vibration for button press
-  if (navigator.vibrate) {
-    navigator.vibrate(20);
-  }
-  
-  setAnimateOut(true);
-  setTimeout(() => {
-    document.body.classList.remove('hide-bottom-nav');
-    setShow(false);
-    onContinue();
-  }, 400);
-};
+  const handleContinue = () => {
+    setAnimateOut(true);
+    setTimeout(() => {
+      document.body.classList.remove('hide-bottom-nav');
+      setShow(false);
+      onContinue();
+    }, 400);
+  };
 
   if (!show) return null;
 
