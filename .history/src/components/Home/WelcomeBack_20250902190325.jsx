@@ -42,26 +42,6 @@ export default function WelcomeBack({ player, onContinue }) {
   };
   
   const userName = getUserName();
-
-  // Get days since first open
-    const getDaysSinceFirstOpen = () => {
-    let firstOpenDate = localStorage.getItem('firstOpenDate');
-    
-    if (!firstOpenDate) {
-        // Set today as first open date if not exists
-        firstOpenDate = new Date().toISOString();
-        localStorage.setItem('firstOpenDate', firstOpenDate);
-    }
-    
-    const firstDate = new Date(firstOpenDate);
-    const today = new Date();
-    const diffTime = Math.abs(today - firstDate);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    return diffDays;
-    };
-
-    const dayCount = getDaysSinceFirstOpen();
   
   useEffect(() => {
     // If not showing, call onContinue immediately
@@ -209,7 +189,7 @@ export default function WelcomeBack({ player, onContinue }) {
         </div>
 
         {/* Stats display */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-200 via-yellow-100 to-orange-100"></div>
             <div className="relative">
@@ -226,16 +206,7 @@ export default function WelcomeBack({ player, onContinue }) {
               <div className="text-xs text-teal-600">Coins</div>
             </div>
           </div>
-          <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-200 via-purple-100 to-pink-100"></div>
-            <div className="relative">
-              <div className="text-3xl mb-1">📅</div>
-              <div className="text-2xl font-bold text-purple-800">{dayCount}</div>
-              <div className="text-xs text-purple-600">Day{dayCount !== 1 ? 's' : ''}</div>
-            </div>
-          </div>
         </div>
-
 
         {/* Spacer */}
         <div className="h-4"></div>

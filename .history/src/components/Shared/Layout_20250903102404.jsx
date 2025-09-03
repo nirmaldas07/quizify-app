@@ -57,12 +57,12 @@ export default function Layout() {
   const haptic = (pattern) => {
     if (!navigator.vibrate) return;
     switch(pattern) {
-      case 'light': navigator.vibrate(20); break;
-      case 'medium': navigator.vibrate(35); break;
-      case 'heavy': navigator.vibrate(50); break;
-      case 'double': navigator.vibrate([30, 50, 30]); break;
-      case 'success': navigator.vibrate([20, 50, 20, 50, 20]); break;
-      default: navigator.vibrate(25);
+      case 'light': navigator.vibrate(10); break;
+      case 'medium': navigator.vibrate(20); break;
+      case 'heavy': navigator.vibrate(40); break;
+      case 'double': navigator.vibrate([20, 50, 20]); break;
+      case 'success': navigator.vibrate([10, 50, 10, 50, 10]); break;
+      default: navigator.vibrate(15);
     }
   };
 
@@ -357,7 +357,7 @@ export default function Layout() {
         if (path === "/play") {
           setNavAnimating(true);
           // playSound('whoosh');
-          haptic('heavy');
+          haptic('medium');
           setTimeout(() => {
             navigate(`/play?view=modes&reset=${Date.now()}`);
             setNavAnimating(false);
@@ -366,7 +366,7 @@ export default function Layout() {
         }
 
         // playSound('tap');
-        haptic('medium');
+        haptic('light');
         navigate(path);
       };
 
@@ -449,7 +449,7 @@ export default function Layout() {
             <div className="flex gap-3">
               <button
                 onClick={() => {
-                  haptic('medium');
+                  haptic('light');
                   setLeaveConfirm({ open: false, go: null });
                 }}
                 className="flex-1 py-3 rounded-2xl border-2 border-green-500/30 bg-green-500/10 hover:bg-green-500/20 transition-all font-semibold text-green-400"
@@ -458,7 +458,7 @@ export default function Layout() {
               </button>
               <button
                 onClick={() => {
-                  haptic('heavy');
+                  haptic('medium');
                   const fn = leaveConfirm.go;
                   setLeaveConfirm({ open: false, go: null });
                   fn?.();

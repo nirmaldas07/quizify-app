@@ -57,12 +57,12 @@ export default function Layout() {
   const haptic = (pattern) => {
     if (!navigator.vibrate) return;
     switch(pattern) {
-      case 'light': navigator.vibrate(20); break;
-      case 'medium': navigator.vibrate(35); break;
-      case 'heavy': navigator.vibrate(50); break;
-      case 'double': navigator.vibrate([30, 50, 30]); break;
-      case 'success': navigator.vibrate([20, 50, 20, 50, 20]); break;
-      default: navigator.vibrate(25);
+      case 'light': navigator.vibrate(10); break;
+      case 'medium': navigator.vibrate(20); break;
+      case 'heavy': navigator.vibrate(40); break;
+      case 'double': navigator.vibrate([20, 50, 20]); break;
+      case 'success': navigator.vibrate([10, 50, 10, 50, 10]); break;
+      default: navigator.vibrate(15);
     }
   };
 
