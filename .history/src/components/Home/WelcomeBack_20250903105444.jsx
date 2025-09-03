@@ -43,8 +43,34 @@ export default function WelcomeBack({ player, onContinue }) {
   
   const userName = getUserName();
 
-  // Use streak count from player data
-    const streakCount = player?.currentStreak || 0;
+    // Get days since first open
+    const getDaysSinceFirstOpen = () => {
+    let firstOpenDate = localStorage.getItem('firstOpenDate');
+    
+    if (!firstOpenDate) {
+        // Set today as first open date if not exists
+        const today = new Date();
+        firstOpenDate = today.toISOString().split('T')[0]; // Store as YYYY-MM-DD
+        localStorage.setItem('firstOpenDate', firstOpenDate);
+        return 1; // First day
+    }
+    
+    // Calculate difference in days
+    const firstDate = new Date(firstOpenDate);
+    const today = new Date();
+    
+    // Set both dates to midnight for accurate day calculation
+    firstDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    
+    const diffTime = today - firstDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Return at least 1 (Day 1 on first day)
+    return diffDays + 1;
+    };
+
+    const dayCount = getDaysSinceFirstOpen();
   
   useEffect(() => {
     // If not showing, call onContinue immediately
@@ -112,11 +138,11 @@ export default function WelcomeBack({ player, onContinue }) {
       navigator.vibrate(20);
     }
     
-   setAnimateOut(true);
-    document.body.classList.remove('hide-bottom-nav'); // Remove immediately
+    setAnimateOut(true);
     setTimeout(() => {
-    setShow(false);
-    onContinue();
+      document.body.classList.remove('hide-bottom-nav');
+      setShow(false);
+      onContinue();
     }, 400);
   };
 
@@ -209,14 +235,14 @@ export default function WelcomeBack({ player, onContinue }) {
               <div className="text-xs text-teal-600">Coins</div>
             </div>
           </div>
-            <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-200 via-red-100 to-pink-100"></div>
+          <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-200 via-purple-100 to-pink-100"></div>
             <div className="relative">
-                <div className="text-3xl mb-1">🔥</div>
-                <div className="text-2xl font-bold text-orange-800">{streakCount}</div>
-                <div className="text-xs text-orange-600">Streak</div>
+              <div className="text-3xl mb-1">📅</div>
+              <div className="text-2xl font-bold text-purple-800">{dayCount}</div>
+              <div className="text-xs text-purple-600">Day{dayCount !== 1 ? 's' : ''}</div>
             </div>
-            </div>
+          </div>
         </div>
 
 

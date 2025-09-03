@@ -112,11 +112,11 @@ export default function WelcomeBack({ player, onContinue }) {
       navigator.vibrate(20);
     }
     
-   setAnimateOut(true);
-    document.body.classList.remove('hide-bottom-nav'); // Remove immediately
+    setAnimateOut(true);
     setTimeout(() => {
-    setShow(false);
-    onContinue();
+      document.body.classList.remove('hide-bottom-nav');
+      setShow(false);
+      onContinue();
     }, 400);
   };
 

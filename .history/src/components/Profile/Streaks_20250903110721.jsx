@@ -493,18 +493,6 @@ export default function Streaks() {
           border: 1px solid rgba(255, 255, 255, 0.1);
           color: rgba(255, 255, 255, 0.3);
         }
-        .day-circle.missed {
-            background: linear-gradient(135deg, #EF4444, #DC2626);
-            color: white;
-            opacity: 0.8;
-            }
-
-        .day-circle.missed::after {
-            content: '✗';
-            position: absolute;
-            font-size: 18px;
-            color: white;
-            }
 
         .day-circle.completed::after,
         .day-circle.today-completed::after {
