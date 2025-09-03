@@ -2,25 +2,14 @@ import { useState, useEffect } from 'react';
 
 export default function WelcomeBack({ player, onContinue }) {
   // Check session storage immediately in initial state
-
-  // temporary k , later just activate this code
-  
-//   const [show, setShow] = useState(() => {
-//     const shownInSession = sessionStorage.getItem('welcomeShown');
-//     return shownInSession !== 'true';
-//   });
-
-
-  const [show, setShow] = useState(false); // Temporarily disabled
-
+  const [show, setShow] = useState(() => {
+    const shownInSession = sessionStorage.getItem('welcomeShown');
+    return shownInSession !== 'true';
+  });
   const [animateOut, setAnimateOut] = useState(false);
   const [mascotBounce, setMascotBounce] = useState(false);
   const [motivationalText, setMotivationalText] = useState('');
   const [randomMascot, setRandomMascot] = useState('');
-  const [userName, setUserName] = useState('Champion');
-  const [userLevel, setUserLevel] = useState(1);
-  const [userCoins, setUserCoins] = useState(0);
-  const [streakCount, setStreakCount] = useState(0);
   
   // Play welcome sound and vibration
   const playWelcomeSound = () => {
@@ -39,57 +28,32 @@ export default function WelcomeBack({ player, onContinue }) {
       navigator.vibrate([100, 50, 100]);
     }
   };
-  
-  useEffect(() => {
-    // Get user data when component mounts
-    const getUserData = () => {
-      // First check currentUser for the most up-to-date info
-      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      
-      let finalName = 'Champion';
-      let finalLevel = 1;
-      let finalCoins = 0;
-      let finalStreak = 0;
-      
-      // Check for profile data if phone exists
-      if (currentUser.phone) {
+    
+    const getUserName = () => {
+    // First check currentUser for the most up-to-date name
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    
+    // Check for profile data if phone exists
+    if (currentUser.phone) {
         const profileData = JSON.parse(localStorage.getItem(`user_profile_${currentUser.phone}`) || '{}');
-        const users = JSON.parse(localStorage.getItem('users') || '{}');
-        const userData = users[currentUser.phone] || {};
-        
-        // Get name - priority: profile data > users database > currentUser > player
         if (profileData.name) {
-          finalName = profileData.name.split(' ')[0]; // First name only
-        } else if (userData.username) {
-          finalName = userData.username.split(' ')[0];
-        } else if (currentUser.username) {
-          finalName = currentUser.username.split(' ')[0];
+        return profileData.name.split(' ')[0]; // Return first name only
         }
-      } else if (currentUser.username) {
-        // If no phone but has username
-        finalName = currentUser.username.split(' ')[0];
-      }
-      
-      // Get game stats from player or qp_player
-      const qpPlayer = JSON.parse(localStorage.getItem('qp_player') || '{}');
-      finalLevel = player?.level || qpPlayer.level || 1;
-      finalCoins = player?.coins || qpPlayer.coins || 0;
-      finalStreak = player?.currentStreak || qpPlayer.currentStreak || 0;
-      
-      // Update qp_player with the correct name
-      if (finalName !== 'Champion' && finalName !== qpPlayer.name) {
-        qpPlayer.name = finalName;
-        localStorage.setItem('qp_player', JSON.stringify(qpPlayer));
-      }
-      
-      setUserName(finalName);
-      setUserLevel(finalLevel);
-      setUserCoins(finalCoins);
-      setStreakCount(finalStreak);
+    }
+    
+    // Fallback to currentUser username or player name
+    if (currentUser.username) return currentUser.username.split(' ')[0];
+    if (player?.name) return player.name.split(' ')[0];
+    
+    return 'Champion'; // Default fallback
     };
     
-    getUserData();
-    
+  const userName = getUserName();
+
+  // Use streak count from player data
+    const streakCount = player?.currentStreak || 0;
+  
+  useEffect(() => {
     // If not showing, call onContinue immediately
     if (!show) {
       onContinue();
@@ -138,7 +102,7 @@ export default function WelcomeBack({ player, onContinue }) {
       clearInterval(bounceTimer);
       clearInterval(messageTimer);
     };
-  }, [show, onContinue, player]);
+  }, [show, onContinue]);
 
   const handleContinue = () => {
     // Play click sound and vibrate
@@ -155,11 +119,11 @@ export default function WelcomeBack({ player, onContinue }) {
       navigator.vibrate(20);
     }
     
-    setAnimateOut(true);
+   setAnimateOut(true);
     document.body.classList.remove('hide-bottom-nav'); // Remove immediately
     setTimeout(() => {
-      setShow(false);
-      onContinue();
+    setShow(false);
+    onContinue();
     }, 400);
   };
 
@@ -240,7 +204,7 @@ export default function WelcomeBack({ player, onContinue }) {
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-200 via-yellow-100 to-orange-100"></div>
             <div className="relative">
               <div className="text-3xl mb-1">⭐</div>
-              <div className="text-2xl font-bold text-orange-800">{userLevel}</div>
+              <div className="text-2xl font-bold text-orange-800">{player?.level || 1}</div>
               <div className="text-xs text-orange-600">Level</div>
             </div>
           </div>
@@ -248,19 +212,20 @@ export default function WelcomeBack({ player, onContinue }) {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-200 via-cyan-100 to-teal-100"></div>
             <div className="relative">
               <div className="text-3xl mb-1">🪙</div>
-              <div className="text-2xl font-bold text-teal-800">{userCoins}</div>
+              <div className="text-2xl font-bold text-teal-800">{player?.coins || 0}</div>
               <div className="text-xs text-teal-600">Coins</div>
             </div>
           </div>
-          <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
+            <div className="relative rounded-2xl p-3 transform hover:scale-105 transition-transform overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-200 via-red-100 to-pink-100"></div>
             <div className="relative">
-              <div className="text-3xl mb-1">🔥</div>
-              <div className="text-2xl font-bold text-orange-800">{streakCount}</div>
-              <div className="text-xs text-orange-600">Streak</div>
+                <div className="text-3xl mb-1">🔥</div>
+                <div className="text-2xl font-bold text-orange-800">{streakCount}</div>
+                <div className="text-xs text-orange-600">Streak</div>
             </div>
-          </div>
+            </div>
         </div>
+
 
         {/* Spacer */}
         <div className="h-4"></div>

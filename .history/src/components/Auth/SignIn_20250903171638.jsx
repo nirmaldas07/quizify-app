@@ -13,7 +13,6 @@ export default function SignIn() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [displayName, setDisplayName] = useState('');
   
   // Get user data to display avatar
   const userData = getUserData(phone);
@@ -24,18 +23,7 @@ export default function SignIn() {
     if (remembered === 'true') {
       setRememberMe(true);
     }
-    
-    // Get the most recent username from profile data if it exists
-    if (phone) {
-      const profileData = JSON.parse(localStorage.getItem(`user_profile_${phone}`) || '{}');
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      const userInfo = users[phone] || {};
-      
-      // Use profile name first, then users database name, then userData name
-      const currentName = profileData.name || userInfo.username || userData?.username || '';
-      setDisplayName(currentName);
-    }
-  }, [phone, userData]);
+  }, []);
   
   const handleSignIn = async () => {
     if (!password) {
@@ -50,26 +38,11 @@ export default function SignIn() {
     await new Promise(resolve => setTimeout(resolve, 500));
     
     if (userData && userData.password === password) {
-      // Get the latest profile data
-      const profileData = JSON.parse(localStorage.getItem(`user_profile_${phone}`) || '{}');
-      const users = JSON.parse(localStorage.getItem('users') || '{}');
-      const userInfo = users[phone] || {};
-      
-    // Ensure all data is properly set
-    const userToSave = {
-    phone,
-    username: profileData.name || userInfo.username || userData.username,
-    avatar: userData.avatar || userInfo.avatar,
-    gender: userInfo.gender || userData.gender,
-    ageGroup: userInfo.ageGroup || userData.ageGroup
-    };
-
-    localStorage.setItem('currentUser', JSON.stringify(userToSave));
-
-    // Also update the qp_player to ensure game state has the name
-    const existingPlayer = JSON.parse(localStorage.getItem('qp_player') || '{}');
-    existingPlayer.name = userToSave.username;
-    localStorage.setItem('qp_player', JSON.stringify(existingPlayer));
+      localStorage.setItem('currentUser', JSON.stringify({
+        phone,
+        username: userData.username,
+        avatar: userData.avatar
+      }));
       
       if (rememberMe) {
         localStorage.setItem('rememberCredentials', 'true');
@@ -201,7 +174,7 @@ export default function SignIn() {
             textAlign: 'center',
             marginBottom: '24px'
           }}>
-            {displayName ? `Hey ${displayName}!` : 'Good to see you again!'}
+            {userData?.username ? `Hey ${userData.username}!` : 'Good to see you again!'}
           </p>
         </div>
 

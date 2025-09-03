@@ -21,9 +21,6 @@ import ProfileStreaks from "./components/Profile/Streaks";
 import ProfileQuests from "./components/Profile/Quests";
 import ProfileSettings from "./components/Profile/Settings";
 import { App as CapacitorApp } from '@capacitor/app';
-import EditProfile from "./components/Profile/EditProfile";
-import PrivacyPolicy from "./components/Profile/PrivacyPolicy";
-
 
 // Auth imports
 import PhoneAuth from "./components/Auth/PhoneAuth";
@@ -80,56 +77,43 @@ export default function App() {
     checkAuth();
   }, []);
 
- // Handle back button
-useEffect(() => {
-  let exitCounter = 0;
-  let exitTimer = null;
-  let backButtonHandler = null;
+  // Handle back button
+  useEffect(() => {
+    let exitCounter = 0;
+    let exitTimer = null;
 
-  const setupBackButton = async () => {
-    try {
-      backButtonHandler = await CapacitorApp.addListener('backButton', () => {
-        const currentPath = window.location.pathname;
+    const backButtonHandler = CapacitorApp.addListener('backButton', () => {
+      const currentPath = window.location.pathname;
+      
+      // If we're on the home page
+      if (currentPath === '/' || currentPath === '/home') {
+        exitCounter++;
         
-        // If we're on the home page
-        if (currentPath === '/' || currentPath === '/home') {
-          exitCounter++;
+        if (exitCounter === 1) {
+          // First press - show toast
+          console.log('Press back again to exit');
           
-          if (exitCounter === 1) {
-            // First press - show toast
-            console.log('Press back again to exit');
-            
-            // Reset counter after 2 seconds
-            exitTimer = setTimeout(() => {
-              exitCounter = 0;
-            }, 2000);
-          } else if (exitCounter === 2) {
-            // Second press - minimize app instead of exit
-            clearTimeout(exitTimer);
-            CapacitorApp.minimizeApp();
-          }
-        } else {
-          // For all other pages, just go back
-          window.history.back();
+          // Reset counter after 2 seconds
+          exitTimer = setTimeout(() => {
+            exitCounter = 0;
+          }, 2000);
+        } else if (exitCounter === 2) {
+          // Second press - minimize app instead of exit
+          clearTimeout(exitTimer);
+          CapacitorApp.minimizeApp();
         }
-      });
-    } catch (error) {
-      console.error('Error setting up back button handler:', error);
-    }
-  };
+      } else {
+        // For all other pages, just go back
+        window.history.back();
+      }
+    });
 
-  setupBackButton();
-
-  // Cleanup
-  return () => {
-    if (backButtonHandler && typeof backButtonHandler.remove === 'function') {
+    // Cleanup
+    return () => {
       backButtonHandler.remove();
-    }
-    if (exitTimer) {
-      clearTimeout(exitTimer);
-    }
-  };
-}, []);
+      if (exitTimer) clearTimeout(exitTimer);
+    };
+  }, []);
 
   // Show loading screen while checking auth
   if (!authChecked) {

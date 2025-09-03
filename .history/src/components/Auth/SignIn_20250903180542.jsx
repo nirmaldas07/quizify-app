@@ -55,21 +55,13 @@ export default function SignIn() {
       const users = JSON.parse(localStorage.getItem('users') || '{}');
       const userInfo = users[phone] || {};
       
-    // Ensure all data is properly set
-    const userToSave = {
-    phone,
-    username: profileData.name || userInfo.username || userData.username,
-    avatar: userData.avatar || userInfo.avatar,
-    gender: userInfo.gender || userData.gender,
-    ageGroup: userInfo.ageGroup || userData.ageGroup
-    };
-
-    localStorage.setItem('currentUser', JSON.stringify(userToSave));
-
-    // Also update the qp_player to ensure game state has the name
-    const existingPlayer = JSON.parse(localStorage.getItem('qp_player') || '{}');
-    existingPlayer.name = userToSave.username;
-    localStorage.setItem('qp_player', JSON.stringify(existingPlayer));
+      localStorage.setItem('currentUser', JSON.stringify({
+        phone,
+        username: profileData.name || userInfo.username || userData.username,
+        avatar: userData.avatar,
+        gender: userInfo.gender || userData.gender,
+        ageGroup: userInfo.ageGroup || userData.ageGroup
+      }));
       
       if (rememberMe) {
         localStorage.setItem('rememberCredentials', 'true');

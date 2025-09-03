@@ -25,7 +25,7 @@ export default function PhoneAuth() {
     sessionStorage.setItem('tempCountryCode', countryCode);
   }, [phone, countryCode]);
   
-  // Define handleSubmit
+  // Define handleSubmit FIRST
   const handleSubmit = async () => {
     setError('');
     
@@ -52,26 +52,41 @@ export default function PhoneAuth() {
     setLoading(false);
   };
 
-// Auto-submit useEffect AFTER handleSubmit is defined
-useEffect(() => {
-  // Don't auto-submit if preventAutoSubmit flag is set
-  if (location.state?.preventAutoSubmit) {
-    return;
-  }
-  
-  // Don't auto-submit if coming back from avatar screen
-  if (location.state?.fromAvatar) {
-    return;
-  }
-  
-  if (phone && phone.length === 10) {
-    // Auto-check after a brief delay to show the UI
-    const timer = setTimeout(() => {
-      handleSubmit();
-    }, 500);
-    return () => clearTimeout(timer);
-  }
-}, []); // Run only once on mount
+  // Auto-submit useEffect AFTER handleSubmit is defined
+  useEffect(() => {
+    if (phone && phone.length === 10) {
+      // Auto-check after a brief delay to show the UI
+      const timer = setTimeout(() => {
+        handleSubmit();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+    setError('');
+    
+    // Check if phone number is exactly 10 digits
+    const cleanPhone = phone.replace(/\D/g, '');
+    if (cleanPhone.length !== 10) {
+      setError('Please enter a 10 digit phone number');
+      return;
+    }
+    
+    setLoading(true);
+    const fullPhone = countryCode + cleanPhone;
+    
+    // Check if user exists
+    const exists = await checkUserExists(fullPhone);
+    
+    if (exists) {
+      // Redirect to signin
+      navigate('/auth/signin', { state: { phone: fullPhone } });
+    } else {
+      // Continue to avatar selection
+      navigate('/auth/avatar', { state: { phone: fullPhone } });
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="auth-screen" style={{ 

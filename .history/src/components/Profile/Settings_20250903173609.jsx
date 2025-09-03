@@ -24,7 +24,7 @@ export default function Settings() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const userPhone = currentUser.phone;
     
-    // Clear ONLY session data, NOT user registration data or users database
+    // Clear ONLY session data, NOT user registration data
     localStorage.removeItem('currentUser');
     localStorage.removeItem('qp_player');
     localStorage.removeItem('rememberCredentials');

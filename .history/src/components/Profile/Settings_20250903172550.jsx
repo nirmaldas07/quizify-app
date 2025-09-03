@@ -9,22 +9,20 @@ export default function Settings() {
   const [haptics, setHaptics] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-
-  useEffect(() => {
-    // Get current user's phone number
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (currentUser.phone) {
-      setPhoneNumber(currentUser.phone);
-    }
-  }, []);
-
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  
+  // Get current user data
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  const [username, setUsername] = useState(currentUser.username || '');
+  const [tempUsername, setTempUsername] = useState(currentUser.username || '');
+  
   const handleSignOut = () => {
     // Get the phone number before clearing session data
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const userPhone = currentUser.phone;
     
-    // Clear ONLY session data, NOT user registration data or users database
+    // Clear ONLY session data, NOT user registration data
     localStorage.removeItem('currentUser');
     localStorage.removeItem('qp_player');
     localStorage.removeItem('rememberCredentials');
@@ -32,15 +30,52 @@ export default function Settings() {
     // Clear session storage
     sessionStorage.clear();
     
-    // Navigate directly to SignIn page
+    // Navigate directly to SignIn page if we have a phone
     if (userPhone) {
       navigate('/auth/signin', { 
         replace: true, 
         state: { phone: userPhone } 
       });
     } else {
+      // Fallback to auth page if no phone number
       navigate('/auth', { replace: true });
     }
+  };
+
+  const handleEditProfile = () => {
+    setIsEditMode(true);
+    setTempUsername(username);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+    setTempUsername(username); // Reset to original
+  };
+
+  const handleSaveChanges = () => {
+    // Update username in current session
+    const updatedUser = {
+      ...currentUser,
+      username: tempUsername
+    };
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    
+    // Also update in the users database
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    if (users[currentUser.phone]) {
+      users[currentUser.phone] = {
+        ...users[currentUser.phone],
+        username: tempUsername
+      };
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+    
+    setUsername(tempUsername);
+    setIsEditMode(false);
+    
+    // Show success message
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 3000);
   };
 
   return (
@@ -48,6 +83,84 @@ export default function Settings() {
       <Screen title="Settings" subtitle="Make it yours">
         <div className="flex flex-col justify-center min-h-[calc(100vh-200px)]">
           <div className="space-y-4">
+            
+            {/* Profile Section */}
+            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 backdrop-blur-sm p-2">
+              <div className="px-4 pt-3 pb-1">
+                <h3 className="text-xs font-semibold text-white/50 uppercase tracking-wider">Profile</h3>
+              </div>
+              <div className="divide-y divide-white/10">
+                {/* Avatar and Username */}
+                <div className="px-4 py-4">
+                  <div className="flex items-center gap-4">
+                    {currentUser.avatar && (
+                      <div className="text-4xl">{currentUser.avatar.emoji}</div>
+                    )}
+                    <div className="flex-1">
+                      {isEditMode ? (
+                        <input
+                          type="text"
+                          value={tempUsername}
+                          onChange={(e) => setTempUsername(e.target.value)}
+                          className="bg-white/10 rounded-lg px-3 py-2 text-white w-full
+                                   border border-white/20 focus:border-purple-400 focus:outline-none"
+                          placeholder="Enter username"
+                          autoFocus
+                        />
+                      ) : (
+                        <>
+                          <div className="text-lg font-semibold text-white">{username}</div>
+                          <div className="text-sm text-white/50">{currentUser.phone}</div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Edit/Save Buttons */}
+                <div className="px-4 py-4">
+                  {!isEditMode ? (
+                    <button
+                      onClick={handleEditProfile}
+                      className="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500
+                               hover:from-purple-600 hover:to-indigo-600 transition-all duration-200
+                               font-semibold text-white flex items-center justify-center gap-2"
+                    >
+                      <span>✏️</span>
+                      <span>Edit Profile</span>
+                    </button>
+                  ) : (
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handleCancelEdit}
+                        className="flex-1 py-3 rounded-2xl bg-white/10 hover:bg-white/20
+                                 transition-all duration-200 font-semibold text-white"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSaveChanges}
+                        className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500
+                                 hover:from-green-600 hover:to-emerald-600 transition-all duration-200
+                                 font-semibold text-white"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Success Message */}
+            {showSuccessMessage && (
+              <div className="rounded-2xl bg-green-500/20 border border-green-500/30 p-4
+                            flex items-center justify-center gap-2 animate-pulse">
+                <span className="text-green-400 font-semibold">Profile updated</span>
+                <span className="text-2xl">✅</span>
+              </div>
+            )}
+
             {/* Preferences Section */}
             <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-purple-900/20 to-indigo-900/20 backdrop-blur-sm p-2">
               <div className="px-4 pt-3 pb-1">
@@ -84,15 +197,8 @@ export default function Settings() {
                 <Row
                   icon="📱"
                   label="Phone Number"
-                  subtitle={phoneNumber || "Not available"}
-                  right={<span className="text-white/40 text-sm">🔒</span>}
-                />
-                <Row
-                  icon="✏️"
-                  label="Edit Profile"
-                  subtitle="Update your details"
-                  right={<span className="text-white/40 text-lg">→</span>}
-                  onClick={() => navigate("/profile/edit")}
+                  subtitle={currentUser.phone || 'Not set'}
+                  right={<span className="text-white/40 text-sm">Cannot change</span>}
                 />
                 <Row
                   icon="🔒"
@@ -161,7 +267,9 @@ function Row({ icon, label, subtitle, right, onClick }) {
       type="button"
       onClick={onClick}
       className="w-full flex items-center justify-between px-4 py-4 text-left
-                 hover:bg-white/5 first:rounded-t-2xl last:rounded-b-2xl transition-all duration-200"
+                 hover:bg-white/5 first:rounded-t-2xl last:rounded-b-2xl transition-all duration-200
+                 disabled:opacity-50 disabled:cursor-not-allowed"
+      disabled={!onClick}
     >
       <div className="flex items-center gap-3">
         {icon && <span className="text-xl">{icon}</span>}

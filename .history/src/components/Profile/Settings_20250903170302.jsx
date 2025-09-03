@@ -1,5 +1,5 @@
 // src/components/Profile/Settings.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Screen from "./Screen.jsx";
 
@@ -9,43 +9,33 @@ export default function Settings() {
   const [haptics, setHaptics] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
 
-  useEffect(() => {
-    // Get current user's phone number
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (currentUser.phone) {
-      setPhoneNumber(currentUser.phone);
-    }
-  }, []);
-
-  const handleSignOut = () => {
-    // Get the phone number before clearing session data
+    const handleSignOut = () => {
+    // Get the phone number before clearing data
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const userPhone = currentUser.phone;
     
-    // Clear ONLY session data, NOT user registration data or users database
+    // Clear all user data
     localStorage.removeItem('currentUser');
     localStorage.removeItem('qp_player');
-    localStorage.removeItem('rememberCredentials');
-    
-    // Clear session storage
     sessionStorage.clear();
     
-    // Navigate directly to SignIn page
+    // Navigate to signin page with the phone number
     if (userPhone) {
-      navigate('/auth/signin', { 
-        replace: true, 
-        state: { phone: userPhone } 
-      });
+        navigate('/auth/signin', { 
+        state: { phone: userPhone }, 
+        replace: true 
+        });
     } else {
-      navigate('/auth', { replace: true });
+        // Fallback to auth page if no phone number
+        navigate('/auth', { replace: true });
     }
-  };
-
+    };
+    
   return (
     <>
       <Screen title="Settings" subtitle="Make it yours">
+        {/* Center the content vertically */}
         <div className="flex flex-col justify-center min-h-[calc(100vh-200px)]">
           <div className="space-y-4">
             {/* Preferences Section */}
@@ -81,12 +71,6 @@ export default function Settings() {
                 <h3 className="text-xs font-semibold text-white/50 uppercase tracking-wider">Account</h3>
               </div>
               <div className="divide-y divide-white/10">
-                <Row
-                  icon="📱"
-                  label="Phone Number"
-                  subtitle={phoneNumber || "Not available"}
-                  right={<span className="text-white/40 text-sm">🔒</span>}
-                />
                 <Row
                   icon="✏️"
                   label="Edit Profile"

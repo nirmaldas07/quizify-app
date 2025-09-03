@@ -52,26 +52,16 @@ export default function PhoneAuth() {
     setLoading(false);
   };
 
-// Auto-submit useEffect AFTER handleSubmit is defined
-useEffect(() => {
-  // Don't auto-submit if preventAutoSubmit flag is set
-  if (location.state?.preventAutoSubmit) {
-    return;
-  }
-  
-  // Don't auto-submit if coming back from avatar screen
-  if (location.state?.fromAvatar) {
-    return;
-  }
-  
-  if (phone && phone.length === 10) {
-    // Auto-check after a brief delay to show the UI
-    const timer = setTimeout(() => {
-      handleSubmit();
-    }, 500);
-    return () => clearTimeout(timer);
-  }
-}, []); // Run only once on mount
+  // Auto-submit if coming from sign-out with a complete phone number
+  useEffect(() => {
+    if (phone && phone.length === 10) {
+      // Auto-check after a brief delay to show the UI
+      const timer = setTimeout(() => {
+        handleSubmit();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, []); // Run only once on mount
 
   return (
     <div className="auth-screen" style={{ 

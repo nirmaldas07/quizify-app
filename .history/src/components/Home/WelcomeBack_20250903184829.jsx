@@ -2,17 +2,10 @@ import { useState, useEffect } from 'react';
 
 export default function WelcomeBack({ player, onContinue }) {
   // Check session storage immediately in initial state
-
-  // temporary k , later just activate this code
-  
-//   const [show, setShow] = useState(() => {
-//     const shownInSession = sessionStorage.getItem('welcomeShown');
-//     return shownInSession !== 'true';
-//   });
-
-
-  const [show, setShow] = useState(false); // Temporarily disabled
-
+  const [show, setShow] = useState(() => {
+    const shownInSession = sessionStorage.getItem('welcomeShown');
+    return shownInSession !== 'true';
+  });
   const [animateOut, setAnimateOut] = useState(false);
   const [mascotBounce, setMascotBounce] = useState(false);
   const [motivationalText, setMotivationalText] = useState('');
