@@ -11,9 +11,6 @@ export default function WelcomeScreen() {
   const [fadeOut, setFadeOut] = useState(false);
   
   const userName = location.state?.username || localStorage.getItem('userName') || 'Champion';
-  
-  // Check if username is long (will likely wrap)
-  const isLongName = userName.length > 12;
 
   useEffect(() => {
     // Mark that user just signed up (to prevent WelcomeBack from showing)
@@ -30,18 +27,17 @@ export default function WelcomeScreen() {
     // Start fade-out animation
     setFadeOut(true);
     
-    // Navigate immediately when fade reaches 50% to avoid black screen
+    // Wait for fade animation to complete before navigating
     setTimeout(() => {
       navigate('/', { replace: true });
-    }, 350);
+    }, 800);
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity`}
+    <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity duration-700`}
       style={{
         background: 'radial-gradient(circle at center, #1a1a2e 0%, #0f0f0f 100%)',
-        opacity: fadeOut ? 0.3 : 1,
-        transitionDuration: '400ms'
+        opacity: fadeOut ? 0 : 1
       }}
     >
       {/* Multiple radiating circles from center */}
@@ -133,11 +129,7 @@ export default function WelcomeScreen() {
           animation: 'fadeInUp 1s ease-out forwards',
           margin: 0
         }}>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold', 
-            marginBottom: isLongName ? '-5px' : '-10px'
-          }}>
+          <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '-10px' }}>
             Welcome
           </div>
           <div style={{ 
@@ -145,9 +137,8 @@ export default function WelcomeScreen() {
             fontWeight: 'bold',
             wordWrap: 'break-word',
             overflowWrap: 'break-word',
-            lineHeight: isLongName ? '1.2' : '1.1',
-            padding: '0 20px',
-            marginTop: isLongName ? '5px' : '0'
+            lineHeight: '1.1',
+            padding: '0 20px'
           }}>
             {userName}
           </div>

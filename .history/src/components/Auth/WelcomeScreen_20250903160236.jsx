@@ -8,12 +8,8 @@ export default function WelcomeScreen() {
   const location = useLocation();
   const [animateIn, setAnimateIn] = useState(false);
   const [showButton, setShowButton] = useState(false);
-  const [fadeOut, setFadeOut] = useState(false);
   
   const userName = location.state?.username || localStorage.getItem('userName') || 'Champion';
-  
-  // Check if username is long (will likely wrap)
-  const isLongName = userName.length > 12;
 
   useEffect(() => {
     // Mark that user just signed up (to prevent WelcomeBack from showing)
@@ -27,21 +23,14 @@ export default function WelcomeScreen() {
   }, []);
 
   const handleStart = () => {
-    // Start fade-out animation
-    setFadeOut(true);
-    
-    // Navigate immediately when fade reaches 50% to avoid black screen
-    setTimeout(() => {
-      navigate('/', { replace: true });
-    }, 350);
+    // Navigate directly to home
+    navigate('/', { replace: true });
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity`}
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
       style={{
-        background: 'radial-gradient(circle at center, #1a1a2e 0%, #0f0f0f 100%)',
-        opacity: fadeOut ? 0.3 : 1,
-        transitionDuration: '400ms'
+        background: 'radial-gradient(circle at center, #1a1a2e 0%, #0f0f0f 100%)'
       }}
     >
       {/* Multiple radiating circles from center */}
@@ -120,9 +109,7 @@ export default function WelcomeScreen() {
           top: 'calc(50% - 200px)',
           left: '50%',
           transform: 'translateX(-50%)',
-          textAlign: 'center',
-          width: '90%',
-          maxWidth: '500px'
+          textAlign: 'center'
         }}
       >
         <h1 style={{ 
@@ -133,22 +120,10 @@ export default function WelcomeScreen() {
           animation: 'fadeInUp 1s ease-out forwards',
           margin: 0
         }}>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold', 
-            marginBottom: isLongName ? '-5px' : '-10px'
-          }}>
+          <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: 'px' }}>
             Welcome
           </div>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold',
-            wordWrap: 'break-word',
-            overflowWrap: 'break-word',
-            lineHeight: isLongName ? '1.2' : '1.1',
-            padding: '0 20px',
-            marginTop: isLongName ? '5px' : '0'
-          }}>
+          <div style={{ fontSize: '48px', fontWeight: 'bold' }}>
             {userName}
           </div>
         </h1>
@@ -181,8 +156,7 @@ export default function WelcomeScreen() {
               alignItems: 'center',
               gap: '12px',
               boxShadow: '0 4px 30px rgba(147, 51, 234, 0.4)',
-              animation: 'slideUp 0.5s ease-out forwards',
-              whiteSpace: 'nowrap'
+              animation: 'slideUp 0.5s ease-out forwards'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.05)';

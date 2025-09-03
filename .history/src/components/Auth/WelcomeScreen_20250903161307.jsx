@@ -11,9 +11,6 @@ export default function WelcomeScreen() {
   const [fadeOut, setFadeOut] = useState(false);
   
   const userName = location.state?.username || localStorage.getItem('userName') || 'Champion';
-  
-  // Check if username is long (will likely wrap)
-  const isLongName = userName.length > 12;
 
   useEffect(() => {
     // Mark that user just signed up (to prevent WelcomeBack from showing)
@@ -27,77 +24,90 @@ export default function WelcomeScreen() {
   }, []);
 
   const handleStart = () => {
-    // Start fade-out animation
+    // Start fade-out and zoom animation
     setFadeOut(true);
     
-    // Navigate immediately when fade reaches 50% to avoid black screen
+    // Wait for animation to complete before navigating
     setTimeout(() => {
       navigate('/', { replace: true });
-    }, 350);
+    }, 600);
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-opacity`}
+    <div className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-all duration-500`}
       style={{
         background: 'radial-gradient(circle at center, #1a1a2e 0%, #0f0f0f 100%)',
-        opacity: fadeOut ? 0.3 : 1,
-        transitionDuration: '400ms'
+        opacity: fadeOut ? 0 : 1,
+        transform: fadeOut ? 'scale(1.1)' : 'scale(1)'
       }}
     >
       {/* Multiple radiating circles from center */}
       <div className="absolute inset-0 flex items-center justify-center">
         {/* First pulse - purple */}
         <div 
-          className="absolute"
+          className={`absolute transition-all duration-500`}
           style={{
             width: '100px',
             height: '100px',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(147, 51, 234, 0.8), transparent)',
-            animation: 'pulseExpand 2.5s ease-out infinite'
+            animation: 'pulseExpand 2.5s ease-out infinite',
+            transform: fadeOut ? 'scale(3)' : 'scale(1)',
+            opacity: fadeOut ? 0 : 1
           }}
         />
         
         {/* Second pulse - pink */}
         <div 
-          className="absolute"
+          className={`absolute transition-all duration-500`}
           style={{
             width: '100px',
             height: '100px',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(236, 72, 153, 0.8), transparent)',
-            animation: 'pulseExpand 2.5s ease-out 0.5s infinite'
+            animation: 'pulseExpand 2.5s ease-out 0.5s infinite',
+            transform: fadeOut ? 'scale(3)' : 'scale(1)',
+            opacity: fadeOut ? 0 : 1
           }}
         />
         
         {/* Third pulse - blue */}
         <div 
-          className="absolute"
+          className={`absolute transition-all duration-500`}
           style={{
             width: '100px',
             height: '100px',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(59, 130, 246, 0.8), transparent)',
-            animation: 'pulseExpand 2.5s ease-out 1s infinite'
+            animation: 'pulseExpand 2.5s ease-out 1s infinite',
+            transform: fadeOut ? 'scale(3)' : 'scale(1)',
+            opacity: fadeOut ? 0 : 1
           }}
         />
         
         {/* Center glow */}
         <div 
-          className="absolute"
+          className={`absolute transition-all duration-700`}
           style={{
             width: '80px',
             height: '80px',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(147, 51, 234, 0.4))',
-            boxShadow: '0 0 60px 20px rgba(147, 51, 234, 0.6)',
-            animation: 'glow 2s ease-in-out infinite'
+            boxShadow: fadeOut ? '0 0 200px 100px rgba(147, 51, 234, 0.9)' : '0 0 60px 20px rgba(147, 51, 234, 0.6)',
+            animation: 'glow 2s ease-in-out infinite',
+            transform: fadeOut ? 'scale(5)' : 'scale(1)',
+            opacity: fadeOut ? 0.3 : 1
           }}
         />
       </div>
       
       {/* Radiating lines */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500`}
+        style={{
+          transform: fadeOut ? 'rotate(180deg) scale(2)' : 'rotate(0deg) scale(1)',
+          opacity: fadeOut ? 0 : 1
+        }}
+      >
         {[...Array(12)].map((_, i) => (
           <div
             key={i}
@@ -114,15 +124,14 @@ export default function WelcomeScreen() {
       </div>
 
       {/* Welcome Text - positioned above the center glow */}
-      <div className={`absolute z-10 transition-all duration-1000
+      <div className={`absolute z-10 transition-all duration-500
         ${animateIn ? 'opacity-100' : 'opacity-0'}`}
         style={{ 
           top: 'calc(50% - 200px)',
           left: '50%',
-          transform: 'translateX(-50%)',
+          transform: fadeOut ? 'translateX(-50%) translateY(-50px) scale(0.8)' : 'translateX(-50%)',
           textAlign: 'center',
-          width: '90%',
-          maxWidth: '500px'
+          opacity: fadeOut ? 0 : 1
         }}
       >
         <h1 style={{ 
@@ -133,22 +142,10 @@ export default function WelcomeScreen() {
           animation: 'fadeInUp 1s ease-out forwards',
           margin: 0
         }}>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold', 
-            marginBottom: isLongName ? '-5px' : '-10px'
-          }}>
+          <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '-10px' }}>
             Welcome
           </div>
-          <div style={{ 
-            fontSize: '48px', 
-            fontWeight: 'bold',
-            wordWrap: 'break-word',
-            overflowWrap: 'break-word',
-            lineHeight: isLongName ? '1.2' : '1.1',
-            padding: '0 20px',
-            marginTop: isLongName ? '5px' : '0'
-          }}>
+          <div style={{ fontSize: '48px', fontWeight: 'bold' }}>
             {userName}
           </div>
         </h1>
@@ -156,11 +153,12 @@ export default function WelcomeScreen() {
 
       {/* CTA Button - positioned below the center glow */}
       {showButton && (
-        <div className="absolute z-10"
+        <div className={`absolute z-10 transition-all duration-500`}
           style={{
             bottom: '250px',
             left: '50%',
-            transform: 'translateX(-50%)'
+            transform: fadeOut ? 'translateX(-50%) translateY(50px) scale(0.8)' : 'translateX(-50%)',
+            opacity: fadeOut ? 0 : 1
           }}
         >
           <button

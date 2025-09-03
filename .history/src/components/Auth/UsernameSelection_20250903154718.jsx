@@ -1,5 +1,5 @@
 // src/components/Auth/UsernameSelection.jsx
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { saveUser } from '../../utils/authHelpers';
 import './auth.css';
@@ -14,12 +14,20 @@ export default function UsernameSelection() {
   const [ageGroup, setAgeGroup] = useState('');
   const [error, setError] = useState('');
   
+  // Generate suggestions only once using useMemo
+  const suggestions = useMemo(() => [
+    'QuizMaster' + Math.floor(Math.random() * 1000),
+    'BrainStorm' + Math.floor(Math.random() * 1000),
+    'SmartCookie' + Math.floor(Math.random() * 1000),
+    'QuizWhiz' + Math.floor(Math.random() * 1000)
+  ], []);
+  
   const ageGroups = [
-    { value: 'under-5', label: 'Under 5 yrs' },
-    { value: '5-10', label: '5-10 yrs' },
-    { value: '11-15', label: '11-15 yrs' },
-    { value: '16-20', label: '16-20 yrs' },
-    { value: '20+', label: '20+ yrs' }
+    { value: 'under-5', label: 'Under 5' },
+    { value: '5-10', label: '5-10' },
+    { value: '11-15', label: '11-15' },
+    { value: '16-20', label: '16-20' },
+    { value: '20+', label: '20+' }
   ];
   
   const handleComplete = () => {
@@ -129,13 +137,43 @@ export default function UsernameSelection() {
             onChange={(e) => setUsername(e.target.value)}
             style={{ 
               width: '100%', 
-              marginBottom: '20px',
+              marginBottom: '12px',
               color: '#333',
               fontSize: '16px',
               WebkitTextFillColor: '#333',
               backgroundColor: 'white'
             }}
           />
+          
+          {/* Name Suggestions */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr', 
+            gap: '8px', 
+            marginBottom: '20px' 
+          }}>
+            {suggestions.map((name, index) => (
+              <button
+                key={index}
+                onClick={() => setUsername(name)}
+                className="suggestion-button"
+                style={{
+                  padding: '8px',
+                  border: '2px solid #e9d5ff',
+                  borderRadius: '12px',
+                  background: username === name ? 'rgba(147, 51, 234, 0.1)' : 'white',
+                  borderColor: username === name ? '#9333ea' : '#e9d5ff',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  transition: 'all 0.3s',
+                  color: '#333'
+                }}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
           
           {/* Gender Selection */}
           <div style={{ marginBottom: '20px' }}>
@@ -147,7 +185,7 @@ export default function UsernameSelection() {
             }}>
               Gender
             </label>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 onClick={() => setGender('male')}
                 style={{
@@ -158,7 +196,7 @@ export default function UsernameSelection() {
                   borderRadius: '12px',
                   background: gender === 'male' ? 'rgba(147, 51, 234, 0.1)' : 'white',
                   cursor: 'pointer',
-                  fontSize: '14px',
+                  fontSize: '16px',
                   fontWeight: '600',
                   color: gender === 'male' ? '#9333ea' : '#64748b',
                   transition: 'all 0.3s'
@@ -176,31 +214,13 @@ export default function UsernameSelection() {
                   borderRadius: '12px',
                   background: gender === 'female' ? 'rgba(147, 51, 234, 0.1)' : 'white',
                   cursor: 'pointer',
-                  fontSize: '14px',
+                  fontSize: '16px',
                   fontWeight: '600',
                   color: gender === 'female' ? '#9333ea' : '#64748b',
                   transition: 'all 0.3s'
                 }}
               >
                 👧 Female
-              </button>
-              <button
-                onClick={() => setGender('other')}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  border: '2px solid',
-                  borderColor: gender === 'other' ? '#9333ea' : '#e9d5ff',
-                  borderRadius: '12px',
-                  background: gender === 'other' ? 'rgba(147, 51, 234, 0.1)' : 'white',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: gender === 'other' ? '#9333ea' : '#64748b',
-                  transition: 'all 0.3s'
-                }}
-              >
-                🌈 Other
               </button>
             </div>
           </div>
@@ -225,13 +245,13 @@ export default function UsernameSelection() {
                   key={age.value}
                   onClick={() => setAgeGroup(age.value)}
                   style={{
-                    padding: '10px 4px',
+                    padding: '10px',
                     border: '2px solid',
                     borderColor: ageGroup === age.value ? '#9333ea' : '#e9d5ff',
                     borderRadius: '12px',
                     background: ageGroup === age.value ? 'rgba(147, 51, 234, 0.1)' : 'white',
                     cursor: 'pointer',
-                    fontSize: '12px',
+                    fontSize: '14px',
                     fontWeight: '600',
                     color: ageGroup === age.value ? '#9333ea' : '#64748b',
                     transition: 'all 0.3s'

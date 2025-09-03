@@ -86,10 +86,10 @@ const userStats = {
         <div className="rounded-3xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-white/10 p-4 backdrop-blur-sm">
           <div className="flex items-center gap-4 mb-3">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 grid place-items-center text-2xl font-bold">
-            {firstName[0].toUpperCase()}
+              {userStats.name[0]}
             </div>
             <div className="flex-1">
-              <div className="text-lg font-semibold">{firstName}</div>
+              <div className="text-lg font-semibold">{player.name || "Player"}</div>
              <div className="text-white/60 text-sm">Level {player.level}</div>
             </div>
             <div className="text-right">
