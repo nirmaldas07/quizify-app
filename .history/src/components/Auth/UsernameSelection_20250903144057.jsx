@@ -1,5 +1,5 @@
 // src/components/Auth/UsernameSelection.jsx
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { saveUser } from '../../utils/authHelpers';
 import './auth.css';
@@ -14,13 +14,12 @@ export default function UsernameSelection() {
   const [showPassword, setShowPassword] = useState(false); 
   const [rememberMe, setRememberMe] = useState(false);
   
-  // Generate suggestions only once using useMemo
-  const suggestions = useMemo(() => [
+  const suggestions = [
     'QuizMaster' + Math.floor(Math.random() * 1000),
     'BrainStorm' + Math.floor(Math.random() * 1000),
     'SmartCookie' + Math.floor(Math.random() * 1000),
     'QuizWhiz' + Math.floor(Math.random() * 1000)
-  ], []); // Empty dependency array means it only runs once
+  ];
   
   const handleComplete = () => {
     if (!username || !password) {
@@ -55,20 +54,13 @@ export default function UsernameSelection() {
     });
   };
 
-  const handleBack = () => {
-    // Navigate back to avatar selection with phone and avatar preserved
-    navigate('/auth/avatar', { 
-      state: { phone, avatar } 
-    });
-  };
-
   return (
     <div className="auth-screen" style={{
-      background: 'linear-gradient(135deg, #ba5174ff 0%, #a9822dff 50%, #ca52baff 100%)'
+      background: 'linear-gradient(135deg, #ff6b9d 0%, #feca57 50%, #ff9ff3 100%)'
     }}>
       <button 
         className="back-button"
-        onClick={handleBack}
+        onClick={() => window.history.back()}
         style={{
           position: 'absolute',
           top: '20px',

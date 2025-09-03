@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Shared/Layout";
 import Home from "./components/Home/Home";
@@ -20,15 +20,20 @@ import ProfileAchievements from "./components/Profile/Achievements";
 import ProfileStreaks from "./components/Profile/Streaks";
 import ProfileQuests from "./components/Profile/Quests";
 import ProfileSettings from "./components/Profile/Settings";
+import { useEffect } from 'react';
 import { App as CapacitorApp } from '@capacitor/app';
 
-// Auth imports
+//Auth
 import PhoneAuth from "./components/Auth/PhoneAuth";
 import SignIn from "./components/Auth/SignIn";
 import AvatarSelection from "./components/Auth/AvatarSelection";
 import UsernameSelection from "./components/Auth/UsernameSelection";
+
+
 import { isLoggedIn } from './utils/authHelpers';
-import WelcomeScreen from "./components/Auth/WelcomeScreen";
+import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+
 
 // Game System imports
 import { useGameState } from './hooks/useGameState';
@@ -37,6 +42,7 @@ import { useGameState } from './hooks/useGameState';
 // This ensures we have a state to go back to
 window.history.replaceState({ path: window.location.pathname, preventBack: true }, '', window.location.pathname);
 window.history.pushState({ path: window.location.pathname, preventBack: true }, '', window.location.pathname);
+
 
 // Create Game Context
 const GameContext = createContext(null);
@@ -50,6 +56,18 @@ export const useGame = () => {
   return context;
 };
 
+
+const navigate = useNavigate();
+
+useEffect(() => {
+  const userLoggedIn = isLoggedIn();
+  if (!userLoggedIn && !window.location.pathname.startsWith('/auth')) {
+    navigate('/auth', { replace: true });
+  }
+  setAuthChecked(true);
+}, [navigate]);
+
+
 // Game Provider Wrapper
 function GameProvider({ children }) {
   const gameState = useGameState();
@@ -62,21 +80,23 @@ function GameProvider({ children }) {
 }
 
 export default function App() {
+
   const [authChecked, setAuthChecked] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check authentication status
+  // Add auth check
   useEffect(() => {
-    const checkAuth = () => {
-      const userLoggedIn = isLoggedIn();
-      setIsAuthenticated(userLoggedIn);
-      setAuthChecked(true);
-    };
-    
-    checkAuth();
+    const userLoggedIn = isLoggedIn();
+    if (!userLoggedIn && !window.location.pathname.startsWith('/auth')) {
+      window.location.href = '/auth';
+    }
+    setAuthChecked(true);
   }, []);
+  
+  if (!authChecked) {
+  return <div />; // return a stable placeholder component
+}
 
-  // Handle back button
+
+  // Add this useEffect for back button handling
   useEffect(() => {
     let exitCounter = 0;
     let exitTimer = null;
@@ -90,6 +110,7 @@ export default function App() {
         
         if (exitCounter === 1) {
           // First press - show toast
+          // You can add a toast notification here if you want
           console.log('Press back again to exit');
           
           // Reset counter after 2 seconds
@@ -99,7 +120,7 @@ export default function App() {
         } else if (exitCounter === 2) {
           // Second press - minimize app instead of exit
           clearTimeout(exitTimer);
-          CapacitorApp.minimizeApp();
+          CapacitorApp.minimizeApp(); // This minimizes instead of exits
         }
       } else {
         // For all other pages, just go back
@@ -113,67 +134,44 @@ export default function App() {
       if (exitTimer) clearTimeout(exitTimer);
     };
   }, []);
-
-  // Show loading screen while checking auth
-  if (!authChecked) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        backgroundColor: '#000'
-      }}>
-        <div style={{ color: '#fff' }}>Loading...</div>
-      </div>
-    );
-  }
-
-  // Redirect to auth if not authenticated and not already on auth page
-  if (!isAuthenticated && !window.location.pathname.startsWith('/auth')) {
-    window.location.href = '/auth';
-    return null;
-  }
-
   return (
     <GameProvider>
-      <Routes>
-        {/* Auth routes OUTSIDE of Layout */}
-        <Route path="/auth" element={<PhoneAuth />} />
-        <Route path="/auth/signin" element={<SignIn />} />
-        <Route path="/auth/avatar" element={<AvatarSelection />} />
-        <Route path="/auth/username" element={<UsernameSelection />} />
-        <Route path="/welcome" element={<WelcomeScreen />} /> 
-  
-        {/* Main app routes inside Layout */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/play" element={<Play />} />
-          <Route path="/play/party" element={<PartySpin />} />
-          
-          {/* Profile routes */}
-          <Route path="/profile" element={<ProfileHome />} />
-          <Route path="/profile/leaderboard" element={<ProfileLeaderboard />} />
-          <Route path="/profile/history" element={<ProfileHistory />} />
-          <Route path="/profile/rewards" element={<ProfileRewards />} />
-          <Route path="/profile/badges" element={<ProfileBadges />} />
-          <Route path="/profile/achievements" element={<ProfileAchievements />} />
-          <Route path="/profile/streaks" element={<ProfileStreaks />} />
-          <Route path="/profile/quests" element={<ProfileQuests />} />
-          <Route path="/profile/settings" element={<ProfileSettings />} />
-          
-          <Route path="/swipe" element={<SwipeQuiz />} />
-          <Route path="/leaders" element={<Navigate to="/profile/leaderboard" replace />} />
-          
-          {/* Quiz routes */}
-          <Route path="/quiz/:category" element={<Quiz />} />
-          <Route path="/quiz/play" element={<QuizPlay />} />
-          <Route path="/practice/start" element={<PracticeStart />} />
+        <Routes>
+          {/* Auth routes OUTSIDE of Layout */}
+          <Route path="/auth" element={<PhoneAuth />} />
+          <Route path="/auth/signin" element={<SignIn />} />
+          <Route path="/auth/avatar" element={<AvatarSelection />} />
+          <Route path="/auth/username" element={<UsernameSelection />} />
+    
+          {/* Main app routes inside Layout */}
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/play" element={<Play />} />
+            <Route path="/play/party" element={<PartySpin />} />            
+            {/* Add this line for direct /quests access */}
+            {/* Profile routes */}
+            <Route path="/profile" element={<ProfileHome />} />
+            <Route path="/profile/leaderboard" element={<ProfileLeaderboard />} />
+            <Route path="/profile/history" element={<ProfileHistory />} />
+            <Route path="/profile/rewards" element={<ProfileRewards />} />
+            <Route path="/profile/badges" element={<ProfileBadges />} />
+            <Route path="/profile/achievements" element={<ProfileAchievements />} />
+            <Route path="/profile/streaks" element={<ProfileStreaks />} />
+            <Route path="/profile/quests" element={<ProfileQuests />} />
+            <Route path="/profile/settings" element={<ProfileSettings />} />
+            
+            <Route path="/swipe" element={<SwipeQuiz />} />
+            <Route path="/leaders" element={<Navigate to="/profile/leaderboard" replace />} />
+            
+            {/* Quiz routes */}
+            <Route path="/quiz/:category" element={<Quiz />} />
+            <Route path="/quiz/play" element={<QuizPlay />} />
+            <Route path="/practice/start" element={<PracticeStart />} />
 
-          {/* Fallback */}
-          <Route path="*" element={<Home />} />
-        </Route>
-      </Routes>
+            {/* Fallback */}
+            <Route path="*" element={<Home />} />
+          </Route>
+        </Routes>
     </GameProvider>
   );
 }

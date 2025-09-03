@@ -215,15 +215,14 @@
 
 .avatar-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   margin-bottom: 24px;
   padding: 0;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
 }
-
 
 .avatar-card {
   aspect-ratio: 1;

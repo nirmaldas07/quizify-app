@@ -49,7 +49,7 @@ export default function AvatarSelection() {
     }}>
       <button 
         className="back-button"
-        onClick={() => navigate('/auth', { state: { phone } })}
+        onClick={() => navigate(-1)}
         style={{
           position: 'absolute',
           top: '20px',
@@ -106,13 +106,11 @@ export default function AvatarSelection() {
         }}>Choose your quiz champion</p>
 
         <div className="avatar-grid" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '10px',  // Slightly reduce gap
-        marginBottom: '32px',
-        padding: '0',
-        maxWidth: '500px',  // Add max width to grid itself
-        margin: '0 auto 32px auto'  // Center the grid
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '12px',
+          marginBottom: '32px',
+          padding: '0'
         }}>
           {avatars.map(avatar => (
             <div

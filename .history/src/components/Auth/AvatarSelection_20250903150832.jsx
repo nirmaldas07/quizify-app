@@ -49,7 +49,7 @@ export default function AvatarSelection() {
     }}>
       <button 
         className="back-button"
-        onClick={() => navigate('/auth', { state: { phone } })}
+        onClick={() => navigate(-1)}
         style={{
           position: 'absolute',
           top: '20px',

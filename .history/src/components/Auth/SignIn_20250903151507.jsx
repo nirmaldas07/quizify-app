@@ -50,11 +50,9 @@ export default function SignIn() {
       
       navigate('/', { replace: true });
     } else {
-        setError('Wrong password');
-        setLoading(false);
-        // Auto-clear error after 3 seconds
-        setTimeout(() => setError(''), 3000);
-        }
+      setError('Incorrect password. Please try again.');
+      setLoading(false);
+    }
   };
   
   const handleOTP = () => {
@@ -246,16 +244,18 @@ export default function SignIn() {
 
         {/* Error Message */}
         {error && (
-        <div style={{
-            color: '#f59e0b',
-            fontSize: '13px',
+          <div style={{
+            color: '#ef4444',
+            fontSize: '14px',
             textAlign: 'center',
-            marginTop: '-12px',
             marginBottom: '16px',
-            fontWeight: '500'
-        }}>
-            ⚠️ {error}
-        </div>
+            padding: '8px',
+            background: 'rgba(239, 68, 68, 0.1)',
+            borderRadius: '8px',
+            animation: 'shake 0.5s'
+          }}>
+            {error}
+          </div>
         )}
 
         {/* Sign In Button */}

@@ -28,7 +28,6 @@ import SignIn from "./components/Auth/SignIn";
 import AvatarSelection from "./components/Auth/AvatarSelection";
 import UsernameSelection from "./components/Auth/UsernameSelection";
 import { isLoggedIn } from './utils/authHelpers';
-import WelcomeScreen from "./components/Auth/WelcomeScreen";
 
 // Game System imports
 import { useGameState } from './hooks/useGameState';
@@ -143,7 +142,6 @@ export default function App() {
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/avatar" element={<AvatarSelection />} />
         <Route path="/auth/username" element={<UsernameSelection />} />
-        <Route path="/welcome" element={<WelcomeScreen />} /> 
   
         {/* Main app routes inside Layout */}
         <Route element={<Layout />}>

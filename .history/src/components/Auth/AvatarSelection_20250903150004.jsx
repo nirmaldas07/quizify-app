@@ -49,7 +49,7 @@ export default function AvatarSelection() {
     }}>
       <button 
         className="back-button"
-        onClick={() => navigate('/auth', { state: { phone } })}
+        onClick={() => navigate(-1)}
         style={{
           position: 'absolute',
           top: '20px',
@@ -70,26 +70,26 @@ export default function AvatarSelection() {
         onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.25)'}
         onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
       >
-        <span style={{ fontSize: '24px', color: 'rgba(194, 128, 190, 0.9)' }}>‹</span>
+        <span style={{ fontSize: '24px', color: 'rgba(255,255,255,0.9)' }}>‹</span>
       </button>
 
-        <div className="content-card" style={{
+      <div className="content-card" style={{
         background: 'rgba(248, 250, 252, 0.95)',
         backdropFilter: 'blur(20px)',
         borderRadius: '32px',
-        padding: '24px 20px',  // Reduce horizontal padding
-        width: '95%',  // Increase from 90% to 95%
-        maxWidth: '100%',  // Remove the pixel limit completely
+        padding: '32px',
+        width: '90%',
+        maxWidth: '400px',
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
-        }}>
+      }}>
         <div className="progress-dots">
           <div className="dot active" style={{ background: '#3730a3' }}></div>
-          <div className="dot" style={{ background: '#bf89ceff' }}></div>
+          <div className="dot" style={{ background: '#e2e8f0' }}></div>
         </div>
 
         <h1 className="title" style={{
           fontSize: '28px',
-          fontWeight: '800',
+          fontWeight: '1000',
           textAlign: 'center',
           marginBottom: '8px',
           background: 'linear-gradient(135deg, #1e3a8a 0%, #6d28d9 100%)',
@@ -106,13 +106,11 @@ export default function AvatarSelection() {
         }}>Choose your quiz champion</p>
 
         <div className="avatar-grid" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '10px',  // Slightly reduce gap
-        marginBottom: '32px',
-        padding: '0',
-        maxWidth: '500px',  // Add max width to grid itself
-        margin: '0 auto 32px auto'  // Center the grid
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '12px',
+          marginBottom: '32px',
+          padding: '0'
         }}>
           {avatars.map(avatar => (
             <div
