@@ -432,6 +432,7 @@ export default function SignIn() {
                 Enter your new password
               </p>
             </div>
+            
             <div className="relative mb-4">
             <input
                 type={showPassword ? "text" : "password"}
