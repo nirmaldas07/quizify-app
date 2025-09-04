@@ -15,12 +15,9 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [displayName, setDisplayName] = useState('');
-
+  
   // Get user data to display avatar
   const userData = getUserData(phone);
-
-  const [showPasswordReset, setShowPasswordReset] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
   
   useEffect(() => {
     // Check if credentials were remembered
@@ -386,21 +383,26 @@ export default function SignIn() {
           borderTop: '1px solid #e2e8f0'
         }}>
           {/* Forgot Password Link */}
-            <a 
-            href="#" 
-            onClick={(e) => {
-                e.preventDefault();
-                setShowPasswordReset(true);
+        <a 
+        href="#" 
+        onClick={(e) => {
+            e.preventDefault();
+            const resetPassword = prompt('Enter new password (min 6 characters):');
+            if (resetPassword && resetPassword.length >= 6) {
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (users[phone]) {
+                users[phone].password = resetPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                alert(`Password changed successfully!\nYour new password is: ${resetPassword}\n\nPlease write it down!`);
+                setPassword(resetPassword); // Auto-fill the new password
+                }
+            } else if (resetPassword) {
+                alert('Password must be at least 6 characters');
+            }
             }}
-            style={{
-                color: '#7c3aed',
-                fontSize: '14px',
-                textDecoration: 'none',
-                fontWeight: '600'
-            }}
-            >
+          >
             Forgot password?
-            </a>
+          </a>
 
           {/* New Account Link */}
           <a 
@@ -419,69 +421,7 @@ export default function SignIn() {
             Create new account
           </a>
         </div>
-     </div>
-
-      {/* Password Reset Modal */}
-      {showPasswordReset && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-          <div className="bg-gradient-to-br from-gray-900 to-purple-900 rounded-3xl p-6 w-full max-w-sm border border-white/20 shadow-2xl">
-            <div className="text-center mb-6">
-              <div className="text-5xl mb-4">🔐</div>
-              <h3 className="text-xl font-bold mb-2 text-white">Reset Password</h3>
-              <p className="text-white/60 text-sm">
-                Enter your new password
-              </p>
-            </div>
-            
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="New password (min 6 characters)"
-              className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 
-                       text-white placeholder-white/50 mb-4"
-              autoFocus
-            />
-            
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setShowPasswordReset(false);
-                  setNewPassword('');
-                }}
-                className="flex-1 py-3 rounded-2xl bg-white/10 hover:bg-white/20 
-                         transition-all duration-200 font-semibold text-white"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (newPassword.length >= 6) {
-                    const users = JSON.parse(localStorage.getItem('users') || '{}');
-                    if (users[phone]) {
-                      users[phone].password = newPassword;
-                      localStorage.setItem('users', JSON.stringify(users));
-                      setPassword(newPassword);
-                      setShowPasswordReset(false);
-                      setNewPassword('');
-                      // Show success feedback
-                      setError('');
-                      alert('Password reset successful! You can now sign in.');
-                    }
-                  } else {
-                    alert('Password must be at least 6 characters');
-                  }
-                }}
-                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 
-                         hover:from-green-600 hover:to-emerald-600 transition-all duration-200 
-                         font-semibold text-white shadow-lg"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
       <style jsx>{`
         @keyframes shake {
