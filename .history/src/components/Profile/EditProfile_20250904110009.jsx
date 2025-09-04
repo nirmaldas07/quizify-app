@@ -101,23 +101,47 @@ export default function EditProfile() {
   };
 
     const handleSave = () => {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-        
-        if (!currentUser.phone) return;
-        
-        // Use UserService to update profile
-        const success = userService.updateUserProfile(currentUser.phone, tempProfileData);
-        
-        if (success) {
-            // Update state
-            setProfileData({...tempProfileData});
-            setIsEditMode(false);
-            setHasChanges(false);
-            
-            // Show success message
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
-        }
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    
+    if (!currentUser.phone) return;
+    
+    // Get existing users database
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    const existingUserData = users[currentUser.phone] || {};
+    
+    // Update currentUser with ALL important fields
+    const updatedUser = {
+        ...currentUser,
+        username: tempProfileData.name,
+        gender: tempProfileData.gender || currentUser.gender,
+        ageGroup: tempProfileData.ageGroup || currentUser.ageGroup
+    };
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    
+    // Update in users database (this persists across sign-outs)
+    users[currentUser.phone] = {
+        ...existingUserData,  // Preserve existing data like password
+        username: tempProfileData.name,
+        phone: currentUser.phone,
+        gender: tempProfileData.gender || currentUser.gender || existingUserData.gender,
+        ageGroup: tempProfileData.ageGroup || currentUser.ageGroup || existingUserData.ageGroup,
+        avatar: currentUser.avatar || existingUserData.avatar,
+        password: existingUserData.password  // Always preserve password
+    };
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    // Store complete profile data separately (this also persists)
+    const profileKey = `user_profile_${currentUser.phone}`;
+    localStorage.setItem(profileKey, JSON.stringify(tempProfileData));
+    
+    // Update state
+    setProfileData({...tempProfileData});
+    setIsEditMode(false);
+    setHasChanges(false);
+    
+    // Show success message
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
     };
 
   const handleChange = (field, value) => {

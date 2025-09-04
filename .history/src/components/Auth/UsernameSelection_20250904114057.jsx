@@ -27,12 +27,8 @@ export default function UsernameSelection() {
     setError('');
     
     if (!username) {
-    setError('Please enter your name');
-    return;
-    }
-    if (!password || password.length < 6) {
-    setError('Password must be at least 6 characters');
-    return;
+      setError('Please enter your name');
+      return;
     }
     if (!gender) {
       setError('Please select your gender');

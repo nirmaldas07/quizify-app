@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Screen from "./Screen.jsx";
-import userService from '../../services/UserService';
 
 export default function Settings() {
   const navigate = useNavigate();

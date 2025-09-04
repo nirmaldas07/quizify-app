@@ -67,25 +67,24 @@ export default function SignIn() {
     }
   };
   
-    const handleOTP = () => {
-    alert('OTP feature coming soon!');
-    // navigate('/auth/otp', { state: { phone } });
-    };
+  const handleOTP = () => {
+    navigate('/auth/otp', { state: { phone } });
+  };
   
-    const handleBack = () => {
+  const handleBack = () => {
     // Clear the auto-submit data to prevent auto-redirect
     sessionStorage.removeItem('tempPhone');
     sessionStorage.removeItem('tempCountryCode');
     
-    // Extract just the phone number without country code (last 10 digits)
-    const phoneWithoutCode = phone?.slice(-10) || '';
+    // Extract just the phone number without country code
+    const phoneWithoutCode = phone?.replace(/^\+\d{1,3}/, '') || '';
     
     // Navigate back to phone auth without triggering auto-submit
     navigate('/auth', { 
-        replace: true,
-        state: { phone: phoneWithoutCode, preventAutoSubmit: true } 
+      replace: true,
+      state: { phone: phoneWithoutCode, preventAutoSubmit: true } 
     });
-    };
+  };
   
   const handleCreateNewAccount = () => {
     // Clear all temporary data

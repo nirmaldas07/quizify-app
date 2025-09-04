@@ -70,16 +70,11 @@ export default function WelcomeBack({ player, onContinue }) {
         
         // Get name - priority: profile data > users database > currentUser > player
         if (profileData.name) {
-        finalName = profileData.name.split(' ')[0]; // First name only
+          finalName = profileData.name.split(' ')[0]; // First name only
         } else if (userData.username) {
-        finalName = userData.username.split(' ')[0];
+          finalName = userData.username.split(' ')[0];
         } else if (currentUser.username) {
-        finalName = currentUser.username.split(' ')[0];
-        }
-
-        // Capitalize first letter
-        if (finalName && finalName !== 'Champion') {
-        finalName = finalName.charAt(0).toUpperCase() + finalName.slice(1).toLowerCase();
+          finalName = currentUser.username.split(' ')[0];
         }
       } else if (currentUser.username) {
         // If no phone but has username
