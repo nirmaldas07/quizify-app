@@ -148,8 +148,8 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { category } = useParams();
   const location = useLocation();
-  const { energy, useEnergy, player, updateDailyStreak } = useGame();
-// Don't extract addCoins or addXP - they shouldn't exist in context
+  const { energy, useEnergy, player, addCoins, addXP, updateDailyStreak } = useGame();
+//   const [routeKey, setRouteKey] = useState('');
 
   
   // Query params
@@ -702,7 +702,7 @@ if (error) {
             isPractice={isPractice}
             player={player}
             categories={allCategories}
-            // addCoins={() => {}}  // Don't pass addCoins at all - remove this prop entirely
+            addCoins={() => {}}  // Empty function since coins are already added via GameDataService
             onNavigate={(path, options) => {
               console.log('onNavigate called with:', path, options);
               if (options?.state) {

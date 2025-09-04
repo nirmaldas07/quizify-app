@@ -98,11 +98,9 @@ const userStats = {
     hover:before:opacity-100 before:transition-opacity before:duration-300
   `;
 
-  const xpPercentage = summary?.xpProgress 
-  ? (summary.xpProgress / (summary.xpNeeded || 100)) * 100
-  : levelProgress.required > 0 
-    ? (levelProgress.current / levelProgress.required) * 100 
-    : 0;
+  const xpPercentage = levelProgress.required > 0 
+  ? (levelProgress.current / levelProgress.required) * 100 
+  : 0;
 
   return (
     <div className="min-h-full bg-[#0B0C10] text-white pt-10 px-3">
@@ -128,7 +126,7 @@ const userStats = {
             </div>
             <div className="flex-1">
               <div className="text-lg font-semibold">{firstName}</div>
-             <div className="text-white/60 text-sm">Level {summary?.level || player.level || 1}</div>
+             <div className="text-white/60 text-sm">Level {player.level}</div>
             </div>
             <div className="text-right">
               <div className="text-yellow-400 font-bold text-lg">{summary?.totalCoins || player.coins || 0} 🪙</div>
@@ -140,7 +138,7 @@ const userStats = {
           <div className="mb-3">
             <div className="flex justify-between text-xs text-white/60 mb-1">
               <span>XP Progress</span>
-              <span>{summary?.xpProgress || levelProgress.current}/{summary?.xpNeeded || levelProgress.required}</span>
+              <span>{levelProgress.current}/{levelProgress.required}</span>
             </div>
             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
               <div 
@@ -264,7 +262,7 @@ const userStats = {
               <div className="text-2xl">⚡</div>
               <div>
                 <div className="text-sm font-bold">QUESTS</div>
-                <div className="text-[11px] opacity-80">{summary?.activeQuests || 2} active goals</div>
+                <div className="text-[11px] opacity-80">2 active goals</div>
               </div>
             </div>
           </button>

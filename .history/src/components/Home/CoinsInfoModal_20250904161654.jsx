@@ -1,6 +1,5 @@
 //src/components/Home/CoinsInfoModal.jsx
 import React from 'react';
-import GameDataService from '../../services/GameDataService';
 
 export default function CoinsInfoModal({ show, onClose, coins, onNavigateToPlay }) {
   if (!show) return null;

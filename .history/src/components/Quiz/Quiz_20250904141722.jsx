@@ -8,8 +8,6 @@ import QuizResults from "./QuizResults";
 import QuizReview from "./QuizReview";
 import { useGame } from "../../App";
 import { allCategories } from '../../utils/categories';
-import GameDataService from '../../services/GameDataService';
-import UserService from '../../services/UserService';
 
 /* ---------------- LocalStorage Keys ---------------- */
 const LS_RESUME = "qp_resume";
@@ -148,8 +146,8 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { category } = useParams();
   const location = useLocation();
-  const { energy, useEnergy, player, updateDailyStreak } = useGame();
-// Don't extract addCoins or addXP - they shouldn't exist in context
+  const { energy, useEnergy, player, addCoins, addXP, updateDailyStreak } = useGame();
+//   const [routeKey, setRouteKey] = useState('');
 
   
   // Query params
@@ -414,16 +412,7 @@ export default function Quiz() {
 
   // Handlers
   const handleQuizComplete = useCallback((results) => {
-  console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
-  console.log("handleQuizComplete called at:", new Date().toISOString());
-  
-  // Add guard against duplicate calls
-  if (window._quizCompleting) {
-    console.warn("Quiz completion already in progress, ignoring duplicate call");
-    return;
-  }
-  window._quizCompleting = true;
-  setTimeout(() => { window._quizCompleting = false; }, 1000);
+    console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
     
     if (!results || !results.questions) {
       console.error("Invalid results object:", results);
@@ -507,38 +496,26 @@ export default function Quiz() {
       console.error("Error saving snapshot:", e);
     }
 
-  // Clear resume
-  localStorage.removeItem(LS_RESUME);
+// Clear resume
+localStorage.removeItem(LS_RESUME);
 
-// Record the session properly through GameDataService
-const currentUser = UserService.getCurrentUser();
-if (currentUser?.phone) {
-  if (isPractice) {
-    // For practice: 2 coins per question completed
-    const practiceResult = GameDataService.recordPracticeSession(currentUser.phone, {
-      questionsCompleted: results.total,
-      correctAnswers: results.correct,
-      category: category
-    });
-    results.earnedCoins = practiceResult.coinsEarned;
-  } else {
-    // For quiz: 5 coins per correct answer
-    const quizResult = GameDataService.recordQuizSession(currentUser.phone, {
-      score: results.correct,
-      totalQuestions: results.total,
-      category: category,
-      difficulty: difficulty,
-      mode: 'quiz'
-    });
-    results.earnedCoins = quizResult.coinsEarned;
-  }
-} else {
-  // If no user logged in, don't add coins at all
-  results.earnedCoins = 0;
+// Calculate coins for display but DON'T add them here
+let coinsToAdd = 0;
+if (isPractice && results.earnedCoins) {
+  coinsToAdd = results.earnedCoins;
+} else if (!isPractice && results.correct > 0) {
+  coinsToAdd = results.correct * 5;
 }
 
-  // Update daily streak
-  updateDailyStreak();
+// // Only add XP here for quiz mode
+// if (!isPractice && results.correct > 0) {
+//   const xpToAdd = results.correct * 10;
+//   addXP(xpToAdd);
+// }
+
+// Update daily streak (for both quiz and practice modes)
+updateDailyStreak();
+// Update results
 
 // Add debug logging
 console.log('Setting review snapshot with:', {
@@ -693,26 +670,27 @@ if (error) {
           />
         )}
 
-        {view === "results" && reviewSnapshot && (
-          <QuizResults
-            results={reviewSnapshot}
-            onRetake={handleRetake}
-            onReview={() => handleReview(reviewSnapshot)}
-            isRetake={isRetake}
-            isPractice={isPractice}
-            player={player}
-            categories={allCategories}
-            // addCoins={() => {}}  // Don't pass addCoins at all - remove this prop entirely
-            onNavigate={(path, options) => {
-              console.log('onNavigate called with:', path, options);
-              if (options?.state) {
-                navigate(path, { state: options.state, replace: options.replace || false });
-              } else {
-                navigate(path);
-              }
-            }}
-          />
-        )}
+  addCoins={(amount) => {
+        // Use GameDataService to properly track coins
+        const currentUser = UserService.getCurrentUser();
+        if (currentUser?.phone) {
+          if (isPractice) {
+            GameDataService.recordPracticeSession(currentUser.phone, {
+              questionsCompleted: reviewSnapshot.total,
+              correctAnswers: reviewSnapshot.correct,
+              category: category
+            });
+          } else {
+            GameDataService.recordQuizSession(currentUser.phone, {
+              score: reviewSnapshot.correct,
+              totalQuestions: reviewSnapshot.total,
+              category: category,
+              difficulty: difficulty,
+              mode: 'quiz'
+            });
+          }
+        }
+      }}
 
         {view === "review" && reviewSnapshot && (
           <QuizReview

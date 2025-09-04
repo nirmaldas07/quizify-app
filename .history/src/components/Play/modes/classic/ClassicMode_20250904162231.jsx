@@ -1,7 +1,6 @@
 // src/components/Play/modes/classic/ClassicMode.jsx
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import GameDataService from '../../../../services/GameDataService';
 import Papa from "papaparse";
 import { useGameData } from "../../shared/hooks/useGameData.js";
 import WheelScreen from "./WheelScreen.jsx";
@@ -369,11 +368,11 @@ const {
       qIndex: prev.qIndex + 1
     }));
 
- if (correct) {
-  GameDataService.addCoins(5, 'Classic Mode - Correct Answer');
-  GameDataService.addXP(1);
-  setPendingCoinBurst(true);
-}
+    if (correct) {
+      addCoins(5);
+      addXp(1);
+      setPendingCoinBurst(true);
+    }
 
     setNextProgressIdx(currentIdx);
     setLastAnswerWasCorrect(!!correct);

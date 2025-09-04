@@ -449,22 +449,22 @@ const QuizSession = ({
         setTimeout(() => setCoinAnimation(false), 3000);
       }, 1000);
     } else {
-    // For practice mode, go directly to completion
-    if (onComplete) {
+      // For practice mode, go directly to completion
+      if (onComplete) {
         onComplete({
-        questions,
-        answers,
-        skipped,
-        correct,
-        total,
-        mode,
-        category,
-        difficulty,
-        earnedStars,
-        // earnedCoins removed - calculated by GameDataService
-        finalStreak: streak
+          questions,
+          answers,
+          skipped,
+          correct,
+          total,
+          mode,
+          category,
+          difficulty,
+          earnedStars,
+        //   earnedCoins: earnedCoins, // earnedCoins removed - calculated by GameDataService
+          finalStreak: streak
         });
-    }
+      }
     }
   };
 

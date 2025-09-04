@@ -64,7 +64,7 @@ const navigate = useNavigate();
 const { player } = useGame();
 // Don't extract addCoins - use GameDataService directly
 const [currentProgress, setCurrentProgress] = useState(4);
-const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
+const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [totalLives, setTotalLives] = useState(4);
   const [animatingCoins, setAnimatingCoins] = useState(false);
   const [animatingLives, setAnimatingLives] = useState(false);

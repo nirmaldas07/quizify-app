@@ -107,7 +107,7 @@ export default function Quests() {
     },
   ]);
   
-  const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
+  const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [showRewardAnimation, setShowRewardAnimation] = useState(null);
   const [dailyProgress, setDailyProgress] = useState(0);
   const coinPillRef = useRef(null);

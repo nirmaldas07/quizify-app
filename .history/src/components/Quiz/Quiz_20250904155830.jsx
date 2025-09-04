@@ -148,8 +148,8 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { category } = useParams();
   const location = useLocation();
-  const { energy, useEnergy, player, updateDailyStreak } = useGame();
-// Don't extract addCoins or addXP - they shouldn't exist in context
+  const { energy, useEnergy, player, addCoins, addXP, updateDailyStreak } = useGame();
+//   const [routeKey, setRouteKey] = useState('');
 
   
   // Query params
@@ -414,16 +414,7 @@ export default function Quiz() {
 
   // Handlers
   const handleQuizComplete = useCallback((results) => {
-  console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
-  console.log("handleQuizComplete called at:", new Date().toISOString());
-  
-  // Add guard against duplicate calls
-  if (window._quizCompleting) {
-    console.warn("Quiz completion already in progress, ignoring duplicate call");
-    return;
-  }
-  window._quizCompleting = true;
-  setTimeout(() => { window._quizCompleting = false; }, 1000);
+    console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
     
     if (!results || !results.questions) {
       console.error("Invalid results object:", results);
@@ -702,7 +693,7 @@ if (error) {
             isPractice={isPractice}
             player={player}
             categories={allCategories}
-            // addCoins={() => {}}  // Don't pass addCoins at all - remove this prop entirely
+            addCoins={() => {}}  // Empty function since coins are already added via GameDataService
             onNavigate={(path, options) => {
               console.log('onNavigate called with:', path, options);
               if (options?.state) {

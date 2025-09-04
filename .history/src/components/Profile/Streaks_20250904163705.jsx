@@ -924,7 +924,7 @@ export default function Streaks() {
           </button>
           <div className="coin-pill" ref={coinPillRef} id="coin-pill">
             <span className="coin-icon">🪙</span>
-            <span className="coin-amount">{GameDataService.getCoins()}</span>
+            <span className="coin-amount">{playerCoins}</span>
           </div>
         </div>
         

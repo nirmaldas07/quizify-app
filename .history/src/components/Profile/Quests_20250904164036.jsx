@@ -107,7 +107,7 @@ export default function Quests() {
     },
   ]);
   
-  const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
+  const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [showRewardAnimation, setShowRewardAnimation] = useState(null);
   const [dailyProgress, setDailyProgress] = useState(0);
   const coinPillRef = useRef(null);
@@ -260,17 +260,16 @@ export default function Quests() {
     setShowRewardAnimation(quest.id);
     
     // Start coin flying animation
-setCoinFly({
-  startRect: {
-    left: window.innerWidth / 2 - 50,
-    top: window.innerHeight / 2,
-    width: 100,
-    height: 100
-  },
-  count: Math.min(quest.reward / 10, 10),
-  amount: quest.reward,
-  questTitle: quest.title // Add this for better tracking
-});
+    setCoinFly({
+        startRect: {
+        left: window.innerWidth / 2 - 50,
+        top: window.innerHeight / 2,
+        width: 100,
+        height: 100
+        },
+        count: Math.min(quest.reward / 10, 10),
+        amount: quest.reward
+    });
     
     setTimeout(() => {
         setItems(prev => prev.map(q => {

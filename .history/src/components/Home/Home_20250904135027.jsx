@@ -64,9 +64,7 @@ export default function Home() {
 });
   
   const navigate = useNavigate();
-  const gameContext = useGame();
-const { player, levelProgress, useEnergy, changeAvatar } = gameContext;
-// Don't extract addXP or addCoins - use GameDataService directly
+  const { player, addXP, addCoins, levelProgress, useEnergy, changeAvatar } = useGame();
   
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
   const [playWrong] = useSound("/sounds/wrong.mp3", { volume: 0.6 });
@@ -205,10 +203,10 @@ const { player, levelProgress, useEnergy, changeAvatar } = gameContext;
       const currentStreak = Number(localStorage.getItem('dq_streak') || 0);
       localStorage.setItem('dq_streak', String(currentStreak + 1));
       
-      // DON'T add coins here - let CoinFly animation handle it
-      // Just update the streak
+      // Record in GameDataService for proper daily tracking
       const currentUser = UserService.getCurrentUser();
       if (currentUser?.phone) {
+        // Update the user's streak in GameDataService
         GameDataService.updateStreak(currentUser.phone);
       }
     }
@@ -359,27 +357,14 @@ const { player, levelProgress, useEnergy, changeAvatar } = gameContext;
             startRect={coinFly.startRect}
             targetRef={coinPillRef}
             count={coinFly.count}
-onDone={() => {
-  if (!dailyCoinsAdded) {
-    // Use GameDataService as single source of truth
-    const currentUser = UserService.getCurrentUser();
-    if (currentUser?.phone) {
-      GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
-      GameDataService.addXP(DAILY_Q_XP);
-      GameDataService.updateQuestProgress(currentUser.phone, 'daily_challenge', 1);
-    } else {
-      // Fallback for non-logged in users - still use GameDataService
-      GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
-      GameDataService.addXP(DAILY_Q_XP);
-    }
-    
-    // DO NOT call addCoins or addXP from context
-    // The context should read from GameDataService
-    
-    setDailyCoinsAdded(true);
-  }
-  setCoinFly(null);
-}}
+            onDone={() => {
+            if (!dailyCoinsAdded) {
+                addXP(DAILY_Q_XP);
+                addCoins(coinFly.amount);
+                setDailyCoinsAdded(true);
+            }
+            setCoinFly(null);
+            }}
           />
         )}
 
@@ -394,14 +379,14 @@ onDone={() => {
             </div>
             
           <div className="flex gap-2">
-          <button
-            ref={coinPillRef}
-            onClick={() => setShowCoinsInfo(true)}
-            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 flex items-center gap-2 hover:from-yellow-500/20 hover:to-orange-500/20 transition"
-          >
-            <span className="text-lg">🪙</span>
-            <span className="font-bold">{GameDataService.getCoins()}</span>
-          </button>
+            <button
+              ref={coinPillRef}
+              onClick={() => setShowCoinsInfo(true)}
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 flex items-center gap-2 hover:from-yellow-500/20 hover:to-orange-500/20 transition"
+            >
+              <span className="text-lg">🪙</span>
+              <span className="font-bold">{player.coins}</span>
+            </button>
           </div>
           </div>
           

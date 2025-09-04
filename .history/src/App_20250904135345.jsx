@@ -70,9 +70,8 @@ function GameProvider({ children }) {
     coins: gameData.coins,
     xp: gameData.xp,
     level: gameData.level,
-    // DON'T pass addCoins or addXP - components should use GameDataService directly
-    // addCoins: gameData.addCoins,  // REMOVED
-    // addXP: gameData.addXp,  // REMOVED
+    addCoins: gameData.addCoins,  // Use GameDataService version
+    addXP: gameData.addXp,  // Use GameDataService version
     recordQuizComplete: gameData.recordQuizComplete,
     recordPracticeComplete: gameData.recordPracticeComplete,
     getTodaySummary: gameData.getTodaySummary,

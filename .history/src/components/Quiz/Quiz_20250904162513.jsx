@@ -702,7 +702,7 @@ if (error) {
             isPractice={isPractice}
             player={player}
             categories={allCategories}
-            // addCoins={() => {}}  // Don't pass addCoins at all - remove this prop entirely
+            addCoins={() => {}}  // Empty function since coins are already added via GameDataService
             onNavigate={(path, options) => {
               console.log('onNavigate called with:', path, options);
               if (options?.state) {

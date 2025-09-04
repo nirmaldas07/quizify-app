@@ -264,7 +264,7 @@ const userStats = {
               <div className="text-2xl">⚡</div>
               <div>
                 <div className="text-sm font-bold">QUESTS</div>
-                <div className="text-[11px] opacity-80">{summary?.activeQuests || 2} active goals</div>
+                <div className="text-[11px] opacity-80">2 active goals</div>
               </div>
             </div>
           </button>

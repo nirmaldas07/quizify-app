@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import CoinFly from "../Shared/CoinFly";
 import useSound from "use-sound";
-import GameDataService from '../../services/GameDataService';
 
 // Categories Configuration
 const categories = [
@@ -71,8 +70,8 @@ const QuizResults = ({
   onNavigate = (path, state) => {},
   isRetake = false,
   isPractice = false,
-  player = { level: 1, coins: 0, combo: 0, energy: 5 },
-  categories: categoriesProp = []
+  player = { level: 1, coins: 0, combo: 0, energy: 5 },player = { level: 1, coins: 0, combo: 0, energy: 5 },
+categories: categoriesProp = []
 // Remove addCoins parameter - we'll use GameDataService directly
 }) => {
 
@@ -462,10 +461,11 @@ useEffect(() => {
             onDone={() => {
             // Add coins only once
             if (coinFly.amount > 0 && !coinsAdded) {
-                console.log('[QuizResults] Coins already added by GameDataService');
+                console.log('[QuizResults] Adding coins once:', coinFly.amount);
+                addCoins(coinFly.amount);
                 setCoinsAdded(true);
-                // Just update display to reflect the coins that were already added
-                setDisplayCoins(GameDataService.getCoins());
+                // Update display to show new total
+                setDisplayCoins(player.coins + coinFly.amount);
             }
             setCoinFly(null);
             }}

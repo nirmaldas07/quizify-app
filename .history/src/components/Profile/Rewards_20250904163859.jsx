@@ -64,7 +64,7 @@ const navigate = useNavigate();
 const { player } = useGame();
 // Don't extract addCoins - use GameDataService directly
 const [currentProgress, setCurrentProgress] = useState(4);
-const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
+const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [totalLives, setTotalLives] = useState(4);
   const [animatingCoins, setAnimatingCoins] = useState(false);
   const [animatingLives, setAnimatingLives] = useState(false);
@@ -169,7 +169,7 @@ if (reward.cost > 0) {
         setAnimatingCoins(true);
         setTimeout(() => {
           setTotalCoins(prev => prev + reward.value);
-          GameDataService.addCoins(reward.value, `Reward Claimed: ${reward.label}`);
+          addCoins(reward.value); // Add to global balance
           setTimeout(() => {
             setAnimatingCoins(false);
             setCoinChange(0);

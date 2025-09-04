@@ -4,7 +4,6 @@ import useSound from 'use-sound';
 import Papa from 'papaparse';
 import SwipeDiscovery from './SwipeDiscovery';
 import { useNavigate } from 'react-router-dom';
-import GameDataService from '../../services/GameDataService';
 
 const SwipeQuiz = () => {
   const navigate = useNavigate();
@@ -497,11 +496,8 @@ useEffect(() => {
     // Hide nav when showing results
     document.body.classList.add('hide-bottom-nav');
     
-  const timer = setTimeout(() => {
-    // Add coins through GameDataService
-    if (sessionCoins > 0) {
-        GameDataService.addCoins(sessionCoins, 'Swipe Quiz Session');
-    }
+    const timer = setTimeout(() => {
+        addCoins(sessionCoins);
         // Reset everything BEFORE changing views
         resetQuizState();
         setIsInQuiz(false); // Critical: reset this

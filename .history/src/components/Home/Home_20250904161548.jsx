@@ -65,8 +65,9 @@ export default function Home() {
   
   const navigate = useNavigate();
   const gameContext = useGame();
-const { player, levelProgress, useEnergy, changeAvatar } = gameContext;
-// Don't extract addXP or addCoins - use GameDataService directly
+const { player, addXP, levelProgress, useEnergy, changeAvatar } = gameContext;
+// Use the GameDataService version of addCoins if available
+const addCoins = gameContext.addCoins || gameContext.player.addCoins;
   
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
   const [playWrong] = useSound("/sounds/wrong.mp3", { volume: 0.6 });

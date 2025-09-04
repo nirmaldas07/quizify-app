@@ -65,8 +65,9 @@ export default function Home() {
   
   const navigate = useNavigate();
   const gameContext = useGame();
-const { player, levelProgress, useEnergy, changeAvatar } = gameContext;
-// Don't extract addXP or addCoins - use GameDataService directly
+const { player, addXP, levelProgress, useEnergy, changeAvatar } = gameContext;
+// Use the GameDataService version of addCoins if available
+const addCoins = gameContext.addCoins || gameContext.player.addCoins;
   
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
   const [playWrong] = useSound("/sounds/wrong.mp3", { volume: 0.6 });
@@ -400,7 +401,7 @@ onDone={() => {
             className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 flex items-center gap-2 hover:from-yellow-500/20 hover:to-orange-500/20 transition"
           >
             <span className="text-lg">🪙</span>
-            <span className="font-bold">{GameDataService.getCoins()}</span>
+            <span className="font-bold">{GameDataService.getCoins() || player.coins || 0}</span>
           </button>
           </div>
           </div>

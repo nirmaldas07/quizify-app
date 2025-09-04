@@ -462,10 +462,11 @@ useEffect(() => {
             onDone={() => {
             // Add coins only once
             if (coinFly.amount > 0 && !coinsAdded) {
-                console.log('[QuizResults] Coins already added by GameDataService');
+                console.log('[QuizResults] Adding coins once:', coinFly.amount);
+                addCoins(coinFly.amount);
                 setCoinsAdded(true);
-                // Just update display to reflect the coins that were already added
-                setDisplayCoins(GameDataService.getCoins());
+                // Update display to show new total
+                setDisplayCoins(player.coins + coinFly.amount);
             }
             setCoinFly(null);
             }}

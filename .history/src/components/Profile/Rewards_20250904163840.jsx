@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import GameDataService from '../../services/GameDataService';
 
 
 const RewardsJourney = () => {
@@ -64,7 +63,7 @@ const navigate = useNavigate();
 const { player } = useGame();
 // Don't extract addCoins - use GameDataService directly
 const [currentProgress, setCurrentProgress] = useState(4);
-const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
+const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [totalLives, setTotalLives] = useState(4);
   const [animatingCoins, setAnimatingCoins] = useState(false);
   const [animatingLives, setAnimatingLives] = useState(false);
@@ -147,10 +146,10 @@ const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
       setShowInsufficientCoinsModal(true);
       return;
     }
-if (reward.cost > 0) {
-  setTotalCoins(prev => prev - reward.cost);
-  GameDataService.addCoins(-reward.cost, `Reward Purchase: ${reward.label}`);
-}
+    if (reward.cost > 0) {
+    setTotalCoins(prev => prev - reward.cost);
+    addCoins(-reward.cost); // Deduct from global balance
+    }
     
     playSound(rewardSound);
     setShowClaimEffect(true);
@@ -169,7 +168,7 @@ if (reward.cost > 0) {
         setAnimatingCoins(true);
         setTimeout(() => {
           setTotalCoins(prev => prev + reward.value);
-          GameDataService.addCoins(reward.value, `Reward Claimed: ${reward.label}`);
+          addCoins(reward.value); // Add to global balance
           setTimeout(() => {
             setAnimatingCoins(false);
             setCoinChange(0);
