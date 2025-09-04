@@ -515,21 +515,6 @@ export default function SignIn() {
       )}
 
       <style jsx>{`
-        @keyframes bounce-in {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes scale-in {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-        .animate-bounce-in {
-            animation: bounce-in 0.5s ease-out;
-        }
-        .animate-scale-in {
-            animation: scale-in 0.3s ease-out 0.2s both;
-        }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-5px); }

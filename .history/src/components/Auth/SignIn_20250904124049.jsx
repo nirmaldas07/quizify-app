@@ -21,8 +21,6 @@ export default function SignIn() {
 
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [newPassword, setNewPassword] = useState('');
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
   
   useEffect(() => {
     // Check if credentials were remembered
@@ -477,8 +475,13 @@ export default function SignIn() {
                     const users = JSON.parse(localStorage.getItem('users') || '{}');
                     if (users[phone]) {
                       users[phone].password = newPassword;
-                        localStorage.setItem('users', JSON.stringify(users));
-                        // Show success message
+                      localStorage.setItem('users', JSON.stringify(users));
+                      setPassword(newPassword);
+                      setShowPasswordReset(false);
+                      setNewPassword('');
+                      // Show success feedback
+                      setError('');
+                      // Show success message
                         setShowPasswordReset(false);
                         setNewPassword('');
                         setPassword(newPassword);
@@ -500,36 +503,7 @@ export default function SignIn() {
         </div>
       )}
 
-      {/* Success Message */}
-      {showSuccessMessage && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-          <div className="bg-green-500 rounded-2xl px-8 py-6 animate-bounce-in">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 animate-scale-in">
-                <span className="text-green-500 text-3xl">✓</span>
-              </div>
-              <p className="text-white font-semibold text-lg">Password reset successfully!</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       <style jsx>{`
-        @keyframes bounce-in {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes scale-in {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-        .animate-bounce-in {
-            animation: bounce-in 0.5s ease-out;
-        }
-        .animate-scale-in {
-            animation: scale-in 0.3s ease-out 0.2s both;
-        }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-5px); }

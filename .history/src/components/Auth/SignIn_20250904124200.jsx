@@ -477,8 +477,13 @@ export default function SignIn() {
                     const users = JSON.parse(localStorage.getItem('users') || '{}');
                     if (users[phone]) {
                       users[phone].password = newPassword;
-                        localStorage.setItem('users', JSON.stringify(users));
-                        // Show success message
+                      localStorage.setItem('users', JSON.stringify(users));
+                      setPassword(newPassword);
+                      setShowPasswordReset(false);
+                      setNewPassword('');
+                      // Show success feedback
+                      setError('');
+                      // Show success message
                         setShowPasswordReset(false);
                         setNewPassword('');
                         setPassword(newPassword);
@@ -499,7 +504,7 @@ export default function SignIn() {
           </div>
         </div>
       )}
-
+      
       {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
@@ -515,21 +520,6 @@ export default function SignIn() {
       )}
 
       <style jsx>{`
-        @keyframes bounce-in {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes scale-in {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-        .animate-bounce-in {
-            animation: bounce-in 0.5s ease-out;
-        }
-        .animate-scale-in {
-            animation: scale-in 0.3s ease-out 0.2s both;
-        }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-5px); }
