@@ -387,19 +387,16 @@ export default function SignIn() {
         href="#" 
         onClick={(e) => {
             e.preventDefault();
-            const resetPassword = prompt('Enter new password (min 6 characters):');
-            if (resetPassword && resetPassword.length >= 6) {
-                const users = JSON.parse(localStorage.getItem('users') || '{}');
-                if (users[phone]) {
-                users[phone].password = resetPassword;
+            // Simple password reset for local storage
+            if (window.confirm('Reset password to 123456?')) {
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[phone]) {
+                users[phone].password = '123456';
                 localStorage.setItem('users', JSON.stringify(users));
-                alert(`Password changed successfully!\nYour new password is: ${resetPassword}\n\nPlease write it down!`);
-                setPassword(resetPassword); // Auto-fill the new password
-                }
-            } else if (resetPassword) {
-                alert('Password must be at least 6 characters');
+                alert('Password reset to: 123456');
             }
-            }}
+            }
+        }}
           >
             Forgot password?
           </a>
