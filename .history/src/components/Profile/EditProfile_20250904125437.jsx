@@ -162,8 +162,8 @@ export default function EditProfile() {
               />
               
                 <div className="grid grid-cols-2 gap-3">
-                {/* Gender Selection - Always editable in edit mode */}
-                {isEditMode ? (
+                {/* Gender Selection */}
+                {isEditMode && (!profileData.gender || profileData.gender === 'Not set') ? (
                     <div>
                     <label className="text-xs text-white/60 mb-1 block">Gender</label>
                     <select
@@ -173,7 +173,7 @@ export default function EditProfile() {
                                 text-white transition-all duration-200 hover:bg-white/10 
                                 focus:bg-white/10 focus:border-white/30 focus:outline-none"
                     >
-                        <option value="">Not set</option>
+                        <option value="">Select</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
@@ -184,11 +184,12 @@ export default function EditProfile() {
                     label="Gender"
                     value={profileData.gender || 'Not set'}
                     disabled={true}
+                    placeholder="Set during signup"
                     />
                 )}
                 
-                {/* Age Group Selection - Always editable in edit mode */}
-                {isEditMode ? (
+                {/* Age Group Selection */}
+                {isEditMode && (!profileData.ageGroup || profileData.ageGroup === 'Not set') ? (
                     <div>
                     <label className="text-xs text-white/60 mb-1 block">Age Group</label>
                     <select
@@ -198,7 +199,7 @@ export default function EditProfile() {
                                 text-white transition-all duration-200 hover:bg-white/10 
                                 focus:bg-white/10 focus:border-white/30 focus:outline-none"
                     >
-                        <option value="">Not set</option>
+                        <option value="">Select</option>
                         <option value="under-5">Under 5 yrs</option>
                         <option value="5-10">5-10 yrs</option>
                         <option value="11-15">11-15 yrs</option>
@@ -211,6 +212,7 @@ export default function EditProfile() {
                     label="Age Group"
                     value={profileData.ageGroup || 'Not set'}
                     disabled={true}
+                    placeholder="Set during signup"
                     />
                 )}
                 </div>
