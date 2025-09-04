@@ -442,8 +442,8 @@ const {
   // Handle game completion
   const handleFinalTreasure = () => {
     // Award final treasure bonus
-    GameDataService.addCoins(GAME_CONSTANTS.FINAL_TREASURE_REWARD, 'Treasure Hunt - Final Treasure');
-    GameDataService.addXP(10); // Bonus XP for completing the game
+    addCoins(GAME_CONSTANTS.FINAL_TREASURE_REWARD);
+    addXp(10); // Bonus XP for completing the game
     
     setTotalStats(prev => ({
       ...prev,

@@ -31,7 +31,7 @@ export function useGameState() {
   const [player, setPlayer] = useState(() => {
     const saved = localStorage.getItem(GAME_CONSTANTS.STORAGE_KEYS.PLAYER);
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (saved) {
+    if (saved) {if (saved) {
     const savedPlayer = JSON.parse(saved);
     // Update name from currentUser if available
     if (currentUser.username) {

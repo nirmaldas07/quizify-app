@@ -34,19 +34,6 @@ export default function WheelScreen({
   const wheelRef = useRef(null);
   const [coinVector, setCoinVector] = useState({ dx: 110, dy: -260 });
   const [showCoinAnim, setShowCoinAnim] = useState(false);
-  const [currentCoins, setCurrentCoins] = useState(GameDataService.getCoins());
-
-    // Refresh coins periodically
-    useEffect(() => {
-    const refreshCoins = () => {
-        setCurrentCoins(GameDataService.getCoins());
-    };
-    
-    // Refresh every second while wheel screen is active
-    const interval = setInterval(refreshCoins, 1000);
-    
-    return () => clearInterval(interval);
-    }, []);
 
   useEffect(() => {
     document.body.classList.add('hide-bottom-nav');
@@ -103,7 +90,7 @@ export default function WheelScreen({
                 <div className="h-1 bg-brand-blue rounded" style={{ width: `${Math.min(xp / nextThreshold, 1) * 100}%` }} />
               </div>
             </button>
-            <button ref={coinTargetRef} className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border translate-y-[4px]">🪙 {currentCoins}</button>
+            <button ref={coinTargetRef} className="px-3 py-1 rounded-2xl bg-white/5 border border-base-border translate-y-[4px]">🪙 {coins}</button>
           </div>
 
           <button

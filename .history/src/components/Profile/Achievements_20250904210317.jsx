@@ -18,7 +18,7 @@ export default function Achievements() {
 // Don't extract addCoins - use GameDataService directly
   const [items, setItems] = useState(init);
   const [claimingId, setClaimingId] = useState(null);
-  const [totalCoins, setTotalCoins] = useState(GameDataService.getCoins());
+  const [totalCoins, setTotalCoins] = useState(player?.coins || 0);
   const [showCelebration, setShowCelebration] = useState(false);
   const [sparkles, setSparkles] = useState([]);
 
@@ -48,7 +48,7 @@ export default function Achievements() {
     setTimeout(() => {
       setItems(prev => prev.map(a => a.id === id ? { ...a, claimed: true } : a));
       setTotalCoins(prev => prev + reward);
-      GameDataService.addCoins(reward, `Achievement: ${items.find(a => a.id === id)?.title || 'Completed'}`);
+      addCoins(reward); // Actually add coins to player balance
       setClaimingId(null);
       setShowCelebration(true);
       

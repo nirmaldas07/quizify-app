@@ -1,8 +1,17 @@
 import { useState, useEffect } from 'react';
-// import GameDataService from './services/GameDataService';
-import GameDataService from '../../services/GameDataService';
+import GameDataService from '../services/GameDataService';
 
 export default function WelcomeBack({ player, onContinue }) {
+  // Check session storage immediately in initial state
+
+  // temporary k , later just activate this code
+
+//   const [show, setShow] = useState(() => {
+//     const shownInSession = sessionStorage.getItem('welcomeShown');
+//     return shownInSession !== 'true';
+//   });
+
+
   const [show, setShow] = useState(() => {
   // Check if just signed up
   const justSignedUp = sessionStorage.getItem('justSignedUp');

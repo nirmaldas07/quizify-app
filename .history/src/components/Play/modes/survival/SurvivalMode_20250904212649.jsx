@@ -6,8 +6,6 @@ import { useGameData } from "../../shared/hooks/useGameData.js";
 import LivesDisplay from "./LivesDisplay.jsx";
 import QuestionScreen from "./QuestionScreen.jsx";
 import GameOverScreen from "./GameOverScreen.jsx";
-import GameDataService from '../../../../services/GameDataService';
-
 
 const DIFFICULTY_TIERS = {
   EASY: { min: 0, max: 9, timer: 30, points: 10 },
@@ -243,8 +241,8 @@ const {
       return newStreak;
     });
 
-    GameDataService.addCoins(Math.floor(points / 10), 'Survival Mode - Correct Answer');
-GameDataService.addXP(1);
+    addCoins(Math.floor(points / 10));
+    addXp(1);
     if (soundOn) playSound("/sounds/correct.mp3", 0.7);
   };
 

@@ -400,8 +400,8 @@ const {
     }));
     
     // Add coins to user account
-    GameDataService.addCoins(finalCoins, `Treasure Hunt - ${island.name} Island`);
-    GameDataService.addXP(currentSession.correctAnswers);
+    addCoins(finalCoins);
+    addXp(currentSession.correctAnswers);
     
     // Update session with final coins
     setCurrentSession(prev => ({ ...prev, coinsEarned: finalCoins }));
@@ -442,8 +442,8 @@ const {
   // Handle game completion
   const handleFinalTreasure = () => {
     // Award final treasure bonus
-    GameDataService.addCoins(GAME_CONSTANTS.FINAL_TREASURE_REWARD, 'Treasure Hunt - Final Treasure');
-    GameDataService.addXP(10); // Bonus XP for completing the game
+    addCoins(GAME_CONSTANTS.FINAL_TREASURE_REWARD);
+    addXp(10); // Bonus XP for completing the game
     
     setTotalStats(prev => ({
       ...prev,

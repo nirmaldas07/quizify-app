@@ -53,7 +53,7 @@ AVATARS: [
       emoji: '🔬', 
       name: 'Science Master', 
       unlockLevel: 10,
-    //   unlocked: false,
+      unlocked: false,
       bgColor: 'from-orange-500 to-red-500'
     },
     { 
@@ -61,7 +61,7 @@ AVATARS: [
       emoji: '🎨', 
       name: 'Creative Mind', 
       unlockLevel: 15,
-    //   unlocked: false,
+      unlocked: false,
       bgColor: 'from-pink-500 to-rose-500'
     }
   ],

@@ -32,19 +32,13 @@ export function useGameState() {
     const saved = localStorage.getItem(GAME_CONSTANTS.STORAGE_KEYS.PLAYER);
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     if (saved) {
-    const savedPlayer = JSON.parse(saved);
-    // Update name from currentUser if available
-    if (currentUser.username) {
-      savedPlayer.name = currentUser.username.split(' ')[0];
+      const savedPlayer = JSON.parse(saved);
+      // Update name from currentUser if available
+      if (currentUser.username) {
+        savedPlayer.name = currentUser.username.split(' ')[0];
+      }
+      return savedPlayer;
     }
-    
-    // Ensure unlockedAvatars exists
-    if (!savedPlayer.unlockedAvatars) {
-      savedPlayer.unlockedAvatars = ['wizard', 'knight'];
-    }
-    
-    return savedPlayer;
-  }
     return defaultPlayerState;
   });
 
