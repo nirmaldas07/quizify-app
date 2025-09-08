@@ -24,7 +24,9 @@ export default function DailyChallenge({ onCoinsUpdate }) {
   const [usedLifelines, setUsedLifelines] = useState({ fifty: false, audience: false });
   const [showBuyLifeModal, setShowBuyLifeModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [timeUntilTomorrow, setTimeUntilTomorrow] = useState('');
+  
+  // Refs
+  const containerRef = useRef(null);
   
   // Sound effects
   const [playCorrect] = useSound('/sounds/correct.mp3', { volume: 0.6 });
@@ -47,27 +49,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     loadSession();
     loadStreak();
   }, []);
-
-  // Timer for next day
-  useEffect(() => {
-    if (stage === 'complete') {
-      const timer = setInterval(() => {
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
-        
-        const diff = tomorrow - now;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        setTimeUntilTomorrow(`${hours}h ${minutes}m ${seconds}s`);
-      }, 1000);
-      
-      return () => clearInterval(timer);
-    }
-  }, [stage]);
 
   const loadStreak = () => {
     const user = UserService.getCurrentUser();
@@ -114,6 +95,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
       setAnswers(new Array(TOTAL_QUESTIONS).fill(null));
       setStage('idle');
     } catch (error) {
+      // Fallback
       setQuestions(getFallbackQuestions());
       setAnswers(new Array(TOTAL_QUESTIONS).fill(null));
       setStage('idle');
@@ -151,12 +133,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     setScore(0);
     setLives(1);
     setUsedLifelines({ fifty: false, audience: false });
-    
-    // Find first unanswered question
-    const firstUnanswered = answers.findIndex(a => a === null);
-    if (firstUnanswered !== -1) {
-      setCurrentIndex(firstUnanswered);
-    }
   };
 
   const handleAnswer = (optionIndex) => {
@@ -173,64 +149,53 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     if (isCorrect) {
       playCorrect();
       setScore(score + 1);
+      
+      // Auto move to next
+      setTimeout(() => {
+        moveToNext();
+      }, 1500);
+      
     } else {
       playWrong();
       setLives(lives - 1);
-    }
-    
-    // Check if all questions are answered
-    setTimeout(() => {
-      const answeredCount = newAnswers.filter(a => a !== null).length;
-      if (answeredCount === TOTAL_QUESTIONS) {
-        completeSession(newAnswers);
+      
+      // Check if game over or move to next
+      if (lives <= 1) {
+        setTimeout(() => {
+          moveToNext();
+        }, 1500);
       } else {
-        moveToNextUnanswered(newAnswers);
+        setTimeout(() => {
+          setIsProcessing(false);
+        }, 1500);
       }
-    }, 1500);
+    }
   };
 
-  const moveToNextUnanswered = (currentAnswers) => {
-    // Find next unanswered question
-    let nextUnanswered = -1;
-    for (let i = currentIndex + 1; i < TOTAL_QUESTIONS; i++) {
-      if (currentAnswers[i] === null) {
-        nextUnanswered = i;
-        break;
-      }
+  const moveToNext = () => {
+    if (currentIndex >= TOTAL_QUESTIONS - 1) {
+      completeSession();
+      return;
     }
     
-    // If no more after current, check from beginning
-    if (nextUnanswered === -1) {
-      for (let i = 0; i < currentIndex; i++) {
-        if (currentAnswers[i] === null) {
-          nextUnanswered = i;
-          break;
-        }
-      }
-    }
+    setIsSliding(true);
+    setSlideDirection('left');
+    playSwipe?.();
     
-    if (nextUnanswered !== -1) {
-      setIsSliding(true);
-      setSlideDirection('left');
-      playSwipe?.();
-      
-      setTimeout(() => {
-        setCurrentIndex(nextUnanswered);
-        setSelectedOption(null);
-        setEliminatedOptions([]);
-        setAudienceVotes([]);
-        setIsSliding(false);
-        setIsProcessing(false);
-      }, 300);
-    } else {
+    setTimeout(() => {
+      setCurrentIndex(currentIndex + 1);
+      setSelectedOption(null);
+      setEliminatedOptions([]);
+      setAudienceVotes([]);
+      setIsSliding(false);
       setIsProcessing(false);
-    }
+    }, 300);
   };
 
   const handleNavigate = (direction) => {
-    const newIndex = direction === 'next' 
-      ? (currentIndex + 1) % TOTAL_QUESTIONS
-      : (currentIndex - 1 + TOTAL_QUESTIONS) % TOTAL_QUESTIONS;
+    const newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+    
+    if (newIndex < 0 || newIndex >= TOTAL_QUESTIONS) return;
     
     playClick?.();
     setIsSliding(true);
@@ -258,14 +223,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
   };
 
   const confirmLifeline = () => {
-    // Deduct coins immediately
-    const success = GameDataService.spendCoins(LIFELINE_COST, `${lifelineType === 'fifty' ? '50:50' : 'Audience'} Lifeline`);
-    
-    if (!success) {
-      alert('Insufficient coins!');
-      setShowLifelineModal(false);
-      return;
-    }
+    GameDataService.spendCoins(LIFELINE_COST, `${lifelineType === 'fifty' ? '50:50' : 'Audience'} Lifeline`);
     
     if (lifelineType === 'fifty') {
       const correct = questions[currentIndex].correct;
@@ -293,40 +251,67 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     if (onCoinsUpdate) onCoinsUpdate();
   };
 
-  const completeSession = (finalAnswers = answers) => {
-    const correctCount = finalAnswers.filter(a => a?.correct).length;
-    const baseCoins = correctCount * COINS_PER_CORRECT;
-    const isPerfect = correctCount === TOTAL_QUESTIONS;
+  const handleBuyLife = () => {
+    const currentCoins = GameDataService.getCoins();
+    
+    if (currentCoins < EXTRA_LIFE_COST) {
+      alert(`You need ${EXTRA_LIFE_COST} coins for an extra life!`);
+      return;
+    }
+    
+    GameDataService.spendCoins(EXTRA_LIFE_COST, 'Extra Life');
+    setLives(lives + 1);
+    playClick?.();
+    setShowBuyLifeModal(false);
+    if (onCoinsUpdate) onCoinsUpdate();
+  };
+
+  const completeSession = () => {
+    // Calculate final score
+    const baseCoins = score * COINS_PER_CORRECT;
+    const isPerfect = score === TOTAL_QUESTIONS;
     const finalCoins = isPerfect ? baseCoins * PERFECT_MULTIPLIER : baseCoins;
     
+    // Add rewards
     GameDataService.addCoins(finalCoins, 'Daily Challenge');
-    GameDataService.addXP(correctCount * XP_PER_CORRECT);
+    GameDataService.addXP(score * XP_PER_CORRECT);
     
+    // Save completion
     const today = new Date().toDateString();
     localStorage.setItem(`daily_complete_${today}`, JSON.stringify({
-      score: correctCount,
-      answers: finalAnswers,
+      score,
+      answers,
       isPerfect,
       finalCoins,
       timestamp: Date.now()
     }));
     
+    // Update streak
     const user = UserService.getCurrentUser();
     if (user?.phone) {
       GameDataService.updateStreak(user.phone);
-      const newStreakData = GameDataService.getStreakData(user.phone);
-      setStreak(newStreakData.current);
     }
     
+    // Play celebration
     if (isPerfect) {
       playClap();
     } else {
       playCoin();
     }
     
-    setScore(correctCount);
     setStage('complete');
     if (onCoinsUpdate) onCoinsUpdate();
+  };
+
+  const resetChallenge = () => {
+    localStorage.removeItem(`daily_complete_${new Date().toDateString()}`);
+    loadQuestions();
+    setStage('idle');
+    setCurrentIndex(0);
+    setAnswers([]);
+    setScore(0);
+    setLives(1);
+    setUsedLifelines({ fifty: false, audience: false });
   };
 
   // Complete state
@@ -336,42 +321,25 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     
     return (
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-600/20 to-blue-600/20 backdrop-blur border border-white/10 p-6 mb-6">
-        {/* Fireworks background for perfect score */}
+        <div className="absolute inset-0 bg-gradient-to-t from-purple-600/10 to-transparent animate-pulse" />
+        
+        {/* Confetti animation */}
         {isPerfect && (
-          <>
-            <div className="absolute inset-0 overflow-hidden">
-              {[...Array(15)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute animate-firework"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 3}s`
-                  }}
-                >
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-explode" />
-                </div>
-              ))}
-            </div>
-            
-            {/* Stars shower */}
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(30)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute animate-star-fall"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 3}s`,
-                    fontSize: `${15 + Math.random() * 15}px`
-                  }}
-                >
-                  ⭐
-                </div>
-              ))}
-            </div>
-          </>
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-confetti"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  fontSize: `${20 + Math.random() * 20}px`
+                }}
+              >
+                {['🎉', '⭐', '✨', '🎊'][Math.floor(Math.random() * 4)]}
+              </div>
+            ))}
+          </div>
         )}
         
         <div className="relative text-center">
@@ -391,31 +359,30 @@ export default function DailyChallenge({ onCoinsUpdate }) {
             </div>
           )}
           
-          <div className="flex justify-center gap-3 mb-4">
-            <div className="px-3 py-2 rounded-xl bg-white/10 backdrop-blur">
-              <div className="text-xl font-bold text-green-400">{score}</div>
+          <div className="flex justify-center gap-4 mb-4">
+            <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur">
+              <div className="text-2xl font-bold text-green-400">{score}</div>
               <div className="text-xs text-gray-400">/ {TOTAL_QUESTIONS}</div>
             </div>
             
-            <div className="px-3 py-2 rounded-xl bg-white/10 backdrop-blur">
-              <div className="text-xl font-bold text-yellow-400">+{finalCoins}</div>
+            <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur">
+              <div className="text-2xl font-bold text-yellow-400">+{finalCoins}</div>
               <div className="text-xs text-gray-400">Coins</div>
             </div>
             
             {streak > 0 && (
-              <div className="px-3 py-2 rounded-xl bg-white/10 backdrop-blur">
-                <div className="text-xl font-bold text-orange-400">🔥 {streak}</div>
+              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur">
+                <div className="text-2xl font-bold text-orange-400">🔥 {streak}</div>
                 <div className="text-xs text-gray-400">Streak</div>
               </div>
             )}
           </div>
           
           <button
-            disabled
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 text-gray-300 font-medium cursor-not-allowed"
+            onClick={resetChallenge}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium hover:opacity-90 transition-all transform hover:scale-[1.02]"
           >
-            <div className="font-medium">Play Tomorrow</div>
-            <div className="text-xs mt-1 opacity-75">{timeUntilTomorrow}</div>
+            Play Again
           </button>
         </div>
       </div>
@@ -483,93 +450,47 @@ export default function DailyChallenge({ onCoinsUpdate }) {
                 <span key={i} className="text-lg animate-heartbeat">❤️</span>
               ))}
             </div>
+            {lives === 0 && (
+              <button
+                onClick={() => setShowBuyLifeModal(true)}
+                className="px-2 py-1 rounded-lg bg-red-500/20 text-red-400 text-xs font-medium hover:bg-red-500/30"
+              >
+                +❤️ 30🪙
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Question */}
-        <div className="mb-6">
-          <p className="text-base font-medium leading-relaxed">{currentQ.question}</p>
-        </div>
-
-        {/* Options with navigation */}
-        <div className="relative px-8">
-          {/* Left navigation - more subtle and on edge */}
+        {/* Navigation */}
+        <div className="flex justify-between items-center mb-4">
           <button
             onClick={() => handleNavigate('prev')}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"
+            disabled={currentIndex === 0}
+            className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center ${
+              currentIndex === 0 ? 'opacity-30' : 'hover:bg-white/10'
+            }`}
           >
-            <span className="text-gray-400 text-sm">‹</span>
+            ◀
           </button>
           
-          {/* Right navigation - more subtle and on edge */}
+          <span className="text-sm text-gray-400">
+            Question {currentIndex + 1} of {TOTAL_QUESTIONS}
+          </span>
+          
           <button
             onClick={() => handleNavigate('next')}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"
+            disabled={currentIndex === TOTAL_QUESTIONS - 1}
+            className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center ${
+              currentIndex === TOTAL_QUESTIONS - 1 ? 'opacity-30' : 'hover:bg-white/10'
+            }`}
           >
-            <span className="text-gray-400 text-sm">›</span>
+            ▶
           </button>
-          
-          {/* Options */}
-          <div className="grid gap-2">
-            {currentQ.options.map((option, idx) => {
-              const isEliminated = eliminatedOptions.includes(idx);
-              const hasAudienceVote = audienceVotes.length > 0;
-              const isAnswered = answers[currentIndex] !== null;
-              const isSelected = answers[currentIndex]?.selected === idx;
-              const isCorrect = idx === currentQ.correct;
-              
-              let className = "relative overflow-hidden p-4 rounded-2xl text-left font-medium transition-all ";
-              
-              if (isEliminated) {
-                className += "opacity-30 cursor-not-allowed bg-gray-800";
-              } else if (isAnswered) {
-                if (isCorrect) {
-                  className += "bg-green-500/20 border-2 border-green-500";
-                } else if (isSelected) {
-                  className += "bg-red-500/20 border-2 border-red-500";
-                } else {
-                  className += "bg-white/5 border-2 border-transparent opacity-50";
-                }
-              } else {
-                className += "bg-white/5 border-2 border-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98]";
-              }
-              
-              return (
-                <button
-                  key={idx}
-                  onClick={() => !isEliminated && !isAnswered && handleAnswer(idx)}
-                  disabled={isEliminated || isAnswered}
-                  className={className}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{['🅰️', '🅱️', '🅲️', '🅳️'][idx]}</span>
-                      <span>{option}</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      {hasAudienceVote && (
-                        <span className="px-2 py-1 rounded-lg bg-purple-500/20 text-purple-400 text-xs">
-                          {audienceVotes[idx]}%
-                        </span>
-                      )}
-                      {isAnswered && isCorrect && (
-                        <span className="text-green-400">✓</span>
-                      )}
-                      {isAnswered && isSelected && !isCorrect && (
-                        <span className="text-red-400">✗</span>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
         </div>
 
-        {/* Lifelines - Below options */}
+        {/* Lifelines */}
         {answers[currentIndex] === null && (
-          <div className="flex justify-center gap-3 mt-4">
+          <div className="flex justify-center gap-3 mb-4">
             <button
               onClick={() => handleLifeline('fifty')}
               disabled={usedLifelines.fifty || eliminatedOptions.length > 0}
@@ -595,6 +516,68 @@ export default function DailyChallenge({ onCoinsUpdate }) {
             </button>
           </div>
         )}
+
+        {/* Question */}
+        <div className="mb-6">
+          <p className="text-base font-medium leading-relaxed">{currentQ.question}</p>
+        </div>
+
+        {/* Options */}
+        <div className="grid gap-2">
+          {currentQ.options.map((option, idx) => {
+            const isEliminated = eliminatedOptions.includes(idx);
+            const hasAudienceVote = audienceVotes.length > 0;
+            const isAnswered = answers[currentIndex] !== null;
+            const isSelected = answers[currentIndex]?.selected === idx;
+            const isCorrect = idx === currentQ.correct;
+            
+            let className = "relative overflow-hidden p-4 rounded-2xl text-left font-medium transition-all ";
+            
+            if (isEliminated) {
+              className += "opacity-30 cursor-not-allowed bg-gray-800";
+            } else if (isAnswered) {
+              if (isCorrect) {
+                className += "bg-green-500/20 border-2 border-green-500";
+              } else if (isSelected) {
+                className += "bg-red-500/20 border-2 border-red-500";
+              } else {
+                className += "bg-white/5 border-2 border-transparent opacity-50";
+              }
+            } else {
+              className += "bg-white/5 border-2 border-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98]";
+            }
+            
+            return (
+              <button
+                key={idx}
+                onClick={() => !isEliminated && !isAnswered && handleAnswer(idx)}
+                disabled={isEliminated || isAnswered}
+                className={className}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{['🅰️', '🅱️', '🅲️', '🅳️'][idx]}</span>
+                    <span>{option}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    {hasAudienceVote && (
+                      <span className="px-2 py-1 rounded-lg bg-purple-500/20 text-purple-400 text-xs">
+                        {audienceVotes[idx]}%
+                      </span>
+                    )}
+                    {isAnswered && isCorrect && (
+                      <span className="text-green-400">✓</span>
+                    )}
+                    {isAnswered && isSelected && !isCorrect && (
+                      <span className="text-red-400">✗</span>
+                    )}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Lifeline Modal */}
@@ -602,8 +585,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full">
             <h3 className="text-lg font-bold mb-4">Use {lifelineType === 'fifty' ? '50:50' : 'Audience'} Lifeline?</h3>
-            <p className="text-sm text-gray-400 mb-2">This will cost 20 coins</p>
-            <p className="text-xs text-gray-500 mb-6">Current balance: {GameDataService.getCoins()} coins</p>
+            <p className="text-sm text-gray-400 mb-6">This will cost 20 coins</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowLifelineModal(false)}
@@ -616,6 +598,30 @@ export default function DailyChallenge({ onCoinsUpdate }) {
                 className="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500"
               >
                 Use Lifeline
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Buy Life Modal */}
+      {showBuyLifeModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full">
+            <h3 className="text-lg font-bold mb-4">Buy Extra Life?</h3>
+            <p className="text-sm text-gray-400 mb-6">Get an extra chance for 30 coins</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowBuyLifeModal(false)}
+                className="flex-1 py-2 rounded-xl bg-gray-700 hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBuyLife}
+                className="flex-1 py-2 rounded-xl bg-gradient-to-r from-red-500 to-pink-500"
+              >
+                Buy Life
               </button>
             </div>
           </div>
@@ -639,45 +645,9 @@ export default function DailyChallenge({ onCoinsUpdate }) {
           75% { transform: translateY(-10px) rotate(5deg); }
         }
         
-        @keyframes star-fall {
-          0% { 
-            transform: translateY(-100vh) rotate(0); 
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% { 
-            transform: translateY(100vh) rotate(720deg); 
-            opacity: 0;
-          }
-        }
-        
-        @keyframes firework {
-          0% { 
-            transform: scale(0) rotate(0);
-            opacity: 1;
-          }
-          50% {
-            transform: scale(30) rotate(180deg);
-            opacity: 0.5;
-          }
-          100% { 
-            transform: scale(60) rotate(360deg);
-            opacity: 0;
-          }
-        }
-        
-        @keyframes explode {
-          0% { 
-            box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.8);
-          }
-          100% { 
-            box-shadow: 0 0 60px 60px rgba(251, 191, 36, 0);
-          }
+        @keyframes confetti {
+          0% { transform: translateY(-100vh) rotate(0); opacity: 1; }
+          100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
         
         .animate-shimmer {
@@ -692,16 +662,8 @@ export default function DailyChallenge({ onCoinsUpdate }) {
           animation: trophy-bounce 2s infinite;
         }
         
-        .animate-star-fall {
-          animation: star-fall 3s linear infinite;
-        }
-        
-        .animate-firework {
-          animation: firework 2s ease-out infinite;
-        }
-        
-        .animate-explode {
-          animation: explode 2s ease-out infinite;
+        .animate-confetti {
+          animation: confetti 3s linear infinite;
         }
         
         .slide-left {

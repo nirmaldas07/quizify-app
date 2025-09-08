@@ -178,22 +178,17 @@ export default function DailyChallenge({ onCoinsUpdate }) {
       setLives(lives - 1);
     }
     
-    // Check if all questions are answered
+    // Auto move to next unanswered question after delay
     setTimeout(() => {
-      const answeredCount = newAnswers.filter(a => a !== null).length;
-      if (answeredCount === TOTAL_QUESTIONS) {
-        completeSession(newAnswers);
-      } else {
-        moveToNextUnanswered(newAnswers);
-      }
+      moveToNextUnanswered();
     }, 1500);
   };
 
-  const moveToNextUnanswered = (currentAnswers) => {
+  const moveToNextUnanswered = () => {
     // Find next unanswered question
     let nextUnanswered = -1;
     for (let i = currentIndex + 1; i < TOTAL_QUESTIONS; i++) {
-      if (currentAnswers[i] === null) {
+      if (answers[i] === null) {
         nextUnanswered = i;
         break;
       }
@@ -202,11 +197,18 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     // If no more after current, check from beginning
     if (nextUnanswered === -1) {
       for (let i = 0; i < currentIndex; i++) {
-        if (currentAnswers[i] === null) {
+        if (answers[i] === null) {
           nextUnanswered = i;
           break;
         }
       }
+    }
+    
+    // Check if all questions are answered
+    const allAnswered = answers.every(a => a !== null);
+    if (allAnswered) {
+      completeSession();
+      return;
     }
     
     if (nextUnanswered !== -1) {
@@ -258,14 +260,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
   };
 
   const confirmLifeline = () => {
-    // Deduct coins immediately
-    const success = GameDataService.spendCoins(LIFELINE_COST, `${lifelineType === 'fifty' ? '50:50' : 'Audience'} Lifeline`);
-    
-    if (!success) {
-      alert('Insufficient coins!');
-      setShowLifelineModal(false);
-      return;
-    }
+    GameDataService.spendCoins(LIFELINE_COST, `${lifelineType === 'fifty' ? '50:50' : 'Audience'} Lifeline`);
     
     if (lifelineType === 'fifty') {
       const correct = questions[currentIndex].correct;
@@ -293,8 +288,8 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     if (onCoinsUpdate) onCoinsUpdate();
   };
 
-  const completeSession = (finalAnswers = answers) => {
-    const correctCount = finalAnswers.filter(a => a?.correct).length;
+  const completeSession = () => {
+    const correctCount = answers.filter(a => a?.correct).length;
     const baseCoins = correctCount * COINS_PER_CORRECT;
     const isPerfect = correctCount === TOTAL_QUESTIONS;
     const finalCoins = isPerfect ? baseCoins * PERFECT_MULTIPLIER : baseCoins;
@@ -305,7 +300,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     const today = new Date().toDateString();
     localStorage.setItem(`daily_complete_${today}`, JSON.stringify({
       score: correctCount,
-      answers: finalAnswers,
+      answers,
       isPerfect,
       finalCoins,
       timestamp: Date.now()
@@ -314,8 +309,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     const user = UserService.getCurrentUser();
     if (user?.phone) {
       GameDataService.updateStreak(user.phone);
-      const newStreakData = GameDataService.getStreakData(user.phone);
-      setStreak(newStreakData.current);
     }
     
     if (isPerfect) {
@@ -336,7 +329,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     
     return (
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-600/20 to-blue-600/20 backdrop-blur border border-white/10 p-6 mb-6">
-        {/* Fireworks background for perfect score */}
+        {/* Fireworks background */}
         {isPerfect && (
           <>
             <div className="absolute inset-0 overflow-hidden">
@@ -391,20 +384,20 @@ export default function DailyChallenge({ onCoinsUpdate }) {
             </div>
           )}
           
-          <div className="flex justify-center gap-3 mb-4">
-            <div className="px-3 py-2 rounded-xl bg-white/10 backdrop-blur">
-              <div className="text-xl font-bold text-green-400">{score}</div>
+          <div className="flex justify-center gap-4 mb-4">
+            <div className="px-4 py-3 rounded-xl bg-white/10 backdrop-blur">
+              <div className="text-2xl font-bold text-green-400">{score}</div>
               <div className="text-xs text-gray-400">/ {TOTAL_QUESTIONS}</div>
             </div>
             
-            <div className="px-3 py-2 rounded-xl bg-white/10 backdrop-blur">
-              <div className="text-xl font-bold text-yellow-400">+{finalCoins}</div>
+            <div className="px-4 py-3 rounded-xl bg-white/10 backdrop-blur">
+              <div className="text-2xl font-bold text-yellow-400">+{finalCoins}</div>
               <div className="text-xs text-gray-400">Coins</div>
             </div>
             
             {streak > 0 && (
-              <div className="px-3 py-2 rounded-xl bg-white/10 backdrop-blur">
-                <div className="text-xl font-bold text-orange-400">🔥 {streak}</div>
+              <div className="px-4 py-3 rounded-xl bg-white/10 backdrop-blur">
+                <div className="text-2xl font-bold text-orange-400">🔥 {streak}</div>
                 <div className="text-xs text-gray-400">Streak</div>
               </div>
             )}
@@ -412,10 +405,10 @@ export default function DailyChallenge({ onCoinsUpdate }) {
           
           <button
             disabled
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-600 to-gray-700 text-gray-300 font-medium cursor-not-allowed"
+            className="w-full py-3 rounded-xl bg-gray-700 text-gray-400 font-medium cursor-not-allowed"
           >
-            <div className="font-medium">Play Tomorrow</div>
-            <div className="text-xs mt-1 opacity-75">{timeUntilTomorrow}</div>
+            <div>Play Tomorrow</div>
+            <div className="text-xs mt-1">{timeUntilTomorrow}</div>
           </button>
         </div>
       </div>
@@ -492,21 +485,21 @@ export default function DailyChallenge({ onCoinsUpdate }) {
         </div>
 
         {/* Options with navigation */}
-        <div className="relative px-8">
-          {/* Left navigation - more subtle and on edge */}
+        <div className="relative">
+          {/* Left navigation */}
           <button
             onClick={() => handleNavigate('prev')}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"
+            className="absolute left-[-20px] top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 z-10"
           >
-            <span className="text-gray-400 text-sm">‹</span>
+            ◀
           </button>
           
-          {/* Right navigation - more subtle and on edge */}
+          {/* Right navigation */}
           <button
             onClick={() => handleNavigate('next')}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"
+            className="absolute right-[-20px] top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 z-10"
           >
-            <span className="text-gray-400 text-sm">›</span>
+            ▶
           </button>
           
           {/* Options */}
@@ -602,8 +595,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full">
             <h3 className="text-lg font-bold mb-4">Use {lifelineType === 'fifty' ? '50:50' : 'Audience'} Lifeline?</h3>
-            <p className="text-sm text-gray-400 mb-2">This will cost 20 coins</p>
-            <p className="text-xs text-gray-500 mb-6">Current balance: {GameDataService.getCoins()} coins</p>
+            <p className="text-sm text-gray-400 mb-6">This will cost 20 coins</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowLifelineModal(false)}
