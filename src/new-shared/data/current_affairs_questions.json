@@ -1,0 +1,1192 @@
+{
+  "current-affairs": [
+    {
+      "question": "Who is the current Prime Minister of India (as of 2024)?",
+      "options": [
+        "Narendra Modi",
+        "Rahul Gandhi",
+        "Amit Shah",
+        "Manmohan Singh"
+      ],
+      "answer": "Narendra Modi",
+      "explanation": "Narendra Modi is the current Prime Minister of India since 2014.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "Which country hosted the G20 Summit in 2023?",
+      "options": [
+        "India",
+        "Indonesia",
+        "Brazil",
+        "Japan"
+      ],
+      "answer": "India",
+      "explanation": "India hosted the G20 Summit in 2023.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "What is the name of the Indian moon mission that landed near the south pole?",
+      "options": [
+        "Chandrayaan-3",
+        "Mangalyaan",
+        "Gaganyaan",
+        "Chandrayaan-2"
+      ],
+      "answer": "Chandrayaan-3",
+      "explanation": "Chandrayaan-3 successfully landed near the moon's south pole in 2023.",
+      "difficulty": "easy"
+    },
+    {
+      "question": "Which company became the first to hit $3 trillion market cap?",
+      "options": [
+        "Apple",
+        "Microsoft",
+        "Amazon",
+        "Google"
+      ],
+      "answer": "Apple",
+      "explanation": "Apple was the first company to reach a $3 trillion market capitalization.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "Who won the 2023 Nobel Peace Prize?",
+      "options": [
+        "Narges Mohammadi",
+        "Greta Thunberg",
+        "Maria Ressa",
+        "Abiy Ahmed"
+      ],
+      "answer": "Narges Mohammadi",
+      "explanation": "Narges Mohammadi won for her fight against the oppression of women in Iran.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "Which country won the ICC Cricket World Cup 2023?",
+      "options": [
+        "Australia",
+        "India",
+        "England",
+        "New Zealand"
+      ],
+      "answer": "Australia",
+      "explanation": "Australia defeated India to win the 2023 ICC Cricket World Cup.",
+      "difficulty": "medium"
+    },
+    {
+      "question": "Which African country joined BRICS in 2024?",
+      "options": [
+        "Ethiopia",
+        "South Africa",
+        "Nigeria",
+        "Ghana"
+      ],
+      "answer": "Ethiopia",
+      "explanation": "Ethiopia became a BRICS member in 2024.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "What is the name of the AI regulation act passed by the EU in 2024?",
+      "options": [
+        "AI Act",
+        "Digital Trust Bill",
+        "Algorithmic Safety Act",
+        "EU Tech Code"
+      ],
+      "answer": "AI Act",
+      "explanation": "The EU passed the 'AI Act' in 2024 to regulate artificial intelligence.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General?",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 10)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 11)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 12)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 13)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 14)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 15)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 16)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 17)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 18)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 19)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 20)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 21)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 22)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 23)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 24)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 25)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 26)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 27)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 28)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 29)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 30)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 31)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 32)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 33)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 34)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 35)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 36)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 37)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 38)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 39)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 40)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 41)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 42)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 43)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 44)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 45)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 46)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 47)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 48)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 49)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 50)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 51)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 52)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 53)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 54)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 55)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 56)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 57)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 58)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 59)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 60)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 61)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 62)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 63)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 64)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 65)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 66)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 67)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 68)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 69)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 70)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 71)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 72)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 73)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 74)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 75)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 76)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 77)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 78)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 79)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 80)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 81)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 82)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 83)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 84)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 85)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 86)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 87)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 88)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 89)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 90)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 91)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 92)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 93)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 94)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 95)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 96)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 97)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 98)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Who is the current UN Secretary-General? (Update 99)",
+      "options": [
+        "Ant\u00f3nio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Volkan Bozk\u0131r"
+      ],
+      "answer": "Ant\u00f3nio Guterres",
+      "explanation": "Ant\u00f3nio Guterres has been the Secretary-General of the United Nations since 2017.",
+      "difficulty": "hard"
+    }
+  ]
+}
