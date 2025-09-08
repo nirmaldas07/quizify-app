@@ -274,7 +274,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
               <div className="text-[10px] text-gray-500">Coins</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-orange-400">🔥2</div>
+              <div className="text-lg font-bold text-orange-400">🔥 {streak}</div>
               <div className="text-[10px] text-gray-500">Streak</div>
             </div>
           </div>
@@ -300,7 +300,14 @@ export default function DailyChallenge({ onCoinsUpdate }) {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-semibold">Daily Challenge</h3>
+            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
+              Daily Challenge
+              {streak > 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400">
+                  🔥 {streak}
+                </span>
+              )}
+            </h3>
             <p className="text-xs text-gray-400">{TOTAL_QUESTIONS} questions • Up to {TOTAL_QUESTIONS * COINS_PER_CORRECT * BONUS_MULTIPLIER} coins</p>
           </div>
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
@@ -311,7 +318,14 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     );
   }
 
+
+
+
   
+
+
+
+
   // Render playing screen
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) return null;

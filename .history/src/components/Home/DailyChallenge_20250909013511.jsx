@@ -274,7 +274,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
               <div className="text-[10px] text-gray-500">Coins</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-orange-400">🔥2</div>
+              <div className="text-lg font-bold text-orange-400">🔥 {streak}</div>
               <div className="text-[10px] text-gray-500">Streak</div>
             </div>
           </div>
@@ -296,7 +296,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     return (
       <div 
         onClick={handleStart}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-6 mb-6 cursor-pointer hover:scale-[1.02] transition-all"
+        className="relative rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-4 mb-4 cursor-pointer hover:scale-[1.02] transition-transform"
       >
         <div className="flex items-center justify-between">
           <div>
@@ -311,7 +311,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     );
   }
 
-  
   // Render playing screen
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) return null;

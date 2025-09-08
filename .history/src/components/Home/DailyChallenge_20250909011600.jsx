@@ -291,27 +291,39 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     );
   }
 
-  // Render idle screen - Compact version
+  // Idle state
   if (stage === 'idle') {
     return (
       <div 
-        onClick={handleStart}
         className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-6 mb-6 cursor-pointer hover:scale-[1.02] transition-all"
+        onClick={handleStart}
       >
-        <div className="flex items-center justify-between">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 animate-shimmer" />
+        
+        <div className="relative flex items-center justify-between">
           <div>
-            <h3 className="text-base font-semibold">Daily Challenge</h3>
-            <p className="text-xs text-gray-400">{TOTAL_QUESTIONS} questions • Up to {TOTAL_QUESTIONS * COINS_PER_CORRECT * BONUS_MULTIPLIER} coins</p>
+            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
+              Daily Challenge
+              {streak > 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400">
+                  🔥 {streak}
+                </span>
+              )}
+            </h3>
+            <p className="text-sm text-gray-400">Tap to start • 3 questions • 1 life</p>
           </div>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-            <span className="text-white">▶</span>
+          
+          <div className="relative">
+            <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse" />
+            <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+              <span className="text-white text-xl">▶</span>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  
   // Render playing screen
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) return null;

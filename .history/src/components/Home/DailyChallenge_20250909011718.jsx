@@ -296,7 +296,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     return (
       <div 
         onClick={handleStart}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-6 mb-6 cursor-pointer hover:scale-[1.02] transition-all"
+        className="relative rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-4 mb-4 cursor-pointer hover:scale-[1.02] transition-transform"
       >
         <div className="flex items-center justify-between">
           <div>
@@ -310,6 +310,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
       </div>
     );
   }
+
 
   
   // Render playing screen

@@ -19,7 +19,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
   // Sound effects
   const [playCorrect] = useSound('/sounds/correct.mp3', { volume: 0.6 });
   const [playWrong] = useSound('/sounds/wrong.mp3', { volume: 0.6 });
-  const [playComplete] = useSound('/sounds/clap.mp3', { volume: 0.7, duration: 1000 });
+  const [playComplete] = useSound('/sounds/clap.mp3', { volume: 0.7 });
   
   // Constants
   const TOTAL_QUESTIONS = 3;
@@ -296,7 +296,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     return (
       <div 
         onClick={handleStart}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-6 mb-6 cursor-pointer hover:scale-[1.02] transition-all"
+        className="relative rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-4 mb-4 cursor-pointer hover:scale-[1.02] transition-transform"
       >
         <div className="flex items-center justify-between">
           <div>
@@ -311,7 +311,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     );
   }
 
-  
   // Render playing screen
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) return null;

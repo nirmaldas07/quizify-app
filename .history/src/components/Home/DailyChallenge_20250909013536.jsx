@@ -274,7 +274,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
               <div className="text-[10px] text-gray-500">Coins</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-orange-400">🔥2</div>
+              <div className="text-lg font-bold text-orange-400">🔥 {streak}</div>
               <div className="text-[10px] text-gray-500">Streak</div>
             </div>
           </div>
@@ -311,7 +311,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     );
   }
 
-  
   // Render playing screen
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) return null;

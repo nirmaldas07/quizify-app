@@ -274,7 +274,7 @@ export default function DailyChallenge({ onCoinsUpdate }) {
               <div className="text-[10px] text-gray-500">Coins</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-orange-400">🔥2</div>
+              <div className="text-lg font-bold text-orange-400">🔥 {streak}</div>
               <div className="text-[10px] text-gray-500">Streak</div>
             </div>
           </div>
@@ -311,7 +311,45 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     );
   }
 
+
+// Idle state
+  if (stage === 'idle') {
+    return (
+      <div 
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur border border-white/10 p-6 mb-6 cursor-pointer hover:scale-[1.02] transition-all"
+        onClick={handleStart}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 animate-shimmer" />
+        
+        <div className="relative flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
+              Daily Challenge
+              {streak > 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400">
+                  🔥 {streak}
+                </span>
+              )}
+            </h3>
+            <p className="text-sm text-gray-400">Tap to start • 3 questions • 1 life</p>
+          </div>
+          
+          <div className="relative">
+            <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse" />
+            <div className="relative w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+              <span className="text-white text-xl">▶</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   
+
+
+
+
   // Render playing screen
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) return null;
