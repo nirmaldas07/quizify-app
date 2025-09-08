@@ -590,7 +590,7 @@ return (
     )}
     
     {/* Coin Pill in top right */}
-    <div className="fixed top-12 right-4 z-50">
+    <div className="fixed top-10 right-4 z-50">
       <div 
         ref={coinPillRef}
         className="flex items-center gap-1 bg-yellow-500/20 px-3 py-1.5 rounded-full backdrop-blur"
