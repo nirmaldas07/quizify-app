@@ -1,11 +1,10 @@
 // src/components/Home/DailyChallenge.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import Papa from 'papaparse';
-import useSound from 'use-sound';
 
 export default function DailyChallenge({ onCoinsUpdate }) {
   // State management
-  const [stage, setStage] = useState('idle'); // idle, playing, celebrating, complete
+  const [stage, setStage] = useState('idle'); // idle, playing, complete
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
@@ -13,13 +12,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
   const [timeUntilTomorrow, setTimeUntilTomorrow] = useState('');
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
-  
-  // Sound effects
-  const [playCorrect] = useSound('/sounds/correct.mp3', { volume: 0.6 });
-  const [playWrong] = useSound('/sounds/wrong.mp3', { volume: 0.6 });
-  const [playComplete] = useSound('/sounds/clap.mp3', { volume: 0.7 });
   
   // Constants
   const TOTAL_QUESTIONS = 3;
@@ -104,7 +96,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     setCurrentIndex(0);
     setSelectedAnswers(new Array(TOTAL_QUESTIONS).fill(null));
     setScore(0);
-    setShowFeedback(false);
   };
 
   const handleAnswer = (optionIndex) => {
@@ -112,38 +103,25 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     newAnswers[currentIndex] = optionIndex;
     setSelectedAnswers(newAnswers);
     
-    // Check if correct and play sound
-    const isCorrect = optionIndex === questions[currentIndex].correct;
-    setLastAnswerCorrect(isCorrect);
-    setShowFeedback(true);
-    
-    if (isCorrect) {
+    // Check if correct
+    if (optionIndex === questions[currentIndex].correct) {
       setScore(score + 1);
-      if (playCorrect) playCorrect();
-    } else {
-      if (playWrong) playWrong();
     }
     
     // Check if all questions answered
     const answeredCount = newAnswers.filter(a => a !== null).length;
     
-    setTimeout(() => {
-      setShowFeedback(false);
-      
-      if (answeredCount === TOTAL_QUESTIONS) {
-        // Show celebration first
-        setStage('celebrating');
-        if (playComplete) playComplete();
-        
-        // Then show results after celebration
-        setTimeout(() => {
-          completeChallenge(newAnswers);
-        }, 2000);
-      } else {
-        // Move to next unanswered question
+    if (answeredCount === TOTAL_QUESTIONS) {
+      // All questions answered, show results
+      setTimeout(() => {
+        completeChallenge(newAnswers);
+      }, 500);
+    } else {
+      // Move to next unanswered question
+      setTimeout(() => {
         moveToNextUnanswered(newAnswers);
-      }
-    }, 600);
+      }, 300);
+    }
   };
 
   const moveToNextUnanswered = (answers) => {
@@ -187,7 +165,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     setCurrentIndex(0);
     setSelectedAnswers([]);
     setScore(0);
-    setShowFeedback(false);
   };
 
   // Swipe handlers
@@ -217,23 +194,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
       setCurrentIndex(prevIndex);
     }
   };
-
-  // Render celebration screen
-  if (stage === 'celebrating') {
-    return (
-      <div className="relative rounded-2xl bg-gradient-to-br from-purple-600/20 to-blue-600/20 backdrop-blur border border-white/10 p-8 mb-4 text-center">
-        <div className="animate-bounce-slow">
-          <span className="text-5xl">🎉</span>
-        </div>
-        <h2 className="text-2xl font-bold mt-4 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-          Congratulations!
-        </h2>
-        <p className="text-sm text-gray-400 mt-2">
-          You've completed today's challenge
-        </p>
-      </div>
-    );
-  }
 
   // Render complete screen - Compact version
   if (stage === 'complete') {
@@ -347,8 +307,6 @@ export default function DailyChallenge({ onCoinsUpdate }) {
         {currentQuestion.options.map((option, idx) => {
           const isSelected = selectedAnswers[currentIndex] === idx;
           const hasAnswered = selectedAnswers[currentIndex] !== null;
-          const isCorrect = idx === currentQuestion.correct;
-          const showCorrectness = showFeedback && (isSelected || isCorrect);
           
           return (
             <button
@@ -357,74 +315,26 @@ export default function DailyChallenge({ onCoinsUpdate }) {
               disabled={hasAnswered}
               className={`
                 relative p-3 rounded-xl text-left text-sm font-medium transition-all
-                ${showCorrectness && isCorrect ? 
-                  'bg-green-500/30 border border-green-500 animate-pulse-once' :
-                  showCorrectness && isSelected && !isCorrect ? 
-                  'bg-red-500/30 border border-red-500 animate-shake' :
-                  isSelected && !showFeedback ? 
-                  'bg-blue-500/20 border border-blue-500' :
-                  hasAnswered ? 
-                  'bg-white/5 border border-transparent opacity-50' :
+                ${isSelected ? 'bg-blue-500/20 border border-blue-500' :
+                  hasAnswered ? 'bg-white/5 border border-transparent opacity-50' :
                   'bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 active:scale-[0.98]'}
               `}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="opacity-50">
-                    {String.fromCharCode(65 + idx)}
-                  </span>
-                  <span>{option}</span>
-                </div>
-                {showCorrectness && isCorrect && (
-                  <span className="text-green-400 animate-fade-in">✓</span>
-                )}
-                {showCorrectness && isSelected && !isCorrect && (
-                  <span className="text-red-400 animate-fade-in">✗</span>
-                )}
+              <div className="flex items-center gap-2">
+                <span className="opacity-50">
+                  {String.fromCharCode(65 + idx)}
+                </span>
+                <span>{option}</span>
               </div>
             </button>
           );
         })}
       </div>
       
-      <style jsx>{`
-        @keyframes pulse-once {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.8; transform: scale(1.02); }
-        }
-        
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
-        }
-        
-        @keyframes fade-in {
-          from { opacity: 0; transform: scale(0.5); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        
-        .animate-pulse-once {
-          animation: pulse-once 0.6s ease-out;
-        }
-        
-        .animate-shake {
-          animation: shake 0.4s ease-out;
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-out;
-        }
-        
-        .animate-bounce-slow {
-          animation: bounce-slow 1s ease-in-out infinite;
-        }
-      `}</style>
+      {/* Swipe hint */}
+      <div className="text-center mt-4 text-[10px] text-gray-500">
+        Swipe left/right to navigate questions
+      </div>
     </div>
   );
 }
