@@ -78,7 +78,7 @@ export default function Layout() {
       // Use whichever has actual scroll (usually only one will be > 0)
       const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
       
-      console.log(`Saving scroll for ${pathname}: main=${mainScroll}, window=${windowScroll}, saved=${scrollPos}`); // Debug log
+      // console.log(`Saving scroll for ${pathname}: main=${mainScroll}, window=${windowScroll}, saved=${scrollPos}`); // Debug log
       scrollPositions.current[pathname] = scrollPos;
     }
   }, [pathname]);
@@ -101,7 +101,7 @@ export default function Layout() {
           const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
           
           scrollPositions.current[pathname] = scrollPos;
-          console.log(`Scroll position updated for ${pathname}: ${scrollPos}`); // Debug log
+          // console.log(`Scroll position updated for ${pathname}: ${scrollPos}`); // Debug log
         }
       });
     };
@@ -124,8 +124,13 @@ export default function Layout() {
     };
   }, [pathname]);
 
-  // Restore scroll when navigating
+ // Restore scroll when navigating
   useEffect(() => {
+    // Skip restoration on initial load
+    if (!scrollPositions.current[pathname] && pathname === '/') {
+      return;
+    }
+    
     // Hide content instantly before any rendering
     if (mainRef.current) {
       mainRef.current.classList.add('navigating');
@@ -157,44 +162,16 @@ export default function Layout() {
     } else {
       // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
       const savedPos = scrollPositions.current[pathname];
-      console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
+      if (savedPos) {
+        // console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
+      }
       
-      if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
+      if (savedPos && savedPos > 0) {
         // Use multiple attempts to ensure scroll is restored
-        const attemptRestore = (attempts = 0) => {
-          if (attempts >= 5) return; // Max 5 attempts
-          
-          // Try to restore scroll on main element first (most likely)
-          if (mainRef.current) {
-            mainRef.current.scrollTop = savedPos;
-            
-            // Check if it worked
-            setTimeout(() => {
-              const currentScroll = mainRef.current?.scrollTop || 0;
-              if (Math.abs(currentScroll - savedPos) > 10) {
-                // If not close enough, try window scroll
-                window.scrollTo(0, savedPos);
-                
-                // Check window scroll
-                setTimeout(() => {
-                  const windowScroll = window.scrollY || window.pageYOffset || 0;
-                  console.log(`Restore attempt ${attempts + 1}: main=${currentScroll}, window=${windowScroll}, target=${savedPos}`);
-                  
-                  if (Math.abs(windowScroll - savedPos) > 10 && Math.abs(currentScroll - savedPos) > 10) {
-                    // Neither worked, try again
-                    attemptRestore(attempts + 1);
-                  }
-                }, 20);
-              } else {
-                console.log(`Successfully restored scroll to ${currentScroll}`);
-              }
-            }, 20);
-          } else {
-            // No main ref, try window
-            window.scrollTo(0, savedPos);
-          }
-        };
-        
+      if (mainRef.current) {
+        mainRef.current.scrollTop = savedPos;
+      }
+              
         // Start restoration attempts immediately
         attemptRestore(0);
         // Remove hiding class after scroll is set
@@ -262,7 +239,7 @@ export default function Layout() {
 
   // Scroll to top helper function
   const scrollToTop = useCallback(() => {
-    console.log('Scrolling to top'); // Debug log
+    // console.log('Scrolling to top'); // Debug log
     
     // Try all possible scroll methods
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -287,10 +264,10 @@ export default function Layout() {
       // Check if this is the active tab
       if (active) {
         const lastTap = lastTapRef.current[path] || 0;
-        console.log(`Active tab clicked. Time since last tap: ${now - lastTap}ms`); // Debug log
+        // console.log(`Active tab clicked. Time since last tap: ${now - lastTap}ms`); // Debug log
         
         if (now - lastTap < 500) {  // Double tap detected
-          console.log('Double tap detected!'); // Debug log
+          // console.log('Double tap detected!'); // Debug log
           scrollToTop();
           // playSound('tap');
           haptic('double');
@@ -310,7 +287,7 @@ export default function Layout() {
         const windowScroll = window.scrollY || window.pageYOffset || 0;
         const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
         
-        console.log(`Manually saving scroll before navigation from ${pathname}: ${scrollPos}`);
+        // console.log(`Manually saving scroll before navigation from ${pathname}: ${scrollPos}`);
         scrollPositions.current[pathname] = scrollPos;
       }
       
@@ -318,7 +295,7 @@ export default function Layout() {
       const lastTap = lastTapRef.current[path] || 0;
       
       if (now - lastTap < 500) {  // Double tap on inactive tab
-        console.log('Double tap on inactive tab - navigating and scrolling to top'); // Debug log
+        // console.log('Double tap on inactive tab - navigating and scrolling to top'); // Debug log
         
         // Clear saved position for target path so it starts at top
         scrollPositions.current[path] = 0;
@@ -407,30 +384,27 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
-      <style>{`
-        .hide-bottom-nav nav[role="navigation"] {
-         display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
-        }
-      `}</style>
+    <style>{`
+      .hide-bottom-nav nav[role="navigation"] {
+      display: none !important;
+      }
+      main.navigating {
+        visibility: hidden;
+      }
+    `}</style>
 
-      <main
-        ref={mainRef}
-        className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4 overscroll-y-contain"
-        style={{
-            height: hideNav || document.body.classList.contains('hide-bottom-nav')
-            ? "100dvh"
-            : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
-            paddingTop: "calc(env(safe-area-inset-top) + 12px)",
-            paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
-            overflowY: "auto"
-        }}
-      >
+<main
+  ref={mainRef}
+  className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4"
+  style={{
+    height: hideNav || document.body.classList.contains('hide-bottom-nav')
+      ? "100dvh"
+      : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
+    paddingTop: "calc(env(safe-area-inset-top) + 12px)",
+    paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
+    overflowY: "auto"
+  }}
+>
         <Outlet />
       </main>
 

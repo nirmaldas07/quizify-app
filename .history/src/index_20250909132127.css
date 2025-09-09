@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Base (global) ---------- */
+@layer base {
+  html, body, #root { 
+    height: 100%; 
+    background:#000; 
+    color:#fff;
+    /* Smooth scrolling physics */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Enhanced scrolling for all scrollable containers */
+  * {
+    /* Smooth scrolling for all elements */
+    scroll-behavior: smooth;
+    
+    /* Better scroll performance on mobile */
+    -webkit-overflow-scrolling: touch;
+    
+    /* Prevent scroll jank */
+    will-change: scroll-position;
+  }
+
+  /* Custom scrollbar for webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.02);
+  }
+
+  /* Calm dark surface + crisp type everywhere */
+  body { 
+    @apply bg-base-bg text-base-text antialiased font-sans;
+    /* Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Subtle selection tint */
+  ::selection { @apply bg-brand-blue/30; }
+
+  /* Prevent abrupt scroll stops */
+  .scroll-container {
+    scroll-snap-type: y proximity;
+    scroll-padding: 1rem;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button, a, input, textarea, select {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* ---------- Rubber band scrolling effect ---------- */
+@layer components {
+  /* Apply to scrollable containers */
+  .rubber-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    position: relative;
+    
+    /* Create bounce effect with pseudo-elements */
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    
+    &::before {
+      top: 0;
+      background: linear-gradient(to bottom, 
+        rgba(11, 15, 26, 0.8) 0%,
+        transparent 100%);
+      height: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &::after {
+      bottom: 0;
+      background: linear-gradient(to top, 
+        rgba(11, 15, 26, 0.8) 0%,
+        transparent 100%);
+      height: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  /* Show gradient when scrolling */
+  .rubber-scroll.scrolling-up::before {
+    opacity: 1;
+  }
+  
+  .rubber-scroll.scrolling-down::after {
+    opacity: 1;
+  }
+
+  /* Original component styles */
+  .card { @apply bg-base-card/90 border border-base-border rounded-2xl p-4; }
+  .pill { @apply px-3 py-1 rounded-full bg-white/5 border border-base-border text-xs; }
+
+  .btn-primary {
+    @apply bg-brand-blue text-white font-medium rounded-xl px-4 py-2
+           hover:bg-brand-blue/90 transition shadow-soft;
+  }
+  .btn-ghost {
+    @apply bg-white/5 border border-base-border text-base-text rounded-xl px-4 py-2
+           hover:bg-white/10 transition;
+  }
+
+  /* Smooth scroll momentum */
+  .smooth-scroll {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Add momentum scrolling on iOS */
+    -webkit-scroll-momentum: true;
+    
+    /* Improve scroll performance */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+}
+
+/* ---------- Utilities ---------- */
+@layer utilities {
+  /* Disable scroll bounce on specific elements */
+  .no-bounce {
+    overscroll-behavior: contain;
+  }
+  
+  /* Force hardware acceleration */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Smooth transform transitions */
+  .smooth-transform {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

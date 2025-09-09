@@ -161,39 +161,12 @@ export default function Layout() {
       
       if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
         // Use multiple attempts to ensure scroll is restored
-        const attemptRestore = (attempts = 0) => {
-          if (attempts >= 5) return; // Max 5 attempts
-          
-          // Try to restore scroll on main element first (most likely)
-          if (mainRef.current) {
-            mainRef.current.scrollTop = savedPos;
-            
-            // Check if it worked
-            setTimeout(() => {
-              const currentScroll = mainRef.current?.scrollTop || 0;
-              if (Math.abs(currentScroll - savedPos) > 10) {
-                // If not close enough, try window scroll
-                window.scrollTo(0, savedPos);
-                
-                // Check window scroll
-                setTimeout(() => {
-                  const windowScroll = window.scrollY || window.pageYOffset || 0;
-                  console.log(`Restore attempt ${attempts + 1}: main=${currentScroll}, window=${windowScroll}, target=${savedPos}`);
-                  
-                  if (Math.abs(windowScroll - savedPos) > 10 && Math.abs(currentScroll - savedPos) > 10) {
-                    // Neither worked, try again
-                    attemptRestore(attempts + 1);
-                  }
-                }, 20);
-              } else {
-                console.log(`Successfully restored scroll to ${currentScroll}`);
-              }
-            }, 20);
-          } else {
-            // No main ref, try window
-            window.scrollTo(0, savedPos);
-          }
-        };
+      // Simple restoration
+      if (mainRef.current && savedPos > 0) {
+        requestAnimationFrame(() => {
+          mainRef.current.scrollTop = savedPos;
+        });
+      }
         
         // Start restoration attempts immediately
         attemptRestore(0);
@@ -407,17 +380,15 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
-      <style>{`
-        .hide-bottom-nav nav[role="navigation"] {
-         display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
-        }
-      `}</style>
+    <style>{`
+      .hide-bottom-nav nav[role="navigation"] {
+      display: none !important;
+      }
+      main.navigating {
+        opacity: 0;
+        transition: opacity 0.1s ease-out;
+      }
+    `}</style>
 
       <main
         ref={mainRef}

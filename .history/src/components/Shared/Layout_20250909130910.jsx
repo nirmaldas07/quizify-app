@@ -87,23 +87,17 @@ export default function Layout() {
   useEffect(() => {
     let rafId = null;
     
+    let scrollTimeout;
     const handleScroll = () => {
-      // Cancel any pending save
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
+      // Clear any existing timeout
+      clearTimeout(scrollTimeout);
       
-      // Schedule save for next animation frame to debounce
-      rafId = requestAnimationFrame(() => {
-        if (['/', '/play', '/swipe', '/profile'].includes(pathname)) {
-          const mainScroll = mainRef.current?.scrollTop || 0;
-          const windowScroll = window.scrollY || window.pageYOffset || 0;
-          const scrollPos = mainScroll > 0 ? mainScroll : windowScroll;
-          
-          scrollPositions.current[pathname] = scrollPos;
-          console.log(`Scroll position updated for ${pathname}: ${scrollPos}`); // Debug log
-        }
-      });
+      // Set new timeout - only saves after 100ms of no scrolling
+      scrollTimeout = setTimeout(() => {
+        // Save scroll position
+        const scrollPos = mainRef.current?.scrollTop || 0;
+        scrollPositions.current[pathname] = scrollPos;
+      }, 100);
     };
 
     // Listen to both window and main element scroll
@@ -161,39 +155,12 @@ export default function Layout() {
       
       if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
         // Use multiple attempts to ensure scroll is restored
-        const attemptRestore = (attempts = 0) => {
-          if (attempts >= 5) return; // Max 5 attempts
-          
-          // Try to restore scroll on main element first (most likely)
-          if (mainRef.current) {
-            mainRef.current.scrollTop = savedPos;
-            
-            // Check if it worked
-            setTimeout(() => {
-              const currentScroll = mainRef.current?.scrollTop || 0;
-              if (Math.abs(currentScroll - savedPos) > 10) {
-                // If not close enough, try window scroll
-                window.scrollTo(0, savedPos);
-                
-                // Check window scroll
-                setTimeout(() => {
-                  const windowScroll = window.scrollY || window.pageYOffset || 0;
-                  console.log(`Restore attempt ${attempts + 1}: main=${currentScroll}, window=${windowScroll}, target=${savedPos}`);
-                  
-                  if (Math.abs(windowScroll - savedPos) > 10 && Math.abs(currentScroll - savedPos) > 10) {
-                    // Neither worked, try again
-                    attemptRestore(attempts + 1);
-                  }
-                }, 20);
-              } else {
-                console.log(`Successfully restored scroll to ${currentScroll}`);
-              }
-            }, 20);
-          } else {
-            // No main ref, try window
-            window.scrollTo(0, savedPos);
-          }
-        };
+      // Simple restoration
+      if (mainRef.current && savedPos > 0) {
+        requestAnimationFrame(() => {
+          mainRef.current.scrollTop = savedPos;
+        });
+      }
         
         // Start restoration attempts immediately
         attemptRestore(0);
@@ -407,17 +374,15 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
-      <style>{`
-        .hide-bottom-nav nav[role="navigation"] {
-         display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
-        }
-      `}</style>
+    <style>{`
+      .hide-bottom-nav nav[role="navigation"] {
+      display: none !important;
+      }
+      main.navigating {
+        opacity: 0;
+        transition: opacity 0.1s ease-out;
+      }
+    `}</style>
 
       <main
         ref={mainRef}

@@ -1,0 +1,149 @@
+/* src/index.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Base (global) ---------- */
+@layer base {
+  html, body, #root { 
+    height: 100%; 
+    background:#000; 
+    color:#fff;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Performance optimizations */
+  html {
+    scroll-behavior: smooth;
+    touch-action: manipulation; /* Prevents double-tap zoom */
+  }
+
+  body { 
+    @apply bg-base-bg text-base-text antialiased font-sans;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Subtle selection tint */
+  ::selection { @apply bg-brand-blue/30; }
+}
+
+/* ---------- Smooth Scrolling ---------- */
+main {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+/* Optimize rendering performance */
+main > * {
+  will-change: auto;
+  contain: layout style paint;
+}
+
+/* Custom scrollbar - minimal and professional */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Remove tap highlights and improve touch */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only where needed */
+input, textarea, [contenteditable], p, span, h1, h2, h3, h4, h5, h6 {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Smooth transitions globally */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Prevent layout shifts */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Optimize button interactions */
+button, a, [role="button"] {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  .card { 
+    @apply bg-base-card/90 border border-base-border rounded-2xl p-4;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .pill { 
+    @apply px-3 py-1 rounded-full bg-white/5 border border-base-border text-xs;
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-primary {
+    @apply bg-brand-blue text-white font-medium rounded-xl px-4 py-2
+           hover:bg-brand-blue/90 transition shadow-soft;
+    transform: translateZ(0); /* Hardware acceleration */
+  }
+  
+  .btn-ghost {
+    @apply bg-white/5 border border-base-border text-base-text rounded-xl px-4 py-2
+           hover:bg-white/10 transition;
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* ---------- Performance Animations ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* GPU-accelerated animations */
+.animate-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -124,8 +124,13 @@ export default function Layout() {
     };
   }, [pathname]);
 
-  // Restore scroll when navigating
+ // Restore scroll when navigating
   useEffect(() => {
+    // Skip restoration on initial load
+    if (!scrollPositions.current[pathname] && pathname === '/') {
+      return;
+    }
+    
     // Hide content instantly before any rendering
     if (mainRef.current) {
       mainRef.current.classList.add('navigating');
@@ -157,9 +162,11 @@ export default function Layout() {
     } else {
       // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
       const savedPos = scrollPositions.current[pathname];
-      console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
+      if (savedPos) {
+        console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
+      }
       
-      if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
+      if (savedPos && savedPos > 0) {
         // Use multiple attempts to ensure scroll is restored
         const attemptRestore = (attempts = 0) => {
           if (attempts >= 5) return; // Max 5 attempts
@@ -407,30 +414,27 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
-      <style>{`
-        .hide-bottom-nav nav[role="navigation"] {
-         display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
-        }
-      `}</style>
+    <style>{`
+      .hide-bottom-nav nav[role="navigation"] {
+      display: none !important;
+      }
+      main.navigating {
+        visibility: hidden;
+      }
+    `}</style>
 
-      <main
-        ref={mainRef}
-        className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4 overscroll-y-contain"
-        style={{
-            height: hideNav || document.body.classList.contains('hide-bottom-nav')
-            ? "100dvh"
-            : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
-            paddingTop: "calc(env(safe-area-inset-top) + 12px)",
-            paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
-            overflowY: "auto"
-        }}
-      >
+<main
+  ref={mainRef}
+  className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4"
+  style={{
+    height: hideNav || document.body.classList.contains('hide-bottom-nav')
+      ? "100dvh"
+      : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
+    paddingTop: "calc(env(safe-area-inset-top) + 12px)",
+    paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
+    overflowY: "auto"
+  }}
+>
         <Outlet />
       </main>
 

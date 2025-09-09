@@ -407,17 +407,15 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-bg text-base-text">
-      <style>{`
-        .hide-bottom-nav nav[role="navigation"] {
-         display: none !important;
-        }
-        main.navigating {
-          visibility: hidden;
-        }
-        main {
-          scroll-behavior: auto !important;
-        }
-      `}</style>
+    <style>{`
+      .hide-bottom-nav nav[role="navigation"] {
+      display: none !important;
+      }
+      main.navigating {
+        opacity: 0;
+        transition: opacity 0.1s ease-out;
+      }
+    `}</style>
 
       <main
         ref={mainRef}
