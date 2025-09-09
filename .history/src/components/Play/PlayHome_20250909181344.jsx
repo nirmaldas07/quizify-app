@@ -20,7 +20,7 @@ const sliceAngle = 360 / WHEEL_CATEGORIES.length;
 
 function ModesGrid({ onModeSelect, onNavigateHome }) {
   return (
-    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden mt-12">
+    <div className="fixed inset-0 bg-base-bg text-base-text overflow-hidden mt-6">
       <div className="h-full overflow-y-auto mx-auto max-w-md px-4 pt-[calc(env(safe-area-inset-top)+5rem)] pb-[calc(env(safe-area-inset-bottom)+5.25rem)]">
         <header className="flex items-center mb-8">
           <h1 className="text-center text-xl font-bold w-full">Choose a quiz mode</h1>
