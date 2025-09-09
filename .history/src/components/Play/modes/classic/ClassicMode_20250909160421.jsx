@@ -368,27 +368,16 @@ export default function ClassicMode({ onBack }) {
       qIndex: prev.qIndex + 1
     }));
 
-if (correct) {
-  // Trigger CoinFly animation
-  // Use a timeout to ensure we're back on wheel screen
-  setTimeout(() => {
-    const wheelRect = wheelRef.current?.getBoundingClientRect();
-    if (wheelRect) {
+    if (correct) {
+      // Trigger CoinFly animation
+      const wheelRect = wheelRef.current?.getBoundingClientRect();
       setCoinFlyData({
         startRect: wheelRect,
         targetRef: coinPillRef,
         count: 5,
         amount: 5
       });
-    } else {
-      // Fallback - just add coins without animation
-      GameDataService.addCoins(5, 'Classic Mode - Correct Answer');
-      GameDataService.addXP(1);
-      window.dispatchEvent(new Event('coinsUpdated'));
-      playSound('/sounds/coin.mp3', 0.7);
     }
-  }, 100);
-}
 
     setNextProgressIdx(currentIdx);
     setLastAnswerWasCorrect(!!correct);

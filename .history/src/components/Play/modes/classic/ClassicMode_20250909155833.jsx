@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import GameDataService from '../../../../services/GameDataService';
-import CoinFly from '../../../Shared/CoinFly';
 import Papa from "papaparse";
 import { useGameData } from "../../shared/hooks/useGameData.js";
 import WheelScreen from "./WheelScreen.jsx";
@@ -16,15 +15,16 @@ import {
 import { toSlug, mod360, vibrate, playSound } from "../../../../utils/gameHelpers";
 
 export default function ClassicMode({ onBack }) {
-  const { 
-    coins, 
-    xp, 
-    level, 
-    ownedCharacters, 
-    soundOn, 
-    unlockCharacter, 
-    setSoundOn 
-  } = useGameData();
+const { 
+  coins, 
+  xp, 
+  level, 
+  ownedCharacters, 
+  soundOn, 
+  // Don't destructure addCoins or addXp - we'll use GameDataService directly
+  unlockCharacter, 
+  setSoundOn 
+} = useGameData();
 
   const [gameState, setGameState] = useState('wheel');
   const [run, setRun] = useState({
@@ -58,10 +58,7 @@ export default function ClassicMode({ onBack }) {
   const [runResults, setRunResults] = useState([false, false, false]);
   const [pendingCoinBurst, setPendingCoinBurst] = useState(false);
   const [timerPaused, setTimerPaused] = useState(false);
-  const [coinFlyData, setCoinFlyData] = useState(null);
-  
-  const coinPillRef = useRef(null);
-  const wheelRef = useRef(null);
+
   const timerRef = useRef(null);
   const spinAudioRef = useRef(null);
   const spinSoundTimerRef = useRef(null);
@@ -244,6 +241,7 @@ export default function ClassicMode({ onBack }) {
   };
 
   const confirmExit = () => {
+    // Just call onBack to return to PlayHome
     onBack();
     resetRun();
   };
@@ -368,26 +366,10 @@ export default function ClassicMode({ onBack }) {
       qIndex: prev.qIndex + 1
     }));
 
-if (correct) {
-  // Trigger CoinFly animation
-  // Use a timeout to ensure we're back on wheel screen
-  setTimeout(() => {
-    const wheelRect = wheelRef.current?.getBoundingClientRect();
-    if (wheelRect) {
-      setCoinFlyData({
-        startRect: wheelRect,
-        targetRef: coinPillRef,
-        count: 5,
-        amount: 5
-      });
-    } else {
-      // Fallback - just add coins without animation
-      GameDataService.addCoins(5, 'Classic Mode - Correct Answer');
-      GameDataService.addXP(1);
-      window.dispatchEvent(new Event('coinsUpdated'));
-      playSound('/sounds/coin.mp3', 0.7);
-    }
-  }, 100);
+ if (correct) {
+  GameDataService.addCoins(5, 'Classic Mode - Correct Answer');
+  GameDataService.addXP(1);
+  setPendingCoinBurst(true);
 }
 
     setNextProgressIdx(currentIdx);
@@ -463,47 +445,29 @@ if (correct) {
   switch (gameState) {
     case 'wheel':
       return (
-        <>
-          {coinFlyData && (
-            <CoinFly
-              startRect={coinFlyData.startRect}
-              targetRef={coinFlyData.targetRef}
-              count={coinFlyData.count}
-              onDone={() => {
-                GameDataService.addCoins(coinFlyData.amount, 'Classic Mode - Correct Answer');
-                GameDataService.addXP(1);
-                window.dispatchEvent(new Event('coinsUpdated'));
-                playSound('/sounds/coin.mp3', 0.7);
-                setCoinFlyData(null);
-              }}
-            />
-          )}
-          <WheelScreen
-            run={run}
-            coins={coins}
-            xp={xp}
-            level={level}
-            ownedCharacters={ownedCharacters}
-            onSpin={spin}
-            onBack={onBack}
-            spinning={spinning}
-            angle={angle}
-            transition={transition}
-            result={result}
-            showCallout={showCallout}
-            glowColor={glowColor}
-            soundOn={soundOn}
-            setSoundOn={setSoundOn}
-            showSparkle={showSparkle}
-            pulseIdx={pulseIdx}
-            coinBurstTick={coinBurstTick}
-            pendingProgressIdx={pendingProgressIdx}
-            lastAnswerWasCorrect={lastAnswerWasCorrect}
-            nextProgressIdx={nextProgressIdx}
-            coinPillRef={coinPillRef}
-            wheelRef={wheelRef}
-          />
-        </>
+        <WheelScreen 
+          run={run}
+          coins={coins}
+          xp={xp}
+          level={level}
+          ownedCharacters={ownedCharacters}
+          onSpin={spin}
+          onBack={onBack}
+          spinning={spinning}
+          angle={angle}
+          transition={transition}
+          result={result}
+          showCallout={showCallout}
+          glowColor={glowColor}
+          soundOn={soundOn}
+          setSoundOn={setSoundOn}
+          showSparkle={showSparkle}
+          pulseIdx={pulseIdx}
+          coinBurstTick={coinBurstTick}
+          pendingProgressIdx={pendingProgressIdx}
+          lastAnswerWasCorrect={lastAnswerWasCorrect}
+          nextProgressIdx={nextProgressIdx}
+        />
       );
       
     case 'interstitial':
