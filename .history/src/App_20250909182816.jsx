@@ -189,7 +189,7 @@ useEffect(() => {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/play" element={<Play />} />
-          <Route path="/play/classic" element={<ClassicMode />} />
+          <Route path="/play/classic" element={<ClassicMode onBack={() => window.history.back()} />} />
           <Route path="/play/party" element={<PartySpin />} />
           
           {/* Profile routes */}

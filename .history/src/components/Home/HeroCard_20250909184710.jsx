@@ -147,27 +147,26 @@ const handleClick = () => {
         </svg>
         </div>
             
-        {/* Title */}
-        <div>
-        <h2 className="text-2xl font-black text-white drop-shadow-md whitespace-nowrap">
-            Spin & Win!
-        </h2>
-        <p className="text-sm text-white/90">
+           {/* Title */}
+            <div className="flex flex-col justify-center">
+            <h2 className="text-xl font-black text-white drop-shadow-md whitespace-nowrap">
+                Spin & Win!
+            </h2>
+            <p className="text-sm text-white/90">
                 Win amazing prizes!
               </p>
             </div>
-          </div>
-
-          {/* Rewards preview - compact */}
-          <div className="flex gap-2 mt-3">
+            </div>
+            {/* Rewards preview - moved here for better layout */}
+            <div className="flex gap-2 mt-2">
             <div className="px-2 py-1 bg-black/20 backdrop-blur rounded-full text-xs font-medium text-white flex items-center gap-1">
-              🪙 <span>Up to 100</span>
+                🪙 <span>Up to 100</span>
             </div>
             <div className="px-2 py-1 bg-black/20 backdrop-blur rounded-full text-xs font-medium text-white flex items-center gap-1">
-              🦄 <span>6 heroes</span>
+                🦄 <span>6 heroes</span>
             </div>
-          </div>
-        </div>
+            </div>
+            </div>
 
         {/* Right section - Floating coins and play button */}
         <div className="flex flex-col items-center gap-2">

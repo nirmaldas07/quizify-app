@@ -95,64 +95,20 @@ const handleClick = () => {
         {/* Left section */}
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-
-        {/* Main icon - Animated Wheel */}
-        <div 
-        className="relative w-14 h-14"
-        style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
-        >
-        <svg 
-            width="56" 
-            height="56" 
-            viewBox="0 0 100 100" 
-            className="absolute inset-0"
-            style={{ animation: 'spin-slow 4s linear infinite' }}
-        >
-            {/* Wheel segments */}
-            {[
-            { color: '#FF6B6B', icon: '🧠' },
-            { color: '#4ECDC4', icon: '🎉' },
-            { color: '#45B7D1', icon: '🧪' },
-            { color: '#FFD700', icon: '🏺' },
-            { color: '#9370DB', icon: '🗺️' },
-            { color: '#FF9800', icon: '🤖' }
-            ].map((segment, i) => {
-            const angle = 60; // 360/6 segments
-            const start = i * angle;
-            const end = start + angle;
-            const largeArc = 0;
-            const sr = (Math.PI * start) / 180;
-            const er = (Math.PI * end) / 180;
-            const x1 = 50 + 45 * Math.cos(sr);
-            const y1 = 50 - 45 * Math.sin(sr);
-            const x2 = 50 + 45 * Math.cos(er);
-            const y2 = 50 - 45 * Math.sin(er);
+            {/* Main icon */}
+            <div 
+              className="text-5xl"
+              style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
+            >
+              🎰
+            </div>
             
-            return (
-                <g key={i}>
-                <path
-                    d={`M50,50 L${x1},${y1} A45,45 0 ${largeArc} 0 ${x2},${y2} Z`}
-                    fill={segment.color}
-                    stroke="rgba(255,255,255,0.3)"
-                    strokeWidth="0.5"
-                />
-                </g>
-            );
-            })}
-            {/* Center circle */}
-            <circle cx="50" cy="50" r="12" fill="white" />
-            <text x="50" y="55" textAnchor="middle" className="text-xs font-bold fill-gray-800">
-            🪙
-            </text>
-        </svg>
-        </div>
-            
-        {/* Title */}
-        <div>
-        <h2 className="text-2xl font-black text-white drop-shadow-md whitespace-nowrap">
-            Spin & Win!
-        </h2>
-        <p className="text-sm text-white/90">
+            {/* Title */}
+            <div>
+              <h2 className="text-2xl font-black text-white drop-shadow-md">
+                Spin & Win!
+              </h2>
+              <p className="text-sm text-white/90">
                 Win amazing prizes!
               </p>
             </div>

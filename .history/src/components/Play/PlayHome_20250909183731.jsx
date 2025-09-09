@@ -159,10 +159,10 @@ export default function PlayHome() {
 //     return () => window.removeEventListener('popstate', handlePopState);
 //   }, [selectedMode]);
 
-//   // Render the selected mode
-//   if (selectedMode === 'classic') {
-//     return <ClassicMode onBack={handleBackToModes} />;
-//   }
+  // Render the selected mode
+  if (selectedMode === 'classic') {
+    return <ClassicMode onBack={handleBackToModes} />;
+  }
 
   if (selectedMode === 'survival') {
     const params = new URLSearchParams(location.search);

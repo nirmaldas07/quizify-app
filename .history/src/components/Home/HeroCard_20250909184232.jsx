@@ -147,12 +147,12 @@ const handleClick = () => {
         </svg>
         </div>
             
-        {/* Title */}
-        <div>
-        <h2 className="text-2xl font-black text-white drop-shadow-md whitespace-nowrap">
-            Spin & Win!
-        </h2>
-        <p className="text-sm text-white/90">
+            {/* Title */}
+            <div>
+              <h2 className="text-xl font-black text-white drop-shadow-md">
+                Spin & Win!
+              </h2>
+              <p className="text-sm text-white/90">
                 Win amazing prizes!
               </p>
             </div>
