@@ -9,7 +9,6 @@ import PartySpin from "./components/Play/PartySpin";
 import SwipeQuiz from './components/Swipe/SwipeQuiz.jsx';
 import QuizPlay from './components/Quiz/QuizPlay';
 import PracticeStart from './components/Quiz/PracticeStart';
-import SurpriseZone from './components/Home/SurpriseZone';
 
 // Profile imports
 import ProfileHome from "./components/Profile/ProfileHome";
@@ -24,7 +23,7 @@ import ProfileSettings from "./components/Profile/Settings";
 import { App as CapacitorApp } from '@capacitor/app';
 import EditProfile from "./components/Profile/EditProfile";
 import PrivacyPolicy from "./components/Profile/PrivacyPolicy";
-
+import SurpriseZone from "./components/Home/SurpriseZone";
 // Auth imports
 import PhoneAuth from "./components/Auth/PhoneAuth";
 import SignIn from "./components/Auth/SignIn";
@@ -207,9 +206,6 @@ useEffect(() => {
           <Route path="/quiz/:category" element={<Quiz />} />
           <Route path="/quiz/play" element={<QuizPlay />} />
           <Route path="/practice/start" element={<PracticeStart />} />
-
-          {/* Surprise Zone route */}
-          <Route path="/surprise" element={<SurpriseZone />} />
 
           {/* Fallback */}
           <Route path="*" element={<Home />} />
