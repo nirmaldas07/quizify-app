@@ -124,13 +124,8 @@ export default function Layout() {
     };
   }, [pathname]);
 
- // Restore scroll when navigating
+  // Restore scroll when navigating
   useEffect(() => {
-    // Skip restoration on initial load
-    if (!scrollPositions.current[pathname] && pathname === '/') {
-      return;
-    }
-    
     // Hide content instantly before any rendering
     if (mainRef.current) {
       mainRef.current.classList.add('navigating');
@@ -162,11 +157,9 @@ export default function Layout() {
     } else {
       // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
       const savedPos = scrollPositions.current[pathname];
-      if (savedPos) {
-        console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
-      }
+      console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
       
-      if (savedPos && savedPos > 0) {
+      if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
         // Use multiple attempts to ensure scroll is restored
         const attemptRestore = (attempts = 0) => {
           if (attempts >= 5) return; // Max 5 attempts
@@ -225,6 +218,90 @@ export default function Layout() {
       }
     }
   }, [pathname]);
+
+// Add momentum scrolling with bounce effect
+  useEffect(() => {
+    const mainElement = mainRef.current;
+    if (!mainElement) return;
+
+    let isScrolling = false;
+    let momentumID = null;
+    let velocity = 0;
+    let lastScrollTop = 0;
+    let lastTimestamp = Date.now();
+
+    const handleScrollStart = (e) => {
+      if (momentumID) {
+        cancelAnimationFrame(momentumID);
+        momentumID = null;
+      }
+      isScrolling = true;
+      lastScrollTop = mainElement.scrollTop;
+      lastTimestamp = Date.now();
+    };
+
+    const handleScrollEnd = () => {
+      isScrolling = false;
+      
+      const currentTime = Date.now();
+      const timeDiff = currentTime - lastTimestamp;
+      const scrollDiff = mainElement.scrollTop - lastScrollTop;
+      velocity = scrollDiff / timeDiff * 16;
+
+      const applyMomentum = () => {
+        if (Math.abs(velocity) > 0.5) {
+          mainElement.scrollTop += velocity;
+          velocity *= 0.95;
+          
+          const maxScroll = mainElement.scrollHeight - mainElement.clientHeight;
+          if (mainElement.scrollTop <= 0) {
+            mainElement.scrollTop = 0;
+            velocity = -velocity * 0.5;
+            mainElement.style.transform = `translateY(${Math.min(velocity * 2, 10)}px)`;
+            setTimeout(() => {
+              mainElement.style.transform = 'translateY(0)';
+            }, 200);
+          } else if (mainElement.scrollTop >= maxScroll) {
+            mainElement.scrollTop = maxScroll;
+            velocity = -velocity * 0.5;
+            mainElement.style.transform = `translateY(${Math.max(velocity * 2, -10)}px)`;
+            setTimeout(() => {
+              mainElement.style.transform = 'translateY(0)';
+            }, 200);
+          }
+          
+          momentumID = requestAnimationFrame(applyMomentum);
+        } else {
+          mainElement.style.transform = 'translateY(0)';
+        }
+      };
+
+      momentumID = requestAnimationFrame(applyMomentum);
+    };
+
+    let scrollTimeout;
+    const handleScroll = () => {
+      if (!isScrolling) handleScrollStart();
+      
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(handleScrollEnd, 150);
+      
+      lastScrollTop = mainElement.scrollTop;
+      lastTimestamp = Date.now();
+    };
+
+    mainElement.addEventListener('scroll', handleScroll, { passive: true });
+    mainElement.addEventListener('touchstart', handleScrollStart, { passive: true });
+    
+    mainElement.style.transition = 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+    return () => {
+      mainElement.removeEventListener('scroll', handleScroll);
+      mainElement.removeEventListener('touchstart', handleScrollStart);
+      if (momentumID) cancelAnimationFrame(momentumID);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
 
   // Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);

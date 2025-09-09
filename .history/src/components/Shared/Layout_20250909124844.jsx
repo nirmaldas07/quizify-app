@@ -226,6 +226,75 @@ export default function Layout() {
     }
   }, [pathname]);
 
+// Elastic overscroll with rubber band effect
+  useEffect(() => {
+    const mainElement = mainRef.current;
+    if (!mainElement) return;
+
+    let startY = 0;
+    let currentY = 0;
+    let scrollTop = 0;
+    let isDragging = false;
+    let animationId = null;
+
+    const handleTouchStart = (e) => {
+      startY = e.touches[0].clientY;
+      scrollTop = mainElement.scrollTop;
+      isDragging = true;
+      
+      // Cancel any ongoing animation
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isDragging) return;
+      
+      currentY = e.touches[0].clientY;
+      const diff = currentY - startY;
+      const maxScroll = mainElement.scrollHeight - mainElement.clientHeight;
+      
+      // At top boundary - pull down creates stretch
+      if (mainElement.scrollTop <= 0 && diff > 0) {
+        e.preventDefault();
+        const stretch = Math.min(diff * 0.5, 150); // Max 150px stretch
+        mainElement.style.transform = `translateY(${stretch}px)`;
+        mainElement.style.transition = 'none';
+      }
+      // At bottom boundary - pull up creates stretch
+      else if (mainElement.scrollTop >= maxScroll && diff < 0) {
+        e.preventDefault();
+        const stretch = Math.max(diff * 0.5, -150); // Max 150px stretch
+        mainElement.style.transform = `translateY(${stretch}px)`;
+        mainElement.style.transition = 'none';
+      }
+    };
+
+    const handleTouchEnd = () => {
+      isDragging = false;
+      
+      // Animate bounce back
+      mainElement.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      mainElement.style.transform = 'translateY(0)';
+    };
+
+    // Add touch listeners
+    mainElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+    mainElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+    mainElement.addEventListener('touchend', handleTouchEnd);
+    mainElement.addEventListener('touchcancel', handleTouchEnd);
+
+    return () => {
+      mainElement.removeEventListener('touchstart', handleTouchStart);
+      mainElement.removeEventListener('touchmove', handleTouchMove);
+      mainElement.removeEventListener('touchend', handleTouchEnd);
+      mainElement.removeEventListener('touchcancel', handleTouchEnd);
+      if (animationId) cancelAnimationFrame(animationId);
+    };
+  }, []);
+
   // Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);
   const [leaveConfirm, setLeaveConfirm] = useState({ open: false, go: null });

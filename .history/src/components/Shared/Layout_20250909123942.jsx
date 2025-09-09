@@ -124,13 +124,8 @@ export default function Layout() {
     };
   }, [pathname]);
 
- // Restore scroll when navigating
+  // Restore scroll when navigating
   useEffect(() => {
-    // Skip restoration on initial load
-    if (!scrollPositions.current[pathname] && pathname === '/') {
-      return;
-    }
-    
     // Hide content instantly before any rendering
     if (mainRef.current) {
       mainRef.current.classList.add('navigating');
@@ -162,11 +157,9 @@ export default function Layout() {
     } else {
       // For bottom nav pages (/, /play, /swipe, /profile), restore saved position
       const savedPos = scrollPositions.current[pathname];
-      if (savedPos) {
-        console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
-      }
+      console.log(`Attempting to restore scroll for ${pathname}: ${savedPos}`); // Debug log
       
-      if (savedPos && savedPos > 0) {
+      if (savedPos !== undefined && savedPos !== null && savedPos > 0) {
         // Use multiple attempts to ensure scroll is restored
         const attemptRestore = (attempts = 0) => {
           if (attempts >= 5) return; // Max 5 attempts
@@ -225,6 +218,53 @@ export default function Layout() {
       }
     }
   }, [pathname]);
+
+// Add smooth deceleration and bounce effect
+  useEffect(() => {
+    const mainElement = mainRef.current;
+    if (!mainElement) return;
+
+    let scrollTimer = null;
+    let isScrolling = false;
+
+    const handleScroll = () => {
+      if (!isScrolling) {
+        mainElement.classList.add('is-scrolling');
+        isScrolling = true;
+      }
+
+      clearTimeout(scrollTimer);
+      
+      // Check if at boundaries for bounce effect
+      const scrollTop = mainElement.scrollTop;
+      const scrollHeight = mainElement.scrollHeight;
+      const clientHeight = mainElement.clientHeight;
+      
+      if (scrollTop <= 0) {
+        mainElement.style.transform = 'translateY(2px)';
+      } else if (scrollTop + clientHeight >= scrollHeight) {
+        mainElement.style.transform = 'translateY(-2px)';
+      } else {
+        mainElement.style.transform = 'translateY(0)';
+      }
+
+      scrollTimer = setTimeout(() => {
+        mainElement.classList.remove('is-scrolling');
+        mainElement.style.transform = 'translateY(0)';
+        isScrolling = false;
+      }, 150);
+    };
+
+    mainElement.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Add CSS for smooth transitions
+    mainElement.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+
+    return () => {
+      mainElement.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimer);
+    };
+  }, []);
 
   // Track modal-open state reactively
   const [modalOpen, setModalOpen] = useState(false);
