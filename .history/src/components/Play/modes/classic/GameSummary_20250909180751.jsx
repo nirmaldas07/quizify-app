@@ -56,7 +56,7 @@ export default function GameSummary({
         }
         
         @keyframes star-rain {
-          0% { transform: translateY(-70vh) rotate(0deg); }
+          0% { transform: translateY(-100vh) rotate(0deg); }
           100% { transform: translateY(100vh) rotate(360deg); }
         }
         
