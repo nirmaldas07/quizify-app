@@ -232,8 +232,7 @@ export default function WheelScreen({
         </div>
 
         {/* Wheel Section - Centered and Larger */}
-        <section className="flex-1 flex items-center justify-center pb-12">
-
+        <section className="flex-1 flex items-center justify-center">
           <div className="relative w-full max-w-sm">
             {/* Ambient glow */}
             <div 
@@ -346,7 +345,7 @@ export default function WheelScreen({
 
               {/* Category Callout - Centered */}
               {showCallout && result && (
-                <div className="absolute left-1/2 -translate-x-1/2 -top-24 z-30">
+                <div className="absolute left-1/2 -translate-x-1/2 -top-20 z-30">
                   <div className="px-5 py-3 rounded-2xl bg-white/95 backdrop-blur-xl shadow-2xl animate-bounce">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{result.cat.icon}</span>
@@ -360,7 +359,7 @@ export default function WheelScreen({
         </section>
 
         {/* Bottom hint */}
-        <div className="text-center pb-12">
+        <div className="text-center pb-8">
           <p className="text-white/30 text-xs">
             Tap SPIN to begin your adventure
           </p>

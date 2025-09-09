@@ -360,7 +360,7 @@ export default function WheelScreen({
         </section>
 
         {/* Bottom hint */}
-        <div className="text-center pb-12">
+        <div className="text-center pb-8">
           <p className="text-white/30 text-xs">
             Tap SPIN to begin your adventure
           </p>
