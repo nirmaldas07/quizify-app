@@ -24,7 +24,7 @@ export default function HeroCard() {
 
   return (
     <div 
-      className="relative overflow-hidden rounded-3xl pt-12 pb-12 px-6 mb-4 cursor-pointer transform transition-all hover:scale-[1.01] active:scale-[0.99]"
+      className="relative overflow-hidden rounded-3xl pt-8 pb-8 px-6 mb-4 cursor-pointer transform transition-all hover:scale-[1.01] active:scale-[0.99]"
       style={{
         background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%)',
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
