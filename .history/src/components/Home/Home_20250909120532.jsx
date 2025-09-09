@@ -445,7 +445,7 @@ onDone={() => {
 {/* Surprise Zone Entry */}
 <div
   onClick={() => navigate("/surprise")}
-  className="mt-6 relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-yellow-500/20 backdrop-blur border border-white/10 p-12 mb-4 cursor-pointer hover:scale-[1.02] transition-all group"
+  className="mt-6 relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-yellow-500/20 backdrop-blur border border-white/10 p-6 mb-4 cursor-pointer hover:scale-[1.02] transition-all group"
 >
   {/* Animated background sparkles */}
   <div className="absolute inset-0 opacity-30">
