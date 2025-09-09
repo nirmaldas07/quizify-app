@@ -99,8 +99,8 @@ export default function HeroCard() {
             style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
           >
             <svg 
-              width="64" 
-              height="64" 
+              width="56" 
+              height="56" 
               viewBox="0 0 100 100" 
               className="absolute inset-0"
               style={{ animation: 'spin-slow 4s linear infinite' }}
@@ -114,7 +114,7 @@ export default function HeroCard() {
                 { color: '#9370DB', icon: '🗺️' },
                 { color: '#FF9800', icon: '🤖' }
               ].map((segment, i) => {
-                const angle = 60; // 360/6 segments
+                const angle = 36; // 360/6 segments
                 const start = i * angle;
                 const end = start + angle;
                 const largeArc = 0;

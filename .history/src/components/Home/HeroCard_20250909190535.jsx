@@ -86,7 +86,7 @@ export default function HeroCard() {
           transition: 'transform 0.3s'
         }}
       >
-        🎡
+        🟡
       </div>
 
       {/* Main content in horizontal layout */}
@@ -99,8 +99,8 @@ export default function HeroCard() {
             style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
           >
             <svg 
-              width="64" 
-              height="64" 
+              width="56" 
+              height="56" 
               viewBox="0 0 100 100" 
               className="absolute inset-0"
               style={{ animation: 'spin-slow 4s linear infinite' }}

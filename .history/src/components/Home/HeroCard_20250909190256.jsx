@@ -79,7 +79,7 @@ export default function HeroCard() {
 
       {/* Floating wheel in background */}
       <div 
-        className="absolute -top-1 -right-2 text-7xl opacity-15"
+        className="absolute -top-5 -right-2 text-7xl opacity-10"
         style={{ 
           animation: 'spin-slow 20s linear infinite',
           transform: isHovered ? 'scale(1.1)' : 'scale(1)',
@@ -99,8 +99,8 @@ export default function HeroCard() {
             style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
           >
             <svg 
-              width="64" 
-              height="64" 
+              width="56" 
+              height="56" 
               viewBox="0 0 100 100" 
               className="absolute inset-0"
               style={{ animation: 'spin-slow 4s linear infinite' }}

@@ -24,7 +24,7 @@ export default function HeroCard() {
 
   return (
     <div 
-      className="relative overflow-hidden rounded-3xl pt-12 pb-12 px-6 mb-4 transform transition-all hover:scale-[1.01] active:scale-[0.99]"
+      className="relative overflow-hidden rounded-3xl pt-12 pb-12 px-6 mb-4 cursor-pointer transform transition-all hover:scale-[1.01] active:scale-[0.99]"
       style={{
         background: 'linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%)',
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
@@ -61,16 +61,16 @@ export default function HeroCard() {
         }
       `}</style>
 
-      {/* Animated sparkles - Always visible */}
-      {sparkles.map(sparkle => (
+      {/* Animated sparkles */}
+      {isHovered && sparkles.map(sparkle => (
         <div
           key={sparkle.id}
           className="absolute text-lg pointer-events-none"
           style={{
             left: `${sparkle.left}%`,
             bottom: '0',
-            animation: `sparkle ${sparkle.duration}s ease-out infinite`,
-            animationDelay: `${sparkle.delay}s`
+            animation: `sparkle ${sparkle.duration}s ease-out`,
+            animationDelay: `${sparkle.delay * 0.1}s`
           }}
         >
           ✨
@@ -79,7 +79,7 @@ export default function HeroCard() {
 
       {/* Floating wheel in background */}
       <div 
-        className="absolute -top-1 -right-2 text-7xl opacity-15"
+        className="absolute -top-10 -right-10 text-7xl opacity-10"
         style={{ 
           animation: 'spin-slow 20s linear infinite',
           transform: isHovered ? 'scale(1.1)' : 'scale(1)',
@@ -99,8 +99,8 @@ export default function HeroCard() {
             style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
           >
             <svg 
-              width="64" 
-              height="64" 
+              width="56" 
+              height="56" 
               viewBox="0 0 100 100" 
               className="absolute inset-0"
               style={{ animation: 'spin-slow 4s linear infinite' }}
@@ -157,10 +157,10 @@ export default function HeroCard() {
 
         {/* Right section - Play button with floating elements */}
         <div className="relative">
-          {/* Floating coins around button - Star moved to top */}
+          {/* Floating coins around button */}
           <div className="absolute -top-2 -left-2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite' }}>🪙</div>
-          <div className="absolute -top-2 -right-2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 0.5s' }}>⭐</div>
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 1s' }}>💎</div>
+          <div className="absolute -top-2 -right-2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 0.5s' }}>💎</div>
+          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 1s' }}>⭐</div>
           
           {/* Play button */}
           <button 
@@ -178,6 +178,14 @@ export default function HeroCard() {
           </button>
         </div>
       </div>
+
+      {/* Daily bonus indicator - small and subtle */}
+      {isHovered && (
+        <div className="absolute bottom-2 left-6 text-xs text-white/80 flex items-center gap-1">
+          <span className="inline-block w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+          <span>Bonus available!</span>
+        </div>
+      )}
     </div>
   );
 }

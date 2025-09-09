@@ -79,7 +79,7 @@ export default function HeroCard() {
 
       {/* Floating wheel in background */}
       <div 
-        className="absolute -top-1 -right-2 text-7xl opacity-15"
+        className="absolute -top-10 -right-10 text-7xl opacity-10"
         style={{ 
           animation: 'spin-slow 20s linear infinite',
           transform: isHovered ? 'scale(1.1)' : 'scale(1)',
@@ -99,8 +99,8 @@ export default function HeroCard() {
             style={{ animation: isHovered ? 'bounce 1s ease-in-out infinite' : 'float 3s ease-in-out infinite' }}
           >
             <svg 
-              width="64" 
-              height="64" 
+              width="56" 
+              height="56" 
               viewBox="0 0 100 100" 
               className="absolute inset-0"
               style={{ animation: 'spin-slow 4s linear infinite' }}
@@ -160,7 +160,7 @@ export default function HeroCard() {
           {/* Floating coins around button - Star moved to top */}
           <div className="absolute -top-2 -left-2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite' }}>🪙</div>
           <div className="absolute -top-2 -right-2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 0.5s' }}>⭐</div>
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 1s' }}>💎</div>
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-sm opacity-70" style={{ animation: 'float 3s ease-in-out infinite 1s' }}>💎</div>
           
           {/* Play button */}
           <button 
