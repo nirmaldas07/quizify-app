@@ -46,7 +46,7 @@ export function ResultInterstitial({ category, onComplete, isBonus = false, soun
           </h2>
 <div className="relative">
   <div className="w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-orange-400/30 rounded-full relative backdrop-blur-xl border-2 border-yellow-400/50">
-    <span className="absolute top-1/2 left-1/2 text-6xl animate-pulse" style={{ transform: 'translate(-46%, -50%)' }}>⭐</span>
+    <span className="absolute top-1/2 left-1/2 text-6xl animate-pulse" style={{ transform: 'translate(-50%, -48%)' }}>⭐</span>
   </div>
   <div className="absolute inset-0 rounded-full bg-yellow-400/20 animate-ping" />
 </div>

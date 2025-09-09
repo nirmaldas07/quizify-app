@@ -44,12 +44,12 @@ export function ResultInterstitial({ category, onComplete, isBonus = false, soun
           <h2 className="text-4xl font-black mb-8 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
             Bonus Round!
           </h2>
-<div className="relative">
-  <div className="w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-orange-400/30 rounded-full relative backdrop-blur-xl border-2 border-yellow-400/50">
-    <span className="absolute top-1/2 left-1/2 text-6xl animate-pulse" style={{ transform: 'translate(-46%, -50%)' }}>⭐</span>
-  </div>
-  <div className="absolute inset-0 rounded-full bg-yellow-400/20 animate-ping" />
-</div>
+          <div className="relative">
+            <div className="w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-orange-400/30 rounded-full grid place-items-center backdrop-blur-xl border-2 border-yellow-400/50">
+            <span className="text-6xl animate-pulse block">⭐</span>
+            </div>
+            <div className="absolute inset-0 rounded-full bg-yellow-400/20 animate-ping" />
+          </div>
           <p className="mt-6 text-lg text-white/80">Get ready for a special challenge!</p>
         </div>
       </div>

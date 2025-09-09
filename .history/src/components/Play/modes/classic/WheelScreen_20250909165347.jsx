@@ -347,7 +347,7 @@ export default function WheelScreen({
               {/* Category Callout - Centered */}
               {showCallout && result && (
                 <div className="absolute left-1/2 -translate-x-1/2 -top-20 z-30">
-                  <div className="px-5 py-2 rounded-2xl bg-white/95 backdrop-blur-xl shadow-2xl animate-bounce">
+                  <div className="px-1 py-3 rounded-2xl bg-white/95 backdrop-blur-xl shadow-2xl animate-bounce">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{result.cat.icon}</span>
                       <span className="font-bold text-gray-800">{result.cat.name}</span>

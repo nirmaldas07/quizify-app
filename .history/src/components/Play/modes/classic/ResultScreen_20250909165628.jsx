@@ -44,12 +44,12 @@ export function ResultInterstitial({ category, onComplete, isBonus = false, soun
           <h2 className="text-4xl font-black mb-8 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
             Bonus Round!
           </h2>
-<div className="relative">
-  <div className="w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-orange-400/30 rounded-full relative backdrop-blur-xl border-2 border-yellow-400/50">
-    <span className="absolute top-1/2 left-1/2 text-6xl animate-pulse" style={{ transform: 'translate(-46%, -50%)' }}>⭐</span>
-  </div>
-  <div className="absolute inset-0 rounded-full bg-yellow-400/20 animate-ping" />
-</div>
+          <div className="relative">
+            <div className="w-32 h-32 bg-gradient-to-br from-yellow-400/30 to-orange-400/30 rounded-full flex items-center justify-center backdrop-blur-xl border-2 border-yellow-400/50">
+              <span className="text-6xl animate-pulse">⭐</span>
+            </div>
+            <div className="absolute inset-0 rounded-full bg-yellow-400/20 animate-ping" />
+          </div>
           <p className="mt-6 text-lg text-white/80">Get ready for a special challenge!</p>
         </div>
       </div>
@@ -105,7 +105,7 @@ export function ResultInterstitial({ category, onComplete, isBonus = false, soun
         
         {/* Main circle */}
         <div
-            className="relative w-96 h-96 rounded-full flex items-center justify-center shadow-2xl"
+          className="relative w-90 h-90 rounded-full flex items-center justify-center shadow-2xl"
           style={{ 
             background: `linear-gradient(135deg, ${category.color}dd, ${category.color}99)`,
             boxShadow: `0 20px 60px ${category.color}40, inset 0 0 60px rgba(255,255,255,0.1)`
