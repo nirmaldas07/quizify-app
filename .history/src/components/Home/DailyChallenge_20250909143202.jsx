@@ -133,7 +133,7 @@ export default function DailyChallenge({ coinPillRef }) {
     if (playCorrect) playCorrect();
     // Show confetti for correct answer
     setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 500);  // Reduced from 2000 to 1000
+    setTimeout(() => setShowConfetti(false), 1000);  // Reduced from 2000 to 1500
     } else {
     if (playWrong) playWrong();
     }

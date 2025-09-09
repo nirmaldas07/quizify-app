@@ -101,6 +101,14 @@ const [, forceUpdate] = useState({});
   }, [player.level, playLevelUp]);
 
 
+  // Check for level up
+useEffect(() => {
+  if (player.level > prevLevelRef.current) {
+    playLevelUp?.();
+    prevLevelRef.current = player.level;
+  }
+}, [player.level, playLevelUp]);
+
 // Listen for coin updates to refresh the display
 useEffect(() => {
   const handleStorageChange = () => {

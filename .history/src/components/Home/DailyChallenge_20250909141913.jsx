@@ -133,7 +133,7 @@ export default function DailyChallenge({ coinPillRef }) {
     if (playCorrect) playCorrect();
     // Show confetti for correct answer
     setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 500);  // Reduced from 2000 to 1000
+    setTimeout(() => setShowConfetti(false), 2000);
     } else {
     if (playWrong) playWrong();
     }
@@ -255,17 +255,15 @@ const Confetti = ({ parentRef }) => {
   
   return (
     <div className="fixed inset-0 pointer-events-none z-50">
-      {[...Array(12)].map((_, i) => (
+      {[...Array(20)].map((_, i) => (
         <div
-          key={`${Date.now()}-${i}`}  // Unique key to prevent React reusing elements
-          className="absolute"
+          key={i}
+          className="absolute animate-confetti"
           style={{
             left: `${startX + (Math.random() * width)}px`,
             top: `${startY}px`,
-            animation: `confettiFall ${2 + Math.random() * 1}s ease-out forwards`,
-            animationDelay: `${Math.random() * 0.3}s`,
-            fontSize: '24px',
-            opacity: 0.9
+            animationDelay: `${Math.random() * 0.5}s`,
+            fontSize: '20px'
           }}
         >
           {['🎉', '✨', '🌟', '⭐', '🎊'][Math.floor(Math.random() * 5)]}
@@ -306,24 +304,18 @@ const Confetti = ({ parentRef }) => {
             targetRef={coinPillRef}
             count={coinFly.count}
             onDone={() => {
-            // Prevent double execution with a flag
-            if (!coinFly.processed) {
-                coinFly.processed = true;
-                
-                // Update coins in GameDataService
-                const currentUser = UserService.getCurrentUser();
-                if (currentUser?.phone) {
+            // Update coins in GameDataService
+            const currentUser = UserService.getCurrentUser();
+            if (currentUser?.phone) {
                 GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
                 GameDataService.updateQuestProgress(currentUser.phone, 'daily_challenge', 1);
-                } else {
+            } else {
                 GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
-                }
-                
-                // Dispatch custom event to trigger re-render
-                window.dispatchEvent(new Event('coinsUpdated'));
             }
-            
             setCoinFly(null);
+            
+            // Dispatch custom event to trigger re-render
+            window.dispatchEvent(new Event('coinsUpdated'));
             }}
           />
         )}
@@ -509,30 +501,17 @@ const Confetti = ({ parentRef }) => {
             50% { transform: translateY(-20px); }
           }
           
-        @keyframes confettiFall {
-        0% { 
-            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
-            opacity: 0.9;
-        }
-        10% {
-            opacity: 1;
-        }
-        25% {
-            transform: translateY(25vh) translateX(10px) rotate(180deg) scale(1.1);
-        }
-        50% {
-            transform: translateY(50vh) translateX(-10px) rotate(360deg) scale(1);
-        }
-        75% {
-            transform: translateY(75vh) translateX(5px) rotate(540deg) scale(0.9);
-            opacity: 0.8;
-        }
-        100% { 
-            transform: translateY(100vh) translateX(0) rotate(720deg) scale(0.8);
-            opacity: 0;
-        }
-        }
-                
+          @keyframes confetti {
+            0% { 
+              transform: translateY(0) rotate(0deg);
+              opacity: 1;
+            }
+            100% { 
+              transform: translateY(100vh) rotate(720deg);
+              opacity: 0;
+            }
+          }
+          
           .animate-shimmer {
             animation: shimmer 3s infinite;
           }

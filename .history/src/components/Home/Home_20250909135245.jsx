@@ -66,7 +66,6 @@ export default function Home() {
   const navigate = useNavigate();
   const gameContext = useGame();
 const { player, levelProgress, useEnergy, changeAvatar } = gameContext;
-const [, forceUpdate] = useState({});
 // Don't extract addXP or addCoins - use GameDataService directly
   
   const [playCorrect] = useSound("/sounds/correct.mp3", { volume: 0.6 });
@@ -100,22 +99,6 @@ const [, forceUpdate] = useState({});
     }
   }, [player.level, playLevelUp]);
 
-
-// Listen for coin updates to refresh the display
-useEffect(() => {
-  const handleStorageChange = () => {
-    forceUpdate({});
-  };
-  
-  window.addEventListener('storage', handleStorageChange);
-  window.addEventListener('coinsUpdated', handleStorageChange);
-  
-  return () => {
-    window.removeEventListener('storage', handleStorageChange);
-    window.removeEventListener('coinsUpdated', handleStorageChange);
-  };
-}, []);
-
   // UI State
   const [showMoreCategories, setShowMoreCategories] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -126,11 +109,27 @@ useEffect(() => {
   const [showCoinsInfo, setShowCoinsInfo] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
+  // Daily Challenge
+  const [dailyQ, setDailyQ] = useState(null);
+  const [picked, setPicked] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [coinFly, setCoinFly] = useState(null);
+  const DAILY_Q_XP = 10;
+  const DAILY_Q_COINS = 5;
+
   // Practice Mode State
+  const [dailyCoinsAdded, setDailyCoinsAdded] = useState(false);
   const [showPracticeConfig, setShowPracticeConfig] = useState(false);
   const [practiceCategory, setPracticeCategory] = useState("general-knowledge");
   const [practiceDifficulty, setPracticeDifficulty] = useState("medium");
   const [practiceCount, setPracticeCount] = useState(10);
+
+  // Check if daily challenge was already completed today
+  const [dailyCompleted, setDailyCompleted] = useState(() => {
+    const dailyLog = readJSON('dq_daily_log', {});
+    return dailyLog[ymd()] === true;
+  });
 
   // Scroll restoration
   useEffect(() => {
@@ -147,6 +146,74 @@ useEffect(() => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Load Daily Question
+  useEffect(() => {
+    if (dailyCompleted) return;
+    
+    const loadDailyQuestion = async () => {
+      try {
+        const csv = await fetch("/data/quiz_questions_bank.csv").then(r => r.text());
+        const { data } = Papa.parse(csv, { header: true, skipEmptyLines: true });
+        if (!data.length) throw new Error("empty");
+        
+        const row = data[Math.floor(Math.random() * data.length)];
+        const opts = [row.option1, row.option2, row.option3, row.option4].filter(Boolean);
+        
+        setDailyQ({
+          category: row.category || "General",
+          prompt: row.question,
+          options: opts,
+          answerIndex: ["A", "B", "C", "D"].indexOf(row.answer?.toUpperCase()) || 0
+        });
+      } catch {
+        setDailyQ({
+          category: "Science",
+          prompt: "Which planet is known as the Red Planet?",
+          options: ["Earth", "Mars", "Jupiter", "Venus"],
+          answerIndex: 1
+        });
+      }
+    };
+    loadDailyQuestion();
+  }, [dailyCompleted]);
+
+  const handleDailyAnswer = (idx, e) => {
+    if (picked !== null) return;
+    setPicked(idx);
+
+    const correct = idx === dailyQ.answerIndex;
+    if (correct) {
+      playCorrect();
+      if (e?.currentTarget && coinPillRef.current) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        playCoin();
+        setCoinFly({ startRect: rect, count: 10, amount: DAILY_Q_COINS });
+      }
+    } else {
+      playWrong();
+    }
+
+  setTimeout(() => {
+    setIsFlipped(true);
+    setShowAnswer(true);
+    if (correct) {
+      const todayKey = ymd();
+      writeJSON('dq_daily_log', { ...readJSON('dq_daily_log', {}), [todayKey]: true });
+      setDailyCompleted(true);
+      
+      // Update streak
+      const currentStreak = Number(localStorage.getItem('dq_streak') || 0);
+      localStorage.setItem('dq_streak', String(currentStreak + 1));
+      
+      // DON'T add coins here - let CoinFly animation handle it
+      // Just update the streak
+      const currentUser = UserService.getCurrentUser();
+      if (currentUser?.phone) {
+        GameDataService.updateStreak(currentUser.phone);
+      }
+    }
+  }, 600);
+  };
 
   const handleCategorySelect = (category) => {
     if (category.slug === "more") {
@@ -285,6 +352,36 @@ useEffect(() => {
             50% { background-position: 100% 50%; }
           }
         `}</style>
+
+        {/* Coin Animation */}
+        {coinFly && (
+          <CoinFly
+            startRect={coinFly.startRect}
+            targetRef={coinPillRef}
+            count={coinFly.count}
+onDone={() => {
+  if (!dailyCoinsAdded) {
+    // Use GameDataService as single source of truth
+    const currentUser = UserService.getCurrentUser();
+    if (currentUser?.phone) {
+      GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
+      GameDataService.addXP(DAILY_Q_XP);
+      GameDataService.updateQuestProgress(currentUser.phone, 'daily_challenge', 1);
+    } else {
+      // Fallback for non-logged in users - still use GameDataService
+      GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
+      GameDataService.addXP(DAILY_Q_XP);
+    }
+    
+    // DO NOT call addCoins or addXP from context
+    // The context should read from GameDataService
+    
+    setDailyCoinsAdded(true);
+  }
+  setCoinFly(null);
+}}
+          />
+        )}
 
         {/* Enhanced Header with Avatar & Game Stats */}
         <div className="mb-8">

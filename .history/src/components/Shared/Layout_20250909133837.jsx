@@ -39,7 +39,7 @@ useEffect(() => {
 
   const handleWheel = (e) => {
     e.preventDefault();
-    const scrollSpeed = 0.1; // Adjust this value (0.1 = very slow, 1 = normal)
+    const scrollSpeed = 0.5; // Adjust this value (0.1 = very slow, 1 = normal)
     main.scrollTop += e.deltaY * scrollSpeed;
   };
 

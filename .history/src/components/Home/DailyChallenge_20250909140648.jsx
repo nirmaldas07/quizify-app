@@ -22,8 +22,6 @@ export default function DailyChallenge({ coinPillRef }) {
   const [coinFly, setCoinFly] = useState(null);
   const [earnedCoins, setEarnedCoins] = useState(0);
   const completeButtonRef = useRef(null);
-  const cardRef = useRef(null);
-
   
   // Sound effects
   const [playCorrect] = useSound('/sounds/correct.mp3', { volume: 0.6 });
@@ -129,13 +127,13 @@ export default function DailyChallenge({ coinPillRef }) {
     setShowFeedback(true);
     
     if (isCorrect) {
-    // Don't update score here - it will be calculated in completeChallenge
-    if (playCorrect) playCorrect();
-    // Show confetti for correct answer
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 500);  // Reduced from 2000 to 1000
+      setScore(score + 1);
+      if (playCorrect) playCorrect();
+      // Show confetti for correct answer
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
     } else {
-    if (playWrong) playWrong();
+      if (playWrong) playWrong();
     }
     
     // Check if all questions answered
@@ -176,7 +174,7 @@ export default function DailyChallenge({ coinPillRef }) {
       }
     }
   };
-
+  
 const completeChallenge = (answers) => {
   const finalScore = answers.reduce((acc, answer, idx) => {
     return acc + (answer === questions[idx].correct ? 1 : 0);
@@ -245,35 +243,28 @@ const completeChallenge = (answers) => {
   };
 
   // Simple confetti component
-const Confetti = ({ parentRef }) => {
-  if (!showConfetti) return null;
-  
-  const parentRect = parentRef?.current?.getBoundingClientRect();
-  const startY = parentRect ? parentRect.top : 100;
-  const startX = parentRect ? parentRect.left : 0;
-  const width = parentRect ? parentRect.width : window.innerWidth;
-  
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50">
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={`${Date.now()}-${i}`}  // Unique key to prevent React reusing elements
-          className="absolute"
-          style={{
-            left: `${startX + (Math.random() * width)}px`,
-            top: `${startY}px`,
-            animation: `confettiFall ${2 + Math.random() * 1}s ease-out forwards`,
-            animationDelay: `${Math.random() * 0.3}s`,
-            fontSize: '24px',
-            opacity: 0.9
-          }}
-        >
-          {['🎉', '✨', '🌟', '⭐', '🎊'][Math.floor(Math.random() * 5)]}
-        </div>
-      ))}
-    </div>
-  );
-};
+  const Confetti = () => {
+    if (!showConfetti) return null;
+    
+    return (
+      <div className="fixed inset-0 pointer-events-none z-50">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-confetti"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: '-10px',
+              animationDelay: `${Math.random() * 0.5}s`,
+              fontSize: '20px'
+            }}
+          >
+            {['🎉', '✨', '🌟', '⭐', '🎊'][Math.floor(Math.random() * 5)]}
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   // Render celebration screen
   if (stage === 'celebrating') {
@@ -306,24 +297,18 @@ const Confetti = ({ parentRef }) => {
             targetRef={coinPillRef}
             count={coinFly.count}
             onDone={() => {
-            // Prevent double execution with a flag
-            if (!coinFly.processed) {
-                coinFly.processed = true;
-                
-                // Update coins in GameDataService
-                const currentUser = UserService.getCurrentUser();
-                if (currentUser?.phone) {
+            // Update coins in GameDataService
+            const currentUser = UserService.getCurrentUser();
+            if (currentUser?.phone) {
                 GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
                 GameDataService.updateQuestProgress(currentUser.phone, 'daily_challenge', 1);
-                } else {
+            } else {
                 GameDataService.addCoins(coinFly.amount, 'Daily Challenge');
-                }
-                
-                // Dispatch custom event to trigger re-render
-                window.dispatchEvent(new Event('coinsUpdated'));
             }
-            
             setCoinFly(null);
+            
+            // Dispatch custom event to trigger re-render
+            window.dispatchEvent(new Event('coinsUpdated'));
             }}
           />
         )}
@@ -404,14 +389,14 @@ const Confetti = ({ parentRef }) => {
   
   // Render playing screen
   const currentQuestion = questions[currentIndex];
- 
+  if (!currentQuestion) return null;
+
   return (
-  <>
-    {/* Confetti effect */}
-    <Confetti parentRef={cardRef} />
+    <>
+      {/* Confetti effect */}
+      <Confetti />
       
-    <div 
-        ref={cardRef}
+      <div 
         className="relative rounded-2xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur border border-white/10 p-4 mb-4"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -509,30 +494,17 @@ const Confetti = ({ parentRef }) => {
             50% { transform: translateY(-20px); }
           }
           
-        @keyframes confettiFall {
-        0% { 
-            transform: translateY(0) translateX(0) rotate(0deg) scale(1);
-            opacity: 0.9;
-        }
-        10% {
-            opacity: 1;
-        }
-        25% {
-            transform: translateY(25vh) translateX(10px) rotate(180deg) scale(1.1);
-        }
-        50% {
-            transform: translateY(50vh) translateX(-10px) rotate(360deg) scale(1);
-        }
-        75% {
-            transform: translateY(75vh) translateX(5px) rotate(540deg) scale(0.9);
-            opacity: 0.8;
-        }
-        100% { 
-            transform: translateY(100vh) translateX(0) rotate(720deg) scale(0.8);
-            opacity: 0;
-        }
-        }
-                
+          @keyframes confetti {
+            0% { 
+              transform: translateY(0) rotate(0deg);
+              opacity: 1;
+            }
+            100% { 
+              transform: translateY(100vh) rotate(720deg);
+              opacity: 0;
+            }
+          }
+          
           .animate-shimmer {
             animation: shimmer 3s infinite;
           }
