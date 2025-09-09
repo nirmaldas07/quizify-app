@@ -296,14 +296,14 @@ export default function DailyChallenge({ onCoinsUpdate }) {
     return (
       <div 
         onClick={handleStart}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-500/30 to-blue-500/15 backdrop-blur border border-white/10 p-8 mb-4 cursor-pointer hover:scale-[1.02] transition-all"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600/10 to-blue-600/10 backdrop-blur border border-white/10 p-6 mb-4 cursor-pointer hover:scale-[1.02] transition-all"
       >
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold mb-2">Daily Challenge</h3>
+            <h3 className="text-lg font-semibold">Daily Challenge</h3>
             <p className="text-xs text-gray-400">{TOTAL_QUESTIONS} questions • Up to {TOTAL_QUESTIONS * COINS_PER_CORRECT * BONUS_MULTIPLIER} coins</p>
           </div>
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
             <span className="text-white">▶</span>
           </div>
         </div>
