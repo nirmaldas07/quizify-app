@@ -56,12 +56,7 @@ export default function DailyChallenge({ coinPillRef }) {
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
       
-      // Format with leading zeros
-      const formattedHours = hours.toString().padStart(2, '0');
-      const formattedMinutes = minutes.toString().padStart(2, '0');
-      const formattedSeconds = seconds.toString().padStart(2, '0');
-      
-      setTimeUntilTomorrow(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
+      setTimeUntilTomorrow(`${hours}h ${minutes}m ${seconds}s`);
     };
       
       updateTimer();
