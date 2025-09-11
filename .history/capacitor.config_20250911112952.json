@@ -1,0 +1,13 @@
+//capacitor.config.json
+
+{
+  "appId": "com.quizify.app",
+  "appName": "Quizify",
+  "webDir": "dist",
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": false,
+      "providers": ["phone"]
+    }
+  }
+}

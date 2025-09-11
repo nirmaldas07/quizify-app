@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Firestore</title>
+</head>
+<body>
+    <h1>Firestore Test</h1>
+    <button onclick="testSave()">Test Save User</button>
+    <button onclick="testGet()">Test Get User</button>
+    <div id="result"></div>
+
+    <script type="module">
+        import { saveUserToFirestore, getUserFromFirestore } from './utils/firestore.js';
+        
+        window.testSave = async () => {
+            const testUser = {
+                username: 'Test User',
+                avatar: { emoji: '🎮' },
+                createdAt: new Date().toISOString()
+            };
+            
+            const success = await saveUserToFirestore('+919999999999', testUser);
+            document.getElementById('result').innerText = success ? 'Saved!' : 'Failed';
+        };
+        
+        window.testGet = async () => {
+            const user = await getUserFromFirestore('+919999999999');
+            document.getElementById('result').innerText = JSON.stringify(user);
+        };
+    </script>
+</body>
+</html>
