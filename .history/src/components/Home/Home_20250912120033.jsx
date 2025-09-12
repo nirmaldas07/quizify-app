@@ -150,7 +150,6 @@ useEffect(() => {
 
 
   const handleCategorySelect = (category) => {
-      AnalyticsService.trackButtonClick(`category_${category.slug}`, 'home_screen');
     if (category.slug === "more") {
       setShowMoreCategories(true);
       return;
