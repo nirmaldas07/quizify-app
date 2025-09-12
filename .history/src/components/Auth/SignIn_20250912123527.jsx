@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserData } from '../../utils/authHelpers';
 import './auth.css';
 import userService from '../../services/UserService';
-import AnalyticsService from '../../services/AnalyticsService';
 
 export default function SignIn() {
   const location = useLocation();
