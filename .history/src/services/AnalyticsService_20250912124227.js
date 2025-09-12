@@ -88,14 +88,11 @@ class AnalyticsService {
     }
   }
 
-logout() {
-  console.log('Analytics logout - clearing user:', this.userId);
-  this.userId = null;
-  this.sessionId = null;
-  this.sessionStart = Date.now();
-  // Clear localStorage analytics too
-  localStorage.removeItem('analytics_events');
-}
+  logout() {
+    this.userId = null;
+    this.sessionId = null;
+    this.sessionStart = Date.now();
+  }
 
   trackEvent(eventName, data = {}) {
     // Firebase Analytics
