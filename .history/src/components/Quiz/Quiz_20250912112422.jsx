@@ -441,11 +441,11 @@ useEffect(() => {
     
     // Get current user and ensure analytics has correct user ID
     const currentUser = UserService.getCurrentUser();
-if (currentUser && currentUser.phone) {
-  // Always restart session with current user
-  AnalyticsService.userId = null; // Clear old user
-  AnalyticsService.startSession(currentUser.phone);
-}
+    if (currentUser && currentUser.phone) {
+      if (AnalyticsService.userId !== currentUser.phone) {
+        AnalyticsService.startSession(currentUser.phone);
+      }
+    }
     
     // Track quiz completion in analytics
     AnalyticsService.trackQuizAttempt({

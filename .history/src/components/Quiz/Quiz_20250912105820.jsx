@@ -435,34 +435,25 @@ useEffect(() => {
   
 
   // Handlers
-    const handleQuizComplete = useCallback((results) => {
-    console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
-    console.log("handleQuizComplete called at:", new Date().toISOString());
-    
-    // Get current user and ensure analytics has correct user ID
-    const currentUser = UserService.getCurrentUser();
-if (currentUser && currentUser.phone) {
-  // Always restart session with current user
-  AnalyticsService.userId = null; // Clear old user
-  AnalyticsService.startSession(currentUser.phone);
-}
-    
-    // Track quiz completion in analytics
-    AnalyticsService.trackQuizAttempt({
-      mode: isPractice ? 'practice' : 'quiz',
-      category: category,
-      score: results.correct,
-      totalQuestions: results.total,
-      timeSpent: Math.floor(elapsedMs / 1000)
-    });
-    
-    // Add guard against duplicate calls
-    if (window._quizCompleting) {
-      console.warn("Quiz completion already in progress, ignoring duplicate call");
-      return;
-    }
-    window._quizCompleting = true;
-    setTimeout(() => { window._quizCompleting = false; }, 1000);
+  const handleQuizComplete = useCallback((results) => {
+  console.log("Quiz completed - Mode:", mode, "isPractice:", isPractice, "Results:", results);
+  console.log("handleQuizComplete called at:", new Date().toISOString());
+  // Track quiz completion in analytics
+  AnalyticsService.trackQuizAttempt({
+    mode: isPractice ? 'practice' : 'quiz',
+    category: category,
+    score: results.correct,
+    totalQuestions: results.total,
+    timeSpent: Math.floor(elapsedMs / 1000) // Convert to seconds
+  });
+  
+  // Add guard against duplicate calls
+  if (window._quizCompleting) {
+    console.warn("Quiz completion already in progress, ignoring duplicate call");
+    return;
+  }
+  window._quizCompleting = true;
+  setTimeout(() => { window._quizCompleting = false; }, 1000);
     
     if (!results || !results.questions) {
       console.error("Invalid results object:", results);
@@ -550,8 +541,8 @@ if (currentUser && currentUser.phone) {
   localStorage.removeItem(LS_RESUME);
 
 // Record the session properly through GameDataService
-const currentUser2 = UserService.getCurrentUser();
-if (currentUser2 && currentUser2.phone) {
+const currentUser = UserService.getCurrentUser();
+if (currentUser?.phone) {
   if (isPractice) {
     // For practice: 2 coins per question completed
   const practiceResult = GameDataService.recordPracticeSession(currentUser.phone, {
@@ -562,7 +553,7 @@ if (currentUser2 && currentUser2.phone) {
     results.earnedCoins = practiceResult.coinsEarned;
   } else {
     // For quiz: 5 coins per correct answer
-    const quizResult = GameDataService.recordQuizSession(currentUser2.phone, {
+    const quizResult = GameDataService.recordQuizSession(currentUser.phone, {
       score: results.correct,
       totalQuestions: results.total,
       category: category,
@@ -605,7 +596,7 @@ GameDataService.storeCurrentResults(resultsData);
 
 setReviewSnapshot(resultsData);
 setView("results");
-  }, [category, mode, timerConfig, elapsedMs, isPractice, returnPath, fromQuest, updateDailyStreak]);
+  }, [category, mode, timerConfig, elapsedMs, isPractice, returnPath, fromQuest]);
 
    // Helper function for date key
   const getTodayKey = () => {

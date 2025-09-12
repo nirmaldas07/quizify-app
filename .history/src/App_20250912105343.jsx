@@ -140,8 +140,6 @@ useEffect(() => {
             // Second press - minimize app instead of exit
             clearTimeout(exitTimer);
             CapacitorApp.minimizeApp();
-            // End analytics session when app minimizes
-            AnalyticsService.endSession();
           }
         } else {
           // For all other pages, just go back
