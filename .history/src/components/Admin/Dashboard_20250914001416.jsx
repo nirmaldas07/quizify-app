@@ -451,7 +451,7 @@ export default function Dashboard() {
               
               <div className="bg-[#0a0a0a] rounded-2xl p-5 border border-white/10">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xs text-white/40 uppercase tracking-wider">Quiz/Session</h3>
+                  <h3 className="text-xs text-white/40 uppercase tracking-wider">Q/Session</h3>
                   <span className="text-lg">📊</span>
                 </div>
                 <div className="text-3xl font-bold">{stats.quizzesPerSession}</div>

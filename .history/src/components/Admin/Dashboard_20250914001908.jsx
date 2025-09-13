@@ -332,7 +332,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
       {/* Header */}
       <div className="bg-[#0a0a0a] border-b border-white/10 px-4 py-4">
         <div className="flex items-center justify-between">
