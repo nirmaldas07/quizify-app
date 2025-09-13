@@ -35,8 +35,7 @@ class AnalyticsService {
         userId,
         startTime: serverTimestamp(),
         date: today,
-        active: true,
-        events: []  // Track user journey
+        active: true
       });
       
       // Update or create user stats
@@ -201,22 +200,6 @@ logout() {
       });
     } catch (error) {
       console.error('Button tracking error:', error);
-    }
-    
-    // Also append to current session
-    if (this.sessionId) {
-      try {
-        await updateDoc(doc(db, 'sessions', this.sessionId), {
-          events: arrayUnion({
-            type: 'button_click',
-            buttonName,
-            context,
-            timestamp: new Date().toISOString()
-          })
-        });
-      } catch (error) {
-        console.error('Session event tracking error:', error);
-      }
     }
   }
 
