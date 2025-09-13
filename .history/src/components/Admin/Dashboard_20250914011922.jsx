@@ -333,9 +333,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#000000] text-white"
-    style={{ paddingTop: "env(safe-area-inset-top)" }}>    
+    style={{ paddingTop: "env(safe-area-inset-top)" }}>
+        
       {/* Header */}
-      <div className="bg-[#0a0a0a] border-b border-white/10 px-4 py-2">
+      <div className="bg-[#0a0a0a] border-b border-white/10 px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
