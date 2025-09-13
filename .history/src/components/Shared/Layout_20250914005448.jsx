@@ -447,9 +447,9 @@ useEffect(() => {
       style={{
           height: hideNav || document.body.classList.contains('hide-bottom-nav')
           ? "100dvh"
-          : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
+          : "calc(100dvh - (10.5rem + env(safe-area-inset-bottom)))",
           paddingTop: "0",  // Set to 0
-          marginTop: "0",  // Add negative margin
+          marginTop: "-2px",  // Add negative margin
           paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
           overflowY: "auto"
       }}

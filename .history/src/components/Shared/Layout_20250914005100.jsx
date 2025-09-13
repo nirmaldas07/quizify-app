@@ -449,7 +449,7 @@ useEffect(() => {
           ? "100dvh"
           : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
           paddingTop: "0",  // Set to 0
-          marginTop: "0",  // Add negative margin
+          marginTop: "-8px",  // Add negative margin
           paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
           overflowY: "auto"
       }}

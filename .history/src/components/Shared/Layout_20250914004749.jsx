@@ -441,19 +441,18 @@ useEffect(() => {
         }
       `}</style>
 
-    <main
-      ref={mainRef}
-      className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4 overscroll-y-contain"
-      style={{
-          height: hideNav || document.body.classList.contains('hide-bottom-nav')
-          ? "100dvh"
-          : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
-          paddingTop: "0",  // Set to 0
-          marginTop: "0",  // Add negative margin
-          paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
-          overflowY: "auto"
-      }}
-    >
+      <main
+        ref={mainRef}
+        className="mx-auto w-full max-w-none px-1 sm:px-3 md:px-4 overscroll-y-contain"
+        style={{
+            height: hideNav || document.body.classList.contains('hide-bottom-nav')
+            ? "100dvh"
+            : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
+            paddingTop: "calc(env(safe-area-inset-top))",
+            paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
+            overflowY: "auto"
+        }}
+      >
         <Outlet />
       </main>
 
