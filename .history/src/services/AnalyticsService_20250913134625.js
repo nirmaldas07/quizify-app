@@ -177,9 +177,6 @@ logout() {
       console.error('Quiz tracking error:', error);
     }
     
-    // Update daily stats with quiz data
-    this.updateDailyStats('quiz_completed', { score, category });
-    
     // Keep localStorage backup
     this.trackEventLocal('quiz_completed', {
       mode,
@@ -232,40 +229,6 @@ logout() {
         });
       } catch (error) {
         console.error('Session event tracking error:', error);
-      }
-    }
-    // Update daily stats
-    this.updateDailyStats(buttonName);
-  }
-
-
-  async updateDailyStats(action, data = {}) {
-    if (!this.userId) return;
-    
-    const today = new Date().toISOString().split('T')[0];
-    const statsRef = doc(db, 'user_daily_stats', `${this.userId}_${today}`);
-    
-    try {
-      // Try to update existing document
-      await updateDoc(statsRef, {
-        [`actions.${action}`]: increment(1),
-        totalActions: increment(1),
-        lastActive: serverTimestamp()
-      });
-    } catch (error) {
-      // Document doesn't exist, create it
-      try {
-        await setDoc(statsRef, {
-          userId: this.userId,
-          date: today,
-          actions: { [action]: 1 },
-          totalActions: 1,
-          firstActive: serverTimestamp(),
-          lastActive: serverTimestamp(),
-          sessions: arrayUnion(this.sessionId)
-        });
-      } catch (err) {
-        console.error('Daily stats error:', err);
       }
     }
   }

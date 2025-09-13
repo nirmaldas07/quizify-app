@@ -177,9 +177,6 @@ logout() {
       console.error('Quiz tracking error:', error);
     }
     
-    // Update daily stats with quiz data
-    this.updateDailyStats('quiz_completed', { score, category });
-    
     // Keep localStorage backup
     this.trackEventLocal('quiz_completed', {
       mode,
@@ -234,8 +231,6 @@ logout() {
         console.error('Session event tracking error:', error);
       }
     }
-    // Update daily stats
-    this.updateDailyStats(buttonName);
   }
 
 
