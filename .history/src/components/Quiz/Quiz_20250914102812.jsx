@@ -245,8 +245,7 @@ useEffect(() => {
 // Initialize session when questions are loaded or route changes
 useEffect(() => {
   // Skip if still loading, has error, or is review mode
-  if (loading || error || isReview || view === "review") return;
-
+  if (loading || error || isReview) return;
   
   // Skip if returning to results
   if (location.state?.returnToResults) return;

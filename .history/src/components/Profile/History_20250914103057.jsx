@@ -564,12 +564,11 @@ const navigate = useNavigate();
                 // Store the snapshot for review
                 localStorage.setItem(REVIEW_KEY, JSON.stringify(item.snapshot));
                 
-                // Navigate to quiz WITHOUT /start in the URL
-                navigate(`/quiz/${item.categoryParam}?review=1&attempt=${item.id}`, {
+                // Navigate to review with proper parameters and history context
+                navigate(`/quiz/${item.categoryParam}/start?review=1&attempt=${item.id}`, {
                     state: { 
                         reviewFrom: "history",
-                        historyPath: "/profile/history",
-                        fromHistory: true
+                        historyPath: "/profile/history" // Add explicit history path
                     },
                 });
                 }}
