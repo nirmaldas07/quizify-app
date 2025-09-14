@@ -247,7 +247,7 @@ useEffect(() => {
       <div className="fixed inset-0 -z-10 pointer-events-none"  
         style={{ background: 'linear-gradient(to bottom, #0B0F1A, #111827)' }}
         />     
-      <div className="relative z-10 px-4 pt-4 pb-24">
+      <div className="relative z-10 px-4 pt-8 pb-24">
         <style jsx>{`
           @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }

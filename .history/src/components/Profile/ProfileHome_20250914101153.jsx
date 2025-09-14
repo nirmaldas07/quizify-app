@@ -105,7 +105,7 @@ const userStats = {
     : 0;
 
   return (
-    <div className="min-h-full bg-[#0B0C10] text-white pt-4 px-3">
+    <div className="min-h-full bg-[#0B0C10] text-white pt-6 px-3">
     {/* Enhanced Header with User Info */}
         <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
