@@ -448,7 +448,7 @@ useEffect(() => {
             height: hideNav || document.body.classList.contains('hide-bottom-nav')
             ? "100dvh"
             : "calc(100dvh - (5.5rem + env(safe-area-inset-bottom)))",
-            paddingTop: "calc(env(safe-area-inset-top) + 12px)",
+            paddingTop: "calc(env(safe-area-inset-top))",
             paddingBottom: hideNav || document.body.classList.contains('hide-bottom-nav') ? 0 : undefined,
             overflowY: "auto"
         }}
