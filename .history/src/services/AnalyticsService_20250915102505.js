@@ -72,13 +72,11 @@ class AnalyticsService {
     if (this.sessionId) {
       const duration = Math.floor((Date.now() - this.sessionStart) / 1000);
       
-// Track in Firebase Analytics (web only)
-      if (!isMobile) {
-        trackEvent('session_end', { 
-          userId: this.userId,
-          duration 
-        });
-      }
+      // Track in Firebase Analytics
+      trackEvent('session_end', { 
+        userId: this.userId,
+        duration 
+      });
       
         // Update session in Firestore with summary
         try {
@@ -115,14 +113,12 @@ logout() {
   localStorage.removeItem('analytics_events');
 }
 
-trackEvent(eventName, data = {}) {
-    // Firebase Analytics (web only)
-    if (!isMobile) {
-      trackEvent(eventName, {
-        userId: this.userId,
-        ...data
-      });
-    }
+  trackEvent(eventName, data = {}) {
+    // Firebase Analytics
+    trackEvent(eventName, {
+      userId: this.userId,
+      ...data
+    });
     
     // Keep localStorage tracking as backup
     this.trackEventLocal(eventName, data);
@@ -148,17 +144,15 @@ trackEvent(eventName, data = {}) {
     const { mode, category, score, totalQuestions, timeSpent } = quizData;
     const accuracy = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
     
-// Firebase Analytics (web only)
-    if (!isMobile) {
-      trackEvent('quiz_completed', {
-        mode,
-        category,
-        score,
-        accuracy,
-        time_spent: timeSpent,
-        userId: this.userId
-      });
-    }
+    // Firebase Analytics
+    trackEvent('quiz_completed', {
+      mode,
+      category,
+      score,
+      accuracy,
+      time_spent: timeSpent,
+      userId: this.userId
+    });
     
     // Store in Firestore
     try {
@@ -207,14 +201,12 @@ trackEvent(eventName, data = {}) {
   }
 
   async trackButtonClick(buttonName, context) {
-// Firebase Analytics (24-48 hour delay) - web only
-    if (!isMobile) {
-      trackEvent('button_click', {
-        button_name: buttonName,
-        context,
-        userId: this.userId
-      });
-    }
+    // Firebase Analytics (24-48 hour delay)
+    trackEvent('button_click', {
+      button_name: buttonName,
+      context,
+      userId: this.userId
+    });
     
     // Store in Firestore for immediate viewing
     try {
@@ -313,14 +305,12 @@ trackEvent(eventName, data = {}) {
   }
 
   // New method to track feature usage
-trackFeatureUsage(featureName, details = {}) {
-    if (!isMobile) {
-      trackEvent('feature_used', {
-        feature: featureName,
-        userId: this.userId,
-        ...details
-      });
-    }
+  trackFeatureUsage(featureName, details = {}) {
+    trackEvent('feature_used', {
+      feature: featureName,
+      userId: this.userId,
+      ...details
+    });
   }
 
   getMostFrequent(arr) {

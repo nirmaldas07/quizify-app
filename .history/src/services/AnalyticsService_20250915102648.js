@@ -207,14 +207,12 @@ trackEvent(eventName, data = {}) {
   }
 
   async trackButtonClick(buttonName, context) {
-// Firebase Analytics (24-48 hour delay) - web only
-    if (!isMobile) {
-      trackEvent('button_click', {
-        button_name: buttonName,
-        context,
-        userId: this.userId
-      });
-    }
+    // Firebase Analytics (24-48 hour delay)
+    trackEvent('button_click', {
+      button_name: buttonName,
+      context,
+      userId: this.userId
+    });
     
     // Store in Firestore for immediate viewing
     try {
@@ -313,14 +311,12 @@ trackEvent(eventName, data = {}) {
   }
 
   // New method to track feature usage
-trackFeatureUsage(featureName, details = {}) {
-    if (!isMobile) {
-      trackEvent('feature_used', {
-        feature: featureName,
-        userId: this.userId,
-        ...details
-      });
-    }
+  trackFeatureUsage(featureName, details = {}) {
+    trackEvent('feature_used', {
+      feature: featureName,
+      userId: this.userId,
+      ...details
+    });
   }
 
   getMostFrequent(arr) {
