@@ -21,6 +21,7 @@
     "@capacitor-firebase/firestore": "^7.3.1",
     "@capacitor/app": "^7.0.2",
     "@capacitor/cli": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
     "firebase": "^11.10.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
