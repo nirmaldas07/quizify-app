@@ -57,7 +57,7 @@ export default function DailyChallenge({ coinPillRef }) {
       }
     }
   }, []);
-
+  
     // Timer for tomorrow
     useEffect(() => {
     if (stage === 'complete') {
@@ -214,13 +214,6 @@ const completeChallenge = (answers) => {
   
   setEarnedCoins(coins);
   setStage('complete');
-  
-  // Save completion data
-  localStorage.setItem('dailyChallengeData', JSON.stringify({
-    completedAt: new Date().toISOString(),
-    score: finalScore,
-    earnedCoins: coins
-  }));
   
   // DON'T add coins here - wait for animation
   // Just trigger the animation
