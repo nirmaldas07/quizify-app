@@ -329,7 +329,7 @@ GameDataService.addXP(1);
     loadNextQuestion();
   };
 
-    const handleBackPress = () => {
+const handleBackPress = () => {
     // Check if we should skip the warning (coming from Game Over screen)
     if (window.skipSurvivalWarning) {
       confirmExit();

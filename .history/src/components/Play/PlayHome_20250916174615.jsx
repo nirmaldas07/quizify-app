@@ -58,7 +58,7 @@ function ModesGrid({ onModeSelect, onNavigateHome }) {
             </div>
             
             <div className="absolute top-2 left-8 text-3xl opacity-60">🏆</div>
-            <div className="absolute top-5 right-32 text-xl opacity-40">⭐</div>
+            <div className="absolute top-12 right-32 text-xl opacity-40">⭐</div>
             <div className="absolute bottom-6 left-6 text-2xl opacity-50">🎲</div>
             <div className="absolute bottom-1 right-12 text-3xl opacity-60">🍪</div>
             <div className="absolute top-28 left-32 text-lg opacity-50">🥨</div>

@@ -242,15 +242,15 @@ export default function GameOverScreen({
         </div>
 
         {/* Achievement Badge */}
-        {/* {showAchievement && (
+        {showAchievement && (
           <div className="mb-8 slide-up" style={{ animationDelay: '0.3s' }}>
             <div className={`glass-card rounded-3xl p-6 bg-gradient-to-r ${achievement.color} bg-opacity-20 border-2 border-white/20 shadow-2xl`}>
               <div className="text-6xl mb-3 bounce-animation">{achievement.emoji}</div>
               <h2 className="text-3xl font-black mb-2">{achievement.title}</h2>
               <p className="text-white/80 mb-4">{achievement.subtitle}</p>
-               */}
+              
               {/* Star Rating */}
-              {/* <div className="flex justify-center gap-1">
+              <div className="flex justify-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <span 
                     key={i} 
@@ -263,7 +263,7 @@ export default function GameOverScreen({
               </div>
             </div>
           </div>
-        )} */}
+        )}
 
         {/* Score Cards */}
         <div className="grid grid-cols-2 gap-4 mb-8 w-full max-w-md">
@@ -335,14 +335,9 @@ export default function GameOverScreen({
           
             <button 
             onClick={() => {
-              // Set a flag to prevent the warning dialog
-              window.skipSurvivalWarning = true;
-              // Call the original onBack
+              // Remove any navigation guards before going back
+              window.onbeforeunload = null;
               onBack();
-              // Clean up the flag after a short delay
-              setTimeout(() => {
-                delete window.skipSurvivalWarning;
-              }, 500);
             }} 
             className="w-full py-4 glass-card text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] hover:bg-white/10 slide-up"
             style={{ animationDelay: '0.9s' }}
