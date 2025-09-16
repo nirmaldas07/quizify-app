@@ -407,12 +407,12 @@ const Confetti = ({ parentRef }) => {
           </div>
           
           {/* Test button - remove in production */}
-          {/* <button
+          <button
             onClick={handleRestart}
             className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-[10px] text-gray-600 hover:text-gray-400"
           >
             [Test: Replay]
-          </button> */}
+          </button>
         </div>
       </>
     );
