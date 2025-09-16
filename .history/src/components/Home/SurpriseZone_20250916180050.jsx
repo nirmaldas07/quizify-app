@@ -141,16 +141,11 @@ function CoinsInfoModal({ show, onClose, coins, onNavigateToPlay }) {
 export default function SurpriseZone() {
   const navigate = useNavigate();
   
-// Hide bottom navigation and prevent scrolling on mount
+  // Hide bottom navigation on mount
   useEffect(() => {
     document.body.classList.add('hide-bottom-nav');
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    
     return () => {
       document.body.classList.remove('hide-bottom-nav');
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
     };
   }, []);
   
@@ -559,7 +554,7 @@ export default function SurpriseZone() {
         )}
       </div>
 
-      <div className="relative z-10 px-6 pb-8 flex-1 overflow-hidden">
+      <div className="relative z-10 px-6 pb-8 flex-1 overflow-y-auto">
         <div className="max-w-sm mx-auto space-y-4">
           {boxes.map((box, index) => (
             <div

@@ -141,16 +141,11 @@ function CoinsInfoModal({ show, onClose, coins, onNavigateToPlay }) {
 export default function SurpriseZone() {
   const navigate = useNavigate();
   
-// Hide bottom navigation and prevent scrolling on mount
+  // Hide bottom navigation on mount
   useEffect(() => {
     document.body.classList.add('hide-bottom-nav');
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    
     return () => {
       document.body.classList.remove('hide-bottom-nav');
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
     };
   }, []);
   
@@ -474,7 +469,7 @@ export default function SurpriseZone() {
   const allOpened = boxes.every(box => box.opened);
 
     return (
-        <div className="fixed inset-0 bg-black text-white overflow-hidden flex flex-col">
+    <div className="h-screen bg-black text-white overflow-hidden flex flex-col">
       <div className="fixed inset-0 bg-gradient-to-b from-gray-900/50 to-black pointer-events-none" />
       
       {coinFly && (
@@ -559,7 +554,7 @@ export default function SurpriseZone() {
         )}
       </div>
 
-      <div className="relative z-10 px-6 pb-8 flex-1 overflow-hidden">
+      <div className="relative z-10 px-6 pb-8 flex-1 overflow-y-auto">
         <div className="max-w-sm mx-auto space-y-4">
           {boxes.map((box, index) => (
             <div
@@ -676,7 +671,7 @@ export default function SurpriseZone() {
         </div>
 
         {allOpened && (
-          <div className="mt-6 text-center space-y-2">
+          <div className="mt-8 text-center space-y-2">
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 backdrop-blur-xl border border-white/10">
               <Lock className="w-4 h-4 text-gray-400" />
               <p className="text-sm text-gray-400">All boxes opened! Come back tomorrow</p>
