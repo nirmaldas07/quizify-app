@@ -390,7 +390,7 @@ const Confetti = ({ parentRef }) => {
             </div>
             
             {/* Right: Stats */}
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <div className="text-center">
                 <div className="text-lg font-bold text-green-400">{accuracy}%</div>
                 <div className="text-[10px] text-gray-500">Accuracy</div>

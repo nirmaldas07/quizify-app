@@ -22,7 +22,6 @@ export default function DailyChallenge({ coinPillRef }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [coinFly, setCoinFly] = useState(null);
   const [earnedCoins, setEarnedCoins] = useState(0);
-  const [userStreak, setUserStreak] = useState(0);
   const completeButtonRef = useRef(null);
   const cardRef = useRef(null);
 
@@ -42,13 +41,6 @@ export default function DailyChallenge({ coinPillRef }) {
 // Load questions on mount
   useEffect(() => {
     loadQuestions();
-    
-    // Load user streak
-    const currentUser = UserService.getCurrentUser();
-    if (currentUser?.phone) {
-      const summary = GameDataService.getTodaySummary(currentUser.phone);
-      setUserStreak(summary?.streak || 0);
-    }
     
     // Check if already completed today
     const savedData = localStorage.getItem('dailyChallengeData');
@@ -400,7 +392,7 @@ const Confetti = ({ parentRef }) => {
                 <div className="text-[10px] text-gray-500">Coins</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-orange-400 whitespace-nowrap">🔥{userStreak}</div>
+                <div className="text-lg font-bold text-orange-400 whitespace-nowrap">🔥1</div>
                 <div className="text-[10px] text-gray-500">Streak</div>
               </div>
             </div>

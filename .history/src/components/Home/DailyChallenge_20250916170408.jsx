@@ -400,7 +400,7 @@ const Confetti = ({ parentRef }) => {
                 <div className="text-[10px] text-gray-500">Coins</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-orange-400 whitespace-nowrap">🔥{userStreak}</div>
+                <div className="text-lg font-bold text-orange-400 whitespace-nowrap">🔥{userStreak} </div>
                 <div className="text-[10px] text-gray-500">Streak</div>
               </div>
             </div>
