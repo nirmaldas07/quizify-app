@@ -209,26 +209,10 @@ export default function Quests() {
     setDailyProgress(Math.round((completed / items.length) * 100));
   }, [items]);
 
-// Sync displayCoins with GameDataService
+    // Sync totalCoins with player coins
     useEffect(() => {
-      const updateCoins = () => {
-        setDisplayCoins(GameDataService.getCoins());
-      };
-      
-      // Update on mount
-      updateCoins();
-      
-      // Listen for custom event
-      window.addEventListener('coinsUpdated', updateCoins);
-      
-      // Poll for changes as backup
-      const interval = setInterval(updateCoins, 500);
-      
-      return () => {
-        window.removeEventListener('coinsUpdated', updateCoins);
-        clearInterval(interval);
-      };
-    }, []);
+    setTotalCoins(player?.coins || 0);
+    }, [player?.coins]);
 
   // Handle navigation to quest activities
   const handleDoIt = (quest) => {
@@ -331,8 +315,8 @@ setCoinFly({
             targetRef={coinPillRef}
             count={coinFly.count}
             onDone={() => {
+            setTotalCoins(prev => prev + coinFly.amount);
             GameDataService.addCoins(coinFly.amount, `Quest Reward: ${coinFly.questTitle || 'Completed'}`);
-            setDisplayCoins(GameDataService.getCoins());
             setCoinFly(null);
             }}
         />
@@ -817,7 +801,7 @@ setCoinFly({
         </button>
 
         <div className="coins-display" ref={coinPillRef}>
-        🪙 {displayCoins}
+        🪙 {totalCoins}
         </div>
         
         <div className="title-section">

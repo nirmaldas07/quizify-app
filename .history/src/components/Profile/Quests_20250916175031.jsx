@@ -331,8 +331,8 @@ setCoinFly({
             targetRef={coinPillRef}
             count={coinFly.count}
             onDone={() => {
+            setTotalCoins(prev => prev + coinFly.amount);
             GameDataService.addCoins(coinFly.amount, `Quest Reward: ${coinFly.questTitle || 'Completed'}`);
-            setDisplayCoins(GameDataService.getCoins());
             setCoinFly(null);
             }}
         />
@@ -817,7 +817,7 @@ setCoinFly({
         </button>
 
         <div className="coins-display" ref={coinPillRef}>
-        🪙 {displayCoins}
+        🪙 {totalCoins}
         </div>
         
         <div className="title-section">
