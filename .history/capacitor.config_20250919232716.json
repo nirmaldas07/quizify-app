@@ -1,0 +1,17 @@
+{
+  "appId": "com.quizify.app",
+  "appName": "Quizify",
+  "webDir": "dist",
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": false,
+      "providers": ["phone"]
+    },
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": false,
+      "backgroundColor": "#DA70D6",
+      "showSpinner": false
+    }
+  }
+}
